@@ -1,0 +1,87 @@
+#spring:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://c204.cjw2k0eykv8p.ap-northeast-2.rds.amazonaws.com:3306/backend?serverTimezone=Asia/Seoul
+#    username: ${DB_USER}
+#    password: ${DB_PASSWORD}
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+#  data:
+#    redis:
+#      host: ${REDIS_HOST}
+#      port: ${REDIS_PORT}
+#      password: ${REDIS_PASSWORD}
+#      repositories:
+#        enabled: false
+#
+#
+#jwt:
+#  secret: ${JWT_SECRET}
+#  expired-min:
+#    access: 240   # access token 만료제한시간 60분 (1시간)
+#    refresh: 10080  # refresh token 만료제한시간 10080분 (7일)
+#
+#logging:
+#  level:
+#    com:
+#      ssafy: debug
+#    root: info
+#
+#
+#cloud:
+#  aws:
+#    s3:
+#      bucket: ${S3_BUCKET}
+#    stack.auto: false
+#    region.static: ap-northeast-2
+#    credentials:
+#      accessKey: ${S3_ACCESS_KEY}
+#      secretKey: ${S3_SECRET_KEY}
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://c204.cjw2k0eykv8p.ap-northeast-2.rds.amazonaws.com:3306/backend?serverTimezone=Asia/Seoul
+    username: c204
+    password: c204ssafy
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  data:
+    redis:
+      host: i10c204.p.ssafy.io
+      port: 6378
+      password: ssafy1234
+      repositories:
+        enabled: false
+
+jwt:
+  secret: 74744906e7fb955f341690a49787fc17fd5bd846e5b11cbc3f562dc1e828d5d104e1ce7472f4e4cafafa93628cc46cc71ed24fd3f2d86359bd9884066c5e3f95
+  expired-min:
+    access: 60   # access token 만료제한시간 60분 (1시간)
+    refresh: 10080  # refresh token 만료제한시간 10080분 (7일)
+
+logging:
+  level:
+    com:
+      ssafy: debug
+    root: info
+
+cloud:
+  aws:
+    s3:
+      bucket: 3dbody-image
+    stack.auto: false
+    region.static: ap-northeast-2
+    credentials:
+      accessKey: AKIAQ3EGP36XU5CEUPOS
+      secretKey: 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
