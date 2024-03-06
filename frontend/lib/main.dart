@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/core/theme/theme_data.dart';
 import 'package:frontend/presentation/pages/splash/splash_page.dart';
 import 'package:frontend/presentation/routes/routes.dart';
 
@@ -13,9 +14,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
     return const MaterialApp(
-      title: 'Flutter Demo',
       home: MyHomePage(),
     );
   }
@@ -27,7 +28,8 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-    routerConfig: router,
+      routerConfig: router,
+      theme: CustomThemeData.themeData,
     );
   }
 }
