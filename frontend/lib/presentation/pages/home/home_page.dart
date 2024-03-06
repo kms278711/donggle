@@ -15,12 +15,44 @@ class _HomePageState extends State<HomePage> {
       decoration: const BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.cover,
-          image: AssetImage(AppIcons.background), // 배경 이미지
+          image: AssetImage(AppIcons.background),
         ),
       ),
-      child: const Scaffold(
-        backgroundColor: Colors.transparent, // 배경색을 투명으로 설정
-      ),
+      child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Stack(children: <Widget>[
+            Container(
+              child: Scaffold(
+                body: Center(
+                  //child: SvgPicture.asset(AppIcons.parchment_svg, width: MediaQuery.of(context).size.width * 0.8,),
+                  child: Image.asset(
+                    AppIcons.parchment,
+                    width: MediaQuery.of(context).size.width * 0.95,
+                  ),
+                ),
+                backgroundColor: Colors.transparent,
+              ),
+            ),
+            Positioned(
+                left: MediaQuery.of(context).size.width * 0.35,
+                child: Container(
+                    color: Colors.transparent,
+                    child: Center(
+                      child: Image.asset(AppIcons.bottle,
+                          width: MediaQuery.of(context).size.width * 0.3),
+                    ))),
+            Positioned(
+                left: MediaQuery.of(context).size.width * 0.41,
+                child: Container(
+                    color: Colors.transparent,
+                    child: const Center(
+                      child: Text(
+                        "Books",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w400, fontSize: 100),
+                      ),
+                    ))),
+          ])),
     );
   }
 }
