@@ -5,7 +5,7 @@ import 'custom_font_weight.dart';
 
 class CustomTheme {
   /// Typography
-  static final textTheme = TextTheme(
+  static const textTheme = TextTheme(
     displayLarge: TextStyle(
       color: AppColors.black,
       fontSize: 57,
@@ -109,37 +109,37 @@ class CustomTheme {
   );
 
   /// color_scheme
-  static final colorScheme = ColorScheme(
+  static const colorScheme = ColorScheme(
     brightness: Brightness.light,
     primary: AppColors.primary,
-    onPrimary: AppColors.primary,
-    primaryContainer: AppColors.primary,
-    secondary: AppColors.primary,
-    onSecondary: AppColors.primary,
-    error: AppColors.primary,
-    onError: AppColors.primary,
-    background: AppColors.primary,
-    onBackground: AppColors.primary,
-    surface: AppColors.primary,
-    onSurface: AppColors.primary,
-    surfaceVariant: AppColors.primary,
-    onSurfaceVariant: AppColors.primary,
-    outline: AppColors.primary,
-    shadow: AppColors.primary,
-    inverseSurface: AppColors.primary,
-    onInverseSurface: AppColors.primary,
-    inversePrimary: AppColors.primary,
+    onPrimary: AppColors.onPrimary,
+    primaryContainer: AppColors.primaryContainer,
+    secondary: AppColors.secondary,
+    onSecondary: AppColors.onSecondary,
+    error: AppColors.error,
+    onError: AppColors.onError,
+    background: AppColors.background,
+    onBackground: AppColors.onBackground,
+    surface: AppColors.surface,
+    onSurface: AppColors.onSurface,
+    surfaceVariant: AppColors.surfaceVariant,
+    onSurfaceVariant: AppColors.onSurfaceVariant,
+    outline: AppColors.outline,
+    shadow: AppColors.shadow,
+    inverseSurface: AppColors.inverseSurface,
+    onInverseSurface: AppColors.onInverseSurface,
+    inversePrimary: AppColors.inversePrimary,
   );
 }
 
 extension ColorSchemeEx on ColorScheme {
-  Color get positive => AppColors.primary;
+  Color get positive => AppColors.positive;
 
-  Color get contentPrimary => AppColors.primary;
+  Color get contentPrimary => AppColors.contentPrimary;
 
-  Color get contentSecondary => AppColors.primary;
+  Color get contentSecondary => AppColors.contentSecondary;
 
-  Color get contentTertiary => AppColors.primary;
+  Color get contentTertiary => AppColors.contentTertiary;
 
-  Color get contentFourth => AppColors.primary;
+  Color get contentFourth => AppColors.contentFourth;
 }
