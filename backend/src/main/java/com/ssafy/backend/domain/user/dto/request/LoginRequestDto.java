@@ -3,11 +3,11 @@ package com.ssafy.backend.domain.user.dto.request;
 import lombok.Getter;
 import lombok.ToString;
 
-@Getter
-@ToString
-public class LoginRequestDto {
+public record LoginRequestDto (
 
-    private String email;
-    private String password;
+    String email,
+    String password
+)
+{
 
 }
