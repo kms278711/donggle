@@ -243,22 +243,30 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(
               height: 30,
             ),
-            Container(
-              width: 350,
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  KakaotalkIcon(),
-                  NaverIcon(),
-                  GoogleIcon(),
-                ],
-              ),
-            )
+            AnimatedCrossFade(
+                firstChild: Container(
+                  width: 350,
+                ),
+                secondChild: Container(
+                  width: 350,
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      KakaotalkIcon(),
+                      NaverIcon(),
+                      GoogleIcon(),
+                    ],
+                  ),
+                ),
+                crossFadeState: isSignup
+                    ? CrossFadeState.showFirst
+                    : CrossFadeState.showSecond,
+                duration: Duration(milliseconds: 200))
           ],
         ),
       ),
