@@ -12,3 +12,8 @@ https://github.com/yining1023/doodleNet/blob/master/doodleNet.ipynb
 https://github.com/yining1023/doodleNet/blob/master/doodleNet.ipynb
 모델 데이터 로드, 다운중 학습은 시작도 못했다 너무 느리다...
 <br><br>
+
+24/03/07 - SY <br>
+https://github.com/Stability-AI/generative-models
+diffuser 모델을 통한 생성형 모델 테스트 완료
+<br><br>
