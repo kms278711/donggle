@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomFontWeight {
   static const FontWeight regular = FontWeight.w400;
-  static const FontWeight semiBold = FontWeight.w600;
+  static const FontWeight semiBold = FontWeight.w500;
   static const FontWeight bold = FontWeight.w700;
 }
 

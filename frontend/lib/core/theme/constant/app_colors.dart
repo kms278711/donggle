@@ -22,7 +22,7 @@ class AppColors {
   static const Color onSurface = Color(0xFF1E1B1E);
   static const Color onSurfaceVariant = Color.fromRGBO(25, 25, 35, 0.15);
 
-  static const Color primaryContainer = Color(0xFF83D1FC);
+  static const Color primaryContainer = Color(0xFF356BAF);
 
   static const Color inverseSurface = Color.fromRGBO(25, 25, 35, 0.74);
   static const Color inversePrimary = Color.fromRGBO(144, 131, 252, 0.9);

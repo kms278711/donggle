@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/drawing_board/flutter_drawing_board.dart';
 import 'package:frontend/core/utils/component/icons/home_icon.dart';
 import 'package:frontend/core/utils/component/icons/my_icon.dart';
 import 'package:frontend/core/utils/component/icons/sound_icon.dart';
 import 'package:frontend/presentation/pages/home/component/background/background_screen.dart';
 import 'package:frontend/presentation/pages/home/component/title/main_title.dart';
 
+final DrawingController _drawingController = DrawingController();
+
 class CardPage extends StatelessWidget {
   const CardPage({super.key});
 
+
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Stack(
@@ -31,11 +37,18 @@ class CardPage extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.01,
                 ),
                 const SoundIcon(),
+
               ],
             ),
           ),
+
+
         ],
       ),
     );
   }
+}
+
+Future<void> _getImageData() async {
+  print((await _drawingController.getImageData())?.buffer.asInt8List());
 }

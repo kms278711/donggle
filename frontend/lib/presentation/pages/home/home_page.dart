@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/utils/component/icons/cards_icon.dart';
 import 'package:frontend/core/utils/component/icons/my_icon.dart';
@@ -21,23 +20,23 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
-          BackgroundScreen(),
-          MainTitle("Books"),
+          const BackgroundScreen(),
+          const MainTitle("Books"),
           // 책 리스트 받아와서 여기서 출력
           Positioned(
             top: MediaQuery.of(context).size.height * 0.02,
             right: MediaQuery.of(context).size.width * 0.01,
             child: Row(
               children: [
-                CardsIcon(),
+                const CardsIcon(),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.01,
                 ),
-                MyIcon(),
+                const MyIcon(),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.01,
                 ),
-                SoundIcon(),
+                const SoundIcon(),
               ],
             ),
           ),
