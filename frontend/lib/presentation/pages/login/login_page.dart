@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/presentation/pages/home/home_page.dart';
+import 'package:frontend/core/utils/component/icons/kakaotalk_icon.dart';
+import 'package:frontend/core/utils/component/icons/naver_icon.dart';
+import 'package:frontend/core/utils/component/icons/google_icon.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -24,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.08,
+              height: MediaQuery.of(context).size.height * 0.05,
             ),
             const DefaultTextStyle(
               style: TextStyle(
@@ -114,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                   color: Colors.white.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(15),
                 ),
-                  child: const Column(
+                child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextField(
@@ -236,6 +239,25 @@ class _LoginPageState extends State<LoginPage> {
                   ? CrossFadeState.showFirst
                   : CrossFadeState.showSecond,
               duration: const Duration(milliseconds: 200),
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Container(
+              width: 350,
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.5),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  KakaotalkIcon(),
+                  NaverIcon(),
+                  GoogleIcon(),
+                ],
+              ),
             )
           ],
         ),
