@@ -23,4 +23,7 @@ class AppIcons {
   static const String sound_icon = "assets/images/icons/sound_icon.png";
   static const String sound_off_icon = "assets/images/icons/sound_off_icon.png";
   static const String word_icon = "assets/images/icons/word_icon.png";
+  static const String kakaotalk_icon = "assets/images/icons/kakaotalk_icon.png";
+  static const String naver_icon = "assets/images/icons/naver_icon.png";
+  static const String google_icon = "assets/images/icons/google_icon.png";
 }
