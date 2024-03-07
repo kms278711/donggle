@@ -1,11 +1,8 @@
 package com.ssafy.backend.domain.user.service;
 
-import com.ssafy.backend.domain.user.dto.SignupRequestDto;
-import com.ssafy.backend.domain.user.entity.User;
+import com.ssafy.backend.domain.user.dto.request.SignupRequestDto;
 import com.ssafy.backend.global.jwt.dto.TokenDto;
 import com.ssafy.backend.global.jwt.dto.UserInfoDto;
-
-import java.util.Optional;
 
 public interface AuthService {
 

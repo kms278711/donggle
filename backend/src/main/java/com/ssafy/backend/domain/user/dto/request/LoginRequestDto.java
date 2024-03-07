@@ -1,4 +1,4 @@
-package com.ssafy.backend.domain.user.dto;
+package com.ssafy.backend.domain.user.dto.request;
 
 import lombok.Getter;
 import lombok.ToString;

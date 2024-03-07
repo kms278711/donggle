@@ -1,7 +1,8 @@
 package com.ssafy.backend.domain.user.service.impl;
 
-import com.ssafy.backend.domain.user.dto.SignupRequestDto;
+import com.ssafy.backend.domain.user.dto.request.SignupRequestDto;
 import com.ssafy.backend.domain.user.entity.User;
+import com.ssafy.backend.domain.user.mapper.UserMapper;
 import com.ssafy.backend.domain.user.repository.UserRepository;
 import com.ssafy.backend.domain.user.service.AuthService;
 import com.ssafy.backend.domain.user.service.UserService;
@@ -26,12 +27,13 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
     @Override
     @Transactional
     public void signup(SignupRequestDto signupRequestDto) {
-        if (userRepository.countByEmail(signupRequestDto.getEmail()) > 0) {
-            userRepository.findByEmail(signupRequestDto.getEmail()).ifPresent(user -> {
+        if (userRepository.countByEmail(signupRequestDto.email()) > 0) {
+            userRepository.findByEmail(signupRequestDto.email()).ifPresent(user -> {
                 if (user.getStatus() == User.Status.WITHDRAWAL) {
                     throw new UserException(WITHDRAW_USER);
                 }
@@ -39,12 +41,13 @@ public class AuthServiceImpl implements AuthService {
             throw new UserException(DUPLICATED_USER);
         }
 
-        User user = signupRequestDto.toEntity();
+        User user = userMapper.toUser(signupRequestDto);
 
         user.updateNickname(userService.nicknameGenerator());
 
         String password = passwordEncoder.encode(user.getPassword());
         user.updatePassword(password);
+        user.updateStatus(User.Status.WITHDRAWAL);
         userRepository.save(user);
     }
 

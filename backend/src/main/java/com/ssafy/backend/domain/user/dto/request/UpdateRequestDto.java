@@ -1,4 +1,4 @@
-package com.ssafy.backend.domain.user.dto;
+package com.ssafy.backend.domain.user.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.backend.domain.user.entity.User;
@@ -11,12 +11,6 @@ public class UpdateRequestDto {
 
     private String name;
     private String nickname;
-    private User.Gender gender;
-    private float height;
-    private float weight;
-
-    @JsonProperty("birth_date")
-    private String birthDate;
 
     @JsonProperty("profile_image")
     private String profileImage;
