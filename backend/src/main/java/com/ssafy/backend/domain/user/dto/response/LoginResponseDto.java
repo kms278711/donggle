@@ -1,4 +1,4 @@
-package com.ssafy.backend.domain.user.dto;
+package com.ssafy.backend.domain.user.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.backend.global.jwt.dto.TokenDto;

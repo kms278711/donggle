@@ -1,4 +1,4 @@
-package com.ssafy.backend.domain.user.dto;
+package com.ssafy.backend.domain.user.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.backend.domain.user.entity.User;
@@ -33,12 +33,7 @@ public class UserResponseDto {
                 .email(user.getEmail())
                 .name(user.getName())
                 .nickname(user.getNickname())
-                .gender(user.getGender().name())
-                .height(user.getHeight())
-                .weight(user.getWeight())
-                .pin(user.getPin())
                 .role(user.getRole().name())
-                .birthDate(user.getBirthDate())
                 .profileImage(user.getProfileImage())
                 .build();
     }

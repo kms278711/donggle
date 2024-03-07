@@ -46,7 +46,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://c204.cjw2k0eykv8p.ap-northeast-2.rds.amazonaws.com:3306/backend?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://ssafyrds.cjw2k0eykv8p.ap-northeast-2.rds.amazonaws.com:3306/backend?serverTimezone=Asia/Seoul
     username: c204
     password: c204ssafy
   jpa:
@@ -58,9 +58,8 @@ spring:
         format_sql: true
   data:
     redis:
-      host: i10c204.p.ssafy.io
-      port: 6378
-      password: ssafy1234
+      host: localhost
+      port: 6379
       repositories:
         enabled: false
 
@@ -79,9 +78,9 @@ logging:
 cloud:
   aws:
     s3:
-      bucket: 3dbody-image
+      bucket: donggle
     stack.auto: false
     region.static: ap-northeast-2
     credentials:
-      accessKey: AKIAQ3EGP36XU5CEUPOS
-      secretKey: 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
+      accessKey: AKIARI2J3RH4QEK7CPSB
+      secretKey: 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

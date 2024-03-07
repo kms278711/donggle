@@ -1,9 +1,9 @@
 package com.ssafy.backend.domain.user.controller;
 
-import com.ssafy.backend.domain.user.dto.LoginRequestDto;
-import com.ssafy.backend.domain.user.dto.LoginResponseDto;
+import com.ssafy.backend.domain.user.dto.request.LoginRequestDto;
+import com.ssafy.backend.domain.user.dto.response.LoginResponseDto;
 import com.ssafy.backend.domain.user.dto.ReissueDto;
-import com.ssafy.backend.domain.user.dto.SignupRequestDto;
+import com.ssafy.backend.domain.user.dto.request.SignupRequestDto;
 import com.ssafy.backend.domain.user.service.AuthService;
 import com.ssafy.backend.domain.user.service.UserService;
 import com.ssafy.backend.global.dto.Response;
@@ -30,9 +30,9 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity signup(@RequestBody SignupRequestDto signupRequestDto) {
+    public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDto) {
         authService.signup(signupRequestDto);
-        return ResponseEntity.ok(Response.success());
+        return ResponseEntity.ok("");
     }
 
     @PostMapping("/login")
