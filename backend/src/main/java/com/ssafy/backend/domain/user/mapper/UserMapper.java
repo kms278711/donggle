@@ -4,7 +4,6 @@ package com.ssafy.backend.domain.user.mapper;
 import com.ssafy.backend.domain.user.dto.request.SignupRequestDto;
 import com.ssafy.backend.domain.user.entity.User;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
