@@ -33,21 +33,22 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
           backgroundColor: Colors.transparent,
           body: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       "동 글 이",
                       style: TextStyle(fontSize: 80),
                     ),
                     Row(
                       children: [
-                        HomeIconMypage(),
-                        SizedBox(width: 10),
-                        CardsIconMypage(),
-                        SizedBox(width: 10),
+                        const HomeIconMypage(),
+                        SizedBox(width: MediaQuery.of(context).size.width * 0.01),
+                        const CardsIconMypage(),
+                        SizedBox(width: MediaQuery.of(context).size.width * 0.01),
+                        // Toggle between SoundIcon and SoundOffIcon based on isSoundOn
                         SoundIcon(),
                       ],
                     ),
@@ -56,7 +57,7 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom:20.0),
+                  padding: const EdgeInsets.only(bottom: 20.0),
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     // Removed height to allow for flexible container height
@@ -66,17 +67,28 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
                     ),
                     child: Stack(
                       children: [
-                        buildTab(context, 0, "진행 중인 동화", const BorderRadius.only(topLeft: Radius.circular(50))),
+                        buildTab(
+                            context,
+                            0,
+                            "진행 중인 동화",
+                            const BorderRadius.only(
+                                topLeft: Radius.circular(50))),
                         buildTab(context, 1, "동화 구매", null),
-                        buildTab(context, 2, "회원 정보", const BorderRadius.only(topRight: Radius.circular(50))),
+                        buildTab(
+                            context,
+                            2,
+                            "회원 정보",
+                            const BorderRadius.only(
+                                topRight: Radius.circular(50))),
                         //Content based on selectedTab can be placed here
                         Positioned(
                           top: MediaQuery.of(context).size.height * 0.12,
+                          left: 0,
                           child: selectedTab == 0
-                              ? CurrentFairytale()
+                              ? const CurrentFairytale()
                               : selectedTab == 1
-                              ? PurchaseFairytale()
-                              : MyPage(),
+                                  ? const PurchaseFairytale()
+                                  : const MyPage(),
                         ),
                       ],
                     ),
@@ -90,7 +102,8 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
     );
   }
 
-  Widget buildTab(BuildContext context, int index, String text, BorderRadius? borderRadius) {
+  Widget buildTab(BuildContext context, int index, String text,
+      BorderRadius? borderRadius) {
     double width = MediaQuery.of(context).size.width * 0.3;
     double height = MediaQuery.of(context).size.height * 0.12;
     bool isSelected = selectedTab == index;
@@ -106,13 +119,17 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
           decoration: BoxDecoration(
             color: isSelected ? AppColors.primaryContainer : Colors.transparent,
             borderRadius: borderRadius,
-            border: const Border(bottom:BorderSide(color: AppColors.primaryContainer, width: 2),),
+            border: const Border(
+              bottom: BorderSide(color: AppColors.primaryContainer, width: 2),
+            ),
           ),
           child: Center(
             child: Text(
               text,
               textAlign: TextAlign.center,
-              style: isSelected ? CustomFontStyle.selectedLarge : CustomFontStyle.unSelectedLarge,
+              style: isSelected
+                  ? CustomFontStyle.selectedLarge
+                  : CustomFontStyle.unSelectedLarge,
             ),
           ),
         ),
