@@ -4,23 +4,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.backend.domain.user.entity.User;
 import lombok.*;
 
-@Getter
 @Builder
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserInfoDto {
+public record UserInfoDto (
 
     @JsonProperty("user_id")
-    private Long userId;
+    Long userId,
 
-    private String email;
-    private String role;
-    private String nickname;
+    String email,
+    String role,
+    String nickname,
 
     @JsonProperty("profile_image")
-    private String profileImage;
-
+    String profileImage
+)
+        {
     public static UserInfoDto from(User user) {
         return UserInfoDto.builder()
                 .userId(user.getUserId())

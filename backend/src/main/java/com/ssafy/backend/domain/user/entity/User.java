@@ -3,7 +3,6 @@ package com.ssafy.backend.domain.user.entity;
 import com.ssafy.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @Entity
 @Getter
@@ -66,5 +65,8 @@ public class User extends BaseEntity {
         this.profileImage = profileImage;
     }
 
+    public void updateRole(Role role) {
+        this.role = role;
+    }
 }
 

@@ -37,10 +37,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void changePassword(Long userId, PasswordRequestDto passwordRequestDto) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException(INVALID_USER));
-        if (!passwordEncoder.matches(passwordRequestDto.getCurrentPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(passwordRequestDto.currentPassword(), user.getPassword())) {
             throw new UserException(INVALID_PASSWORD);
         }
-        updatePassword(user, passwordRequestDto.getNewPassword());
+        updatePassword(user, passwordRequestDto.newPassword());
     }
 
     @Override

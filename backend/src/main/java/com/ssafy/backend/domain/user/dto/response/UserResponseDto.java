@@ -4,29 +4,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.backend.domain.user.entity.User;
 import lombok.*;
 
-@Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-public class UserResponseDto {
-
-    private Long userId;
-    private String email;
-    private String name;
-    private String nickname;
-    private String gender;
-    private float height;
-    private float weight;
-    private String pin;
-    private String role;
-
-    @JsonProperty("birth_date")
-    private String birthDate;
+public record UserResponseDto (
+    Long userId,
+    String email,
+    String name,
+    String nickname,
+    String role,
 
     @JsonProperty("profile_image")
-    private String profileImage;
-
+    String profileImage
+)
+{
     public static UserResponseDto from(User user) {
         return UserResponseDto.builder()
                 .userId(user.getUserId())
@@ -37,6 +26,4 @@ public class UserResponseDto {
                 .profileImage(user.getProfileImage())
                 .build();
     }
-
-
 }

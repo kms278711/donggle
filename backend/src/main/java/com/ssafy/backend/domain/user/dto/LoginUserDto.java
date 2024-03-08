@@ -2,33 +2,29 @@ package com.ssafy.backend.domain.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.backend.global.jwt.dto.UserInfoDto;
-import lombok.*;
+import lombok.Builder;
 
-@Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-public class LoginUserDto {
+public record LoginUserDto (
 
     @JsonProperty("user_id")
-    private Long userId;
+    Long userId,
 
-    private String email;
-    private String role;
-    private String nickname;
+    String email,
+    String role,
+    String nickname,
 
     @JsonProperty("profile_image")
-    private String profileImage;
-
+    String profileImage
+)
+{
     public static LoginUserDto from(UserInfoDto info) {
         return LoginUserDto.builder()
-                .userId(info.getUserId())
-                .email(info.getEmail())
-                .nickname(info.getNickname())
-                .profileImage(info.getProfileImage())
-                .role(info.getRole())
+                .userId(info.userId())
+                .email(info.email())
+                .nickname(info.nickname())
+                .profileImage(info.profileImage())
+                .role(info.role())
                 .build();
     }
-
 }

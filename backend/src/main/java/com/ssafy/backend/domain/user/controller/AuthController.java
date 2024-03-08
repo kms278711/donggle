@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,9 +31,9 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDto) {
-        authService.signup(signupRequestDto);
-        return ResponseEntity.ok("");
+    public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDto, @RequestParam MultipartFile profileImage) {
+        authService.signup(signupRequestDto, profileImage);
+        return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
 
     @PostMapping("/login")
@@ -42,7 +43,7 @@ public class AuthController {
 
         return ResponseEntity.ok(Response.success(
                 LoginResponseDto.builder()
-                        .userInfo(userService.getUserInfo(userInfoDto.getUserId()))
+                        .userInfo(userService.getUserInfo(userInfoDto.userId()))
                         .token(tokenDto)
                         .build(),
                 HttpStatus.OK.name(), "로그인 성공")
@@ -59,7 +60,7 @@ public class AuthController {
 
     @PostMapping("/reissue")
     public ResponseEntity reissue(@RequestBody ReissueDto reissueDto) {
-        TokenDto tokenDto = authService.reissue(reissueDto.getRefreshToken());
+        TokenDto tokenDto = authService.reissue(reissueDto.refreshToken());
 
         Map<String, Object> map = new HashMap<>();
         map.put("token", tokenDto);
@@ -75,5 +76,4 @@ public class AuthController {
         }
         return ResponseEntity.ok(Response.success("", ""));
     }
-
 }

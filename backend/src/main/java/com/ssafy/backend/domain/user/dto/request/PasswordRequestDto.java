@@ -1,20 +1,15 @@
 package com.ssafy.backend.domain.user.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.ToString;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
-@Getter
-@ToString
-public class PasswordRequestDto {
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+public record PasswordRequestDto (
 
-    @JsonProperty("current_password")
-    private String currentPassword;
+    String currentPassword,
 
-    @JsonProperty("new_password")
-    private String newPassword;
+    String newPassword,
 
-    @JsonProperty("new_password_check")
-    private String newPasswordCheck;
-
-}
+    String newPasswordCheck
+)
+{}
