@@ -83,6 +83,18 @@ flutter:
      - family: Nanumson_jangmi
        fonts:
          - asset: assets/fonts/Nanumson_jangmi.ttf
+     - family: Itim
+       fonts:
+         - asset: assets/fonts/Itim-Regular.ttf
+     - family: Varela
+       fonts:
+         - asset: assets/fonts/VarelaRound-Regular.ttf
+     - family: Neucha
+       fonts:
+         - asset: assets/fonts/Neucha-Regular.ttf
+     - family: PatrickHand
+       fonts:
+         - asset: assets/fonts/PatrickHand-Regular.ttf
 
   #   - family: Trajan Pro
   #     fonts:
