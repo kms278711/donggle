@@ -1,7 +1,7 @@
 import 'package:frontend/presentation/pages/card/card_page.dart';
 import 'package:frontend/presentation/pages/home/home_page.dart';
 import 'package:frontend/presentation/pages/login/login_page.dart';
-import 'package:frontend/presentation/pages/mypage/my_page.dart';
+import 'package:frontend/presentation/pages/mypage/my_page_background.dart';
 import 'package:go_router/go_router.dart';
 
 import '../pages/splash/splash_page.dart';
@@ -27,7 +27,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: RoutePath.myPage,
       name: 'myPage',
-      builder: (context, state) => const MyPage(),
+      builder: (context, state) => const MyPageBackground(),
     ),
     GoRoute(
       path: RoutePath.login,

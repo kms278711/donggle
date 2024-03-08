@@ -1,15 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/core/theme/constant/app_icons.dart';
+import 'package:frontend/core/utils/component/icons/sound_off_icon.dart';
+import 'package:frontend/core/utils/component/icons/sound_on_icon.dart';
 
-class SoundIcon extends StatelessWidget {
+class SoundIcon extends StatefulWidget {
   const SoundIcon({super.key});
 
   @override
+  State<SoundIcon> createState() => _SoundIconState();
+}
+
+class _SoundIconState extends State<SoundIcon> {
+  bool isSoundOn = true;
+
+  @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      child: Image.asset(AppIcons.sound_icon,
-          width: MediaQuery.of(context).size.width * 0.05),
+    return GestureDetector(
+      onTap: () {
+        print("Tapped Sound Icon");
+        setState(() {
+          // Toggle the sound state
+          isSoundOn = !isSoundOn;
+        });
+      },
+      child: isSoundOn
+          ? const SoundOnIcon()
+          : const SoundOffIcon(),
     );
   }
 }
