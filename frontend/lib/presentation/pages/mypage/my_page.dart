@@ -12,18 +12,22 @@ class MyPage extends StatelessWidget {
         children: [
           MyPageBackground(),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.252,
+              top: MediaQuery.of(context).size.height * 0.252,
               left: MediaQuery.of(context).size.width * 0.05,
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.7,
+                height: MediaQuery.of(context).size.height * 0.748 - 20,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("진행중인 동화가 없습니다.", textAlign: TextAlign.center,style: CustomFontStyle.bodyLarge,),
+                    Text(
+                      "진행중인 동화가 없습니다.",
+                      textAlign: TextAlign.center,
+                      style: CustomFontStyle.bodyLarge,
+                    ),
                   ],
                 ),
-          ))
+              ))
         ],
       ),
     );

@@ -14,133 +14,98 @@ class MyPageBackground extends StatefulWidget {
 }
 
 class _MyPageBackgroundState extends State<MyPageBackground> {
+  int selectedTab = 0; // 초기에 선택된 탭의 인덱스
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: AssetImage(AppIcons.background),
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: AssetImage(AppIcons.background),
+          ),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Column(
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "동 글 이",
+                      style: TextStyle(fontSize: 80),
+                    ),
+                    Row(
+                      children: [
+                        HomeIcon(),
+                        SizedBox(width: 10),
+                        CardsIcon(),
+                        SizedBox(width: 10),
+                        SoundIcon(),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom:20.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    // Removed height to allow for flexible container height
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: Stack(
+                      children: [
+                        buildTab(context, 0, "진행 중인 동화", const BorderRadius.only(topLeft: Radius.circular(50))),
+                        buildTab(context, 1, "동화 구매", null),
+                        buildTab(context, 2, "회원 정보", const BorderRadius.only(topRight: Radius.circular(50))),
+                        // Content based on selectedTab can be placed here
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "동 글 이",
-                    style: TextStyle(fontSize: 80),
-                  ),
-                  Row(
-                    children: [
-                      const HomeIcon(),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.01,
-                      ),
-                      const CardsIcon(),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.01,
-                      ),
-                      const SoundIcon(),
-                    ],
-                  ),
-                ],
-              ),
+    );
+  }
+
+  Widget buildTab(BuildContext context, int index, String text, BorderRadius? borderRadius) {
+    double width = MediaQuery.of(context).size.width * 0.3;
+    double height = MediaQuery.of(context).size.height * 0.12;
+    bool isSelected = selectedTab == index;
+
+    return Positioned(
+      top: 0, // Adjust position based on selection
+      left: width * index,
+      child: GestureDetector(
+        onTap: () => setState(() => selectedTab = index),
+        child: Container(
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+            color: isSelected ? AppColors.primaryContainer : Colors.transparent,
+            borderRadius: borderRadius,
+            border: const Border(bottom:BorderSide(color: AppColors.primaryContainer, width: 2),),
+          ),
+          child: Center(
+            child: Text(
+              text,
+              textAlign: TextAlign.center,
+              style: isSelected ? CustomFontStyle.selectedLarge : CustomFontStyle.unSelectedLarge,
             ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height * 0.82,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: Stack(
-                children: [
-                  Positioned(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      height: MediaQuery.of(context).size.height * 0.12,
-                      decoration: const BoxDecoration(
-                        color: AppColors.primaryContainer,
-                        borderRadius:
-                        BorderRadius.only(topLeft: Radius.circular(50)),
-                        border: Border(
-                          top: BorderSide.none,
-                          left: BorderSide.none,
-                          right: BorderSide.none,
-                          bottom: BorderSide(
-                            width: 2.0,
-                            style: BorderStyle.solid,
-                            color: AppColors.primaryContainer,
-                          ),
-                        ),
-                      ),
-                      child: Text("진행 중인 동화", textAlign: TextAlign.center,style: CustomFontStyle.selectedLarge,),
-                    ),
-                  ),
-                  Positioned(
-                    top: 0,
-                    left: MediaQuery.of(context).size.width * 0.3,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      height: MediaQuery.of(context).size.height * 0.12,
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          top: BorderSide.none,
-                          left: BorderSide(
-                            width: 2.0,
-                            style: BorderStyle.solid,
-                            color: AppColors.primaryContainer,
-                          ),
-                          right: BorderSide(
-                            width: 2.0,
-                            style: BorderStyle.solid,
-                            color: AppColors.primaryContainer,
-                          ),
-                          bottom: BorderSide(
-                            width: 2.0,
-                            style: BorderStyle.solid,
-                            color: AppColors.primaryContainer,
-                          ),
-                        ),
-                      ),
-                      child: Text("동화 구매", textAlign: TextAlign.center,style: CustomFontStyle.unSelectedLarge,),
-                    ),
-                  ),
-                  Positioned(
-                    top: 0,
-                    left: MediaQuery.of(context).size.width * 0.6,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      height: MediaQuery.of(context).size.height * 0.12,
-                      decoration: const BoxDecoration(
-                        borderRadius:
-                        BorderRadius.only(topRight: Radius.circular(50)),
-                        border: Border(
-                          top: BorderSide.none,
-                          left: BorderSide.none,
-                          right: BorderSide.none,
-                          bottom: BorderSide(
-                            width: 2.0,
-                            style: BorderStyle.solid,
-                            color: AppColors.primaryContainer,
-                          ),
-                        ),
-                      ),
-                      child: Text("회원 정보", textAlign: TextAlign.center,style: CustomFontStyle.unSelectedLarge,),
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
+          ),
         ),
       ),
-    );;
+    );
   }
 }
