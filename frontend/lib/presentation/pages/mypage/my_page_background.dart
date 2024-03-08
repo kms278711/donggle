@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
-import 'package:frontend/core/utils/component/icons/cards_icon.dart';
-import 'package:frontend/core/utils/component/icons/home_icon.dart';
+import 'package:frontend/core/utils/component/icons/cards_icon_mypage.dart';
+import 'package:frontend/core/utils/component/icons/home_icon_mypage.dart';
 import 'package:frontend/core/utils/component/icons/sound_icon.dart';
+import 'package:frontend/presentation/pages/mypage/current_fairytale.dart';
+import 'package:frontend/presentation/pages/mypage/my_page.dart';
+import 'package:frontend/presentation/pages/mypage/purchase_fairytale.dart';
 
 class MyPageBackground extends StatefulWidget {
   const MyPageBackground({super.key});
@@ -41,9 +44,9 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
                     ),
                     Row(
                       children: [
-                        HomeIcon(),
+                        HomeIconMypage(),
                         SizedBox(width: 10),
-                        CardsIcon(),
+                        CardsIconMypage(),
                         SizedBox(width: 10),
                         SoundIcon(),
                       ],
@@ -66,7 +69,15 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
                         buildTab(context, 0, "진행 중인 동화", const BorderRadius.only(topLeft: Radius.circular(50))),
                         buildTab(context, 1, "동화 구매", null),
                         buildTab(context, 2, "회원 정보", const BorderRadius.only(topRight: Radius.circular(50))),
-                        // Content based on selectedTab can be placed here
+                        //Content based on selectedTab can be placed here
+                        Positioned(
+                          top: MediaQuery.of(context).size.height * 0.12,
+                          child: selectedTab == 0
+                              ? CurrentFairytale()
+                              : selectedTab == 1
+                              ? PurchaseFairytale()
+                              : MyPage(),
+                        ),
                       ],
                     ),
                   ),

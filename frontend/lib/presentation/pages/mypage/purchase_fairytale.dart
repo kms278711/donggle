@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 
-class MyPage extends StatelessWidget {
-  const MyPage({super.key});
+class PurchaseFairytale extends StatelessWidget {
+  const PurchaseFairytale({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class MyPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            "회원 정보가 없습니다.",
+            "구매 가능한 동화가 없습니다.",
             textAlign: TextAlign.center,
             style: CustomFontStyle.bodyLarge,
           ),
