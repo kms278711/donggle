@@ -14,6 +14,8 @@ class AppIcons {
   static const String water_right = "assets/images/water_right.png";
   static const String card = "assets/images/card.png";
   static const String water_test = "assets/images/water_test.png";
+  static const String crab = "assets/images/crab.png";
+  static const String jellyfish = "assets/images/jellyfish.png";
 
   //icons
   static const String close_circle = "assets/images/icons/close-circle.png";
