@@ -2,14 +2,12 @@ package com.ssafy.backend.domain.book.entity;
 
 import com.ssafy.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Getter
 @ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookPageSentence extends BaseEntity {
@@ -24,7 +22,7 @@ public class BookPageSentence extends BaseEntity {
 
     private String sentenceSoundPath;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "book_page_id")
     private BookPage bookPage;
 
