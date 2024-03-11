@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
+import 'package:frontend/core/utils/component/buttons/red_button.dart';
+import 'package:frontend/presentation/pages/modal/signout_modal.dart';
 
 class CurrentFairytale extends StatelessWidget {
   const CurrentFairytale({super.key});
@@ -17,6 +20,7 @@ class CurrentFairytale extends StatelessWidget {
             textAlign: TextAlign.center,
             style: CustomFontStyle.bodyLarge,
           ),
+          // RedButton('회원탈퇴', onPressed: ,)
         ],
       ),
     );
