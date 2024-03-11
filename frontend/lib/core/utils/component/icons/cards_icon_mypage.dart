@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
-import 'package:frontend/presentation/routes/route_path.dart';
-import 'package:go_router/go_router.dart';
 
 class CardsIconMypage extends StatelessWidget {
   const CardsIconMypage({super.key});
