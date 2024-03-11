@@ -3,7 +3,6 @@ package com.ssafy.backend.global.error;
 import com.ssafy.backend.global.dto.Response;
 import com.ssafy.backend.global.error.exception.ExceptionType;
 import com.ssafy.backend.global.error.exception.FileException;
-import com.ssafy.backend.global.error.exception.InbodyException;
 import com.ssafy.backend.global.error.exception.UserException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,13 +37,6 @@ public class GlobalExceptionAdvice {
                 .body(Response.fail(exceptionType.name(), exceptionType.getErrorMessage()));
     }
 
-    @ExceptionHandler({InbodyException.class})
-    public ResponseEntity inbodyExceptionHandler(InbodyException ex) {
-        ExceptionType exceptionType = ex.getExceptionType();
-        return ResponseEntity.status(exceptionType.getHttpStatus())
-                .body(Response.fail(exceptionType.name(), exceptionType.getErrorMessage()));
-    }
-
     @ExceptionHandler({FileException.class})
     public ResponseEntity fileExceptionHandler(FileException ex) {
         ExceptionType exceptionType = ex.getExceptionType();
@@ -61,8 +53,10 @@ public class GlobalExceptionAdvice {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity handleDefaultExcpeiton(Exception ex) {
+        String message = ex.getMessage();
+        System.out.println(message);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Response.fail(HttpStatus.BAD_REQUEST.name(), "기본 에러"));
+                .body(Response.fail(HttpStatus.BAD_REQUEST.name(), "에러가 발생했습니다."));
     }
 
 }

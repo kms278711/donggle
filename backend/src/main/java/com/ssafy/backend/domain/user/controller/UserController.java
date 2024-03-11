@@ -33,7 +33,7 @@ public class UserController {
 
     @PostMapping("/{user_id}/password/check")
     public ResponseEntity checkPassword(@PathVariable("user_id") Long userId, @RequestBody PasswordRequestDto passwordRequestDto) {
-        if (!userService.checkPassword(userId, passwordRequestDto.getCurrentPassword())) {
+        if (!userService.checkPassword(userId, passwordRequestDto.currentPassword())) {
             return ResponseEntity.ok(Response.fail(HttpStatus.BAD_REQUEST.name(), "비밀번호가 맞지 않습니다."));
         }
         return ResponseEntity.ok(Response.success());
@@ -65,19 +65,19 @@ public class UserController {
 
     @PatchMapping("/{user_id}/name")
     public ResponseEntity updateName(@PathVariable("user_id") Long userId, @RequestBody UpdateRequestDto updateRequestDto) {
-        userService.updateName(userId, updateRequestDto.getName());
+        userService.updateName(userId, updateRequestDto.name());
         return ResponseEntity.ok(Response.success());
     }
 
     @PatchMapping("/{user_id}/nickname")
     public ResponseEntity updateNickname(@PathVariable("user_id") Long userId, @RequestBody UpdateRequestDto updateRequestDto) {
-        userService.updateNickname(userId, updateRequestDto.getNickname());
+        userService.updateNickname(userId, updateRequestDto.nickname());
         return ResponseEntity.ok(Response.success());
     }
 
     @PatchMapping("/{user_id}/profile-image")
     public ResponseEntity updateProfileImage(@PathVariable("user_id") Long userId, @RequestBody UpdateRequestDto updateRequestDto) {
-        userService.updateProfileImage(userId, updateRequestDto.getProfileImage());
+        userService.updateProfileImage(userId, updateRequestDto.profileImage());
         return ResponseEntity.ok(Response.success());
     }
 

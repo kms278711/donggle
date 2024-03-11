@@ -106,7 +106,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static void saveLoginUserInSecurityContext(LoginUserDto loginUserDto) {
         JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(
                 loginUserDto, "",
-                Arrays.asList(new SimpleGrantedAuthority(loginUserDto.getRole()))
+                Arrays.asList(new SimpleGrantedAuthority(loginUserDto.role()))
         );
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }

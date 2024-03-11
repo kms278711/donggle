@@ -5,7 +5,6 @@ import com.ssafy.backend.domain.user.entity.User;
 import com.ssafy.backend.domain.user.mapper.UserMapper;
 import com.ssafy.backend.domain.user.repository.UserRepository;
 import com.ssafy.backend.domain.user.service.AuthService;
-import com.ssafy.backend.domain.user.service.UserService;
 import com.ssafy.backend.global.error.exception.UserException;
 import com.ssafy.backend.global.jwt.dto.TokenDto;
 import com.ssafy.backend.global.jwt.dto.UserInfoDto;
@@ -15,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.ssafy.backend.global.error.exception.ExceptionType.*;
 
@@ -23,7 +23,6 @@ import static com.ssafy.backend.global.error.exception.ExceptionType.*;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
-    private final UserService userService;
     private final JwtService jwtService;
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
@@ -31,10 +30,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public void signup(SignupRequestDto signupRequestDto) {
-        if (userRepository.countByEmail(signupRequestDto.email()) > 0) {
+    public void signup(SignupRequestDto signupRequestDto, MultipartFile profileImage) {
+        if (isUserExist(signupRequestDto)) {
             userRepository.findByEmail(signupRequestDto.email()).ifPresent(user -> {
-                if (user.getStatus() == User.Status.WITHDRAWAL) {
+                if (isWithdrawal(user)) {
                     throw new UserException(WITHDRAW_USER);
                 }
             });
@@ -43,19 +42,34 @@ public class AuthServiceImpl implements AuthService {
 
         User user = userMapper.toUser(signupRequestDto);
 
-        user.updateNickname(userService.nicknameGenerator());
+        passwordEncoding(user);
+        InitialSetting(user);
+        userRepository.save(user);
+    }
 
+    private static boolean isWithdrawal(User user) {
+        return user.getStatus() == User.Status.WITHDRAWAL;
+    }
+
+    private static void InitialSetting(User user) {
+        user.updateStatus(User.Status.MEMBER);
+        user.updateRole(User.Role.USER);
+    }
+
+    private void passwordEncoding(User user) {
         String password = passwordEncoder.encode(user.getPassword());
         user.updatePassword(password);
-        user.updateStatus(User.Status.WITHDRAWAL);
-        userRepository.save(user);
+    }
+
+    private boolean isUserExist(SignupRequestDto signupRequestDto) {
+        return userRepository.countByEmail(signupRequestDto.email()) > 0;
     }
 
     @Override
     public UserInfoDto login(String email, String password) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UserException(INVALID_EMAIL));
 
-        if (user.getStatus() == User.Status.WITHDRAWAL) {
+        if (isWithdrawal(user)) {
             throw new UserException(WITHDRAW_USER);
         }
 
@@ -88,5 +102,4 @@ public class AuthServiceImpl implements AuthService {
     public boolean duplicateCheckEmail(String email) {
         return userRepository.existsByEmail(email);
     }
-
 }

@@ -8,7 +8,6 @@ import com.ssafy.backend.global.jwt.repository.TokenRepository;
 import io.jsonwebtoken.*;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.BasicJsonParser;
 import org.springframework.stereotype.Service;
 
@@ -36,12 +35,12 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public String issueAccessToken(@NonNull UserInfoDto info) {
         Claims claims = Jwts.claims()
-                .setId(String.valueOf(info.getUserId()));
+                .setId(String.valueOf(info.userId()));
 
-        claims.put(CLAIM_EMAIL, info.getEmail());
-        claims.put(CLAIM_ROLE, info.getRole());
-        claims.put(CLAIM_NICKNAME, info.getNickname());
-        claims.put(CLAIM_PROFILE_IMAGE, info.getProfileImage());
+        claims.put(CLAIM_EMAIL, info.email());
+        claims.put(CLAIM_ROLE, info.role());
+        claims.put(CLAIM_NICKNAME, info.nickname());
+        claims.put(CLAIM_PROFILE_IMAGE, info.profileImage());
         return issueToken(claims, jwtUtils.getAccessTokenExpiredMin(), jwtUtils.getEncodedKey());
     }
     public String issueRefreshToken(@NonNull Long id) {
@@ -53,13 +52,13 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public TokenDto issueToken(@NonNull UserInfoDto info) {
         String accessToken = issueAccessToken(info);
-        String refreshToken = issueRefreshToken(info.getUserId());
+        String refreshToken = issueRefreshToken(Long.valueOf(info.userId()));
         tokenRepository.save(refreshToken, accessToken, jwtUtils.getRefreshTokenExpiredMin());
         return TokenDto.builder()
                 .accessToken(accessToken)
-                .accessTokenExpired(jwtUtils.getAccessTokenExpiredMin() * 60)
+                .accessTokenExpired(jwtUtils.getAccessTokenExpiredMin() * 60L)
                 .refreshToken(refreshToken)
-                .refreshTokenExpired(jwtUtils.getRefreshTokenExpiredMin() * 60)
+                .refreshTokenExpired(jwtUtils.getRefreshTokenExpiredMin() * 60L)
                 .build();
     }
 
@@ -121,7 +120,7 @@ public class JwtServiceImpl implements JwtService {
         LoginUserDto loginUserDto = parseAccessToken(accessToken);
         long expiration = calculateExpiration(accessToken);
         tokenRepository.save(accessToken, "BLACK_LIST", expiration);
-        tokenRepository.delete(String.valueOf(loginUserDto.getUserId()));
+        tokenRepository.delete(String.valueOf(loginUserDto.userId()));
 
     }
 
