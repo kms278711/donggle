@@ -4,7 +4,6 @@ import com.ssafy.backend.domain.user.dto.ReissueDto;
 import com.ssafy.backend.domain.user.dto.request.LoginRequestDto;
 import com.ssafy.backend.domain.user.dto.request.SignupRequestDto;
 import com.ssafy.backend.domain.user.service.AuthService;
-import com.ssafy.backend.domain.user.service.UserService;
 import com.ssafy.backend.global.dto.Response;
 import com.ssafy.backend.global.jwt.dto.TokenDto;
 import com.ssafy.backend.global.jwt.dto.UserInfoDto;
@@ -24,7 +23,6 @@ public class AuthController {
 
     private final AuthService authService;
     private final JwtService jwtService;
-    private final UserService userService;
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDto, @RequestParam(required = false) MultipartFile profileImage) {
@@ -33,7 +31,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<TokenDto> login(@RequestBody LoginRequestDto loginRequestDto) {
         UserInfoDto userInfoDto = authService.login(loginRequestDto.email(), loginRequestDto.password());
         TokenDto tokenDto = jwtService.issueToken(userInfoDto);
 
@@ -48,16 +46,16 @@ public class AuthController {
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity reissue(@RequestBody ReissueDto reissueDto) {
+    public ResponseEntity<TokenDto> reissue(@RequestBody ReissueDto reissueDto) {
         TokenDto tokenDto = authService.reissue(reissueDto.refreshToken());
         return ResponseEntity.ok(tokenDto);
     }
 
-    @GetMapping
-    public ResponseEntity duplicateCheckEmail(@RequestParam String email) {
+    @GetMapping("/email-check")
+    public ResponseEntity<Boolean> duplicateCheckEmail(@RequestParam String email) {
         if (authService.duplicateCheckEmail(email)) {
-            return ResponseEntity.ok(Response.fail("", ""));
+            return ResponseEntity.ok(false);
         }
-        return ResponseEntity.ok(Response.success("", ""));
+        return ResponseEntity.ok(true);
     }
 }
