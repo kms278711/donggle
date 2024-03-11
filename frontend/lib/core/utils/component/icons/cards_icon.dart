@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
-import 'package:frontend/presentation/routes/route_path.dart';
-import 'package:go_router/go_router.dart';
 
 class CardsIcon extends StatelessWidget {
   const CardsIcon({super.key});
@@ -9,7 +7,7 @@ class CardsIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.go(RoutePath.card),
+      onTap: () {},
       child: Image.asset(AppIcons.word_icon,
           width: MediaQuery.of(context).size.width * 0.05),
     );

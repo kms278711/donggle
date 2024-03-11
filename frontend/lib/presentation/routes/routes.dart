@@ -1,6 +1,5 @@
-import 'package:frontend/presentation/pages/card/card_page.dart';
-import 'package:frontend/presentation/pages/home/home_page.dart';
 import 'package:frontend/presentation/pages/login/login_page.dart';
+import 'package:frontend/presentation/pages/main_screen/main_screen.dart';
 import 'package:frontend/presentation/pages/mypage/my_page_background.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,14 +14,9 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const SplashPage(),
     ),
     GoRoute(
-      path: RoutePath.home,
-      name: 'home',
-      builder: (context, state) => const HomePage(),
-    ),
-    GoRoute(
-      path: RoutePath.card,
-      name: 'card',
-      builder: (context, state) => const CardPage(),
+      path: RoutePath.main,
+      name: 'main',
+      builder: (context, state) => const MainScreen(),
     ),
     GoRoute(
       path: RoutePath.myPage,

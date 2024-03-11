@@ -1,7 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/theme_data.dart';
-import 'package:frontend/presentation/pages/splash/splash_page.dart';
 import 'package:frontend/presentation/routes/routes.dart';
 
 void main() {

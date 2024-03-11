@@ -10,7 +10,7 @@ class MyReview extends StatelessWidget {
       padding: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.01),
       child: Text(
         "내가 남긴 리뷰",
-        style: CustomFontStyle.textMedium,
+        style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMedium),
       ),
     );
   }
