@@ -4,6 +4,16 @@ import '../constant/app_colors.dart';
 import 'custom_font_weight.dart';
 
 class CustomFontStyle {
+  static TextStyle getTextStyle(BuildContext context, TextStyle baseStyle) {
+    double width = MediaQuery.of(context).size.width;
+
+    // Define your scaling factor based on the device's width
+    // For example, if the design is based on a 375 width screen
+    double scaleFactor = width / 1480;
+
+    return baseStyle.copyWith(fontSize: baseStyle.fontSize! * scaleFactor);
+  }
+
   /// Typography
   static const selectedLarge = TextStyle(
     fontFamily: "Nanumson_jangmi",

@@ -3,6 +3,8 @@ import 'package:frontend/presentation/pages/home/home_page.dart';
 import 'package:frontend/core/utils/component/icons/kakaotalk_icon.dart';
 import 'package:frontend/core/utils/component/icons/naver_icon.dart';
 import 'package:frontend/core/utils/component/icons/google_icon.dart';
+import 'package:frontend/presentation/routes/route_path.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -198,14 +200,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const HomePage(),
-                        ),
-                      );
-                    },
+                    onTap: () => context.go(RoutePath.main),
                     child: const DefaultTextStyle(
                       style: TextStyle(
                         fontFamily: 'Nanumson_jangmi',

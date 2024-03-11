@@ -29,24 +29,24 @@ class MyPage extends StatelessWidget {
                   height: MediaQuery.of(context).size.height * 0.05,
                 ),
                 RichText(
-                  text: const TextSpan(
+                  text: TextSpan(
                     children: <TextSpan>[
                       TextSpan(
                         text: '닉네임: ',
-                        style: CustomFontStyle.textSmall,
+                        style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmall),
                       ),
                       TextSpan(
-                          text: 'mj3meal', style: CustomFontStyle.textSmallEng),
+                          text: 'mj3meal', style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmallEng)),
                     ],
                   ),
                 ),
                 RichText(
-                  text: const TextSpan(
+                  text: TextSpan(
                     children: <TextSpan>[
-                      TextSpan(text: '이메일: ', style: CustomFontStyle.textSmall),
+                      TextSpan(text: '이메일: ', style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmall)),
                       TextSpan(
                           text: 'ducco705@snu.ac.kr',
-                          style: CustomFontStyle.textSmallEng),
+                          style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmallEng)),
                     ],
                   ),
                 ),
@@ -55,9 +55,9 @@ class MyPage extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    GreenButton("정보수정"),
+                    GreenButton("정보수정", onPressed: () {  },),
                     SizedBox(width: MediaQuery.of(context).size.width * 0.02),
-                    GreenButton("로그아웃")
+                    GreenButton("로그아웃", onPressed: () {  },)
                   ],
                 )
               ],

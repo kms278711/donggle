@@ -128,8 +128,8 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
               text,
               textAlign: TextAlign.center,
               style: isSelected
-                  ? CustomFontStyle.selectedLarge
-                  : CustomFontStyle.unSelectedLarge,
+                  ? CustomFontStyle.getTextStyle(context, CustomFontStyle.selectedLarge)
+                  : CustomFontStyle.getTextStyle(context, CustomFontStyle.unSelectedLarge),
             ),
           ),
         ),
