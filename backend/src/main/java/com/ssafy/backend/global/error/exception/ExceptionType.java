@@ -37,8 +37,8 @@ public enum ExceptionType {
     FAIL_WRITE_FILE(HttpStatus.BAD_REQUEST, "파일 작성을 실패하였습니다."),
     FAIL_RESPONSE(HttpStatus.BAD_REQUEST, "RESPONSE가 없습니다."),
 
-    NOT_FOUND_BOOK(HttpStatus.BAD_REQUEST, "해당 책이 존재하지 않습니다.");
-
+    NOT_FOUND_BOOK(HttpStatus.BAD_REQUEST, "해당 책이 존재하지 않습니다."),
+    NOT_FOUND_BOOKPAGE(HttpStatus.BAD_REQUEST, "해당페이지가 존재하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String errorMessage;

@@ -4,6 +4,9 @@ import com.ssafy.backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @ToString
@@ -22,9 +25,12 @@ public class Book extends BaseEntity {
     private String summary;
 
     @Column(nullable = false)
-    private String path;
+    private String coverPath;
 
     @Column(nullable = false)
     private int price;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    private List<BookPage> bookPages = new ArrayList<>();
 
 }

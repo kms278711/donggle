@@ -22,7 +22,7 @@ public class BookPageSentence extends BaseEntity {
 
     private String sentenceSoundPath;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "book_page_id")
     private BookPage bookPage;
 
