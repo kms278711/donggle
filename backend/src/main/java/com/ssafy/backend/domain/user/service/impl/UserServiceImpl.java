@@ -89,14 +89,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateName(Long userId, String name) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserException(INVALID_USER));
-        user.updateName(name);
-    }
-
-
-    @Override
-    @Transactional
     public void updateProfileImage(Long userId, String profileImage) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException(INVALID_USER));
         user.updateProfileImage(profileImage);

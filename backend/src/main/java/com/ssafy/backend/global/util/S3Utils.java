@@ -1,8 +1,11 @@
 package com.ssafy.backend.global.util;
 
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.ssafy.backend.global.error.exception.ExceptionType;
+import com.ssafy.backend.global.error.exception.FileException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,7 +27,7 @@ public class S3Utils {
         amazonS3Client.putObject(bucketName, folderName + "/", new ByteArrayInputStream(new byte[0]), new ObjectMetadata());
     }
 
-    // 다중 파일 업로드
+    // 파일 업로드
     public void fileUpload(String folderName, String fileName, MultipartFile file) throws Exception {
         if(amazonS3Client != null) {
 
@@ -36,18 +39,18 @@ public class S3Utils {
             objectMetadata.setContentType(file.getContentType());
             objectMetadata.setContentLength(file.getSize());
             objectMetadata.setHeader("filename", file.getOriginalFilename());
-            amazonS3Client.putObject(new PutObjectRequest(bucket + "/" + folderName, file.getName(), files.get(i).getInputStream(), objectMetadata));
+            amazonS3Client.putObject(new PutObjectRequest(bucket + "/" + folderName, file.getName(), file.getInputStream(), objectMetadata));
         } else {
-            throw new AppException(ErrorType.aws_credentials_fail, null);
+            throw new FileException(ExceptionType.AWS_UPLOAD_FAIL);
         }
     }
 
     // 다중 파일 삭제
     public void fileDelete(String filePath, String fileName) {
-        if(amazonS3 != null) {
-            amazonS3.deleteObject(new DeleteObjectRequest(filePath, fileName));
+        if(amazonS3Client != null) {
+            amazonS3Client.deleteObject(new DeleteObjectRequest(filePath, fileName));
         } else {
-            throw new AppException(ErrorType.aws_credentials_fail, null);
+            throw new FileException(ExceptionType.AWS_DELETE_FAIL);
         }
     }
     

@@ -8,7 +8,6 @@ import lombok.*;
 public record UserResponseDto (
     Long userId,
     String email,
-    String name,
     String nickname,
     String role,
 
@@ -20,7 +19,6 @@ public record UserResponseDto (
         return UserResponseDto.builder()
                 .userId(user.getUserId())
                 .email(user.getEmail())
-                .name(user.getName())
                 .nickname(user.getNickname())
                 .role(user.getRole().name())
                 .profileImage(user.getProfileImage())

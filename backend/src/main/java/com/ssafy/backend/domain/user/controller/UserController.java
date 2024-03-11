@@ -63,12 +63,6 @@ public class UserController {
         return ResponseEntity.ok(Response.success());
     }
 
-    @PatchMapping("/{user_id}/name")
-    public ResponseEntity updateName(@PathVariable("user_id") Long userId, @RequestBody UpdateRequestDto updateRequestDto) {
-        userService.updateName(userId, updateRequestDto.name());
-        return ResponseEntity.ok(Response.success());
-    }
-
     @PatchMapping("/{user_id}/nickname")
     public ResponseEntity updateNickname(@PathVariable("user_id") Long userId, @RequestBody UpdateRequestDto updateRequestDto) {
         userService.updateNickname(userId, updateRequestDto.nickname());

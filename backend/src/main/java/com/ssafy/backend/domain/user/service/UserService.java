@@ -15,7 +15,6 @@ public interface UserService {
     void updateStatus(Long userId);
     void updateNickname(Long userId, String nickname);
     boolean duplicateCheckNickname(String nickname);
-    void updateName(Long userId, String name);
     void updateProfileImage(Long userId, String profileImage);
 
 }

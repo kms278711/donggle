@@ -22,8 +22,6 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    private String name;
-
     private String nickname;
 
     private String profileImage;
@@ -56,10 +54,6 @@ public class User extends BaseEntity {
     }
 
     public void updateStatus(Status status) { this.status = status; }
-
-    public void updateName(String name) {
-        this.name = name;
-    }
 
     public void updateProfileImage(String profileImage) {
         this.profileImage = profileImage;
