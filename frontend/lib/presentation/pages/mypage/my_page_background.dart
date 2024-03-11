@@ -7,6 +7,7 @@ import 'package:frontend/core/utils/component/icons/home_icon_mypage.dart';
 import 'package:frontend/core/utils/component/icons/sound_icon.dart';
 import 'package:frontend/presentation/pages/mypage/current_fairytale.dart';
 import 'package:frontend/presentation/pages/mypage/my_page.dart';
+import 'package:frontend/presentation/pages/mypage/my_page_update.dart';
 import 'package:frontend/presentation/pages/mypage/purchase_fairytale.dart';
 
 class MyPageBackground extends StatefulWidget {
@@ -18,6 +19,11 @@ class MyPageBackground extends StatefulWidget {
 
 class _MyPageBackgroundState extends State<MyPageBackground> {
   int selectedTab = 0; // 초기에 선택된 탭의 인덱스
+  bool isUpdateSelected = false; // 정보수정 버튼 눌렀는지 확인
+
+  void updateToggle() {
+    isUpdateSelected != isUpdateSelected;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +51,11 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
                     Row(
                       children: [
                         const HomeIconMypage(),
-                        SizedBox(width: MediaQuery.of(context).size.width * 0.01),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.01),
                         const CardsIconMypage(),
-                        SizedBox(width: MediaQuery.of(context).size.width * 0.01),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.01),
                         // Toggle between SoundIcon and SoundOffIcon based on isSoundOn
                         SoundIcon(),
                       ],
@@ -88,7 +96,15 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
                               ? const CurrentFairytale()
                               : selectedTab == 1
                                   ? const PurchaseFairytale()
-                                  : const MyPage(),
+                                  : isUpdateSelected
+                                      ? MyPage(
+                                          isUpdateSelected: isUpdateSelected,
+                                          updateToggle: updateToggle,
+                                        )
+                                      : MyPageUpdate(
+                                          isUpdateSelected: isUpdateSelected,
+                                          updateToggle: updateToggle,
+                                        ),
                         ),
                       ],
                     ),
@@ -128,8 +144,10 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
               text,
               textAlign: TextAlign.center,
               style: isSelected
-                  ? CustomFontStyle.getTextStyle(context, CustomFontStyle.selectedLarge)
-                  : CustomFontStyle.getTextStyle(context, CustomFontStyle.unSelectedLarge),
+                  ? CustomFontStyle.getTextStyle(
+                      context, CustomFontStyle.selectedLarge)
+                  : CustomFontStyle.getTextStyle(
+                      context, CustomFontStyle.unSelectedLarge),
             ),
           ),
         ),

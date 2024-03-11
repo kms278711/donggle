@@ -20,7 +20,6 @@ class CurrentFairytale extends StatelessWidget {
             textAlign: TextAlign.center,
             style: CustomFontStyle.getTextStyle(context, CustomFontStyle.bodyLarge),
           ),
-          // RedButton('회원탈퇴', onPressed: ,)
         ],
       ),
     );
