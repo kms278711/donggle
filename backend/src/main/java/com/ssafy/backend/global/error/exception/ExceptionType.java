@@ -35,7 +35,10 @@ public enum ExceptionType {
     NOT_FOUND_AVATAR_URL(HttpStatus.BAD_REQUEST, "AVATAR_URL을 입력해주세요."),
     FAIL_CREATE_FILE(HttpStatus.BAD_REQUEST, "파일 생성을 실패하였습니다."),
     FAIL_WRITE_FILE(HttpStatus.BAD_REQUEST, "파일 작성을 실패하였습니다."),
-    FAIL_RESPONSE(HttpStatus.BAD_REQUEST, "RESPONSE가 없습니다.");
+    FAIL_RESPONSE(HttpStatus.BAD_REQUEST, "RESPONSE가 없습니다."),
+
+    NOT_FOUND_BOOK(HttpStatus.BAD_REQUEST, "해당 책이 존재하지 않습니다.");
+
 
     private final HttpStatus httpStatus;
     private final String errorMessage;

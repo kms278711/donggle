@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface BookService {
 
-    public List<BookDto> searchAllbook();
-
+    List<BookDto> searchAllBook();
+    BookDto searchBook(Long bookId);
 }
