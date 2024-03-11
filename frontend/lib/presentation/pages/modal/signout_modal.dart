@@ -11,6 +11,8 @@ class SignOut extends StatefulWidget {
 class _SignOutState extends State<SignOut> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Column(
+      children: [Text('hi')],
+    );
   }
 }
