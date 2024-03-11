@@ -1,11 +1,9 @@
 package com.ssafy.backend.domain.user.controller;
 
-import com.ssafy.backend.domain.user.dto.request.LoginRequestDto;
-import com.ssafy.backend.domain.user.dto.response.LoginResponseDto;
 import com.ssafy.backend.domain.user.dto.ReissueDto;
+import com.ssafy.backend.domain.user.dto.request.LoginRequestDto;
 import com.ssafy.backend.domain.user.dto.request.SignupRequestDto;
 import com.ssafy.backend.domain.user.service.AuthService;
-import com.ssafy.backend.domain.user.service.UserService;
 import com.ssafy.backend.global.dto.Response;
 import com.ssafy.backend.global.jwt.dto.TokenDto;
 import com.ssafy.backend.global.jwt.dto.UserInfoDto;
@@ -15,9 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -27,27 +23,19 @@ public class AuthController {
 
     private final AuthService authService;
     private final JwtService jwtService;
-    private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDto) {
-        authService.signup(signupRequestDto);
-        return ResponseEntity.ok("");
+    public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDto, @RequestParam(required = false) MultipartFile profileImage) {
+        authService.signup(signupRequestDto, profileImage);
+        return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<TokenDto> login(@RequestBody LoginRequestDto loginRequestDto) {
         UserInfoDto userInfoDto = authService.login(loginRequestDto.email(), loginRequestDto.password());
         TokenDto tokenDto = jwtService.issueToken(userInfoDto);
 
-        return ResponseEntity.ok(Response.success(
-                LoginResponseDto.builder()
-                        .userInfo(userService.getUserInfo(userInfoDto.getUserId()))
-                        .token(tokenDto)
-                        .build(),
-                HttpStatus.OK.name(), "로그인 성공")
-        );
-
+        return ResponseEntity.ok(tokenDto);
     }
 
     @PostMapping("/logout")
@@ -58,22 +46,16 @@ public class AuthController {
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity reissue(@RequestBody ReissueDto reissueDto) {
-        TokenDto tokenDto = authService.reissue(reissueDto.getRefreshToken());
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("token", tokenDto);
-
-        return ResponseEntity.ok(Response.success(map));
-
+    public ResponseEntity<TokenDto> reissue(@RequestBody ReissueDto reissueDto) {
+        TokenDto tokenDto = authService.reissue(reissueDto.refreshToken());
+        return ResponseEntity.ok(tokenDto);
     }
 
-    @GetMapping
-    public ResponseEntity duplicateCheckEmail(@RequestParam String email) {
+    @GetMapping("/email-check")
+    public ResponseEntity<Boolean> duplicateCheckEmail(@RequestParam String email) {
         if (authService.duplicateCheckEmail(email)) {
-            return ResponseEntity.ok(Response.fail("", ""));
+            return ResponseEntity.ok(false);
         }
-        return ResponseEntity.ok(Response.success("", ""));
+        return ResponseEntity.ok(true);
     }
-
 }
