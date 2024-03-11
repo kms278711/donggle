@@ -17,3 +17,6 @@ https://github.com/yining1023/doodleNet/blob/master/doodleNet.ipynb
 https://github.com/Stability-AI/generative-models
 diffuser 모델을 통한 생성형 모델 테스트 완료
 <br><br>
+
+24/03/07 - TH <br>
+gerrit setting 완료
