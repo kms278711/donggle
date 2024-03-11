@@ -7,20 +7,58 @@ import 'package:frontend/core/utils/component/icons/my_icon.dart';
 import 'package:frontend/core/utils/component/icons/sound_icon.dart';
 import 'package:frontend/presentation/pages/card/card_page.dart';
 import 'package:frontend/presentation/pages/home/component/background/back_ground_below.dart';
+import 'package:frontend/presentation/pages/home/component/background/background_screen.dart';
 import 'package:frontend/presentation/pages/home/component/background/background_upper.dart';
 import 'package:frontend/presentation/pages/home/home_page.dart';
 import 'package:frontend/presentation/pages/quiz/quiz_page.dart';
 import 'package:indexed/indexed.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final String? id;
+
+  const MainScreen({this.id, super.key});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+  bool _isLoading = true; // Initial state is loading
+
+  @override
+  void initState() {
+    super.initState();
+    _updateSelectedIndex();
+  }
+
+  @override
+  void didUpdateWidget(covariant MainScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.id != oldWidget.id) {
+      _isLoading = true; // Reset loading state on widget update
+      _updateSelectedIndex();
+    }
+  }
+
+  void _updateSelectedIndex() {
+    // Simulate an asynchronous operation with a post frame callback
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final String pageIndex = widget.id ?? '0';
+      try {
+        setState(() {
+          _selectedIndex = int.parse(pageIndex);
+          _isLoading = false; // Loading complete
+        });
+      } on FormatException {
+        setState(() {
+          _selectedIndex = 0; // Default value in case of parsing error
+          _isLoading = false; // Loading complete
+        });
+      }
+    });
+  }
+
 
   final List<Widget> _pages = [
     const WidgetForHomeButton(),
@@ -42,6 +80,12 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        body: BackgroundScreen(),
+      );
+    }
+
     return Scaffold(
       body: Indexer(
         children: [
@@ -78,36 +122,31 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
           ),
-          (_selectedIndex == 1) ?
-            Indexed(
-              index: 1000,
-              child: Positioned(
-                top: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.12,
-                right: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.1,
-                child: GreenButton("문제 풀기", onPressed: () => _onButtonPressed(2),),
-              ),
-            ) : Container(),
-          (_selectedIndex == 2) ?
-          Indexed(
-            index: 1000,
-            child: Positioned(
-              top: MediaQuery
-                  .of(context)
-                  .size
-                  .height * 0.1,
-              right: MediaQuery
-                  .of(context)
-                  .size
-                  .width * 0.065,
-              child: IconButton(icon: const CloseCircle(),onPressed: () => _onButtonPressed(1)),
-            ),
-          ) : Container(),
+          (_selectedIndex == 1)
+              ? Indexed(
+                  index: 1000,
+                  child: Positioned(
+                    top: MediaQuery.of(context).size.height * 0.12,
+                    right: MediaQuery.of(context).size.width * 0.1,
+                    child: GreenButton(
+                      "문제 풀기",
+                      onPressed: () => _onButtonPressed(2),
+                    ),
+                  ),
+                )
+              : Container(),
+          (_selectedIndex == 2)
+              ? Indexed(
+                  index: 1000,
+                  child: Positioned(
+                    top: MediaQuery.of(context).size.height * 0.1,
+                    right: MediaQuery.of(context).size.width * 0.065,
+                    child: IconButton(
+                        icon: const CloseCircle(),
+                        onPressed: () => _onButtonPressed(1)),
+                  ),
+                )
+              : Container(),
           const Indexed(index: 100, child: BackgroundUpper())
         ],
       ),

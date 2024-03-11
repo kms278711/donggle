@@ -15,6 +15,13 @@ class CustomFontStyle {
   }
 
   /// Typography
+  static const titleMedium = TextStyle(
+    fontFamily: "Nanumson_jangmi",
+    color: AppColors.black,
+    fontSize: 80,
+    fontWeight: CustomFontWeight.semiBold,
+  );
+
   static const selectedLarge = TextStyle(
     fontFamily: "Nanumson_jangmi",
     color: AppColors.white,

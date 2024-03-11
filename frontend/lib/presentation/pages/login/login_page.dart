@@ -200,7 +200,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () => context.go(RoutePath.main),
+                    onTap: () => context.go(RoutePath.main0),
                     child: const DefaultTextStyle(
                       style: TextStyle(
                         fontFamily: 'Nanumson_jangmi',

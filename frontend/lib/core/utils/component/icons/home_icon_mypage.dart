@@ -9,7 +9,7 @@ class HomeIconMypage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.go(RoutePath.main),
+      onTap: () => context.go(RoutePath.main0),
       child: Image.asset(AppIcons.home_icon,
           width: MediaQuery.of(context).size.width * 0.05),
     );

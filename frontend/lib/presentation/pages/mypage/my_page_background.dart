@@ -38,9 +38,9 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       "동 글 이",
-                      style: TextStyle(fontSize: 80),
+                      style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleMedium),
                     ),
                     Row(
                       children: [

@@ -16,7 +16,10 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: RoutePath.main,
       name: 'main',
-      builder: (context, state) => const MainScreen(),
+      builder: (context, state) {
+        final id = state.pathParameters['id'];
+        return MainScreen(id: id ?? '0',);
+      },
     ),
     GoRoute(
       path: RoutePath.myPage,
