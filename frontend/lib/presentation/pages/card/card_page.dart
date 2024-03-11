@@ -15,7 +15,7 @@ class CardPage extends StatelessWidget {
           Positioned(
             top: MediaQuery.of(context).size.width * 0.12,
             left: MediaQuery.of(context).size.height * 0.16,
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.8,
               height: MediaQuery.of(context).size.height * 0.7,
               child: Column(
