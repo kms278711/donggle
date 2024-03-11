@@ -14,6 +14,5 @@ public interface JwtService {
     Long parseRefreshToken(String refreshToken);
     void addBlackList(@NonNull String accessToken);
     boolean isBlack(String jwt);
-    UserInfoDto parseAccessTokenByBase64(String accessToken);
 
 }

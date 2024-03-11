@@ -8,13 +8,10 @@ import com.ssafy.backend.global.jwt.repository.TokenRepository;
 import io.jsonwebtoken.*;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.json.BasicJsonParser;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.Base64;
 import java.util.Date;
-import java.util.Map;
 
 import static com.ssafy.backend.global.error.exception.ExceptionType.EXPIRED_TOKEN;
 import static com.ssafy.backend.global.error.exception.ExceptionType.INVALID_TOKEN;
@@ -126,21 +123,5 @@ public class JwtServiceImpl implements JwtService {
 
     public boolean isBlack(String jwt) {
         return tokenRepository.hasKey(jwt);
-    }
-
-    public UserInfoDto parseAccessTokenByBase64(String accessToken) {
-        String payload = accessToken.split("\\.")[1];
-
-        String decodePayload = new String(Base64.getDecoder().decode(payload));
-
-        BasicJsonParser jsonParser = new BasicJsonParser();
-
-        Map<String, Object> map = jsonParser.parseMap(decodePayload);
-
-        return UserInfoDto.builder()
-                .userId(Long.valueOf((String)(map.get("jti"))))
-                .email((String)map.get(CLAIM_EMAIL))
-                .role((String)map.get(CLAIM_ROLE))
-                .build();
     }
 }

@@ -1,8 +1,7 @@
 package com.ssafy.backend.domain.user.controller;
 
-import com.ssafy.backend.domain.user.dto.request.LoginRequestDto;
-import com.ssafy.backend.domain.user.dto.response.LoginResponseDto;
 import com.ssafy.backend.domain.user.dto.ReissueDto;
+import com.ssafy.backend.domain.user.dto.request.LoginRequestDto;
 import com.ssafy.backend.domain.user.dto.request.SignupRequestDto;
 import com.ssafy.backend.domain.user.service.AuthService;
 import com.ssafy.backend.domain.user.service.UserService;
@@ -17,9 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Slf4j
 @RestController
 @RequestMapping("/api/auth")
@@ -31,7 +27,7 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDto, @RequestParam MultipartFile profileImage) {
+    public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDto, @RequestParam(required = false) MultipartFile profileImage) {
         authService.signup(signupRequestDto, profileImage);
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
@@ -41,14 +37,7 @@ public class AuthController {
         UserInfoDto userInfoDto = authService.login(loginRequestDto.email(), loginRequestDto.password());
         TokenDto tokenDto = jwtService.issueToken(userInfoDto);
 
-        return ResponseEntity.ok(Response.success(
-                LoginResponseDto.builder()
-                        .userInfo(userService.getUserInfo(userInfoDto.userId()))
-                        .token(tokenDto)
-                        .build(),
-                HttpStatus.OK.name(), "로그인 성공")
-        );
-
+        return ResponseEntity.ok(tokenDto);
     }
 
     @PostMapping("/logout")
@@ -61,12 +50,7 @@ public class AuthController {
     @PostMapping("/reissue")
     public ResponseEntity reissue(@RequestBody ReissueDto reissueDto) {
         TokenDto tokenDto = authService.reissue(reissueDto.refreshToken());
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("token", tokenDto);
-
-        return ResponseEntity.ok(Response.success(map));
-
+        return ResponseEntity.ok(tokenDto);
     }
 
     @GetMapping
