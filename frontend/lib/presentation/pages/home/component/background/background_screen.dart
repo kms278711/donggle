@@ -70,6 +70,16 @@ class _BackgroundScreenState extends State<BackgroundScreen>
   AnimationController? _animationController_jellyfish;
   Animation<double>? _rotateAnimation_jellyfish;
   Animation<Offset>? _transAnimation_jellyfish;
+  // AnimationController? _animationController_parchment;
+  // Animation<double>? _rotateAnimation_parchment;
+  // Animation<Offset>? _transAnimation_parchment;
+  // AnimationController? _animationController_bottle;
+  // Animation<double>? _rotateAnimation_bottle;
+  // Animation<Offset>? _transAnimation_bottle;
+  // AnimationController? _animationController_ground_crab;
+  // Animation<double>? _rotateAnimation_ground_crab;
+  // Animation<Offset>? _transAnimation_ground_crab;
+
 
   @override
   void initState() {
@@ -305,6 +315,45 @@ class _BackgroundScreenState extends State<BackgroundScreen>
           .animate(_animationController_jellyfish!);
     });
 
+    // _animationController_parchment = AnimationController(
+    //     duration: const Duration(milliseconds: 1500), vsync: this);
+    // _rotateAnimation_parchment = Tween<double>(begin: 0, end: 0)
+    //     .animate(_animationController_parchment!);
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   final screenWidth = MediaQuery.of(context).size.width;
+    //   final screenHeight = MediaQuery.of(context).size.height;
+    //   _transAnimation_parchment = Tween<Offset>(
+    //       begin: Offset(screenWidth * -2, screenHeight * 0),
+    //       end: Offset(screenWidth * 0, screenHeight * 0))
+    //       .animate(_animationController_parchment!);
+    // });
+    //
+    // _animationController_bottle = AnimationController(
+    //     duration: const Duration(milliseconds: 2000), vsync: this);
+    // _rotateAnimation_bottle = Tween<double>(begin: 0, end: 50.25)
+    //     .animate(_animationController_bottle!);
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   final screenWidth = MediaQuery.of(context).size.width;
+    //   final screenHeight = MediaQuery.of(context).size.height;
+    //   _transAnimation_bottle = Tween<Offset>(
+    //       begin: Offset(screenWidth * 3, screenHeight * 3),
+    //       end: Offset(screenWidth * 0, screenHeight * -0.405))
+    //       .animate(_animationController_bottle!);
+    // });
+    //
+    // _animationController_ground_crab = AnimationController(
+    //     duration: const Duration(milliseconds: 3000), vsync: this);
+    // _rotateAnimation_ground_crab = Tween<double>(begin: 0, end: 0)
+    //     .animate(_animationController_ground_crab!);
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   final screenWidth = MediaQuery.of(context).size.width;
+    //   final screenHeight = MediaQuery.of(context).size.height;
+    //   _transAnimation_ground_crab = Tween<Offset>(
+    //       begin: Offset(screenWidth * 0, screenHeight * 0.6),
+    //       end: Offset(screenWidth * 0, screenHeight * 0.42))
+    //       .animate(_animationController_ground_crab!);
+    // });
+
     // 왼쪽 물방울
     _animationController1!.repeat();
     _animationController2!.repeat();
@@ -330,6 +379,15 @@ class _BackgroundScreenState extends State<BackgroundScreen>
 
     // 해파리
     _animationController_jellyfish!.repeat(reverse: true);
+
+    // // 양피지
+    // _animationController_parchment!.forward();
+    //
+    // // 병
+    // _animationController_bottle!.forward();
+    //
+    // // 땅
+    // _animationController_ground_crab!.forward();
   }
 
   @override
@@ -359,6 +417,15 @@ class _BackgroundScreenState extends State<BackgroundScreen>
 
     // 해파리
     _animationController_jellyfish!.dispose();
+
+    // // 양피지
+    // _animationController_parchment!.dispose();
+    //
+    // // 병
+    // _animationController_bottle!.dispose();
+    //
+    // // 땅
+    // _animationController_ground_crab!.dispose();
     super.dispose();
   }
 
@@ -387,6 +454,32 @@ class _BackgroundScreenState extends State<BackgroundScreen>
                 backgroundColor: Colors.transparent,
               ),
             ),
+            // Indexed(
+            //   index: -5,
+            //   child: AnimatedBuilder(
+            //     animation: _rotateAnimation_parchment!,
+            //     builder: (context, widget) {
+            //       if (_transAnimation_parchment != null) {
+            //         return Transform.translate(
+            //           offset: _transAnimation_parchment!.value,
+            //           child: Transform.rotate(
+            //             angle: _rotateAnimation_parchment!.value,
+            //             child: widget,
+            //           ),
+            //         );
+            //       } else {
+            //         return Container();
+            //       }
+            //     },
+            //     child: Container(
+            //       color: Colors.transparent,
+            //       child: Center(
+            //         child: Image.asset(AppIcons.parchment,
+            //             width: MediaQuery.of(context).size.width * 0.95),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Indexed(
               index: -4,
               child: Positioned(
@@ -400,6 +493,32 @@ class _BackgroundScreenState extends State<BackgroundScreen>
                 ),
               ),
             ),
+            // Indexed(
+            //   index: -4,
+            //   child: AnimatedBuilder(
+            //     animation: _rotateAnimation_bottle!,
+            //     builder: (context, widget) {
+            //       if (_transAnimation_bottle != null) {
+            //         return Transform.translate(
+            //           offset: _transAnimation_bottle!.value,
+            //           child: Transform.rotate(
+            //             angle: _rotateAnimation_bottle!.value,
+            //             child: widget,
+            //           ),
+            //         );
+            //       } else {
+            //         return Container();
+            //       }
+            //     },
+            //     child: Container(
+            //       color: Colors.transparent,
+            //       child: Center(
+            //         child: Image.asset(AppIcons.bottle,
+            //             width: MediaQuery.of(context).size.width * 0.3),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Indexed(
               index: 1001,
               child: Positioned(
@@ -426,6 +545,32 @@ class _BackgroundScreenState extends State<BackgroundScreen>
                 ),
               ),
             ),
+            // Indexed(
+            //   index: 1002,
+            //   child: AnimatedBuilder(
+            //     animation: _rotateAnimation_ground_crab!,
+            //     builder: (context, widget) {
+            //       if (_transAnimation_ground_crab != null) {
+            //         return Transform.translate(
+            //           offset: _transAnimation_ground_crab!.value,
+            //           child: Transform.rotate(
+            //             angle: _rotateAnimation_ground_crab!.value,
+            //             child: widget,
+            //           ),
+            //         );
+            //       } else {
+            //         return Container();
+            //       }
+            //     },
+            //     child: Container(
+            //       color: Colors.transparent,
+            //       child: Center(
+            //         child: Image.asset(AppIcons.ground,
+            //             width: MediaQuery.of(context).size.width),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Indexed(
               index: 1003,
               child: AnimatedBuilder(
