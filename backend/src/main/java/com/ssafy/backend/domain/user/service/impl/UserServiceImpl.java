@@ -26,6 +26,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void updatePassword(User user, String password) {
         user.updatePassword(passwordEncoder.encode(password));
+        System.out.println("확인");
+        userRepository.save(user);
     }
 
     @Override
@@ -42,6 +44,7 @@ public class UserServiceImpl implements UserService {
     public void changeNickname(Long userId, String nickname) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException(INVALID_USER));
         user.updateNickname(nickname);
+        userRepository.save(user);
     }
 
     @Override
@@ -55,6 +58,7 @@ public class UserServiceImpl implements UserService {
     public void updateStatus(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException(INVALID_USER));
         user.updateStatus(User.Status.WITHDRAWAL);
+        userRepository.save(user);
     }
 
     @Override
