@@ -17,10 +17,47 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  Future<bool> checkLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final registerProvider = Provider.of<RegisterFieldModel>(context, listen: false);
+    bool isLogin = prefs.getBool('isLogin') ?? false;
+    if(isLogin){
+      String? email = prefs.getString('email');
+      String? password = prefs.getString('password');
+      await registerProvider.loginWithEmail(email!, password!, context).then((_){
+        if(registerProvider.isSignedIn){
+          //TODO: 로그인 성공 시 해야하는 것? 예를들면 access Token 저장이라던지...
+        }else{
+          isLogin = false;
+          prefs.setBool('isLogin', false);
+        }
+      });
+    }
+    return isLogin;
+  }
+
+  void moveScreen() async {
+    await checkLogin().then((isLogin) {
+      if (isLogin) {
+        context.go(RoutePath.main0);
+      } else {
+        context.go(RoutePath.login);
+      }
+    });
+  }
+
+
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 2), () => context.go(RoutePath.login));
+    Timer(const Duration(milliseconds: 1500), (){
+      moveScreen();
+    });
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
   }
 
   @override

@@ -307,7 +307,7 @@ class LoginButton extends StatelessWidget {
         registerField.login(context);
         if(registerField.isSignedIn) {
           showToast('로그인에 성공하였습니다!');
-          context.push(RoutePath.main0);
+          context.go(RoutePath.main0);
         }else{
           registerField.resetPassword();
         }
@@ -333,8 +333,9 @@ class SignupButton extends StatelessWidget {
         if (registerField.isValid && registerField.isSame) {
           registerField.signUp(context);
           if (registerField.isSignedUp) {
+            registerField.login(context);
             showToast('회원가입에 성공하였습니다!');
-            context.push(RoutePath.main0);
+            context.go(RoutePath.main0);
           }else{
             registerField.resetFields();
           }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class RegisterFieldModel extends ChangeNotifier {
   String email = "";
   String password = "";
@@ -86,10 +88,15 @@ class RegisterFieldModel extends ChangeNotifier {
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({"email": email, "password": password});
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     var response = await http.post(url, headers: headers, body: body);
 
     if (response.statusCode == 200) {
       isSignedIn = true;
+      prefs.setBool('isLogin', true);
+      prefs.setString('email', email);
+      prefs.setString('password', password);
     } else {
       isSignedIn = false;
       isFailed = true;
@@ -98,7 +105,29 @@ class RegisterFieldModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void loginWithEmail(String email, String password){
+  Future<void> loginWithEmail(String email, String password, BuildContext context) async{
+    this.email = email;
+    this.password = password;
+    await login(context);
+  }
 
+  Future<void> logOut(BuildContext context) async {
+    var url = Uri.https("j10c101.p.ssafy.io", "api/auth/logout");
+    final headers = {'Content-Type': 'application/json'};
+    final body = jsonEncode({"email": email, "password": password});
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    var response = await http.post(url, headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      isSignedIn = false;
+      prefs.setBool('isLogin', false);
+      prefs.setString('email', '');
+      prefs.setString('password', '');
+    } else {
+      isSignedIn = true;
+    }
+    notifyListeners();
   }
 }
