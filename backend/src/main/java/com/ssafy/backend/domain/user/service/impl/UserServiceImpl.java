@@ -29,13 +29,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void changePassword(Long userId, PasswordRequestDto passwordRequestDto) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException(INVALID_USER));
-        System.out.println("check");
         if (!passwordEncoder.matches(passwordRequestDto.currentPassword(), user.getPassword())) {
             throw new UserException(INVALID_PASSWORD);
         }
         updatePassword(user, passwordRequestDto.newPassword());
+    }
+
+    @Override
+    public void changeNickname(Long userId, String nickname) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserException(INVALID_USER));
+        user.updateNickname(nickname);
     }
 
     @Override
