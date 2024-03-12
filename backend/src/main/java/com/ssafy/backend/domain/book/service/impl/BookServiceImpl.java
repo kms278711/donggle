@@ -90,8 +90,11 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookInfoDto searchBookInfo(Long bookId, Long loginUserId) {
-        UserBookProcess bookProcess = userBookProcessRespository.findByUser_UserIdAndBook_BookId(bookId, loginUserId);
-
+        //Book book = bookRepository.findById(bookId).orElseThrow(() -> new UserException(NOT_FOUND_BOOK));
+        UserBookProcess bookProcess = userBookProcessRespository.findByUser_userIdAndBook_bookId(loginUserId, bookId)
+                .orElseThrow(() -> new UserException(NOT_FOUND_BOOK));
+        System.out.println("bookProcess : " + bookProcess);
+        System.out.println("bookId : " + bookId + ", loginUserId : " + loginUserId);
         List<BookPage> pages = userBookProcessRespository.findByBookId(bookId);
         List<Long> pageIds = pages.stream().map(BookPage::getBookPageId)
                 .collect(Collectors.toList());
