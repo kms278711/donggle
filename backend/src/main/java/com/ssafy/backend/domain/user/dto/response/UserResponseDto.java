@@ -1,8 +1,7 @@
 package com.ssafy.backend.domain.user.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.backend.domain.user.entity.User;
-import lombok.*;
+import lombok.Builder;
 
 @Builder
 public record UserResponseDto (
@@ -10,8 +9,6 @@ public record UserResponseDto (
     String email,
     String nickname,
     String role,
-
-    @JsonProperty("profile_image")
     String profileImage
 )
 {

@@ -8,8 +8,6 @@ public record PasswordRequestDto (
 
     String currentPassword,
 
-    String newPassword,
-
-    String newPasswordCheck
+    String newPassword
 )
 {}
