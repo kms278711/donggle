@@ -13,4 +13,5 @@ public interface UserService {
     void updateStatus(Long userId);
     void updateProfileImage(Long userId, MultipartFile profileImage);
 
+    void changeNickname(Long userId, String nickname);
 }

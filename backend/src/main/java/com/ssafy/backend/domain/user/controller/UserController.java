@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
-@PreAuthorize("(hasAuthority('USER') or hasAuthority('ADMIN')) and (#userId == authentication.principal.userId)")
+@PreAuthorize("(hasAuthority('ROLE_USER') or hasAuthority('ROLE_ADMIN')) and (#userId == authentication.principal.userId)")
 public class UserController {
 
     private final UserService userService;
@@ -43,6 +43,20 @@ public class UserController {
             return ResponseEntity.ok("비밀번호를 확인해주세요.");
         }
         return ResponseEntity.ok("비밀번호 변경이 완료되었습니다.");
+    }
+
+    /**
+     * 닉네임 변경
+     */
+    @PatchMapping("/nickname")
+    public ResponseEntity<String> changeNickname(Authentication authentication, @RequestParam String nickname) {
+        try {
+            Long userId = getCurrentUserId(authentication);
+            userService.changeNickname(userId, nickname);
+        } catch (UserException e) {
+            return ResponseEntity.ok("잘못된 요청입니다.");
+        }
+        return ResponseEntity.ok("닉네임 변경이 완료되었습니다.");
     }
 
     /**
