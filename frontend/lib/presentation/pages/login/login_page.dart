@@ -4,8 +4,10 @@ import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/icons/kakaotalk_icon.dart';
 import 'package:frontend/core/utils/component/icons/naver_icon.dart';
 import 'package:frontend/core/utils/component/icons/google_icon.dart';
+import 'package:frontend/domain/model/model_register.dart';
 import 'package:frontend/presentation/routes/route_path.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -49,7 +51,12 @@ class _LoginPageState extends State<LoginPage> {
               height: MediaQuery.of(context).size.height * 0.02,
             ),
             AnimatedCrossFade(
-              firstChild: const PasswordConfirmInput(),
+              firstChild: const Column(
+                children: [
+                  PasswordConfirmInput(),
+                  ErrorMessage(),
+                ],
+              ),
               secondChild: Container(
                 width: MediaQuery.of(context).size.width * 0.47,
               ),
@@ -71,6 +78,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   GestureDetector(
                     onTap: () {
+                      Provider.of<RegisterFieldModel>(context, listen: false)
+                          .resetFields();
                       signUpToggle();
                     },
                     child: DefaultTextStyle(
@@ -114,8 +123,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 secondChild: Container(
                   width: 350,
-                  padding:
-                      EdgeInsets.all(MediaQuery.of(context).size.height * 0.01),
+                  padding: EdgeInsets.all(
+                      MediaQuery.of(context).size.height * 0.01),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(15),
@@ -146,6 +155,9 @@ class EmailInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final registerField =
+        Provider.of<RegisterFieldModel>(context, listen: false);
+
     return Container(
       width: MediaQuery.of(context).size.width * 0.47,
       height: MediaQuery.of(context).size.height * 0.1,
@@ -159,21 +171,25 @@ class EmailInput extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TextField(
-            onChanged: (email) {},
+            controller: registerField.emailController,
+            onChanged: (email) {
+              registerField.setEmail(email);
+            },
             keyboardType: TextInputType.emailAddress,
             style: CustomFontStyle.getTextStyle(
                 context, CustomFontStyle.textSmall),
             decoration: InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(
-                    MediaQuery.of(context).size.width * 0.038, 0, 0, 0),
-                icon: Text(
-                  'Email',
-                  style: CustomFontStyle.getTextStyle(
-                      context, CustomFontStyle.textMediumLarge),
-                ),
-                filled: true,
-                fillColor: Colors.transparent,
-                border: InputBorder.none),
+              contentPadding: EdgeInsets.fromLTRB(
+                  MediaQuery.of(context).size.width * 0.038, 0, 0, 0),
+              icon: Text(
+                'Email',
+                style: CustomFontStyle.getTextStyle(
+                    context, CustomFontStyle.textMediumLarge),
+              ),
+              filled: true,
+              fillColor: Colors.transparent,
+              border: InputBorder.none,
+            ),
           ),
         ],
       ),
@@ -187,6 +203,9 @@ class PasswordInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final registerField =
+        Provider.of<RegisterFieldModel>(context, listen: true);
+
     return Container(
       width: MediaQuery.of(context).size.width * 0.47,
       height: MediaQuery.of(context).size.height * 0.1,
@@ -200,7 +219,10 @@ class PasswordInput extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TextField(
-            onChanged: (password) {},
+            controller: registerField.passwordController,
+            onChanged: (password) {
+              registerField.setPassword(password);
+            },
             style: CustomFontStyle.getTextStyle(
                 context, CustomFontStyle.textSmall),
             obscureText: true,
@@ -228,6 +250,9 @@ class PasswordConfirmInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final registerField =
+        Provider.of<RegisterFieldModel>(context, listen: true);
+
     return Container(
       width: MediaQuery.of(context).size.width * 0.47,
       height: MediaQuery.of(context).size.height * 0.1,
@@ -241,7 +266,10 @@ class PasswordConfirmInput extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TextField(
-            onChanged: (passwordConfirm) {},
+            controller: registerField.passwordConfirmController,
+            onChanged: (passwordConfirm) {
+              registerField.setPasswordConfirm(passwordConfirm);
+            },
             style: CustomFontStyle.getTextStyle(
                 context, CustomFontStyle.textSmall),
             obscureText: true,
@@ -289,14 +317,44 @@ class SignupButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final registerField =
+        Provider.of<RegisterFieldModel>(context, listen: true);
     return GestureDetector(
       onTap: () {
-        showToast('회원가입에 성공하였습니다!');
-        context.push(RoutePath.main0);
+        if (registerField.isValid && registerField.isSame) {
+          registerField.signUp(context);
+          if(registerField.isSignedUp) {
+            showToast('회원가입에 성공하였습니다!');
+            context.push(RoutePath.main0);
+          }
+        }
       },
       child: DefaultTextStyle(
         style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textLarge),
         child: const Text('회원가입'),
+      ),
+    );
+  }
+}
+
+///-----------------------------------------------------------------------------------------///
+class ErrorMessage extends StatelessWidget {
+  const ErrorMessage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final registerField =
+        Provider.of<RegisterFieldModel>(context, listen: true);
+
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.07,
+      child: Text(
+        registerField.isValid
+            ? registerField.isSame
+                ? ""
+                : "비밀번호가 일치하지 않습니다."
+            : "비밀번호는 8글자 이상, 16글자 이하여야 합니다.",
+        style: CustomFontStyle.errorMedium,
       ),
     );
   }
