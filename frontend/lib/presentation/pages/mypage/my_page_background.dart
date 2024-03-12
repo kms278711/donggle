@@ -9,6 +9,8 @@ import 'package:frontend/presentation/pages/mypage/current_fairytale.dart';
 import 'package:frontend/presentation/pages/mypage/my_page.dart';
 import 'package:frontend/presentation/pages/mypage/my_page_update.dart';
 import 'package:frontend/presentation/pages/mypage/purchase_fairytale.dart';
+import 'package:frontend/provider/main_provider.dart';
+import 'package:provider/provider.dart';
 
 class MyPageBackground extends StatefulWidget {
   const MyPageBackground({super.key});
@@ -19,14 +21,11 @@ class MyPageBackground extends StatefulWidget {
 
 class _MyPageBackgroundState extends State<MyPageBackground> {
   int selectedTab = 0; // 초기에 선택된 탭의 인덱스
-  bool isUpdateSelected = false; // 정보수정 버튼 눌렀는지 확인
-
-  void updateToggle() {
-    isUpdateSelected != isUpdateSelected;
-  }
 
   @override
   Widget build(BuildContext context) {
+    final isMyPageUpdateSelected = context.select<MainProvider, bool>((provider) => provider.isMyPageUpdateSelected);
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -38,9 +37,9 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          children: [
+          Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -57,7 +56,7 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
                         SizedBox(
                             width: MediaQuery.of(context).size.width * 0.01),
                         // Toggle between SoundIcon and SoundOffIcon based on isSoundOn
-                        SoundIcon(),
+                        const SoundIcon(),
                       ],
                     ),
                   ],
@@ -96,15 +95,9 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
                               ? const CurrentFairytale()
                               : selectedTab == 1
                                   ? const PurchaseFairytale()
-                                  : isUpdateSelected
-                                      ? MyPage(
-                                          isUpdateSelected: isUpdateSelected,
-                                          updateToggle: updateToggle,
-                                        )
-                                      : MyPageUpdate(
-                                          isUpdateSelected: isUpdateSelected,
-                                          updateToggle: updateToggle,
-                                        ),
+                                  : isMyPageUpdateSelected
+                                      ? const MyPageUpdate()
+                                      : const MyPage(),
                         ),
                       ],
                     ),

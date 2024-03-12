@@ -4,23 +4,17 @@ import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/presentation/pages/mypage/my_review.dart';
+import 'package:frontend/provider/main_provider.dart';
+import 'package:provider/provider.dart';
 
 class MyPage extends StatefulWidget {
-  final bool isUpdateSelected;
-  final Function(bool) updateToggle;
-
-  const MyPage({
-    super.key,
-    required this.isUpdateSelected,
-    required this.updateToggle,
-  });
+  const MyPage({super.key});
 
   @override
   State<MyPage> createState() => _MyPageState();
 }
 
 class _MyPageState extends State<MyPage> {
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -77,7 +71,9 @@ class _MyPageState extends State<MyPage> {
                   children: [
                     GreenButton(
                       "정보수정",
-                      onPressed: () => updateToggle(isUpdateSelected),
+                      onPressed: () {
+                        context.read<MainProvider>().myPageUpdateToggle();
+                      },
                     ),
                     SizedBox(width: MediaQuery.of(context).size.width * 0.02),
                     GreenButton(
