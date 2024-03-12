@@ -41,8 +41,8 @@ public class User extends BaseEntity {
     }
 
     public enum Role {
-        USER,
-        ADMIN
+        ROLE_USER,
+        ROLE_ADMIN
     }
 
     public void updatePassword(String password) {

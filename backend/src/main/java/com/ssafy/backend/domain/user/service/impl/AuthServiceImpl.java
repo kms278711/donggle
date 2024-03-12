@@ -58,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
 
     private static void InitialSetting(User user) {
         user.updateStatus(User.Status.MEMBER);
-        user.updateRole(User.Role.USER);
+        user.updateRole(User.Role.ROLE_USER);
         user.updateNickname(generateNickname());
     }
 
