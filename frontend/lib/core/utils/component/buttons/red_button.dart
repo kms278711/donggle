@@ -13,14 +13,14 @@ class RedButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        textStyle: CustomFontStyle.textMedium,
+        textStyle: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMedium),
         backgroundColor: AppColors.error,
         shadowColor: AppColors.black,
         elevation: 10,
       ),
       child: Text(
         textContent,
-        style: CustomFontStyle.textMedium,
+        style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMedium),
       ),
     );
   }

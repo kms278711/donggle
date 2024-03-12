@@ -26,9 +26,9 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
   @override
   void setState(VoidCallback fn) {
     if (selectedTab == 0) {
-      context.read<MainProvider>().myPageUpdateToggle();
+      context.read<MainProvider>().resetMyPageUpdate();
     } else if (selectedTab == 1) {
-      context.read<MainProvider>().myPageUpdateToggle();
+      context.read<MainProvider>().resetMyPageUpdate();
     }
     super.setState(fn);
   }
