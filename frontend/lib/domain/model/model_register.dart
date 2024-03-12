@@ -7,11 +7,12 @@ class RegisterFieldModel extends ChangeNotifier {
   String password = "";
   String passwordConfirm = "";
   String serverMessage = "";
+  String loginMessage = "";
   bool isSame = true;
   bool isValid = true;
   bool isSignedUp = false;
   bool isFailed = false;
-  bool isLoggedIn = false;
+  bool isSignedIn = false;
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -27,7 +28,6 @@ class RegisterFieldModel extends ChangeNotifier {
   void setPassword(String password) {
     this.password = password;
     isFailed = false;
-    isSame = this.password == passwordConfirm;
     if (password.length < 8 || password.length > 16) {
       isValid = false;
     } else {
@@ -49,6 +49,10 @@ class RegisterFieldModel extends ChangeNotifier {
     passwordConfirmController.clear();
     isSame = true;
     isValid = true;
+  }
+
+  void resetPassword(){
+    passwordController.clear();
   }
 
   @override
@@ -75,5 +79,26 @@ class RegisterFieldModel extends ChangeNotifier {
       serverMessage = json.decode(utf8.decode(response.bodyBytes))['data_header']['result_message'];
     }
     notifyListeners();
+  }
+
+  Future<void> login(BuildContext context) async {
+    var url = Uri.https("j10c101.p.ssafy.io", "api/auth/login");
+    final headers = {'Content-Type': 'application/json'};
+    final body = jsonEncode({"email": email, "password": password});
+
+    var response = await http.post(url, headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      isSignedIn = true;
+    } else {
+      isSignedIn = false;
+      isFailed = true;
+      serverMessage = json.decode(utf8.decode(response.bodyBytes))['data_header']['result_message'];
+    }
+    notifyListeners();
+  }
+
+  void loginWithEmail(String email, String password){
+
   }
 }

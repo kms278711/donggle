@@ -39,9 +39,11 @@ class _LoginPageState extends State<LoginPage> {
                   context, CustomFontStyle.titleLarge),
               child: const Text('동  글  이'),
             ),
+            ErrorMessage(),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
+              height: MediaQuery.of(context).size.height * 0.02,
             ),
+
             const EmailInput(),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
@@ -54,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
               firstChild: const Column(
                 children: [
                   PasswordConfirmInput(),
-                  ErrorMessage(),
+
                 ],
               ),
               secondChild: Container(
@@ -298,10 +300,17 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final registerField =
+    Provider.of<RegisterFieldModel>(context, listen: true);
     return GestureDetector(
       onTap: () {
-        showToast('로그인에 성공하였습니다!');
-        context.push(RoutePath.main0);
+        registerField.login(context);
+        if(registerField.isSignedIn) {
+          showToast('로그인에 성공하였습니다!');
+          context.push(RoutePath.main0);
+        }else{
+          registerField.resetPassword();
+        }
       },
       child: DefaultTextStyle(
         style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textLarge),
