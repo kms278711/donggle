@@ -6,6 +6,7 @@ import 'package:frontend/core/utils/component/icons/close_circle.dart';
 import 'package:frontend/core/utils/component/icons/home_icon_main.dart';
 import 'package:frontend/core/utils/component/icons/my_icon.dart';
 import 'package:frontend/core/utils/component/icons/sound_icon.dart';
+import 'package:frontend/main.dart';
 import 'package:frontend/presentation/pages/card/card_page.dart';
 import 'package:frontend/presentation/pages/home/component/background/back_ground_below.dart';
 import 'package:frontend/presentation/pages/home/component/background/background_screen.dart';
@@ -14,7 +15,7 @@ import 'package:frontend/presentation/pages/home/home_page.dart';
 import 'package:frontend/presentation/pages/quiz/quiz_page.dart';
 import 'package:indexed/indexed.dart';
 
-late AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer.newPlayer();
+
 
 class MainScreen extends StatefulWidget {
   final String? id;
@@ -34,14 +35,8 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     _updateSelectedIndex();
 
-    assetsAudioPlayer.open(
-      Audio("assets/music/background.mp3"),
-      loopMode: LoopMode.single, //반복 여부 (LoopMode.none : 없음)
-      autoStart: true, //자동 시작 여부
-      showNotification: false, //스마트폰 알림 창에 띄울지 여부
-    );
-
     assetsAudioPlayer.play();
+
   }
 
   @override

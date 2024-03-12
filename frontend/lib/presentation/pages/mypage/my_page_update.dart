@@ -4,7 +4,7 @@ import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/buttons/red_button.dart';
 import 'package:frontend/presentation/pages/modal/signout_modal.dart';
-import 'package:frontend/provider/main_provider.dart';
+import 'package:frontend/presentation/provider/main_provider.dart';
 import 'package:provider/provider.dart';
 
 class MyPageUpdate extends StatefulWidget {

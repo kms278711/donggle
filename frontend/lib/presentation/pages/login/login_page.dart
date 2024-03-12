@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/icons/kakaotalk_icon.dart';
 import 'package:frontend/core/utils/component/icons/naver_icon.dart';
 import 'package:frontend/core/utils/component/icons/google_icon.dart';
+import 'package:frontend/domain/model/model_auth.dart';
 import 'package:frontend/domain/model/model_register.dart';
+import 'package:frontend/main.dart';
+import 'package:frontend/presentation/provider/message_provider.dart';
 import 'package:frontend/presentation/routes/route_path.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +30,16 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    Provider.of<RegisterFieldModel>(context, listen: false).resetFields();
+    assetsAudioPlayer.stop();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var message = Provider.of<MessageProvider>(context, listen: true);
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -39,11 +52,16 @@ class _LoginPageState extends State<LoginPage> {
                   context, CustomFontStyle.titleLarge),
               child: const Text('동  글  이'),
             ),
-            ErrorMessage(),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.07,
+              child: Text(
+                isSignup ? message.message2 : message.message1,
+                style: CustomFontStyle.errorMedium,
+              ),
+            ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
             ),
-
             const EmailInput(),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.02,
@@ -56,7 +74,6 @@ class _LoginPageState extends State<LoginPage> {
               firstChild: const Column(
                 children: [
                   PasswordConfirmInput(),
-
                 ],
               ),
               secondChild: Container(
@@ -227,8 +244,8 @@ class PasswordInput extends StatelessWidget {
             },
             style: CustomFontStyle.getTextStyle(
                 context, CustomFontStyle.textSmall),
-            obscureText: true,
-            decoration: InputDecoration(
+                obscureText: true,
+                decoration: InputDecoration(
                 contentPadding: EdgeInsets.fromLTRB(
                     MediaQuery.of(context).size.width * 0.072, 0, 0, 0),
                 icon: Text(
@@ -301,14 +318,18 @@ class LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final registerField =
-    Provider.of<RegisterFieldModel>(context, listen: true);
+        Provider.of<RegisterFieldModel>(context, listen: false);
+    final auth = Provider.of<AuthModel>(context, listen: false);
     return GestureDetector(
-      onTap: () {
-        registerField.login(context);
-        if(registerField.isSignedIn) {
+      onTap: () async {
+        AuthStatus loginStatus =
+            await auth.login(registerField.email, registerField.password);
+
+        if (loginStatus == AuthStatus.loginSuccess) {
           showToast('로그인에 성공하였습니다!');
           context.go(RoutePath.main0);
-        }else{
+        } else {
+          showToast("로그인에 실패했습니다.", backgroundColor: AppColors.error);
           registerField.resetPassword();
         }
       },
@@ -328,15 +349,17 @@ class SignupButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final registerField =
         Provider.of<RegisterFieldModel>(context, listen: true);
+    final auth = Provider.of<AuthModel>(context, listen: false);
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         if (registerField.isValid && registerField.isSame) {
-          registerField.signUp(context);
-          if (registerField.isSignedUp) {
-            registerField.login(context);
+          AuthStatus registerStatus =
+              await auth.signUp(registerField.email, registerField.password);
+          if (registerStatus == AuthStatus.registerSuccess) {
+            await auth.login(registerField.email, registerField.password);
             showToast('회원가입에 성공하였습니다!');
             context.go(RoutePath.main0);
-          }else{
+          } else {
             registerField.resetFields();
           }
         }
@@ -344,31 +367,6 @@ class SignupButton extends StatelessWidget {
       child: DefaultTextStyle(
         style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textLarge),
         child: const Text('회원가입'),
-      ),
-    );
-  }
-}
-
-///-----------------------------------------------------------------------------------------///
-class ErrorMessage extends StatelessWidget {
-  const ErrorMessage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final registerField =
-        Provider.of<RegisterFieldModel>(context, listen: true);
-
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.07,
-      child: Text(
-        registerField.isFailed
-            ? registerField.serverMessage
-            : registerField.isValid
-                ? registerField.isSame
-                    ? ""
-                    : "비밀번호가 일치하지 않습니다."
-                : "비밀번호는 8글자 이상, 16글자 이하여야 합니다.",
-        style: CustomFontStyle.errorMedium,
       ),
     );
   }

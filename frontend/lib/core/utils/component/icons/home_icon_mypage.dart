@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/presentation/routes/route_path.dart';
-import 'package:frontend/provider/main_provider.dart';
+import 'package:frontend/presentation/provider/main_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 

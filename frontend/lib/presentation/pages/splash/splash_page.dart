@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
-import 'package:frontend/domain/model/model_register.dart';
+import 'package:frontend/domain/model/model_auth.dart';
 import 'package:frontend/presentation/routes/route_path.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -19,15 +19,13 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   Future<bool> checkLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final registerProvider = Provider.of<RegisterFieldModel>(context, listen: false);
+    final authProvider = Provider.of<AuthModel>(context, listen: false);
     bool isLogin = prefs.getBool('isLogin') ?? false;
     if(isLogin){
       String? email = prefs.getString('email');
       String? password = prefs.getString('password');
-      await registerProvider.loginWithEmail(email!, password!, context).then((_){
-        if(registerProvider.isSignedIn){
-          //TODO: 로그인 성공 시 해야하는 것? 예를들면 access Token 저장이라던지...
-        }else{
+      await authProvider.login(email!, password!).then((loginStatus){
+        if(loginStatus != AuthStatus.loginSuccess){
           isLogin = false;
           prefs.setBool('isLogin', false);
         }

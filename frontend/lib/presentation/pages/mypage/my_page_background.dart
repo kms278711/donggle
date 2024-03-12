@@ -5,12 +5,12 @@ import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/icons/cards_icon_mypage.dart';
 import 'package:frontend/core/utils/component/icons/home_icon_mypage.dart';
 import 'package:frontend/core/utils/component/icons/sound_icon.dart';
-import 'package:frontend/presentation/pages/main_screen/main_screen.dart';
+import 'package:frontend/main.dart';
 import 'package:frontend/presentation/pages/mypage/current_fairytale.dart';
 import 'package:frontend/presentation/pages/mypage/my_page.dart';
 import 'package:frontend/presentation/pages/mypage/my_page_update.dart';
 import 'package:frontend/presentation/pages/mypage/purchase_fairytale.dart';
-import 'package:frontend/provider/main_provider.dart';
+import 'package:frontend/presentation/provider/main_provider.dart';
 import 'package:provider/provider.dart';
 
 class MyPageBackground extends StatefulWidget {
