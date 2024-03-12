@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RegisterFieldModel extends ChangeNotifier {
   String email = "";
   String password = "";
   String passwordConfirm = "";
+  String serverMessage = "";
   bool isSame = true;
   bool isValid = true;
   bool isSignedUp = false;
+  bool isFailed = false;
   bool isLoggedIn = false;
 
   final TextEditingController emailController = TextEditingController();
@@ -17,11 +20,13 @@ class RegisterFieldModel extends ChangeNotifier {
 
   void setEmail(String email) {
     this.email = email;
+    isFailed = false;
     notifyListeners();
   }
 
   void setPassword(String password) {
     this.password = password;
+    isFailed = false;
     isSame = this.password == passwordConfirm;
     if (password.length < 8 || password.length > 16) {
       isValid = false;
@@ -33,6 +38,7 @@ class RegisterFieldModel extends ChangeNotifier {
 
   void setPasswordConfirm(String passwordConfirm) {
     this.passwordConfirm = passwordConfirm;
+    isFailed = false;
     isSame = password == this.passwordConfirm;
     notifyListeners();
   }
@@ -55,16 +61,19 @@ class RegisterFieldModel extends ChangeNotifier {
   }
 
   Future<void> signUp(BuildContext context) async {
-    var url = Uri.parse("http://j10c101.p.ssafy.io:8082/api/auth/signup");
-    final body = '{"email": "${this.email}", "password": "${this.password}"}';
+    var url = Uri.https("j10c101.p.ssafy.io", "api/auth/signup");
+    final headers = {'Content-Type': 'application/json'};
+    final body = jsonEncode({"email": email, "password": password});
 
-    var response = await http.post(url, body: body);
-    print(response.statusCode);
-    print(response.body);
-    if (response.statusCode == 201) {
-        isSignedUp = true;
-      } else {
-        isSignedUp = false;
-      }
+    var response = await http.post(url, headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      isSignedUp = true;
+    } else {
+      isSignedUp = false;
+      isFailed = true;
+      serverMessage = json.decode(utf8.decode(response.bodyBytes))['data_header']['result_message'];
     }
+    notifyListeners();
+  }
 }

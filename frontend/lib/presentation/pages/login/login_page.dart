@@ -123,8 +123,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 secondChild: Container(
                   width: 350,
-                  padding: EdgeInsets.all(
-                      MediaQuery.of(context).size.height * 0.01),
+                  padding:
+                      EdgeInsets.all(MediaQuery.of(context).size.height * 0.01),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(15),
@@ -323,9 +323,11 @@ class SignupButton extends StatelessWidget {
       onTap: () {
         if (registerField.isValid && registerField.isSame) {
           registerField.signUp(context);
-          if(registerField.isSignedUp) {
+          if (registerField.isSignedUp) {
             showToast('회원가입에 성공하였습니다!');
             context.push(RoutePath.main0);
+          }else{
+            registerField.resetFields();
           }
         }
       },
@@ -349,11 +351,13 @@ class ErrorMessage extends StatelessWidget {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.07,
       child: Text(
-        registerField.isValid
-            ? registerField.isSame
-                ? ""
-                : "비밀번호가 일치하지 않습니다."
-            : "비밀번호는 8글자 이상, 16글자 이하여야 합니다.",
+        registerField.isFailed
+            ? registerField.serverMessage
+            : registerField.isValid
+                ? registerField.isSame
+                    ? ""
+                    : "비밀번호가 일치하지 않습니다."
+                : "비밀번호는 8글자 이상, 16글자 이하여야 합니다.",
         style: CustomFontStyle.errorMedium,
       ),
     );

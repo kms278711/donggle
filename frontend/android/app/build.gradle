@@ -66,4 +66,5 @@ flutter {
 
 dependencies {
     implementation 'com.android.support:multidex:1.0.3'
+    implementation "com.localebro:okhttpprofiler:1.0.8"
 }
