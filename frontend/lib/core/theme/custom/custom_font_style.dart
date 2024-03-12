@@ -53,6 +53,13 @@ class CustomFontStyle {
     fontWeight: CustomFontWeight.regular,
   );
 
+  static const textLargeEng = TextStyle(
+    fontFamily: "PatrickHand",
+    color: AppColors.black,
+    fontSize: 70,
+    fontWeight: CustomFontWeight.regular,
+  );
+
   static const textMediumLarge = TextStyle(
     fontFamily: "Nanumson_jangmi",
     color: AppColors.black,
@@ -71,6 +78,13 @@ class CustomFontStyle {
     fontFamily: "Nanumson_jangmi",
     color: AppColors.black,
     fontSize: 40,
+    fontWeight: CustomFontWeight.regular,
+  );
+
+  static const textMoreSmall = TextStyle(
+    fontFamily: "Nanumson_jangmi",
+    color: AppColors.black,
+    fontSize: 30,
     fontWeight: CustomFontWeight.regular,
   );
 
