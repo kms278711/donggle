@@ -4,13 +4,11 @@ import com.ssafy.backend.domain.user.dto.ReissueDto;
 import com.ssafy.backend.domain.user.dto.request.LoginRequestDto;
 import com.ssafy.backend.domain.user.dto.request.SignupRequestDto;
 import com.ssafy.backend.domain.user.service.AuthService;
-import com.ssafy.backend.global.dto.Response;
 import com.ssafy.backend.global.jwt.dto.TokenDto;
 import com.ssafy.backend.global.jwt.dto.UserInfoDto;
 import com.ssafy.backend.global.jwt.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,9 +37,9 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity logout(@RequestHeader("Authorization") String accessToken) {
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String accessToken) {
         jwtService.addBlackList(accessToken);
-        return ResponseEntity.ok((Response.success(HttpStatus.OK.name(), "")));
+        return ResponseEntity.ok("로그아웃이 정상적으로 완료되었습니다." );
 
     }
 
