@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/presentation/pages/home/home_page.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/icons/kakaotalk_icon.dart';
 import 'package:frontend/core/utils/component/icons/naver_icon.dart';
 import 'package:frontend/core/utils/component/icons/google_icon.dart';
@@ -16,7 +17,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool isSignup = false;
 
-  void SignUpToggle() {
+  void signUpToggle() {
     setState(() {
       isSignup = !isSignup;
     });
@@ -31,167 +32,51 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.05,
             ),
-            const DefaultTextStyle(
-              style: TextStyle(
-                fontFamily: 'Nanumson_jangmi',
-                fontWeight: FontWeight.w400,
-                fontSize: 180,
-                color: Colors.black,
-              ),
-              child: Text('동  글  이'),
+            DefaultTextStyle(
+              style: CustomFontStyle.getTextStyle(
+                  context, CustomFontStyle.titleLarge),
+              child: const Text('동  글  이'),
             ),
-            const SizedBox(
-              height: 30,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.05,
             ),
-            Container(
-              width: 700,
-              height: 80,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextField(
-                    style: TextStyle(
-                      fontSize: 30,
-                    ),
-                    decoration: InputDecoration(
-                        icon: Text(
-                          'ID',
-                          style: TextStyle(
-                            fontSize: 60,
-                            color: Colors.black,
-                          ),
-                        ),
-                        filled: true,
-                        fillColor: Colors.transparent,
-                        border: InputBorder.none),
-                  ),
-                ],
-              ),
+            const EmailInput(),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            Container(
-              width: 700,
-              height: 80,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextField(
-                    style: TextStyle(
-                      fontSize: 30,
-                    ),
-                    obscureText: true,
-                    decoration: InputDecoration(
-                        icon: Text(
-                          'PW',
-                          style: TextStyle(
-                            fontSize: 60,
-                            color: Colors.black,
-                          ),
-                        ),
-                        filled: true,
-                        fillColor: Colors.transparent,
-                        border: InputBorder.none),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 20,
+            const PasswordInput(),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.02,
             ),
             AnimatedCrossFade(
-              firstChild: Container(
-                width: 700,
-                height: 80,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextField(
-                      style: TextStyle(
-                        fontSize: 30,
-                      ),
-                      obscureText: true,
-                      // showCursor: false,
-                      decoration: InputDecoration(
-                          icon: Text(
-                            'PW 확인',
-                            style: TextStyle(
-                              fontSize: 60,
-                              color: Colors.black,
-                            ),
-                          ),
-                          filled: true,
-                          fillColor: Colors.transparent,
-                          border: InputBorder.none),
-                    ),
-                  ],
-                ),
-              ),
+              firstChild: const PasswordConfirmInput(),
               secondChild: Container(
-                width: 700,
+                width: MediaQuery.of(context).size.width * 0.47,
               ),
               crossFadeState: isSignup
                   ? CrossFadeState.showFirst
                   : CrossFadeState.showSecond,
               duration: const Duration(milliseconds: 200),
             ),
-            const SizedBox(
-              height: 30,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.035,
             ),
             AnimatedCrossFade(
               firstChild: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const HomePage(),
-                        ),
-                      );
-                    },
-                    child: const DefaultTextStyle(
-                      style: TextStyle(
-                        fontFamily: 'Nanumson_jangmi',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 80,
-                        color: Colors.black,
-                      ),
-                      child: Text('회원가입'),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 100,
+                  const SignupButton(),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.1,
                   ),
                   GestureDetector(
                     onTap: () {
-                      SignUpToggle();
+                      signUpToggle();
                     },
-                    child: const DefaultTextStyle(
-                      style: TextStyle(
-                        fontFamily: 'Nanumson_jangmi',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 80,
-                        color: Colors.black,
-                      ),
-                      child: Text('취소'),
+                    child: DefaultTextStyle(
+                      style: CustomFontStyle.getTextStyle(
+                          context, CustomFontStyle.textLarge),
+                      child: const Text('취소'),
                     ),
                   ),
                 ],
@@ -199,33 +84,18 @@ class _LoginPageState extends State<LoginPage> {
               secondChild: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  GestureDetector(
-                    onTap: () => context.go(RoutePath.main0),
-                    child: const DefaultTextStyle(
-                      style: TextStyle(
-                        fontFamily: 'Nanumson_jangmi',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 80,
-                        color: Colors.black,
-                      ),
-                      child: Text('로그인'),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 100,
+                  const LoginButton(),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.1,
                   ),
                   GestureDetector(
                     onTap: () {
-                      SignUpToggle();
+                      signUpToggle();
                     },
-                    child: const DefaultTextStyle(
-                      style: TextStyle(
-                        fontFamily: 'Nanumson_jangmi',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 80,
-                        color: Colors.black,
-                      ),
-                      child: Text('회원가입'),
+                    child: DefaultTextStyle(
+                      style: CustomFontStyle.getTextStyle(
+                          context, CustomFontStyle.textLarge),
+                      child: const Text('회원가입'),
                     ),
                   ),
                 ],
@@ -244,7 +114,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 secondChild: Container(
                   width: 350,
-                  padding: EdgeInsets.all(10),
+                  padding:
+                      EdgeInsets.all(MediaQuery.of(context).size.height * 0.01),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(15),
@@ -261,9 +132,171 @@ class _LoginPageState extends State<LoginPage> {
                 crossFadeState: isSignup
                     ? CrossFadeState.showFirst
                     : CrossFadeState.showSecond,
-                duration: Duration(milliseconds: 200))
+                duration: const Duration(milliseconds: 200))
           ],
         ),
+      ),
+    );
+  }
+}
+
+///-----------------------------------------------------------------------------------------///
+class EmailInput extends StatelessWidget {
+  const EmailInput({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.47,
+      height: MediaQuery.of(context).size.height * 0.1,
+      padding: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width * 0.02),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextField(
+            onChanged: (email) {},
+            keyboardType: TextInputType.emailAddress,
+            style: CustomFontStyle.getTextStyle(
+                context, CustomFontStyle.textSmall),
+            decoration: InputDecoration(
+                contentPadding: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.width * 0.038, 0, 0, 0),
+                icon: Text(
+                  'Email',
+                  style: CustomFontStyle.getTextStyle(
+                      context, CustomFontStyle.textMediumLarge),
+                ),
+                filled: true,
+                fillColor: Colors.transparent,
+                border: InputBorder.none),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+///-----------------------------------------------------------------------------------------///
+class PasswordInput extends StatelessWidget {
+  const PasswordInput({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.47,
+      height: MediaQuery.of(context).size.height * 0.1,
+      padding: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width * 0.02),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextField(
+            onChanged: (password) {},
+            style: CustomFontStyle.getTextStyle(
+                context, CustomFontStyle.textSmall),
+            obscureText: true,
+            decoration: InputDecoration(
+                contentPadding: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.width * 0.072, 0, 0, 0),
+                icon: Text(
+                  'PW',
+                  style: CustomFontStyle.getTextStyle(
+                      context, CustomFontStyle.textMediumLarge),
+                ),
+                filled: true,
+                fillColor: Colors.transparent,
+                border: InputBorder.none),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+///-----------------------------------------------------------------------------------------///
+class PasswordConfirmInput extends StatelessWidget {
+  const PasswordConfirmInput({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.47,
+      height: MediaQuery.of(context).size.height * 0.1,
+      padding: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width * 0.02),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextField(
+            onChanged: (passwordConfirm) {},
+            style: CustomFontStyle.getTextStyle(
+                context, CustomFontStyle.textSmall),
+            obscureText: true,
+            // showCursor: false,
+            decoration: InputDecoration(
+                contentPadding: EdgeInsets.fromLTRB(
+                    MediaQuery.of(context).size.width * 0.01, 0, 0, 0),
+                icon: Text(
+                  'PW 확인',
+                  style: CustomFontStyle.getTextStyle(
+                      context, CustomFontStyle.textMediumLarge),
+                ),
+                filled: true,
+                fillColor: Colors.transparent,
+                border: InputBorder.none),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+///-----------------------------------------------------------------------------------------///
+class LoginButton extends StatelessWidget {
+  const LoginButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        showToast('로그인에 성공하였습니다!');
+        context.push(RoutePath.main0);
+      },
+      child: DefaultTextStyle(
+        style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textLarge),
+        child: const Text('로그인'),
+      ),
+    );
+  }
+}
+
+///-----------------------------------------------------------------------------------------///
+class SignupButton extends StatelessWidget {
+  const SignupButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        showToast('회원가입에 성공하였습니다!');
+        context.push(RoutePath.main0);
+      },
+      child: DefaultTextStyle(
+        style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textLarge),
+        child: const Text('회원가입'),
       ),
     );
   }

@@ -6,15 +6,18 @@ import 'custom_font_weight.dart';
 class CustomFontStyle {
   static TextStyle getTextStyle(BuildContext context, TextStyle baseStyle) {
     double width = MediaQuery.of(context).size.width;
-
-    // Define your scaling factor based on the device's width
-    // For example, if the design is based on a 375 width screen
     double scaleFactor = width / 1480;
-
     return baseStyle.copyWith(fontSize: baseStyle.fontSize! * scaleFactor);
   }
 
   /// Typography
+  static const titleLarge = TextStyle(
+    fontFamily: "Nanumson_jangmi",
+    color: AppColors.black,
+    fontSize: 180,
+    fontWeight: CustomFontWeight.semiBold,
+  );
+
   static const titleMedium = TextStyle(
     fontFamily: "Nanumson_jangmi",
     color: AppColors.black,
@@ -40,6 +43,20 @@ class CustomFontStyle {
     fontFamily: "Nanumson_jangmi",
     color: AppColors.black,
     fontSize: 75,
+    fontWeight: CustomFontWeight.regular,
+  );
+
+  static const textLarge = TextStyle(
+    fontFamily: "Nanumson_jangmi",
+    color: AppColors.black,
+    fontSize: 80,
+    fontWeight: CustomFontWeight.regular,
+  );
+
+  static const textMediumLarge = TextStyle(
+    fontFamily: "Nanumson_jangmi",
+    color: AppColors.black,
+    fontSize: 60,
     fontWeight: CustomFontWeight.regular,
   );
 
