@@ -8,6 +8,7 @@ import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/theme/theme_data.dart';
 import 'package:frontend/domain/model/model_auth.dart';
+import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/domain/model/model_register.dart';
 import 'package:frontend/presentation/provider/message_provider.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
@@ -24,6 +25,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => MainProvider()),
       ChangeNotifierProvider(create: (_) => MessageProvider()),
       Provider(create: (_) => UserProvider()),
+      ChangeNotifierProvider(create: (_) => BookModel()),
       ChangeNotifierProvider(
           create: (context) => RegisterFieldModel(
               Provider.of<MessageProvider>(context, listen: false))),

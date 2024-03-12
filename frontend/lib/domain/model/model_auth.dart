@@ -1,8 +1,8 @@
+import 'dart:convert';
+
 import 'package:frontend/presentation/provider/message_provider.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum AuthStatus {
