@@ -25,7 +25,8 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
 
   @override
   Widget build(BuildContext context) {
-    final isMyPageUpdateSelected = context.select<MainProvider, bool>((provider) => provider.isMyPageUpdateSelected);
+    final isMyPageUpdateSelected = context.select<MainProvider, bool>(
+        (provider) => provider.isMyPageUpdateSelected);
 
     return Scaffold(
       body: Container(
@@ -38,15 +39,16 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: Column(
-          children: [
-          Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       "동 글 이",
-                      style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleMedium),
+                      style: CustomFontStyle.getTextStyle(
+                          context, CustomFontStyle.titleMedium),
                     ),
                     Row(
                       children: [
@@ -93,7 +95,7 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
                           top: MediaQuery.of(context).size.height * 0.12,
                           left: 0,
                           child: selectedTab == 0
-                              ?  const CurrentFairytale()
+                              ? const CurrentFairytale()
                               : selectedTab == 1
                                   ? const PurchaseFairytale()
                                   : isMyPageUpdateSelected
