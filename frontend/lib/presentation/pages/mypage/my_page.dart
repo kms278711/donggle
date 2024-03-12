@@ -4,10 +4,17 @@ import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/presentation/pages/mypage/my_review.dart';
+import 'package:frontend/provider/main_provider.dart';
+import 'package:provider/provider.dart';
 
-class MyPage extends StatelessWidget {
+class MyPage extends StatefulWidget {
   const MyPage({super.key});
 
+  @override
+  State<MyPage> createState() => _MyPageState();
+}
+
+class _MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -33,20 +40,27 @@ class MyPage extends StatelessWidget {
                     children: <TextSpan>[
                       TextSpan(
                         text: '닉네임: ',
-                        style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmall),
+                        style: CustomFontStyle.getTextStyle(
+                            context, CustomFontStyle.textSmall),
                       ),
                       TextSpan(
-                          text: 'mj3meal', style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmallEng)),
+                          text: 'mj3meal',
+                          style: CustomFontStyle.getTextStyle(
+                              context, CustomFontStyle.textSmallEng)),
                     ],
                   ),
                 ),
                 RichText(
                   text: TextSpan(
                     children: <TextSpan>[
-                      TextSpan(text: '이메일: ', style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmall)),
+                      TextSpan(
+                          text: '이메일: ',
+                          style: CustomFontStyle.getTextStyle(
+                              context, CustomFontStyle.textSmall)),
                       TextSpan(
                           text: 'ducco705@snu.ac.kr',
-                          style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmallEng)),
+                          style: CustomFontStyle.getTextStyle(
+                              context, CustomFontStyle.textSmallEng)),
                     ],
                   ),
                 ),
@@ -55,9 +69,17 @@ class MyPage extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    GreenButton("정보수정", onPressed: () {  },),
+                    GreenButton(
+                      "정보수정",
+                      onPressed: () {
+                        context.read<MainProvider>().myPageUpdateToggle();
+                      },
+                    ),
                     SizedBox(width: MediaQuery.of(context).size.width * 0.02),
-                    GreenButton("로그아웃", onPressed: () {  },)
+                    GreenButton(
+                      "로그아웃",
+                      onPressed: () {},
+                    )
                   ],
                 )
               ],

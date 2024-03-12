@@ -9,6 +9,8 @@ import 'package:frontend/presentation/pages/main_screen/main_screen.dart';
 import 'package:frontend/presentation/pages/mypage/current_fairytale.dart';
 import 'package:frontend/presentation/pages/mypage/my_page.dart';
 import 'package:frontend/presentation/pages/mypage/purchase_fairytale.dart';
+import 'package:frontend/provider/main_provider.dart';
+import 'package:provider/provider.dart';
 
 class MyPageBackground extends StatefulWidget {
   const MyPageBackground({super.key});
@@ -22,6 +24,8 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
 
   @override
   Widget build(BuildContext context) {
+    final isMyPageUpdateSelected = context.select<MainProvider, bool>((provider) => provider.isMyPageUpdateSelected);
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -33,9 +37,9 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          children: [
+          Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -46,9 +50,11 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
                     Row(
                       children: [
                         const HomeIconMypage(),
-                        SizedBox(width: MediaQuery.of(context).size.width * 0.01),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.01),
                         const CardsIconMypage(),
-                        SizedBox(width: MediaQuery.of(context).size.width * 0.01),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.01),
                         // Toggle between SoundIcon and SoundOffIcon based on isSoundOn
                         SoundIcon(assetsAudioPlayer),
                       ],
@@ -89,7 +95,9 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
                               ? const CurrentFairytale()
                               : selectedTab == 1
                                   ? const PurchaseFairytale()
-                                  : const MyPage(),
+                                  : isMyPageUpdateSelected
+                                      ? const MyPageUpdate()
+                                      : const MyPage(),
                         ),
                       ],
                     ),
@@ -129,8 +137,10 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
               text,
               textAlign: TextAlign.center,
               style: isSelected
-                  ? CustomFontStyle.getTextStyle(context, CustomFontStyle.selectedLarge)
-                  : CustomFontStyle.getTextStyle(context, CustomFontStyle.unSelectedLarge),
+                  ? CustomFontStyle.getTextStyle(
+                      context, CustomFontStyle.selectedLarge)
+                  : CustomFontStyle.getTextStyle(
+                      context, CustomFontStyle.unSelectedLarge),
             ),
           ),
         ),
