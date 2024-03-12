@@ -45,7 +45,6 @@ class AuthModel{
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     var response = await http.post(url, headers: headers, body: body);
-    print(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
       String accessToken = json.decode(utf8.decode(response.bodyBytes))['access_token'];
@@ -58,6 +57,8 @@ class AuthModel{
       prefs.setBool('isLogin', true);
       prefs.setString('email', email);
       prefs.setString('password', password);
+
+      userProvider.getUserInfo();
 
       return AuthStatus.loginSuccess;
     } else {

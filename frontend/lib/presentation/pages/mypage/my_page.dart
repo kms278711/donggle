@@ -23,6 +23,9 @@ class _MyPageState extends State<MyPage> {
   late AuthModel auth;
   late UserProvider userProvider;
   String accessToken = "";
+  String nickName = "";
+  String email = "";
+  String profileImage = "";
 
   @override
   void initState() {
@@ -30,6 +33,10 @@ class _MyPageState extends State<MyPage> {
     auth = Provider.of<AuthModel>(context, listen: false);
     userProvider = Provider.of<UserProvider>(context, listen: false);
     accessToken = userProvider.getAccessToken();
+    userProvider.getUserInfo();
+    nickName = userProvider.getNickName();
+    email = userProvider.getEmail();
+    profileImage = userProvider.getProfileImage();
   }
 
 
@@ -62,7 +69,7 @@ class _MyPageState extends State<MyPage> {
                             context, CustomFontStyle.textSmall),
                       ),
                       TextSpan(
-                          text: 'mj3meal',
+                          text: nickName,
                           style: CustomFontStyle.getTextStyle(
                               context, CustomFontStyle.textSmallEng)),
                     ],
@@ -76,7 +83,7 @@ class _MyPageState extends State<MyPage> {
                           style: CustomFontStyle.getTextStyle(
                               context, CustomFontStyle.textSmall)),
                       TextSpan(
-                          text: 'ducco705@snu.ac.kr',
+                          text: email,
                           style: CustomFontStyle.getTextStyle(
                               context, CustomFontStyle.textSmallEng)),
                     ],
@@ -84,6 +91,10 @@ class _MyPageState extends State<MyPage> {
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.width * 0.05,
+                ),
+                GreenButton("Test", onPressed: ()=> userProvider.getUserInfo()),
+                SizedBox(
+                  height: MediaQuery.of(context).size.width * 0.02,
                 ),
                 Row(
                   children: [
