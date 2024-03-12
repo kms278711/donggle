@@ -23,6 +23,14 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
   int selectedTab = 0; // 초기에 선택된 탭의 인덱스
 
   @override
+  void setState(VoidCallback fn) {
+    if (selectedTab == 0) {
+
+    }
+    super.setState(fn);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final isMyPageUpdateSelected = context.select<MainProvider, bool>((provider) => provider.isMyPageUpdateSelected);
 
