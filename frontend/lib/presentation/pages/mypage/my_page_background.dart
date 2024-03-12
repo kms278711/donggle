@@ -5,6 +5,7 @@ import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/icons/cards_icon_mypage.dart';
 import 'package:frontend/core/utils/component/icons/home_icon_mypage.dart';
 import 'package:frontend/core/utils/component/icons/sound_icon.dart';
+import 'package:frontend/presentation/pages/main_screen/main_screen.dart';
 import 'package:frontend/presentation/pages/mypage/current_fairytale.dart';
 import 'package:frontend/presentation/pages/mypage/my_page.dart';
 import 'package:frontend/presentation/pages/mypage/purchase_fairytale.dart';
@@ -49,7 +50,7 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
                         const CardsIconMypage(),
                         SizedBox(width: MediaQuery.of(context).size.width * 0.01),
                         // Toggle between SoundIcon and SoundOffIcon based on isSoundOn
-                        SoundIcon(),
+                        SoundIcon(assetsAudioPlayer),
                       ],
                     ),
                   ],

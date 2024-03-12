@@ -1,3 +1,4 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/icons/cards_icon_main.dart';
@@ -12,6 +13,8 @@ import 'package:frontend/presentation/pages/home/component/background/background
 import 'package:frontend/presentation/pages/home/home_page.dart';
 import 'package:frontend/presentation/pages/quiz/quiz_page.dart';
 import 'package:indexed/indexed.dart';
+
+late AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer.newPlayer();
 
 class MainScreen extends StatefulWidget {
   final String? id;
@@ -30,6 +33,15 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _updateSelectedIndex();
+
+    assetsAudioPlayer.open(
+      Audio("assets/music/background.mp3"),
+      loopMode: LoopMode.single, //반복 여부 (LoopMode.none : 없음)
+      autoStart: true, //자동 시작 여부
+      showNotification: false, //스마트폰 알림 창에 띄울지 여부
+    );
+
+    assetsAudioPlayer.play();
   }
 
   @override
@@ -117,7 +129,7 @@ class _MainScreenState extends State<MainScreen> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.01,
                   ),
-                  const SoundIcon(),
+                  SoundIcon(assetsAudioPlayer),
                 ],
               ),
             ),
