@@ -6,11 +6,7 @@ class RedButton extends StatelessWidget {
   final String textContent;
   final VoidCallback onPressed;
 
-  const RedButton(
-    this.textContent, {
-    super.key,
-    required this.onPressed,
-  });
+  const RedButton(this.textContent, {super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

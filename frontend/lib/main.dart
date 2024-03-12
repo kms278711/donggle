@@ -2,9 +2,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/theme_data.dart';
 import 'package:frontend/presentation/routes/routes.dart';
+import 'package:provider/provider.dart';
+import 'provider/main_provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (_) => MainProvider(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
