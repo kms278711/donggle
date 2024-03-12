@@ -1,12 +1,16 @@
 package com.ssafy.backend.domain.book.controller;
 
 import com.ssafy.backend.domain.book.dto.BookDto;
+import com.ssafy.backend.domain.book.dto.BookInfoDto;
 import com.ssafy.backend.domain.book.dto.BookPageDto;
 import com.ssafy.backend.domain.book.dto.BookPageSentenceDto;
 import com.ssafy.backend.domain.book.service.BookService;
+import com.ssafy.backend.domain.user.dto.LoginUserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,10 +31,19 @@ public class BookController {
         return ResponseEntity.ok(bookList);
     }
 
-    // 구매한 책 목록 전체 조회
 
-    // 책 단일 조회
+    // 책 정보 조회(책 클릭시)
     @GetMapping("/{bookId}")
+    public ResponseEntity<BookInfoDto> searchBookInfo(@PathVariable("bookId") Long bookId, Authentication authentication) {
+        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
+        Long loginUserId = loginUser.userId();
+        BookInfoDto bookInfo = bookService.searchBookInfo(bookId, loginUserId);
+
+        return ResponseEntity.ok(bookInfo);
+    }
+
+    // 책 단일 조회(구매창)
+    @GetMapping("/{bookId}/purchase")
     public ResponseEntity<BookDto> searchBook(@PathVariable("bookId") Long bookId) {
         BookDto bookDto = bookService.searchBook(bookId);
 
@@ -45,4 +58,14 @@ public class BookController {
         return ResponseEntity.ok(bookPageDto);
     }
 
+
+    // 다음 페이지로 넘어가기 전 현재 페이지 정보 저장
+    @PostMapping("/{bookId}/pages/{page}")
+    public ResponseEntity<String> saveProgressBookPage(@PathVariable("bookId") Long bookId, @PathVariable("page") int page, Authentication authentication) {
+        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
+        Long loginUserId = loginUser.userId();
+        bookService.saveProgressBookPage(loginUserId, bookId, page);
+
+        return ResponseEntity.ok("진행중인 페이지가 저장되었습니다.");
+    }
 }
