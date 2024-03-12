@@ -92,7 +92,7 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
                           top: MediaQuery.of(context).size.height * 0.12,
                           left: 0,
                           child: selectedTab == 0
-                              ? const CurrentFairytale()
+                              ?  const CurrentFairytale()
                               : selectedTab == 1
                                   ? const PurchaseFairytale()
                                   : isMyPageUpdateSelected
