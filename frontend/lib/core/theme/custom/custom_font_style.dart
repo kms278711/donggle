@@ -95,4 +95,10 @@ class CustomFontStyle {
     fontWeight: CustomFontWeight.regular,
   );
 
+  static const errorMedium = TextStyle(
+    fontFamily: "Nanumson_jangmi",
+    color: AppColors.error,
+    fontSize: 50,
+    fontWeight: CustomFontWeight.regular,
+  );
 }
