@@ -66,6 +66,7 @@ class _HomePageState extends State<HomePage> {
                               mainAxisSpacing: MediaQuery.of(context).size.height * 0.05, // Vertical space between items
                             ),
                             physics: const AlwaysScrollableScrollPhysics(),
+                            scrollDirection: Axis.vertical,
                             itemCount: bookLength,
                             itemBuilder: (context, index) {
                               final book = Book.fromJson(bookModel.books[index]);

@@ -41,6 +41,9 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
 
   @override
   Widget build(BuildContext context) {
+    final currentNickName =
+        Provider.of<UserProvider>(context, listen: true).getNickName();
+
     return WillPopScope(
       onWillPop: () async {
         context.read<MainProvider>().resetMyPageUpdate();
@@ -92,7 +95,7 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
                                 context, CustomFontStyle.textLarge),
                           ),
                           TextSpan(
-                              text: nickName,
+                              text: currentNickName,
                               style: CustomFontStyle.getTextStyle(
                                   context, CustomFontStyle.textLarge)),
                         ],
@@ -106,11 +109,18 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
                       onPressed: () {
                         showDialog(
                           context: context,
+                          barrierDismissible: true,
                           builder: (BuildContext context) {
                             return const nickNameUpdateModal(
                               title: "닉네임 수정",
                               input: NickNameInput(), // 수정 코드
                             );
+                          },
+                        ).then(
+                          (value) {
+                            Provider.of<NickNameUpdateModel>(context,
+                                    listen: false)
+                                .resetFields();
                           },
                         );
                       },
