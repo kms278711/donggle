@@ -19,7 +19,7 @@ class nickNameUpdateModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     late NickNameUpdateModel nickName =
-        Provider.of<NickNameUpdateModel>(context, listen: false);
+    Provider.of<NickNameUpdateModel>(context, listen: false);
 
     return AlertDialog(
       backgroundColor: Colors.white,
@@ -29,7 +29,10 @@ class nickNameUpdateModal extends StatelessWidget {
             context, CustomFontStyle.textMediumLarge2),
       ),
       content: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.08,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height * 0.08,
         child: const NickNameInput(),
       ),
       actions: <Widget>[
@@ -47,6 +50,7 @@ class nickNameUpdateModal extends StatelessWidget {
                 (context), CustomFontStyle.textMedium),
           ),
           onPressed: () {
+            nickName.resetFields();
             Navigator.of(context).pop(); // 모달 닫기
           },
         ),
@@ -55,19 +59,37 @@ class nickNameUpdateModal extends StatelessWidget {
   }
 }
 
-class NickNameInput extends StatelessWidget {
+class NickNameInput extends StatefulWidget {
   const NickNameInput({super.key});
+
+  @override
+  State<NickNameInput> createState() => _NickNameInputState();
+}
+
+class _NickNameInputState extends State<NickNameInput> {
 
   @override
   Widget build(BuildContext context) {
     final nickName =
-        Provider.of<NickNameUpdateModel>(context, listen: true);
+    Provider.of<NickNameUpdateModel>(context, listen: true);
+    final userProvider =
+    Provider.of<UserProvider>(context, listen: true);
+    final nickNameHint = userProvider.getNickName();
 
     return Container(
-      width: MediaQuery.of(context).size.width * 0.47,
-      height: MediaQuery.of(context).size.height * 0.01,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width * 0.47,
+      height: MediaQuery
+          .of(context)
+          .size
+          .height * 0.01,
       padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width * 0.02),
+          horizontal: MediaQuery
+              .of(context)
+              .size
+              .width * 0.02),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
@@ -82,10 +104,9 @@ class NickNameInput extends StatelessWidget {
             },
             style: CustomFontStyle.getTextStyle(
                 context, CustomFontStyle.textSmall),
-            decoration: const InputDecoration(
-              hintText: '큰눈',
-              // 현재 닉네임으로
-              contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            decoration: InputDecoration(
+              hintText: nickNameHint,
+              contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
               filled: true,
               fillColor: Colors.transparent,
               border: InputBorder.none,
