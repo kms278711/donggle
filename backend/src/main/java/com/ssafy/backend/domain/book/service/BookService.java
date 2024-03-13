@@ -13,4 +13,8 @@ public interface BookService {
     void saveProgressBookPage(Long loginUserId, Long bookId, int page);
 
     void createReview(Long loginUserId, Long bookId, BookReviewRequestDto bookReviewRequestDto);
+
+    List<UserBookProcessDto> searchProcessBook(Long loginUserId);
+
+    List<BookPurchasedLearningDto> searchPurchasedBook(Long loginUserId);
 }
