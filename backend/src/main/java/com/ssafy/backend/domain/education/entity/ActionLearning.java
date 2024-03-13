@@ -1,6 +1,5 @@
 package com.ssafy.backend.domain.education.entity;
 
-import com.ssafy.backend.domain.education.entity.idClass.ActionLearningId;
 import com.ssafy.backend.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -12,18 +11,15 @@ import lombok.ToString;
 @Getter
 @ToString
 @NoArgsConstructor
-@IdClass(ActionLearningId.class)
 public class ActionLearning {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long actionId;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Id
     @ManyToOne
     @JoinColumn(name="education_id")
     private Education education;
@@ -33,9 +29,10 @@ public class ActionLearning {
     private boolean isSkipped;
 
     @Builder
-    public ActionLearning(Long actionId, User user, Education education) {
-        this.actionId = actionId;
+    public ActionLearning(User user, Education education, String userPath, boolean isSkipped) {
         this.user = user;
         this.education = education;
+        this.userPath = userPath;
+        this.isSkipped = isSkipped;
     }
 }

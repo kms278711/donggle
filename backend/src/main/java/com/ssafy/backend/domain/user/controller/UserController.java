@@ -78,9 +78,9 @@ public class UserController {
     }
 
     @PostMapping("/educations/{educationId}")
-    public ResponseEntity<String> saveEducation(Authentication authentication,@RequestParam MultipartFile userActionImage, @PathVariable Long educationId) {
+    public ResponseEntity<String> saveEducation(Authentication authentication, @RequestParam MultipartFile userActionImage, @RequestParam boolean isSkipped, @PathVariable Long educationId) {
         Long userId = getCurrentUserId(authentication);
-        userService.saveEducationImage(userId, educationId,userActionImage);
+        userService.saveEducationImage(userId, educationId, userActionImage, isSkipped);
         return ResponseEntity.ok("그림이 저장되었습니다.");
     }
 

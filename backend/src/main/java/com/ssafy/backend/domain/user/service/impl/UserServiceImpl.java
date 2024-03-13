@@ -1,5 +1,9 @@
 package com.ssafy.backend.domain.user.service.impl;
 
+import com.ssafy.backend.domain.education.entity.ActionLearning;
+import com.ssafy.backend.domain.education.entity.Education;
+import com.ssafy.backend.domain.education.repository.ActionLearningRepository;
+import com.ssafy.backend.domain.education.repository.EducationRepository;
 import com.ssafy.backend.domain.user.dto.request.PasswordRequestDto;
 import com.ssafy.backend.domain.user.dto.response.UserResponseDto;
 import com.ssafy.backend.domain.user.entity.User;
@@ -22,6 +26,8 @@ import static com.ssafy.backend.global.error.exception.ExceptionType.INVALID_USE
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final EducationRepository educationRepository;
+    private final ActionLearningRepository actionLearningRepository;
     private final PasswordEncoder passwordEncoder;
     private final S3Utils s3Utils;
 
@@ -50,11 +56,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveEducationImage(Long userId, Long educationId, MultipartFile userActionImage) {
+    public void saveEducationImage(Long userId, Long educationId, MultipartFile userActionImage, boolean isSkipped) {
         String folderName =  "word/" + educationId + "/" + userId;
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException(INVALID_USER));
-        uploadToS3(userActionImage, folderName, user);
+        Education education = educationRepository.findById(educationId).orElseThrow(() -> new UserException(INVALID_USER));
+        uploadToS3(userActionImage, folderName);
+        System.out.println(ActionLearning.builder()
+                .education(education)
+                .user(user)
+                .userPath(folderName+"/"+userActionImage.getOriginalFilename())
+                .isSkipped(isSkipped));
+        actionLearningRepository.save(ActionLearning.builder()
+                        .education(education)
+                        .user(user)
+                        .userPath(folderName+"/"+userActionImage.getOriginalFilename())
+                        .isSkipped(isSkipped)
+                .build());
     }
+
 
     @Override
     public void updateProfileImage(Long userId, MultipartFile profileImage) {
@@ -62,17 +81,17 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException(INVALID_USER));
         try {
             s3Utils.bucketDelete(folderName, user.getProfileImage().replace(folderName+"/", ""));
-            uploadToS3(profileImage, folderName, user);
+            uploadToS3(profileImage, folderName);
+            user.updateProfileImage(folderName +"/"+ profileImage.getOriginalFilename());
+            userRepository.save(user);
         } catch (Exception e) {
             throw new UserException(ExceptionType.AWS_DELETE_FAIL);
         }
     }
 
-    private void uploadToS3(MultipartFile userActionImage, String folderName, User user) {
+    private void uploadToS3(MultipartFile image, String folderName) {
         try {
-            s3Utils.fileUpload(folderName, userActionImage);
-            user.updateProfileImage(folderName +"/"+ userActionImage.getOriginalFilename());
-            userRepository.save(user);
+            s3Utils.fileUpload(folderName, image);
         } catch (Exception e) {
             throw new UserException(ExceptionType.AWS_UPLOAD_FAIL);
         }
