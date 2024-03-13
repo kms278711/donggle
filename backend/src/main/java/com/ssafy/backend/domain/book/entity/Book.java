@@ -30,7 +30,4 @@ public class Book extends BaseEntity {
     @Column(nullable = false)
     private int price;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    private List<BookPage> bookPages = new ArrayList<>();
-
 }

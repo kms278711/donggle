@@ -1,9 +1,6 @@
 package com.ssafy.backend.domain.book.service;
 
-import com.ssafy.backend.domain.book.dto.BookDto;
-import com.ssafy.backend.domain.book.dto.BookInfoDto;
-import com.ssafy.backend.domain.book.dto.BookPageDto;
-import com.ssafy.backend.domain.book.dto.BookPageSentenceDto;
+import com.ssafy.backend.domain.book.dto.*;
 
 import java.util.List;
 
@@ -14,4 +11,6 @@ public interface BookService {
     BookPageDto searchBookPage(Long bookId, int page);
     BookInfoDto searchBookInfo(Long bookId, Long loginUserId);
     void saveProgressBookPage(Long loginUserId, Long bookId, int page);
+
+    void createReview(Long loginUserId, Long bookId, BookReviewRequestDto bookReviewRequestDto);
 }

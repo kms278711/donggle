@@ -31,6 +31,5 @@ public class BookPage extends BaseEntity {
     @JoinColumn(name = "book_id")
     private Book book;
 
-    @OneToMany(mappedBy = "bookPage", cascade = CascadeType.ALL)
-    private List<BookPageSentence> bookPageSentences = new ArrayList<>();
+
 }

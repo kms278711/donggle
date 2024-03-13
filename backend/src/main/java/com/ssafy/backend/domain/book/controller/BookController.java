@@ -1,16 +1,12 @@
 package com.ssafy.backend.domain.book.controller;
 
-import com.ssafy.backend.domain.book.dto.BookDto;
-import com.ssafy.backend.domain.book.dto.BookInfoDto;
-import com.ssafy.backend.domain.book.dto.BookPageDto;
-import com.ssafy.backend.domain.book.dto.BookPageSentenceDto;
+import com.ssafy.backend.domain.book.dto.*;
 import com.ssafy.backend.domain.book.service.BookService;
 import com.ssafy.backend.domain.user.dto.LoginUserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -67,5 +63,16 @@ public class BookController {
         bookService.saveProgressBookPage(loginUserId, bookId, page);
 
         return ResponseEntity.ok("진행중인 페이지가 저장되었습니다.");
+    }
+
+    @PostMapping("{bookId}/review")
+    public ResponseEntity<String> createReview(@PathVariable("bookId") Long bookId,
+                                               @RequestBody BookReviewRequestDto bookReviewRequestDto,
+                                               Authentication authentication) {
+        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
+        Long loginUserId = loginUser.userId();
+        bookService.createReview(loginUserId, bookId, bookReviewRequestDto);
+
+        return ResponseEntity.ok("리뷰가 등록되었습니다.");
     }
 }
