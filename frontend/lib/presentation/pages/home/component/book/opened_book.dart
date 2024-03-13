@@ -17,19 +17,7 @@ class OpenedBook extends StatelessWidget {
       onPressed: () {
         print("[+]bookId : $bookId");
       },
-      icon: Stack(
-        children: [
-          img,
-          Container(
-            color: Color.fromRGBO(0, 0, 0, 0.7),
-            width: img.width,
-            height: img.height,
-          ),
-          Center(
-            child: Image.asset(AppIcons.lock_closed, width: MediaQuery.of(context).size.width * 0.5,),
-          )
-        ],
-      ),
+      icon: img,
       padding: EdgeInsets.zero,
     );
   }

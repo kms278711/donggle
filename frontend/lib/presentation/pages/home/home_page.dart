@@ -60,27 +60,32 @@ class _HomePageState extends State<HomePage> {
                         if (snapshot.data == "Success") {
                           int bookLength = bookModel.books.length;
                           return GridView.builder(
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 4, // Number of items in each row
-                              childAspectRatio: (MediaQuery.of(context).size.width / 4) / 350, // Adjust the size ratio of each item
-                              mainAxisSpacing: MediaQuery.of(context).size.height * 0.05, // Vertical space between items
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4,
+                              mainAxisSpacing:
+                                  MediaQuery.of(context).size.height * 0.05,
                             ),
-                            physics: const AlwaysScrollableScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            physics: const ScrollPhysics(),
                             itemCount: bookLength,
                             itemBuilder: (context, index) {
-                              final book = Book.fromJson(bookModel.books[index]);
+                              final book =
+                                  Book.fromJson(bookModel.books[index]);
                               final url = Constant.s3BaseUrl + book.path;
                               final id = book.bookId;
-                              return book.isPay ? OpenedBook(url, id) :LockedBook(url, id);
+                              return book.isPay
+                                  ? OpenedBook(url, id)
+                                  : LockedBook(url, id);
                             },
-                  
                           );
                         } else {
                           return Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                snapshot.data!, // Use the data from the snapshot
+                                snapshot.data!,
+                                // Use the data from the snapshot
                                 textAlign: TextAlign.center,
                                 style: CustomFontStyle.getTextStyle(
                                     context, CustomFontStyle.unSelectedLarge),
