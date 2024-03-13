@@ -9,6 +9,10 @@ class AppIcons {
   static const String parchment = "assets/images/parchment.png";
   static const String parchment_svg = "assets/images/parchment.svg";
   static const String seaweeds = "assets/images/seaweeds.png";
+  static const String seaweedLeft = "assets/images/seaweed-left.png";
+  static const String seaweedRight = "assets/images/seaweed-right.png";
+  static const String seaweedRight1 = "assets/images/seaweed_right_1.png";
+  static const String seaweedRight2 = "assets/images/seaweed_right_2.png";
   static const String stars = "assets/images/star.png";
   static const String water_left = "assets/images/water_left.png";
   static const String water_right = "assets/images/water_right.png";
