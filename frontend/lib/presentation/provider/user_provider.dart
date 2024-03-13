@@ -78,11 +78,11 @@ class UserProvider{
     var response = await http.get(url, headers: headers);
 
     print(response.statusCode);
-    print(utf8.decode(response.bodyBytes));
+    print(json.decode(utf8.decode(response.bodyBytes)));
 
     if(response.statusCode == 200){
-      String nickname = json.decode(utf8.decode(response.bodyBytes))['nickname'];
-      String profileImage = json.decode(utf8.decode(response.bodyBytes))['profileImage'];
+      String nickname = json.decode(utf8.decode(response.bodyBytes))['nickname'] ?? "";
+      String profileImage = json.decode(utf8.decode(response.bodyBytes))['profileImage'] ?? "";
 
       _nickname = nickname;
       _profileImage = profileImage;

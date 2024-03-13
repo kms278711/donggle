@@ -71,7 +71,7 @@ class _MyPageState extends State<MyPage> {
                       TextSpan(
                           text: nickName,
                           style: CustomFontStyle.getTextStyle(
-                              context, CustomFontStyle.textSmallEng)),
+                              context, CustomFontStyle.textSmall)),
                     ],
                   ),
                 ),
@@ -91,10 +91,6 @@ class _MyPageState extends State<MyPage> {
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.width * 0.05,
-                ),
-                GreenButton("Test", onPressed: ()=> userProvider.getUserInfo()),
-                SizedBox(
-                  height: MediaQuery.of(context).size.width * 0.02,
                 ),
                 Row(
                   children: [
