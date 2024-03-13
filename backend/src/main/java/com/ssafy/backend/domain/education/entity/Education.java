@@ -7,8 +7,6 @@ import lombok.*;
 @Entity
 @Getter
 @ToString
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class Education {
 

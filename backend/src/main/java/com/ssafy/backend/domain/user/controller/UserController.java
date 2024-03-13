@@ -77,6 +77,13 @@ public class UserController {
         return ResponseEntity.ok("프로필 이미지 수정에 성공했습니다.");
     }
 
+    @PostMapping("/educations/{educationId}")
+    public ResponseEntity<String> saveEducation(Authentication authentication,@RequestParam MultipartFile userActionImage, @PathVariable Long educationId) {
+        Long userId = getCurrentUserId(authentication);
+        userService.saveEducationImage(userId, educationId,userActionImage);
+        return ResponseEntity.ok("그림이 저장되었습니다.");
+    }
+
     private static Long getCurrentUserId(Authentication authentication) {
         LoginUserDto user = (LoginUserDto)(authentication.getPrincipal());
         return user.userId();

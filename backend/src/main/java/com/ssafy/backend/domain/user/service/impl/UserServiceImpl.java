@@ -29,7 +29,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void updatePassword(User user, String password) {
         user.updatePassword(passwordEncoder.encode(password));
-        System.out.println("확인");
         userRepository.save(user);
     }
 
@@ -51,6 +50,35 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void saveEducationImage(Long userId, Long educationId, MultipartFile userActionImage) {
+        String folderName =  "word/" + educationId + "/" + userId;
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserException(INVALID_USER));
+        uploadToS3(userActionImage, folderName, user);
+    }
+
+    @Override
+    public void updateProfileImage(Long userId, MultipartFile profileImage) {
+        String folderName =  "userprofile/" + userId;
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserException(INVALID_USER));
+        try {
+            s3Utils.bucketDelete(folderName, user.getProfileImage().replace(folderName+"/", ""));
+            uploadToS3(profileImage, folderName, user);
+        } catch (Exception e) {
+            throw new UserException(ExceptionType.AWS_DELETE_FAIL);
+        }
+    }
+
+    private void uploadToS3(MultipartFile userActionImage, String folderName, User user) {
+        try {
+            s3Utils.fileUpload(folderName, userActionImage);
+            user.updateProfileImage(folderName +"/"+ userActionImage.getOriginalFilename());
+            userRepository.save(user);
+        } catch (Exception e) {
+            throw new UserException(ExceptionType.AWS_UPLOAD_FAIL);
+        }
+    }
+
+    @Override
     public UserResponseDto getUserInfo(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException(INVALID_USER));
         return UserResponseDto.from(user);
@@ -62,20 +90,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException(INVALID_USER));
         user.updateStatus(User.Status.WITHDRAWAL);
         userRepository.save(user);
-    }
-
-    @Override
-    public void updateProfileImage(Long userId, MultipartFile profileImage) {
-        String folderName =  "userprofile/" + userId;
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserException(INVALID_USER));
-        try {
-            s3Utils.bucketDelete(folderName, user.getProfileImage().replace(folderName+"/", ""));
-            s3Utils.fileUpload(folderName, profileImage);
-            user.updateProfileImage(folderName+"/"+profileImage.getOriginalFilename());
-            userRepository.save(user);
-        } catch (Exception e) {
-            throw new UserException(ExceptionType.AWS_UPLOAD_FAIL);
-        }
     }
 
 }
