@@ -107,10 +107,9 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return nickNameUpdate(
+                            return const nickNameUpdateModal(
                               title: "닉네임 수정",
-                              input: const NickNameInput(),
-                              onConfirm: () {}, // 수정 코드
+                              input: NickNameInput(), // 수정 코드
                             );
                           },
                         );
@@ -156,47 +155,6 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class NickNameInput extends StatelessWidget {
-  const NickNameInput({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final nickNameUpdate =
-        Provider.of<NickNameUpdateModel>(context, listen: false);
-
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.47,
-      height: MediaQuery.of(context).size.height * 0.01,
-      padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width * 0.02),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          TextField(
-            controller: nickNameUpdate.nickNameController,
-            onChanged: (nickname) {
-              nickNameUpdate.setNickName(nickname);
-            },
-            style: CustomFontStyle.getTextStyle(
-                context, CustomFontStyle.textSmall),
-            decoration: const InputDecoration(
-              hintText: '큰눈', // 현재 닉네임으로
-              contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-              filled: true,
-              fillColor: Colors.transparent,
-              border: InputBorder.none,
-            ),
-          ),
-        ],
       ),
     );
   }
