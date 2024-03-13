@@ -90,7 +90,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookInfoDto searchBookInfo(Long bookId, Long loginUserId) {
-        //Book book = bookRepository.findById(bookId).orElseThrow(() -> new UserException(NOT_FOUND_BOOK));
         UserBookProcess bookProcess = userBookProcessRespository.findByUser_userIdAndBook_bookId(loginUserId, bookId)
                 .orElseThrow(() -> new UserException(NOT_FOUND_BOOK));
         System.out.println("bookProcess : " + bookProcess);

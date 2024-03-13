@@ -6,7 +6,7 @@ public record BookDto(
         Long bookId,
         String title,
         String summary,
-        String path,
+        String coverPath,
         String price,
         boolean isPay
 )
