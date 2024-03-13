@@ -12,6 +12,5 @@ public interface UserService {
     UserResponseDto getUserInfo(Long userId);
     void updateStatus(Long userId);
     void updateProfileImage(Long userId, MultipartFile profileImage);
-
     void changeNickname(Long userId, String nickname);
 }

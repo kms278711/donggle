@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import static com.ssafy.backend.global.error.exception.ExceptionType.*;
 
@@ -30,12 +29,11 @@ public class AuthServiceImpl implements AuthService {
 
     /**
      * 회원가입
-     * @param signupRequestDto
-     * @param profileImage
+     * @param signupRequestDto 회원가입 요청 정보
      */
     @Override
     @Transactional
-    public void signup(SignupRequestDto signupRequestDto, MultipartFile profileImage) {
+    public void signup(SignupRequestDto signupRequestDto) {
         if (isUserExist(signupRequestDto)) {
             userRepository.findByEmail(signupRequestDto.email()).ifPresent(user -> {
                 if (isWithdrawal(user)) {
@@ -46,7 +44,6 @@ public class AuthServiceImpl implements AuthService {
         }
 
         User user = userMapper.toUser(signupRequestDto);
-
         passwordEncoding(user);
         InitialSetting(user);
         userRepository.save(user);
@@ -60,6 +57,7 @@ public class AuthServiceImpl implements AuthService {
         user.updateStatus(User.Status.MEMBER);
         user.updateRole(User.Role.ROLE_USER);
         user.updateNickname(generateNickname());
+        user.updateProfileImage("userprofile/defaultImage.jpg");
     }
 
     private static String generateNickname() {
@@ -79,9 +77,6 @@ public class AuthServiceImpl implements AuthService {
 
     /**
      * 로그인
-     * @param email
-     * @param password
-     * @return
      */
     @Override
     public UserInfoDto login(String email, String password) {
@@ -107,8 +102,6 @@ public class AuthServiceImpl implements AuthService {
 
     /**
      * 토큰 재발급
-     * @param refreshToken
-     * @return
      */
     @Override
     @Transactional
@@ -121,6 +114,9 @@ public class AuthServiceImpl implements AuthService {
         return jwtService.issueToken(userInfo);
     }
 
+    /**
+     * 이메일 중복검사
+     */
     @Override
     public boolean duplicateCheckEmail(String email) {
         return userRepository.existsByEmail(email);

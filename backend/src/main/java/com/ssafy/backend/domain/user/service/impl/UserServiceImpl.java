@@ -5,7 +5,9 @@ import com.ssafy.backend.domain.user.dto.response.UserResponseDto;
 import com.ssafy.backend.domain.user.entity.User;
 import com.ssafy.backend.domain.user.repository.UserRepository;
 import com.ssafy.backend.domain.user.service.UserService;
+import com.ssafy.backend.global.error.exception.ExceptionType;
 import com.ssafy.backend.global.error.exception.UserException;
+import com.ssafy.backend.global.util.S3Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final S3Utils s3Utils;
 
     @Override
     @Transactional
@@ -63,7 +66,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateProfileImage(Long userId, MultipartFile profileImage) {
-        //TODO
+        String folderName =  "userprofile/" + userId;
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserException(INVALID_USER));
+        try {
+            s3Utils.bucketDelete(folderName, user.getProfileImage().replace(folderName+"/", ""));
+            s3Utils.fileUpload(folderName, profileImage);
+            user.updateProfileImage(folderName+"/"+profileImage.getOriginalFilename());
+            userRepository.save(user);
+        } catch (Exception e) {
+            throw new UserException(ExceptionType.AWS_UPLOAD_FAIL);
+        }
     }
 
 }
