@@ -1,7 +1,6 @@
 package com.ssafy.backend.global.util;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ssafy.backend.global.error.exception.ExceptionType;
@@ -28,27 +27,27 @@ public class S3Utils {
     }
 
     // 파일 업로드
-    public void fileUpload(String folderName, String fileName, MultipartFile file) throws Exception {
+    public void fileUpload(String folderName, MultipartFile file) throws Exception {
         if(amazonS3Client != null) {
 
             if(!file.isEmpty()) {
-                createFolder(bucket + "/contact", folderName);
+                createFolder(bucket, folderName);
             }
 
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentType(file.getContentType());
             objectMetadata.setContentLength(file.getSize());
             objectMetadata.setHeader("filename", file.getOriginalFilename());
-            amazonS3Client.putObject(new PutObjectRequest(bucket + "/" + folderName, file.getName(), file.getInputStream(), objectMetadata));
+            amazonS3Client.putObject(new PutObjectRequest(bucket + "/" + folderName, file.getOriginalFilename(), file.getInputStream(), objectMetadata));
         } else {
             throw new FileException(ExceptionType.AWS_UPLOAD_FAIL);
         }
     }
 
-    // 다중 파일 삭제
-    public void fileDelete(String filePath, String fileName) {
+    // 파일 삭제
+    public void bucketDelete(String folderName, String fileName) {
         if(amazonS3Client != null) {
-            amazonS3Client.deleteObject(new DeleteObjectRequest(filePath, fileName));
+            amazonS3Client.deleteObject(bucket+"/"+folderName, fileName);
         } else {
             throw new FileException(ExceptionType.AWS_DELETE_FAIL);
         }

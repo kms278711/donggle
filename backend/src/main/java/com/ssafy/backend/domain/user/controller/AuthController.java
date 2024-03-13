@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -23,8 +22,8 @@ public class AuthController {
     private final JwtService jwtService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDto, @RequestParam(required = false) MultipartFile profileImage) {
-        authService.signup(signupRequestDto, profileImage);
+    public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDto) {
+        authService.signup(signupRequestDto);
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
 
