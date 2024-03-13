@@ -3,8 +3,13 @@ import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/buttons/red_button.dart';
+import 'package:frontend/domain/model/model_auth.dart';
+import 'package:frontend/domain/model/model_nicknameupdate.dart';
+import 'package:frontend/domain/model/model_register.dart';
+import 'package:frontend/presentation/pages/modal/nickname_update_modal.dart';
 import 'package:frontend/presentation/pages/modal/signout_modal.dart';
 import 'package:frontend/presentation/provider/main_provider.dart';
+import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class MyPageUpdate extends StatefulWidget {
@@ -15,13 +20,24 @@ class MyPageUpdate extends StatefulWidget {
 }
 
 class _MyPageUpdateState extends State<MyPageUpdate> {
-  // // 페이지 나가면 false로 초기화
-  // @override
-  // void dispose() {
-  //   // Provider를 통해 상태 초기화
-  //   Provider.of<MainProvider>(context, listen: false).resetMyPageUpdate();
-  //   super.dispose();
-  // }
+  late AuthModel auth;
+  late UserProvider userProvider;
+  String accessToken = "";
+  String nickName = "";
+  String email = "";
+  String profileImage = "";
+
+  @override
+  void initState() {
+    super.initState();
+    auth = Provider.of<AuthModel>(context, listen: false);
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    accessToken = userProvider.getAccessToken();
+    userProvider.getUserInfo();
+    nickName = userProvider.getNickName();
+    email = userProvider.getEmail();
+    profileImage = userProvider.getProfileImage();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,75 +47,93 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
         return true;
       },
       child: Container(
-        padding: EdgeInsets.fromLTRB(MediaQuery.of(context).size.width * 0.1, 0, 0, 0),
-        height: MediaQuery.of(context).size.height * 0.7,
-        width: MediaQuery.of(context).size.height * 0.99,
+        padding: EdgeInsets.fromLTRB(
+            MediaQuery.of(context).size.width * 0.1, 0, 0, 0),
+        // height: MediaQuery.of(context).size.height * 0.7,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.09,
+            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(
-                  AppIcons.user_icon,
-                  width: MediaQuery.of(context).size.width * 0.12,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Image.asset(
+                      AppIcons.user_icon,
+                      width: MediaQuery.of(context).size.width * 0.12,
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.03,
+                    ),
+                    GreenButton(
+                      "수정하기",
+                      onPressed: () {
+                        context.read<MainProvider>().myPageUpdateToggle();
+                      },
+                    ),
+                  ],
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                ),
-                RichText(
-                  text: TextSpan(
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: '닉네임: ',
-                        style: CustomFontStyle.getTextStyle(
-                            context, CustomFontStyle.textLarge),
-                      ),
-                      TextSpan(
-                          text: 'mj3meal',
-                          style: CustomFontStyle.getTextStyle(
-                              context, CustomFontStyle.textLargeEng)),
-                    ],
-                  ),
-                ),
-                RichText(
-                  text: TextSpan(
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: '이메일: ',
-                          style: CustomFontStyle.getTextStyle(
-                              context, CustomFontStyle.textLarge)),
-                      TextSpan(
-                          text: 'ducco705@snu.ac.kr',
-                          style: CustomFontStyle.getTextStyle(
-                              context, CustomFontStyle.textLargeEng)),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
+                  height: MediaQuery.of(context).size.height * 0.1,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Row(
-                      children: [
-                        GreenButton(
-                          "돌아가기",
-                          onPressed: () {
-                            context.read<MainProvider>().myPageUpdateToggle();
+                    RichText(
+                      text: TextSpan(
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: '닉네임: ',
+                            style: CustomFontStyle.getTextStyle(
+                                context, CustomFontStyle.textLarge),
+                          ),
+                          TextSpan(
+                              text: nickName,
+                              style: CustomFontStyle.getTextStyle(
+                                  context, CustomFontStyle.textLarge)),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.03,
+                    ),
+                    GreenButton(
+                      '수정하기',
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return nickNameUpdate(
+                              title: "닉네임 수정",
+                              input: const NickNameInput(),
+                              onConfirm: () {}, // 수정 코드
+                            );
                           },
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.02,
-                        ),
-                        GreenButton(
-                          "수정하기",
-                          onPressed: () {
-                            context.read<MainProvider>().myPageUpdateToggle();
-                          },
-                        ),
-                      ],
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.5,
+                    ),
+                    GreenButton(
+                      "돌아가기",
+                      onPressed: () {
+                        context.read<MainProvider>().myPageUpdateToggle();
+                      },
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.height * 0.03,
                     ),
                     RedButton(
                       '회원탈퇴',
@@ -122,6 +156,47 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class NickNameInput extends StatelessWidget {
+  const NickNameInput({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final nickNameUpdate =
+        Provider.of<NickNameUpdateModel>(context, listen: false);
+
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.47,
+      height: MediaQuery.of(context).size.height * 0.01,
+      padding: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width * 0.02),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TextField(
+            controller: nickNameUpdate.nickNameController,
+            onChanged: (nickname) {
+              nickNameUpdate.setNickName(nickname);
+            },
+            style: CustomFontStyle.getTextStyle(
+                context, CustomFontStyle.textSmall),
+            decoration: const InputDecoration(
+              hintText: '큰눈', // 현재 닉네임으로
+              contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+              filled: true,
+              fillColor: Colors.transparent,
+              border: InputBorder.none,
+            ),
+          ),
+        ],
       ),
     );
   }

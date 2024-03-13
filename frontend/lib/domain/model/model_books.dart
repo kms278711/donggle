@@ -11,8 +11,8 @@ class BookModel extends ChangeNotifier {
     final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
     var response = await http.get(url, headers: headers);
 
-    print(response.statusCode);
-    print(utf8.decode(response.bodyBytes));
+    // print(response.statusCode);
+    // print(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
         books = json.decode(utf8.decode(response.bodyBytes));
