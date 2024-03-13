@@ -25,7 +25,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => MainProvider()),
       ChangeNotifierProvider(create: (_) => MessageProvider()),
       Provider(create: (_) => UserProvider()),
-      ChangeNotifierProvider(create: (_) => BookModel()),
+      ChangeNotifierProvider(create: (context) => BookModel(Provider.of<UserProvider>(context, listen: false))),
       ChangeNotifierProvider(
           create: (context) => RegisterFieldModel(
               Provider.of<MessageProvider>(context, listen: false))),

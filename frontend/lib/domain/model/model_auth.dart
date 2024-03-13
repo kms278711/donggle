@@ -88,7 +88,11 @@ class AuthModel{
 
       print("logout success");
       return AuthStatus.logoutSuccess;
-    } else {
+    } else if(response.statusCode == 401){
+      userProvider.refreshToken();
+      return logOut(userProvider.getAccessToken());
+    }
+    else{
       return AuthStatus.logoutFail;
     }
   }

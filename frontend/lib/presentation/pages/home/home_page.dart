@@ -1,8 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
+import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
+import 'package:frontend/presentation/pages/home/component/book/locked_book.dart';
+import 'package:frontend/presentation/pages/home/component/book/opened_book.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -38,48 +39,60 @@ class _HomePageState extends State<HomePage> {
           Positioned(
             top: MediaQuery.of(context).size.width * 0.11,
             left: MediaQuery.of(context).size.height * 0.16,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.height * 0.7,
-              child: FutureBuilder<String>(
-                future: bookModel.getAllBooks(accessToken),
-                // Your Future<String> function call
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    // While waiting for the future to complete, show a loading spinner.
-                    return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    // If the future completes with an error, display the error.
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    // When the future completes successfully, use the data.
-                    if (snapshot.data == "Success") {
-                      return ListView.builder(
-                        itemCount: bookModel.books.length,
-                        itemBuilder: (context, index) {
-                          final book = Book.fromJson(bookModel.books[index]);
-                          return ListTile(
-                            title: Text(book.title, style: CustomFontStyle.textSmall,),
+            right: MediaQuery.of(context).size.width * 0.09,
+            bottom: MediaQuery.of(context).size.width * 0.07,
+            child: Column(
+              children: [
+                Expanded(
+                  child: FutureBuilder<String>(
+                    future: bookModel.getAllBooks(accessToken),
+                    // Your Future<String> function call
+                    builder:
+                        (BuildContext context, AsyncSnapshot<String> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        // While waiting for the future to complete, show a loading spinner.
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        // If the future completes with an error, display the error.
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        // When the future completes successfully, use the data.
+                        if (snapshot.data == "Success") {
+                          int bookLength = bookModel.books.length;
+                          return GridView.builder(
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4, // Number of items in each row
+                              childAspectRatio: (MediaQuery.of(context).size.width / 4) / 350, // Adjust the size ratio of each item
+                              mainAxisSpacing: MediaQuery.of(context).size.height * 0.05, // Vertical space between items
+                            ),
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            itemCount: bookLength,
+                            itemBuilder: (context, index) {
+                              final book = Book.fromJson(bookModel.books[index]);
+                              final url = Constant.s3BaseUrl + book.path;
+                              final id = book.bookId;
+                              return book.isPay ? OpenedBook(url, id) :LockedBook(url, id);
+                            },
+                  
                           );
-                        },
-                      );
-                    } else {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            snapshot.data!, // Use the data from the snapshot
-                            textAlign: TextAlign.center,
-                            style: CustomFontStyle.getTextStyle(
-                                context, CustomFontStyle.unSelectedLarge),
-                          ),
-                        ],
-                      );
-                    }
-                  }
-                },
-              ),
+                        } else {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                snapshot.data!, // Use the data from the snapshot
+                                textAlign: TextAlign.center,
+                                style: CustomFontStyle.getTextStyle(
+                                    context, CustomFontStyle.unSelectedLarge),
+                              ),
+                            ],
+                          );
+                        }
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
           )
         ],

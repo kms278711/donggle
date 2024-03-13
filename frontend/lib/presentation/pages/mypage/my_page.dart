@@ -4,6 +4,7 @@ import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
+import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_auth.dart';
 import 'package:frontend/presentation/pages/mypage/my_review.dart';
 import 'package:frontend/presentation/provider/main_provider.dart';
@@ -53,8 +54,8 @@ class _MyPageState extends State<MyPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  AppIcons.user_icon,
+                Image.network(
+                  Constant.s3BaseUrl + profileImage,
                   width: MediaQuery.of(context).size.width * 0.1,
                 ),
                 SizedBox(

@@ -1,4 +1,3 @@
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/icons/cards_icon_main.dart';
@@ -166,9 +165,7 @@ class WidgetForHomeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: HomePage(),
-    );
+    return HomePage();
   }
 }
 

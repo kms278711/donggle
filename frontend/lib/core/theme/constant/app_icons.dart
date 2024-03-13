@@ -30,4 +30,5 @@ class AppIcons {
   static const String naver_icon = "assets/images/icons/naver_icon.png";
   static const String google_icon = "assets/images/icons/google_icon.png";
   static const String user_icon = "assets/images/icons/user_profile.png";
+  static const String lock_closed = "assets/images/icons/lock_closed.png";
 }

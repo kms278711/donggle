@@ -88,8 +88,10 @@ class UserProvider{
       _profileImage = profileImage;
 
       return "Success";
-    }
-    else{
+    }else if(response.statusCode == 401){
+      refreshToken();
+      return getUserInfo();
+    }else{
       return utf8.decode(response.bodyBytes);
     }
   }
