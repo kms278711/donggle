@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
@@ -53,9 +55,15 @@ class _MyPageState extends State<MyPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.network(
-                  Constant.s3BaseUrl + profileImage,
-                  width: MediaQuery.of(context).size.width * 0.1,
+                ClipOval(
+                  child: CachedNetworkImage(
+                    imageUrl: Constant.s3BaseUrl + profileImage,
+                    width: MediaQuery.of(context).size.width * 0.1,
+                    height: MediaQuery.of(context).size.width * 0.1,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                  ),
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.05,

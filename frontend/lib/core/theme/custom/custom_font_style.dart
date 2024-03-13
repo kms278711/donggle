@@ -25,6 +25,13 @@ class CustomFontStyle {
     fontWeight: CustomFontWeight.semiBold,
   );
 
+  static const titleSmall = TextStyle(
+    fontFamily: "Nanumson_jangmi",
+    color: AppColors.black,
+    fontSize: 50,
+    fontWeight: CustomFontWeight.semiBold,
+  );
+
   static const selectedLarge = TextStyle(
     fontFamily: "Nanumson_jangmi",
     color: AppColors.white,
@@ -43,6 +50,13 @@ class CustomFontStyle {
     fontFamily: "Nanumson_jangmi",
     color: AppColors.black,
     fontSize: 75,
+    fontWeight: CustomFontWeight.regular,
+  );
+
+  static const bodyMedium = TextStyle(
+    fontFamily: "Nanumson_jangmi",
+    color: AppColors.black,
+    fontSize: 50,
     fontWeight: CustomFontWeight.regular,
   );
 

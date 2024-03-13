@@ -35,4 +35,5 @@ class AppIcons {
   static const String google_icon = "assets/images/icons/google_icon.png";
   static const String user_icon = "assets/images/icons/user_profile.png";
   static const String lock_closed = "assets/images/icons/lock_closed.png";
+  static const String circle_back = "assets/images/icons/circle-back.png";
 }
