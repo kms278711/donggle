@@ -38,7 +38,7 @@ class Book {
   final String title;
   final String? summary;
   final String path;
-  final String price;
+  final int price;
   final bool isPay;
 
   Book({

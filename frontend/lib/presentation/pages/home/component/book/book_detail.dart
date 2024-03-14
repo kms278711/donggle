@@ -7,6 +7,7 @@ import 'package:frontend/core/utils/component/icons/circle_back_icon.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/presentation/routes/route_path.dart';
+import 'package:frontend/presentation/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -126,10 +127,12 @@ class _BookDetailState extends State<BookDetail> {
             top: MediaQuery.of(context).size.height * 0.115,
             right: MediaQuery.of(context).size.width * 0.06,
             child: GreenButton("문제풀기", onPressed: () {
-              Navigator.of(context).pop("refresh");
+              // Navigator.of(context).pop("refresh");
               // context.go(RoutePath.main3);
+              Navigator.of(context).pop();
+              globalRouter.pushReplacement(RoutePath.main3);
               // Navigator.of(context).pop();
-              // newcontext.go(RoutePath.main3);
+              // context.pushReplacement(RoutePath.main3);
             }),
           ),
         ],

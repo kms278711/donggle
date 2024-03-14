@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../pages/splash/splash_page.dart';
 import 'route_path.dart';
 
-final GoRouter router = GoRouter(
+final GoRouter globalRouter = GoRouter(
   routes: [
     GoRoute(
       path: RoutePath.splash,

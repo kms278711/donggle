@@ -22,13 +22,13 @@ class _OpenedBookState extends State<OpenedBook> {
       color: Colors.transparent,
       child: InkWell(
         onTap: () async {
-          String result = await DialogUtils.showCustomDialog(context,
-              bookId: widget.bookId);
-          if (!context.mounted) return;
-          if (result == "refresh") {
-            context.go(RoutePath.main3);
-          }
-          // DialogUtils.showCustomDialog(context, bookId: widget.bookId);
+          // String result = await DialogUtils.showCustomDialog(context,
+          //     bookId: widget.bookId);
+          // if (!context.mounted) return;
+          // if (result == "refresh") {
+          //   context.go(RoutePath.main3);
+          // }
+          DialogUtils.showCustomDialog(context, bookId: widget.bookId);
         },
         child: Center(
           child: ClipRRect(
