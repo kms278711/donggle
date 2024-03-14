@@ -1,5 +1,6 @@
 package com.ssafy.backend.domain.user.controller;
 
+import com.ssafy.backend.domain.education.dto.UserEducationDto;
 import com.ssafy.backend.domain.user.dto.LoginUserDto;
 import com.ssafy.backend.domain.user.dto.request.PasswordRequestDto;
 import com.ssafy.backend.domain.user.dto.response.UserResponseDto;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -77,8 +80,15 @@ public class UserController {
         return ResponseEntity.ok("프로필 이미지 수정에 성공했습니다.");
     }
 
+    @GetMapping("/educations")
+    public ResponseEntity<List<UserEducationDto>> getEducations(Authentication authentication) {
+        Long userId = getCurrentUserId(authentication);
+        List<UserEducationDto> educationList = userService.getEducationsByUser(userId);
+        return ResponseEntity.ok(educationList);
+    }
+
     @PostMapping("/educations/{educationId}")
-    public ResponseEntity<String> saveEducation(Authentication authentication, @RequestParam MultipartFile userActionImage, @RequestParam boolean isSkipped, @PathVariable Long educationId) {
+    public ResponseEntity<String> saveEducation(Authentication authentication, @RequestParam(required = false) MultipartFile userActionImage, @RequestParam boolean isSkipped, @PathVariable Long educationId) {
         Long userId = getCurrentUserId(authentication);
         userService.saveEducationImage(userId, educationId, userActionImage, isSkipped);
         return ResponseEntity.ok("그림이 저장되었습니다.");

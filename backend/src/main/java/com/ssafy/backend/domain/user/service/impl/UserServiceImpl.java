@@ -1,5 +1,6 @@
 package com.ssafy.backend.domain.user.service.impl;
 
+import com.ssafy.backend.domain.education.dto.UserEducationDto;
 import com.ssafy.backend.domain.education.entity.ActionLearning;
 import com.ssafy.backend.domain.education.entity.Education;
 import com.ssafy.backend.domain.education.repository.ActionLearningRepository;
@@ -17,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 import static com.ssafy.backend.global.error.exception.ExceptionType.INVALID_PASSWORD;
 import static com.ssafy.backend.global.error.exception.ExceptionType.INVALID_USER;
@@ -60,18 +63,24 @@ public class UserServiceImpl implements UserService {
         String folderName =  "word/" + educationId + "/" + userId;
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException(INVALID_USER));
         Education education = educationRepository.findById(educationId).orElseThrow(() -> new UserException(INVALID_USER));
-        uploadToS3(userActionImage, folderName);
-        System.out.println(ActionLearning.builder()
-                .education(education)
-                .user(user)
-                .userPath(folderName+"/"+userActionImage.getOriginalFilename())
-                .isSkipped(isSkipped));
+        String userPath = "";
+
+        if(!userActionImage.isEmpty()) {
+            uploadToS3(userActionImage, folderName);
+            userPath = folderName+"/"+userActionImage.getOriginalFilename();
+        }
+
         actionLearningRepository.save(ActionLearning.builder()
                         .education(education)
                         .user(user)
-                        .userPath(folderName+"/"+userActionImage.getOriginalFilename())
+                        .userPath(userPath)
                         .isSkipped(isSkipped)
-                .build());
+                        .build());
+    }
+
+    @Override
+    public List<UserEducationDto> getEducationsByUser(Long userId) {
+        return educationRepository.findEducationByUser(userId);
     }
 
 
