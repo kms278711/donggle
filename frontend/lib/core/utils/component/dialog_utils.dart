@@ -9,13 +9,10 @@ class DialogUtils {
   factory DialogUtils() => _instance;
 
 
-  static void showCustomDialog(BuildContext context,
-      {required String title,
-        String okBtnText = "Ok",
-        String cancelBtnText = "Cancel",
-        required int bookId,
-        required Function okBtnFunction}) {
-    showGeneralDialog(
+  static Future<String> showCustomDialog(BuildContext context,
+      { required int bookId,
+      }) async{
+    final result = await showGeneralDialog(
         context: context,
         barrierDismissible: true,
         barrierLabel: MaterialLocalizations.of(context)
@@ -45,5 +42,6 @@ class DialogUtils {
               }
           );
         });
+    return (result == null) ? "" : "refresh";
   }
 }

@@ -19,10 +19,6 @@ class BookModel extends ChangeNotifier {
     };
     var response = await http.get(url, headers: headers);
 
-    print(response.statusCode);
-    print(utf8.decode(response.bodyBytes));
-    print(json.decode(utf8.decode(response.bodyBytes)).length);
-
     if (response.statusCode == 200) {
       books = json.decode(utf8.decode(response.bodyBytes));
       return "Success";

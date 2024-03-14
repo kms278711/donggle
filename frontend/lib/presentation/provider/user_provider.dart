@@ -58,7 +58,6 @@ class UserProvider extends ChangeNotifier {
     final body = jsonEncode({"refreshToken": _refreshToken});
 
     var response = await http.post(url, headers: headers, body: body);
-    print(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
       String accessToken =
@@ -83,9 +82,6 @@ class UserProvider extends ChangeNotifier {
     };
 
     var response = await http.get(url, headers: headers);
-
-    print(response.statusCode);
-    print(json.decode(utf8.decode(response.bodyBytes)));
 
     if (response.statusCode == 200) {
       String nickname =

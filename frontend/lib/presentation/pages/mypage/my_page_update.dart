@@ -167,7 +167,7 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
                                       Navigator.of(dialogContext).pop();
                                       showToast('탈퇴가 완료되었습니다.');
                                       newContext.go(RoutePath
-                                          .main0); // 새로운 BuildContext를 사용
+                                          .login); // 새로운 BuildContext를 사용
                                     } else {
                                       showToast('들어올땐 마음대로지만 나갈땐 아닙니다.');
                                     }

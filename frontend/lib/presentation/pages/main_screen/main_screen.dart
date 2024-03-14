@@ -33,7 +33,6 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _updateSelectedIndex();
-
     assetsAudioPlayer.play();
 
   }
@@ -67,13 +66,15 @@ class _MainScreenState extends State<MainScreen> {
 
 
   final List<Widget> _pages = [
-    const WidgetForHomeButton(),
-    const WidgetForCardButton(),
-    const WidgetForQuizButton(),
+    const HomePage(),
+    const CardPage(),
+    const QuizPage(),
+    const QuizPage(),
   ];
 
   final List _icons = [
     const CardsIconMain(),
+    const HomeIconMain(),
     const HomeIconMain(),
     const HomeIconMain(),
   ];
@@ -99,6 +100,7 @@ class _MainScreenState extends State<MainScreen> {
           Indexed(
             index: 0,
             child: IndexedStack(
+              key: ValueKey(widget.id),
               index: _selectedIndex,
               children: _pages,
             ),
@@ -156,37 +158,6 @@ class _MainScreenState extends State<MainScreen> {
           const Indexed(index: 100, child: BackgroundUpper())
         ],
       ),
-    );
-  }
-}
-
-class WidgetForHomeButton extends StatelessWidget {
-  const WidgetForHomeButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return HomePage();
-  }
-}
-
-class WidgetForCardButton extends StatelessWidget {
-  const WidgetForCardButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: CardPage(),
-    );
-  }
-}
-
-class WidgetForQuizButton extends StatelessWidget {
-  const WidgetForQuizButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: QuizPage(),
     );
   }
 }

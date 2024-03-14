@@ -36,6 +36,7 @@ class _BookDetailState extends State<BookDetail> {
 
   @override
   Widget build(BuildContext context) {
+
     return DefaultTextStyle(
       style: CustomFontStyle.titleSmall,
       child: Stack(
@@ -124,7 +125,12 @@ class _BookDetailState extends State<BookDetail> {
           Positioned(
             top: MediaQuery.of(context).size.height * 0.115,
             right: MediaQuery.of(context).size.width * 0.06,
-            child: GreenButton("문제풀기", onPressed: () {}),
+            child: GreenButton("문제풀기", onPressed: () {
+              Navigator.of(context).pop("refresh");
+              // context.go(RoutePath.main3);
+              // Navigator.of(context).pop();
+              // newcontext.go(RoutePath.main3);
+            }),
           ),
         ],
       ),
