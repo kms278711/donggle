@@ -1,4 +1,4 @@
-package com.ssafy.backend.domain.book.repository;
+package com.ssafy.backend.domain.book.repository.bookpage;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.backend.domain.book.entity.*;

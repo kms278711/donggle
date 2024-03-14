@@ -2,7 +2,6 @@ package com.ssafy.backend.domain.book.repository.bookpurchased;
 
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;
