@@ -10,6 +10,7 @@ class BookModel extends ChangeNotifier {
   BookModel(this.userProvider);
 
   List<dynamic> books = [];
+  List<dynamic> currentBooks = [];
 
   Future<String> getAllBooks(String accessToken) async {
     var url = Uri.https("j10c101.p.ssafy.io", "api/books");
@@ -28,6 +29,28 @@ class BookModel extends ChangeNotifier {
     } else {
       String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']
           ['result_message'];
+      return msg;
+    }
+  }
+
+  Future<String> getCurrentBooks(String accessToken) async {
+    var url = Uri.https("j10c101.p.ssafy.io", "api/books/mybooks");
+    final headers = {
+      'Content-Type': 'application/json',
+      "Authorization": "Bearer $accessToken"
+    };
+    var response = await http.get(url, headers: headers);
+
+    print(utf8.decode(response.bodyBytes));
+    if (response.statusCode == 200) {
+      currentBooks = json.decode(utf8.decode(response.bodyBytes));
+      return "Success";
+    } else if (response.statusCode == 401) {
+      userProvider.refreshToken();
+      return getAllBooks(userProvider.getAccessToken());
+    } else {
+      String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']
+      ['result_message'];
       return msg;
     }
   }

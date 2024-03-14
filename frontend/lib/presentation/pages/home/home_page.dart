@@ -75,11 +75,9 @@ class _HomePageState extends State<HomePage> {
                                   Book.fromJson(bookModel.books[index]);
                               final url = Constant.s3BaseUrl + book.path;
                               final id = book.bookId;
-                              final title = book.title;
-                              // return book.isPay
-                              //     ? OpenedBook(url, id)
-                              //     : LockedBook(url, id);
-                              return OpenedBook(url, id);
+                              return book.isPay
+                                  ? OpenedBook(url, id)
+                                  : LockedBook(url, id);
                             },
                           );
                         } else {

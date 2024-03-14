@@ -60,6 +60,13 @@ class CustomFontStyle {
     fontWeight: CustomFontWeight.regular,
   );
 
+  static const bodyMediumWhite = TextStyle(
+    fontFamily: "Nanumson_jangmi",
+    color: AppColors.white,
+    fontSize: 50,
+    fontWeight: CustomFontWeight.regular,
+  );
+
   static const textLarge = TextStyle(
     fontFamily: "Nanumson_jangmi",
     color: AppColors.black,

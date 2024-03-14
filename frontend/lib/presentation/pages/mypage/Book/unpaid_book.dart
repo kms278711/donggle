@@ -1,31 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:frontend/core/utils/component/dialog_utils.dart';
 
-class OpenedBook extends StatefulWidget {
+class UnpaidBook extends StatefulWidget {
   final String url;
   final int bookId;
 
-  const OpenedBook(this.url, this.bookId, {Key? key}) : super(key: key);
+  const UnpaidBook(this.url, this.bookId, {Key? key}) : super(key: key);
 
   @override
-  State<OpenedBook> createState() => _OpenedBookState();
+  State<UnpaidBook> createState() => _OpenedBookState();
 }
 
-class _OpenedBookState extends State<OpenedBook> {
+class _OpenedBookState extends State<UnpaidBook> {
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: () async {
-          // String result = await DialogUtils.showCustomDialog(context,
-          //     bookId: widget.bookId);
-          // if (!context.mounted) return;
-          // if (result == "refresh") {
-          //   context.go(RoutePath.main3);
-          // }
-          DialogUtils.showCustomDialog(context, bookId: widget.bookId);
+          print("[*] TODO: Pay for book");
         },
         child: Center(
           child: ClipRRect(
