@@ -12,6 +12,8 @@ enum AuthStatus {
   loginFail,
   logoutSuccess,
   logoutFail,
+  signOutSuccess,
+  signOutFail,
 }
 
 class AuthModel{
@@ -94,6 +96,35 @@ class AuthModel{
     }
     else{
       return AuthStatus.logoutFail;
+    }
+  }
+
+  Future<AuthStatus> signOut(String accessToken) async {
+    var url = Uri.https("j10c101.p.ssafy.io", "api/users");
+    final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    var response = await http.delete(url, headers: headers);
+
+    if (response.statusCode == 200) {
+
+      userProvider.setEmail("");
+      userProvider.setAccessToken("");
+      userProvider.setRefreshToken("");
+
+      prefs.setBool('isLogin', false);
+      prefs.setString('email', '');
+      prefs.setString('password', '');
+
+      print("성공");
+      return AuthStatus.signOutSuccess;
+    } else if(response.statusCode == 400){
+      userProvider.refreshToken();
+      return logOut(userProvider.getAccessToken());
+    }
+    else{
+      return AuthStatus.signOutFail;
     }
   }
 }

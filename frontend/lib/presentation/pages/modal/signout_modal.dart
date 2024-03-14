@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
-import 'package:frontend/core/utils/component/buttons/red_button.dart';
 
 class signOut extends StatelessWidget {
   final String title;
@@ -43,9 +42,8 @@ class signOut extends StatelessWidget {
             style: CustomFontStyle.getTextStyle(
                 (context), CustomFontStyle.textMoreSmall),
           ),
-          onPressed: () {
+          onPressed: () {// 모달 닫기
             onConfirm();
-            Navigator.of(context).pop(); // 모달 닫기
           },
         ),
       ],

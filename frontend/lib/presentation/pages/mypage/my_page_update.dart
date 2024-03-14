@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
@@ -6,6 +7,7 @@ import 'package:frontend/core/utils/component/buttons/red_button.dart';
 import 'package:frontend/domain/model/model_auth.dart';
 import 'package:frontend/domain/model/model_nicknameupdate.dart';
 import 'package:frontend/domain/model/model_register.dart';
+import 'package:frontend/presentation/pages/login/login_page.dart';
 import 'package:frontend/presentation/pages/modal/nickname_update_modal.dart';
 import 'package:frontend/presentation/pages/modal/signout_modal.dart';
 import 'package:frontend/presentation/provider/main_provider.dart';
@@ -42,7 +44,7 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
   @override
   Widget build(BuildContext context) {
     final currentNickName =
-        Provider.of<UserProvider>(context, listen: true).getNickName();
+    Provider.of<UserProvider>(context, listen: true).getNickName();
 
     return WillPopScope(
       onWillPop: () async {
@@ -51,13 +53,19 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
       },
       child: Container(
         padding: EdgeInsets.fromLTRB(
-            MediaQuery.of(context).size.width * 0.1, 0, 0, 0),
+            MediaQuery
+                .of(context)
+                .size
+                .width * 0.1, 0, 0, 0),
         // height: MediaQuery.of(context).size.height * 0.7,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.09,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.09,
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,10 +75,16 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
                   children: [
                     Image.asset(
                       AppIcons.user_icon,
-                      width: MediaQuery.of(context).size.width * 0.12,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.12,
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.03,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.03,
                     ),
                     GreenButton(
                       "수정하기",
@@ -81,7 +95,10 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
                   ],
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.1,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.1,
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -102,7 +119,10 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
                       ),
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.03,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.03,
                     ),
                     GreenButton(
                       '수정하기',
@@ -117,9 +137,9 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
                             );
                           },
                         ).then(
-                          (value) {
+                              (value) {
                             Provider.of<NickNameUpdateModel>(context,
-                                    listen: false)
+                                listen: false)
                                 .resetFields();
                           },
                         );
@@ -128,12 +148,18 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
                   ],
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.1,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.1,
                 ),
                 Row(
                   children: [
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.5,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.5,
                     ),
                     GreenButton(
                       "돌아가기",
@@ -142,7 +168,10 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
                       },
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.height * 0.03,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.03,
                     ),
                     RedButton(
                       '회원탈퇴',
@@ -153,7 +182,20 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
                             return signOut(
                               title: "회원탈퇴",
                               content: "계정을 삭제 하시겠습니까?",
-                              onConfirm: () {}, // 탈퇴 코드
+                              onConfirm: () async {
+                                AuthStatus signOutStatus =
+                                await auth.signOut(accessToken);
+                                if (signOutStatus ==
+                                    AuthStatus.signOutSuccess) {
+                                  Navigator.of(context).pop();
+                                  showToast('탈퇴가 완료되었습니다.');
+                                  Navigator.pushReplacement(context,
+                                      MaterialPageRoute(
+                                          builder: (context) => LoginPage()));
+                                } else {
+                                  showToast('들어올땐 마음대로지만 나갈땐 아닙니다.');
+                                }
+                              }, // 탈퇴 코드
                             );
                           },
                         );
