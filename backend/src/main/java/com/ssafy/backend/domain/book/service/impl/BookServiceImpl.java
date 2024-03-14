@@ -1,9 +1,16 @@
 package com.ssafy.backend.domain.book.service.impl;
 
 import com.ssafy.backend.domain.book.dto.*;
+import com.ssafy.backend.domain.book.dto.request.BookReviewRequestDto;
+import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;
 import com.ssafy.backend.domain.book.entity.*;
 import com.ssafy.backend.domain.book.mapper.BookMapper;
 import com.ssafy.backend.domain.book.repository.*;
+import com.ssafy.backend.domain.book.repository.book.BookRepository;
+import com.ssafy.backend.domain.book.repository.bookpage.BookPageRepository;
+import com.ssafy.backend.domain.book.repository.bookprocess.UserBookProcessRespository;
+import com.ssafy.backend.domain.book.repository.bookpurchased.BookPurchasedRepository;
+import com.ssafy.backend.domain.book.repository.booksentence.BookPageSentenceRepository;
 import com.ssafy.backend.domain.book.service.BookService;
 import com.ssafy.backend.domain.education.dto.EducationDto;
 import com.ssafy.backend.domain.education.entity.Education;
@@ -15,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,27 +43,21 @@ public class BookServiceImpl implements BookService {
     private final UserBookProcessRespository userBookProcessRespository;
     private final UserRepository userRepository;
     private final BookReviewRepository bookReviewRepository;
-
+    private final BookPurchasedRepository bookPurchasedRepository;
 
     // 책 정보 전체 조회
     @Override
-    @Transactional
-    public List<BookDto> searchAllBook() {
-        List<Book> books = bookRepository.findAll();
-        List<BookDto> bookDtoList = books.stream()
-                .map(bookMapper::toBookDto)
-                .toList();
+    public List<BookPurchasedResponseDto> searchAllBook(Long loginUserId) {
 
-        return bookDtoList;
+        return bookPurchasedRepository.findByUser_userId(loginUserId);
     }
 
     @Override
     @Transactional
     public BookDto searchBook(Long bookId) {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new UserException(NOT_FOUND_BOOK));
-        BookDto bookDto = bookMapper.toBookDto(book);
 
-        return bookDto;
+        return bookMapper.toBookDto(book);
     }
 
     @Override
@@ -140,32 +142,44 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void createReview(Long loginUserId, Long bookId, BookReviewRequestDto bookReviewRequestDto) {
-        System.out.println("loginUserId : " + loginUserId + ", bookId : " + bookId);
-        System.out.println("bookReviewDto : " + bookReviewRequestDto);
-
         User userId = userRepository.findById(loginUserId)
                 .orElseThrow(() -> new UserException(INVALID_USER));
-        System.out.println("userId : " + userId);
-        
-        try {
-            Book reviewBookId = bookRepository.findById(bookId)
-                    .orElseThrow(() -> new UserException(NOT_FOUND_BOOK));
-            System.out.println("reviewBookId : " + reviewBookId);
+        Book reviewBookId = bookRepository.findById(bookId)
+                .orElseThrow(() -> new UserException(NOT_FOUND_BOOK));
+
+        BookReview bookReview = BookReview.builder()
+                .user(userId)
+                .book(reviewBookId)
+                .score(bookReviewRequestDto.score())
+                .content(bookReviewRequestDto.content())
+                .build();
+
+        bookReviewRepository.save(bookReview);
+    }
+
+    @Override
+    public List<UserBookProcessDto> searchProcessBook(Long loginUserId) {
+        List<UserBookProcess> userBookProcesses = userBookProcessRespository.findByUser_userId(loginUserId);
+
+        return userBookProcesses.stream()
+                .map(bookMapper::toUserBookProcessDto)
+                .toList();
+    }
 
 
 
-            BookReview bookReview = BookReview.builder()
-                    .user(userId)
-                    .book(reviewBookId)
-                    .score(bookReviewRequestDto.score())
-                    .content(bookReviewRequestDto.content())
-                    .build();
+    @Override
+    public List<BookPurchasedResponseDto> searchPurchasedBook(Long loginUserId) {
 
-            bookReviewRepository.save(bookReview);
-        } catch (Exception e) {
-            e.printStackTrace();
+        List<BookPurchasedResponseDto> booklists = bookPurchasedRepository.findByUser_userId(loginUserId);
+        List<BookPurchasedResponseDto> purchasedResponseDtos = new ArrayList<>();
+        for (BookPurchasedResponseDto booklist : booklists) {
+            if (booklist.isPay() == true) {
+                purchasedResponseDtos.add(booklist);
+            }
+
         }
-
+        return purchasedResponseDtos;
     }
 
 

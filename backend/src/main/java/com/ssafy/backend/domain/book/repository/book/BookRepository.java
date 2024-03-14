@@ -1,4 +1,4 @@
-package com.ssafy.backend.domain.book.repository;
+package com.ssafy.backend.domain.book.repository.book;
 
 import com.ssafy.backend.domain.book.dto.BookInfoDto;
 import com.ssafy.backend.domain.book.entity.Book;

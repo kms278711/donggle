@@ -1,6 +1,8 @@
 package com.ssafy.backend.domain.book.controller;
 
 import com.ssafy.backend.domain.book.dto.*;
+import com.ssafy.backend.domain.book.dto.request.BookReviewRequestDto;
+import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;
 import com.ssafy.backend.domain.book.service.BookService;
 import com.ssafy.backend.domain.user.dto.LoginUserDto;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +23,12 @@ public class BookController {
 
     // 책 목록 전체 조회
     @GetMapping
-    public ResponseEntity<List<BookDto>> searchAllBook(@RequestParam(required = false) Long userId) {
-        List<BookDto> bookList = bookService.searchAllBook();
+    public ResponseEntity<List<BookPurchasedResponseDto>> searchAllBook(Authentication authentication) {
+        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
+        Long loginUserId = loginUser.userId();
+        List<BookPurchasedResponseDto> books = bookService.searchAllBook(loginUserId);
 
-        return ResponseEntity.ok(bookList);
+        return ResponseEntity.ok(books);
     }
 
 
@@ -65,6 +69,7 @@ public class BookController {
         return ResponseEntity.ok("진행중인 페이지가 저장되었습니다.");
     }
 
+    // 리뷰 등록
     @PostMapping("{bookId}/review")
     public ResponseEntity<String> createReview(@PathVariable("bookId") Long bookId,
                                                @RequestBody BookReviewRequestDto bookReviewRequestDto,
@@ -74,5 +79,25 @@ public class BookController {
         bookService.createReview(loginUserId, bookId, bookReviewRequestDto);
 
         return ResponseEntity.ok("리뷰가 등록되었습니다.");
+    }
+
+    // 진행중인 책 조회
+    @GetMapping("/mybooks")
+    public ResponseEntity<List<UserBookProcessDto>> searchProcessBook(Authentication authentication) {
+        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
+        Long loginUserId = loginUser.userId();
+        List<UserBookProcessDto> processBooks = bookService.searchProcessBook(loginUserId);
+
+        return ResponseEntity.ok(processBooks);
+    }
+
+    // 구매한 책 조회
+    @GetMapping("/purchase")
+    public ResponseEntity<List<BookPurchasedResponseDto>> searchPurchasedBook(Authentication authentication) {
+        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
+        Long loginUserId = loginUser.userId();
+        List<BookPurchasedResponseDto> purchasedBooks = bookService.searchPurchasedBook(loginUserId);
+
+        return ResponseEntity.ok(purchasedBooks);
     }
 }
