@@ -1,20 +1,24 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/buttons/red_button.dart';
+import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_auth.dart';
 import 'package:frontend/domain/model/model_nicknameupdate.dart';
 import 'package:frontend/domain/model/model_register.dart';
 import 'package:frontend/presentation/pages/login/login_page.dart';
 import 'package:frontend/presentation/pages/modal/nickname_update_modal.dart';
+import 'package:frontend/presentation/pages/modal/profileimage_update_modal.dart';
 import 'package:frontend/presentation/pages/modal/signout_modal.dart';
 import 'package:frontend/presentation/provider/main_provider.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:frontend/presentation/routes/route_path.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:file_picker/file_picker.dart';
 
 class MyPageUpdate extends StatefulWidget {
   const MyPageUpdate({super.key});
@@ -69,19 +73,32 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Image.asset(
-                      AppIcons.user_icon,
-                      width: MediaQuery.of(context).size.width * 0.12,
+                    ClipOval(
+                      child: CachedNetworkImage(
+                        imageUrl: Constant.s3BaseUrl + profileImage,
+                        width: MediaQuery.of(context).size.width * 0.1,
+                        height: MediaQuery.of(context).size.width * 0.1,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                      ),
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.03,
                     ),
-                    GreenButton(
-                      "수정하기",
-                      onPressed: () {
-                        context.read<MainProvider>().myPageUpdateToggle();
-                      },
-                    ),
+                    GreenButton("수정하기", onPressed: () {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (BuildContext context) {
+                          return const profileImageUpdateModal(
+                            title: "프로필 사진 변경",
+                          );
+                        },
+                      );
+                    }),
                   ],
                 ),
                 SizedBox(
