@@ -8,6 +8,7 @@ import 'package:frontend/core/utils/component/icons/google_icon.dart';
 import 'package:frontend/domain/model/model_auth.dart';
 import 'package:frontend/domain/model/model_register.dart';
 import 'package:frontend/main.dart';
+import 'package:frontend/presentation/pages/home/home_page.dart';
 import 'package:frontend/presentation/provider/message_provider.dart';
 import 'package:frontend/presentation/routes/route_path.dart';
 import 'package:go_router/go_router.dart';
@@ -244,8 +245,8 @@ class PasswordInput extends StatelessWidget {
             },
             style: CustomFontStyle.getTextStyle(
                 context, CustomFontStyle.textSmall),
-                obscureText: true,
-                decoration: InputDecoration(
+            obscureText: true,
+            decoration: InputDecoration(
                 contentPadding: EdgeInsets.fromLTRB(
                     MediaQuery.of(context).size.width * 0.072, 0, 0, 0),
                 icon: Text(
