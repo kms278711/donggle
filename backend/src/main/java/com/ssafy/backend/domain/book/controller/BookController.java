@@ -1,7 +1,8 @@
 package com.ssafy.backend.domain.book.controller;
 
 import com.ssafy.backend.domain.book.dto.*;
-import com.ssafy.backend.domain.book.entity.UserBookProcess;
+import com.ssafy.backend.domain.book.dto.request.BookReviewRequestDto;
+import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;
 import com.ssafy.backend.domain.book.service.BookService;
 import com.ssafy.backend.domain.user.dto.LoginUserDto;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +23,12 @@ public class BookController {
 
     // 책 목록 전체 조회
     @GetMapping
-    public ResponseEntity<List<BookDto>> searchAllBook(@RequestParam(required = false) Long userId) {
-        List<BookDto> bookList = bookService.searchAllBook();
+    public ResponseEntity<List<BookPurchasedResponseDto>> searchAllBook(Authentication authentication) {
+        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
+        Long loginUserId = loginUser.userId();
+        List<BookPurchasedResponseDto> books = bookService.searchAllBook(loginUserId);
 
-        return ResponseEntity.ok(bookList);
+        return ResponseEntity.ok(books);
     }
 
 
@@ -90,10 +93,10 @@ public class BookController {
 
     // 구매한 책 조회
     @GetMapping("/purchase")
-    public ResponseEntity<List<BookPurchasedLearningDto>> searchPurchasedBook(Authentication authentication) {
+    public ResponseEntity<List<BookPurchasedResponseDto>> searchPurchasedBook(Authentication authentication) {
         LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
         Long loginUserId = loginUser.userId();
-        List<BookPurchasedLearningDto> purchasedBooks = bookService.searchPurchasedBook(loginUserId);
+        List<BookPurchasedResponseDto> purchasedBooks = bookService.searchPurchasedBook(loginUserId);
 
         return ResponseEntity.ok(purchasedBooks);
     }

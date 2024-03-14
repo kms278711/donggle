@@ -1,4 +1,4 @@
-package com.ssafy.backend.domain.book.repository;
+package com.ssafy.backend.domain.book.repository.bookprocess;
 
 import com.ssafy.backend.domain.book.entity.BookPage;
 import com.ssafy.backend.domain.book.entity.BookPageSentence;

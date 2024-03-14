@@ -1,4 +1,4 @@
-package com.ssafy.backend.domain.book.dto;
+package com.ssafy.backend.domain.book.dto.response;
 
 import com.ssafy.backend.domain.book.entity.Book;
 import com.ssafy.backend.domain.user.entity.User;

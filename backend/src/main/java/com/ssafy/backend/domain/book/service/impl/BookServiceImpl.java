@@ -1,9 +1,16 @@
 package com.ssafy.backend.domain.book.service.impl;
 
 import com.ssafy.backend.domain.book.dto.*;
+import com.ssafy.backend.domain.book.dto.request.BookReviewRequestDto;
+import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;
 import com.ssafy.backend.domain.book.entity.*;
 import com.ssafy.backend.domain.book.mapper.BookMapper;
 import com.ssafy.backend.domain.book.repository.*;
+import com.ssafy.backend.domain.book.repository.book.BookRepository;
+import com.ssafy.backend.domain.book.repository.bookpage.BookPageRepository;
+import com.ssafy.backend.domain.book.repository.bookprocess.UserBookProcessRespository;
+import com.ssafy.backend.domain.book.repository.bookpurchased.BookPurchasedRepository;
+import com.ssafy.backend.domain.book.repository.booksentence.BookPageSentenceRepository;
 import com.ssafy.backend.domain.book.service.BookService;
 import com.ssafy.backend.domain.education.dto.EducationDto;
 import com.ssafy.backend.domain.education.entity.Education;
@@ -15,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,23 +47,17 @@ public class BookServiceImpl implements BookService {
 
     // 책 정보 전체 조회
     @Override
-    @Transactional
-    public List<BookDto> searchAllBook() {
-        List<Book> books = bookRepository.findAll();
-        List<BookDto> bookDtoList = books.stream()
-                .map(bookMapper::toBookDto)
-                .toList();
+    public List<BookPurchasedResponseDto> searchAllBook(Long loginUserId) {
 
-        return bookDtoList;
+        return bookPurchasedRepository.findByUser_userId(loginUserId);
     }
 
     @Override
     @Transactional
     public BookDto searchBook(Long bookId) {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new UserException(NOT_FOUND_BOOK));
-        BookDto bookDto = bookMapper.toBookDto(book);
 
-        return bookDto;
+        return bookMapper.toBookDto(book);
     }
 
     @Override
@@ -158,23 +160,26 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<UserBookProcessDto> searchProcessBook(Long loginUserId) {
         List<UserBookProcess> userBookProcesses = userBookProcessRespository.findByUser_userId(loginUserId);
-        List<UserBookProcessDto> userBookProcessDtos = userBookProcesses.stream()
+
+        return userBookProcesses.stream()
                 .map(bookMapper::toUserBookProcessDto)
                 .toList();
-
-        return userBookProcessDtos;
     }
 
+
+
     @Override
-    public List<BookPurchasedLearningDto> searchPurchasedBook(Long loginUserId) {
-        System.out.println("loginUserId : " + loginUserId);
-        List<BookPurchasedLearning> purchasedBooks = bookPurchasedRepository.findByUser_userId(loginUserId);
-        System.out.println("purchasedBooks : " + purchasedBooks);
-        List<BookPurchasedLearningDto> userPurchasedBooks = purchasedBooks.stream()
-                .map(bookMapper::toBookPurchasedLearningDto)
-                .toList();
-        System.out.println("userPurchasedBooks :" + userPurchasedBooks);
-        return userPurchasedBooks;
+    public List<BookPurchasedResponseDto> searchPurchasedBook(Long loginUserId) {
+
+        List<BookPurchasedResponseDto> booklists = bookPurchasedRepository.findByUser_userId(loginUserId);
+        List<BookPurchasedResponseDto> purchasedResponseDtos = new ArrayList<>();
+        for (BookPurchasedResponseDto booklist : booklists) {
+            if (booklist.isPay() == true) {
+                purchasedResponseDtos.add(booklist);
+            }
+
+        }
+        return purchasedResponseDtos;
     }
 
 

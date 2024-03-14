@@ -1,9 +1,6 @@
-package com.ssafy.backend.domain.book.repository;
+package com.ssafy.backend.domain.book.repository.bookpage;
 
-import com.querydsl.core.QueryFactory;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.backend.domain.book.dto.BookPageDto;
-import com.ssafy.backend.domain.book.dto.BookPageSentenceDto;
 import com.ssafy.backend.domain.book.entity.*;
 import com.ssafy.backend.domain.education.entity.Education;
 import com.ssafy.backend.domain.education.entity.QEducation;

@@ -1,4 +1,4 @@
-package com.ssafy.backend.domain.book.dto;
+package com.ssafy.backend.domain.book.dto.request;
 
 import lombok.Builder;
 

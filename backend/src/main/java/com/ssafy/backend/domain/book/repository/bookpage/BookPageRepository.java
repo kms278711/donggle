@@ -1,10 +1,7 @@
-package com.ssafy.backend.domain.book.repository;
+package com.ssafy.backend.domain.book.repository.bookpage;
 
 import com.ssafy.backend.domain.book.entity.BookPage;
-import com.ssafy.backend.domain.book.entity.BookPageSentence;
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
 
 public interface BookPageRepository extends JpaRepository<BookPage, Long>, BookPageCustomRespository{
 
