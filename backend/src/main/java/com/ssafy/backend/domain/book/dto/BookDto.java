@@ -1,6 +1,9 @@
 package com.ssafy.backend.domain.book.dto;
+
+import com.ssafy.backend.domain.book.dto.response.BookReviewResponseDto;
 import lombok.Builder;
-import lombok.Setter;
+
+import java.util.List;
 
 @Builder
 public record BookDto(
@@ -9,7 +12,8 @@ public record BookDto(
         String summary,
         String coverPath,
         int price,
-        boolean isPay
+        boolean isPay,
+        List<BookReviewResponseDto> bookReviews
 )
 {
 
