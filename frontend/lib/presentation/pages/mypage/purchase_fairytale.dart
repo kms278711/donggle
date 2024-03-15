@@ -67,7 +67,7 @@ class _PurchaseFairytaleState extends State<PurchaseFairytale> {
                         final book = Book.fromJson(bookModel.books[index]);
                         final url = Constant.s3BaseUrl + book.path;
                         final id = book.bookId;
-                        return book.isPay
+                        return book.isPay ?? false
                             ? PaidBook(url, id)
                             : UnpaidBook(url, id);
                       },

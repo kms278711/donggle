@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/theme/custom/custom_font_style.dart';
 
 
 
 class MainTitle extends StatelessWidget {
   final String titleString;
-  final double stringSize;
 
-  const MainTitle(this.titleString, {this.stringSize = 100, super.key});
+  const MainTitle(this.titleString, {super.key});
 
   bool containsKorean(String text) {
     RegExp koreanRegex = RegExp(r'[\u3131-\uD79D]');
@@ -25,11 +25,11 @@ class MainTitle extends StatelessWidget {
             child: containsKorean(titleString)
                 ? Text(
                     titleString,
-                    style: TextStyle(fontSize: stringSize),
+                    style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleMain),
                   )
                 : Text(
                     titleString,
-                    style: TextStyle(fontSize: stringSize, fontFamily: "Itim"),
+                    style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleMainEng),
                   ),
           ),
         ],

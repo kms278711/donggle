@@ -6,6 +6,8 @@ import 'package:frontend/core/utils/component/icons/cards_icon_mypage.dart';
 import 'package:frontend/core/utils/component/icons/home_icon_mypage.dart';
 import 'package:frontend/core/utils/component/icons/sound_icon.dart';
 import 'package:frontend/main.dart';
+import 'package:frontend/presentation/pages/mypage/Book/book_detail.dart';
+import 'package:frontend/presentation/pages/mypage/Book/purchase_history.dart';
 import 'package:frontend/presentation/pages/mypage/current_fairytale.dart';
 import 'package:frontend/presentation/pages/mypage/my_page.dart';
 import 'package:frontend/presentation/pages/mypage/my_page_update.dart';
@@ -24,12 +26,26 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
   int selectedTab = 0; // 초기에 선택된 탭의 인덱스
 
   @override
+  void initState() {
+    super.initState();
+    context.read<MainProvider>().resetDetailPageSelection();
+    context.read<MainProvider>().resetMyPageUpdate();
+    context.read<MainProvider>().resetPurchaseHistory();
+  }
+
+  @override
   void setState(VoidCallback fn) {
     if (selectedTab == 0) {
       context.read<MainProvider>().resetMyPageUpdate();
     } else if (selectedTab == 1) {
       context.read<MainProvider>().resetMyPageUpdate();
     }
+
+    if(selectedTab != 1){
+      context.read<MainProvider>().resetDetailPageSelection();
+      context.read<MainProvider>().resetPurchaseHistory();
+    }
+
     super.setState(fn);
   }
 
@@ -37,6 +53,10 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
   Widget build(BuildContext context) {
     final isMyPageUpdateSelected = context.select<MainProvider, bool>(
         (provider) => provider.isMyPageUpdateSelected);
+    final isDetailPageSelected = context
+        .select<MainProvider, bool>((provider) => provider.isDetailPageSeleted);
+    final isPurchaseHistorySelected = context.select<MainProvider, bool>(
+        (provider) => provider.isPurchaseHistorySelected);
 
     return Scaffold(
       body: Container(
@@ -107,7 +127,11 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
                           child: selectedTab == 0
                               ? const CurrentFairytale()
                               : selectedTab == 1
-                                  ? const PurchaseFairytale()
+                                  ? isPurchaseHistorySelected
+                                      ? const PurchaseHistory()
+                                      : isDetailPageSelected
+                                          ? const BooksDetailPay()
+                                          : const PurchaseFairytale()
                                   : isMyPageUpdateSelected
                                       ? const MyPageUpdate()
                                       : const MyPage(),

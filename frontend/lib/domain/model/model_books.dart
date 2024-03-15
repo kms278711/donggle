@@ -12,6 +12,13 @@ class BookModel extends ChangeNotifier {
   List<dynamic> books = [];
   List<dynamic> currentBooks = [];
 
+  int currentBookId = 1;
+
+  void setCurrentBookId(int currentBookId){
+    this.currentBookId = currentBookId;
+    notifyListeners();
+  }
+
   Future<String> getAllBooks(String accessToken) async {
     var url = Uri.https("j10c101.p.ssafy.io", "api/books");
     final headers = {
@@ -61,8 +68,8 @@ class Book {
   final String title;
   final String? summary;
   final String path;
-  final int price;
-  final bool isPay;
+  final int? price;
+  final bool? isPay;
 
   Book({
     required this.bookId,

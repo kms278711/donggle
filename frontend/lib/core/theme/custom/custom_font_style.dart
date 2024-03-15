@@ -11,6 +11,20 @@ class CustomFontStyle {
   }
 
   /// Typography
+  static const titleMain = TextStyle(
+    fontFamily: "Nanumson_jangmi",
+    color: AppColors.black,
+    fontSize: 100,
+    fontWeight: CustomFontWeight.semiBold,
+  );
+
+  static const titleMainEng = TextStyle(
+    fontFamily: "Itim",
+    color: AppColors.black,
+    fontSize: 100,
+    fontWeight: CustomFontWeight.semiBold,
+  );
+
   static const titleLarge = TextStyle(
     fontFamily: "Nanumson_jangmi",
     color: AppColors.black,

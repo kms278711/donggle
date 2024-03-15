@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
+import 'package:frontend/domain/model/model_books.dart';
+import 'package:frontend/presentation/provider/main_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class PaidBook extends StatelessWidget {
@@ -16,10 +19,10 @@ class PaidBook extends StatelessWidget {
       color: Colors.transparent, // Avoid any undesired coloring
       child: InkWell(
         onTap: () {
-          showToast(
-            "구매 완료한 동화책 입니다!",
-            context: context,
-          );
+          /// TODO: 누르면 동화책 리뷰 불러오기
+          context.read<BookModel>().setCurrentBookId(bookId);
+          context.read<MainProvider>().detailPageSelectionToggle();
+          /// TODO: 내 동화책 리뷰 남길 수 있게 하기
         },
         child: Stack(
           children: [

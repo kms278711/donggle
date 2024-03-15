@@ -76,7 +76,7 @@ class _CurrentFairytaleState extends State<CurrentFairytale> {
                       itemCount: bookLength,
                       itemBuilder: (context, index) {
                         final book = Book.fromJson(
-                            bookModel.currentBooks[index]['book']);
+                            bookModel.currentBooks[index]);
                         final url = Constant.s3BaseUrl + book.path;
                         final id = book.bookId;
                         return OpenedBook(url, id);
