@@ -8,6 +8,7 @@ import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/buttons/red_button.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_nicknameupdate.dart';
+import 'package:frontend/domain/model/model_profileupdate.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -51,8 +52,8 @@ class _profileImageUpdateModalState extends State<profileImageUpdateModal> {
 
   @override
   Widget build(BuildContext context) {
-    // late NickNameUpdateModel nickName =
-    //     Provider.of<NickNameUpdateModel>(context, listen: false);
+    late ProfileUpdateModel profile =
+        Provider.of<ProfileUpdateModel>(context, listen: false);
 
     return AlertDialog(
       backgroundColor: Colors.white,
@@ -83,7 +84,9 @@ class _profileImageUpdateModalState extends State<profileImageUpdateModal> {
         GreenButton(
           "변경",
           onPressed: () {
-            // nickName.nickNameUpdate(nickName.nickName);
+            profile.setProfile(_files[0].path!);
+            profile.profileUpdate(_files[0].path!);
+            _files.clear();
             Navigator.of(context).pop(); // 모달 닫기
           }, // 모달 닫기
         ),
@@ -95,6 +98,7 @@ class _profileImageUpdateModalState extends State<profileImageUpdateModal> {
           ),
           onPressed: () {
             // nickName.resetFields();
+            _files.clear();
             Navigator.of(context).pop(); // 모달 닫기
           },
         ),

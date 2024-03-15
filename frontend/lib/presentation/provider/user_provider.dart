@@ -30,6 +30,7 @@ class UserProvider extends ChangeNotifier {
 
   void setProfileImage(String profileImage) {
     _profileImage = profileImage;
+    notifyListeners();
   }
 
   String getEmail() {
