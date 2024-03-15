@@ -127,7 +127,6 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
                           left: 0,
                           right: 0,
                           child: Container(
-                            color: Colors.red,
                             child: selectedTab == 0
                                 ? const CurrentFairytale()
                                 : selectedTab == 1
