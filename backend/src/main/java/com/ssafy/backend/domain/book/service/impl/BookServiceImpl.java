@@ -158,6 +158,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public List<UserBookProcessDto> searchProcessBook(Long loginUserId) {
         List<UserBookProcess> userBookProcesses = userBookProcessRespository.findByUser_userId(loginUserId);
 
