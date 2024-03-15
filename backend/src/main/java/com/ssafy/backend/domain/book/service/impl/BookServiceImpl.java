@@ -3,14 +3,15 @@ package com.ssafy.backend.domain.book.service.impl;
 import com.ssafy.backend.domain.book.dto.*;
 import com.ssafy.backend.domain.book.dto.request.BookReviewRequestDto;
 import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;
+import com.ssafy.backend.domain.book.dto.response.BookReviewResponseDto;
 import com.ssafy.backend.domain.book.entity.*;
 import com.ssafy.backend.domain.book.mapper.BookMapper;
-import com.ssafy.backend.domain.book.repository.*;
 import com.ssafy.backend.domain.book.repository.book.BookRepository;
 import com.ssafy.backend.domain.book.repository.bookpage.BookPageRepository;
 import com.ssafy.backend.domain.book.repository.bookprocess.UserBookProcessRespository;
 import com.ssafy.backend.domain.book.repository.bookpurchased.BookPurchasedRepository;
 import com.ssafy.backend.domain.book.repository.booksentence.BookPageSentenceRepository;
+import com.ssafy.backend.domain.book.repository.review.BookReviewRepository;
 import com.ssafy.backend.domain.book.service.BookService;
 import com.ssafy.backend.domain.education.dto.EducationDto;
 import com.ssafy.backend.domain.education.entity.Education;
@@ -48,7 +49,6 @@ public class BookServiceImpl implements BookService {
     // 책 정보 전체 조회
     @Override
     public List<BookPurchasedResponseDto> searchAllBook(Long loginUserId) {
-
         return bookPurchasedRepository.findByUser_userId(loginUserId);
     }
 
@@ -56,8 +56,17 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public BookDto searchBook(Long bookId) {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new UserException(NOT_FOUND_BOOK));
+        BookDto bookDto = bookMapper.toBookDto(book);
+        return bookDto.builder()
+                .bookId(bookDto.bookId())
+                .title(bookDto.title())
+                .summary(bookDto.summary())
+                .coverPath(bookDto.coverPath())
+                .price(bookDto.price())
+                .isPay(bookDto.isPay())
+                .bookReviews(searchReviews(bookId))
+                .build();
 
-        return bookMapper.toBookDto(book);
     }
 
     @Override
@@ -141,6 +150,32 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
+    public List<UserBookProcessDto> searchProcessBook(Long loginUserId) {
+        List<UserBookProcess> userBookProcesses = userBookProcessRespository.findByUser_userId(loginUserId);
+
+        return userBookProcesses.stream()
+                .map(bookMapper::toUserBookProcessDto)
+                .toList();
+    }
+
+
+
+    @Override
+    public List<BookPurchasedResponseDto> searchPurchasedBook(Long loginUserId) {
+        // 전체 책 목록 조회
+        List<BookPurchasedResponseDto> booklists = bookPurchasedRepository.findByUser_userId(loginUserId);
+        // Book중 isPay가 true인 booklist만 뽑아서 리스트에 저장
+        List<BookPurchasedResponseDto> purchasedResponseDtos = new ArrayList<>();
+        for (BookPurchasedResponseDto booklist : booklists) {
+            if (booklist.isPay() == true) {
+                purchasedResponseDtos.add(booklist);
+            }
+        }
+        return purchasedResponseDtos;
+    }
+
+    @Override
+    @Transactional
     public void createReview(Long loginUserId, Long bookId, BookReviewRequestDto bookReviewRequestDto) {
         User userId = userRepository.findById(loginUserId)
                 .orElseThrow(() -> new UserException(INVALID_USER));
@@ -158,29 +193,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional
-    public List<UserBookProcessDto> searchProcessBook(Long loginUserId) {
-        List<UserBookProcess> userBookProcesses = userBookProcessRespository.findByUser_userId(loginUserId);
-
-        return userBookProcesses.stream()
-                .map(bookMapper::toUserBookProcessDto)
-                .toList();
-    }
-
-
-
-    @Override
-    public List<BookPurchasedResponseDto> searchPurchasedBook(Long loginUserId) {
-
-        List<BookPurchasedResponseDto> booklists = bookPurchasedRepository.findByUser_userId(loginUserId);
-        List<BookPurchasedResponseDto> purchasedResponseDtos = new ArrayList<>();
-        for (BookPurchasedResponseDto booklist : booklists) {
-            if (booklist.isPay() == true) {
-                purchasedResponseDtos.add(booklist);
-            }
-
-        }
-        return purchasedResponseDtos;
+    public List<BookReviewResponseDto> searchReviews(Long bookId) {
+        List<BookReviewResponseDto> bookReviews = bookReviewRepository.findByBook_bookId(bookId);
+        return bookReviews;
     }
 
 
