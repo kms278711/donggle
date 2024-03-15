@@ -34,14 +34,31 @@ public class S3Utils {
                 createFolder(bucket, folderName);
             }
 
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentType(file.getContentType());
-            objectMetadata.setContentLength(file.getSize());
+            ObjectMetadata objectMetadata = getObjectMetadata(file);
             objectMetadata.setHeader("filename", file.getOriginalFilename());
             amazonS3Client.putObject(new PutObjectRequest(bucket + "/" + folderName, file.getOriginalFilename(), file.getInputStream(), objectMetadata));
         } else {
             throw new FileException(ExceptionType.AWS_UPLOAD_FAIL);
         }
+    }
+
+    private static ObjectMetadata getObjectMetadata(MultipartFile file) {
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        String fileName = file.getOriginalFilename();
+        String extension = "";
+        assert fileName != null;
+        if (fileName.contains("jpg") || fileName.contains("jpeg")) {
+            extension = "image/jpeg";
+        } else if (fileName.contains("png")) {
+            extension = "image/png";
+        } else if (fileName.contains("gif")) {
+            extension = "image/gif";
+        } else {
+            extension = file.getContentType();
+        }
+        objectMetadata.setContentType(extension);
+        objectMetadata.setContentLength(file.getSize());
+        return objectMetadata;
     }
 
     // 파일 삭제
