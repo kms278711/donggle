@@ -51,6 +51,8 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
   Widget build(BuildContext context) {
     final currentNickName =
         Provider.of<UserProvider>(context, listen: true).getNickName();
+    final currentProfile =
+        Provider.of<UserProvider>(context, listen: true).getProfileImage();
 
     return WillPopScope(
       onWillPop: () async {
@@ -75,7 +77,7 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
                   children: [
                     ClipOval(
                       child: CachedNetworkImage(
-                        imageUrl: Constant.s3BaseUrl + profileImage,
+                        imageUrl: Constant.s3BaseUrl + currentProfile,
                         width: MediaQuery.of(context).size.width * 0.1,
                         height: MediaQuery.of(context).size.width * 0.1,
                         fit: BoxFit.cover,
@@ -88,17 +90,20 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.03,
                     ),
-                    GreenButton("수정하기", onPressed: () {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (BuildContext context) {
-                          return const profileImageUpdateModal(
-                            title: "프로필 사진 변경",
-                          );
-                        },
-                      );
-                    }),
+                    GreenButton(
+                      "수정하기",
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (BuildContext context) {
+                            return const profileImageUpdateModal(
+                              title: "프로필 사진 변경",
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ],
                 ),
                 SizedBox(
