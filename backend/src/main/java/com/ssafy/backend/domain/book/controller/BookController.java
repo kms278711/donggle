@@ -86,6 +86,7 @@ public class BookController {
     public ResponseEntity<List<UserBookProcessDto>> searchProcessBook(Authentication authentication) {
         LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
         Long loginUserId = loginUser.userId();
+        
         List<UserBookProcessDto> processBooks = bookService.searchProcessBook(loginUserId);
 
         return ResponseEntity.ok(processBooks);

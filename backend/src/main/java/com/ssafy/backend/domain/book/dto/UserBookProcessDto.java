@@ -6,6 +6,8 @@ import lombok.Builder;
 
 @Builder
 public record UserBookProcessDto(
-        BookDto book
+        Long bookId,
+        String title,
+        String coverPath
 ) {
 }
