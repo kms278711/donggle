@@ -64,9 +64,6 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.09,
-            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
