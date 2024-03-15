@@ -6,6 +6,7 @@ import lombok.*;
 
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor
 @IdClass(ProgressBookId.class)
 public class UserBookProcess {

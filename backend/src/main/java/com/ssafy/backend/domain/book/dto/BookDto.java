@@ -8,7 +8,7 @@ public record BookDto(
         String title,
         String summary,
         String coverPath,
-        String price,
+        int price,
         boolean isPay
 )
 {
