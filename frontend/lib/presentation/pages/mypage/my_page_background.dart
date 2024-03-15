@@ -123,18 +123,23 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
                         //Content based on selectedTab can be placed here
                         Positioned(
                           top: MediaQuery.of(context).size.height * 0.12,
+                          bottom: 0,
                           left: 0,
-                          child: selectedTab == 0
-                              ? const CurrentFairytale()
-                              : selectedTab == 1
-                                  ? isPurchaseHistorySelected
-                                      ? const PurchaseHistory()
-                                      : isDetailPageSelected
-                                          ? const BooksDetailPay()
-                                          : const PurchaseFairytale()
-                                  : isMyPageUpdateSelected
-                                      ? const MyPageUpdate()
-                                      : const MyPage(),
+                          right: 0,
+                          child: Container(
+                            color: Colors.red,
+                            child: selectedTab == 0
+                                ? const CurrentFairytale()
+                                : selectedTab == 1
+                                    ? isPurchaseHistorySelected
+                                        ? const PurchaseHistory()
+                                        : isDetailPageSelected
+                                            ? const BooksDetailPay()
+                                            : const PurchaseFairytale()
+                                    : isMyPageUpdateSelected
+                                        ? const MyPageUpdate()
+                                        : const MyPage(),
+                          ),
                         ),
                       ],
                     ),
