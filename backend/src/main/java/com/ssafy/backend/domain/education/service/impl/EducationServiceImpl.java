@@ -1,8 +1,8 @@
 package com.ssafy.backend.domain.education.service.impl;
 
 import com.ssafy.backend.domain.education.dto.response.EducationResponseDto;
-import com.ssafy.backend.domain.education.repository.ActionLearningRepository;
-import com.ssafy.backend.domain.education.repository.EducationRepository;
+import com.ssafy.backend.domain.education.repository.actionLearning.ActionLearningRepository;
+import com.ssafy.backend.domain.education.repository.education.EducationRepository;
 import com.ssafy.backend.domain.education.service.EducationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
