@@ -10,6 +10,7 @@ class UserProvider extends ChangeNotifier {
   String _refreshToken = "";
   String _nickname = "";
   String _profileImage = "";
+  String _userId = "";
 
   void setEmail(String email) {
     _email = email;
@@ -33,6 +34,11 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setUserId(String userId) {
+    _userId = userId;
+    notifyListeners();
+  }
+
   String getEmail() {
     return _email;
   }
@@ -51,6 +57,10 @@ class UserProvider extends ChangeNotifier {
 
   String getProfileImage() {
     return _profileImage;
+  }
+
+  String getUserId() {
+    return _userId;
   }
 
   Future<String> refreshToken() async {

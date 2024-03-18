@@ -72,6 +72,7 @@ class _MyPageUpdateState extends State<MyPageUpdate> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    // Text(Constant.s3BaseUrl + currentProfile),
                     ClipOval(
                       child: CachedNetworkImage(
                         imageUrl: Constant.s3BaseUrl + currentProfile,

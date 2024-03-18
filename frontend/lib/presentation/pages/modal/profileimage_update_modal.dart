@@ -28,12 +28,15 @@ class profileImageUpdateModal extends StatefulWidget {
 class _profileImageUpdateModalState extends State<profileImageUpdateModal> {
   late UserProvider userProvider;
   String profileImage = "";
+  String userId = "";
+  String profileName = "";
 
   @override
   void initState() {
     super.initState();
     userProvider = Provider.of<UserProvider>(context, listen: false);
     profileImage = userProvider.getProfileImage();
+    userId = userProvider.getUserId();
   }
 
   final List<PlatformFile> _files = [];
@@ -46,6 +49,7 @@ class _profileImageUpdateModalState extends State<profileImageUpdateModal> {
     setState(() {
       for (PlatformFile file in uploadedFiles!) {
         _files.add(file);
+        profileName = _files[0].name;
       }
     });
   }
@@ -84,7 +88,6 @@ class _profileImageUpdateModalState extends State<profileImageUpdateModal> {
         GreenButton(
           "변경",
           onPressed: () {
-            profile.setProfile(_files[0].path!);
             profile.profileUpdate(_files[0].path!);
             _files.clear();
             Navigator.of(context).pop(); // 모달 닫기

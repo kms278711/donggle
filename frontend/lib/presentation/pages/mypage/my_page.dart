@@ -28,6 +28,7 @@ class _MyPageState extends State<MyPage> {
   String nickName = "";
   String email = "";
   String profileImage = "";
+  String userId = "";
 
   @override
   void initState() {
@@ -39,6 +40,7 @@ class _MyPageState extends State<MyPage> {
     nickName = userProvider.getNickName();
     email = userProvider.getEmail();
     profileImage = userProvider.getProfileImage();
+    userId = userProvider.getUserId();
   }
 
 

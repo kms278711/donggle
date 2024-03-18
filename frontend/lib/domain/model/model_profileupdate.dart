@@ -11,14 +11,14 @@ class ProfileUpdateModel extends ChangeNotifier {
 
   ProfileUpdateModel(this.userProvider);
 
-  late String profile = userProvider.getProfileImage();
+  // late String profile = userProvider.getProfileImage();
   late String accessToken = userProvider.getAccessToken();
+  // late String userId = userProvider.getUserId();
 
-
-  void setProfile(String profile) {
-    this.profile = profile;
-    notifyListeners();
-  }
+  // void setProfile(String profileName) {
+  //   profile = 'userprofile/$userId/$profileName';
+  //   notifyListeners();
+  // }
 
   Future<String> profileUpdate(String profilePath) async {
 
@@ -37,7 +37,7 @@ class ProfileUpdateModel extends ChangeNotifier {
     if (streamedResponse.statusCode == 200) {
       var response = await http.Response.fromStream(streamedResponse);
       // 이 부분은 서버 응답에 따라 조정이 필요할 수 있습니다. 파일 경로 대신 서버에서 반환한 새로운 프로필 이미지 URL을 사용하세요.
-      userProvider.setProfileImage(profilePath);
+      userProvider.setProfileImage(response.body);
       userProvider.getUserInfo();
       showToast("변경되었습니다.");
       return "Success";
