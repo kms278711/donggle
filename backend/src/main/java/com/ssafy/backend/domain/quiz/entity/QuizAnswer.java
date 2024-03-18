@@ -1,5 +1,6 @@
 package com.ssafy.backend.domain.quiz.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.ToString;
@@ -13,9 +14,11 @@ public class QuizAnswer {
     private Long choiceId;
 
     private String choice;
-    private boolean isAnswer;
+    private boolean answer;
     private String choiceImagePath;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "quiz_id")
     private WordQuiz wordQuiz;
 }

@@ -2,7 +2,7 @@ package com.ssafy.backend.domain.quiz.dto;
 
 public record AnswerDto(
         String choice,
-        Boolean isAnswer,
+        boolean answer,
         String choiceImagePath
 ) {
 }
