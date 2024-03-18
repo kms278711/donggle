@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:indexed/indexed.dart';
 
@@ -418,48 +420,50 @@ class _BackgroundScreenState extends State<BackgroundUpper>
               ),
             ),
           ),
-          // Indexed(
-          //   index: 1003,
-          //   child: Positioned(
-          //     child: AnimatedBuilder(
-          //       animation: _rotateAnimation_fish!,
-          //       builder: (context, widget) {
-          //         if (_transAnimation_fish != null) {
-          //           return Transform.translate(
-          //             offset: _transAnimation_fish!.value,
-          //             child: Transform.rotate(
-          //               angle: _rotateAnimation_fish!.value,
-          //               child: widget,
-          //             ),
-          //           );
-          //         } else {
-          //           return Container();
-          //         }
-          //       },
-          //       child: Container(
-          //         color: Colors.transparent,
-          //         child: Center(
-          //           child: Image.asset(AppIcons.fish,
-          //               width: MediaQuery.of(context).size.width * 0.15),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
           Indexed(
-            index: 1002,
+            index: 1003,
             child: Positioned(
-              bottom: MediaQuery.of(context).size.height * 0.15,
-              left: MediaQuery.of(context).size.width * 0.08,
-              child: Container(
-                color: Colors.transparent,
-                child: Center(
-                  child: Image.asset(AppIcons.fish,
-                      width: MediaQuery.of(context).size.width * 0.15),
+              child: IgnorePointer(
+                child: AnimatedBuilder(
+                  animation: _rotateAnimation_fish!,
+                  builder: (context, widget) {
+                    if (_transAnimation_fish != null) {
+                      return Transform.translate(
+                        offset: _transAnimation_fish!.value,
+                        child: Transform.rotate(
+                          angle: _rotateAnimation_fish!.value,
+                          child: widget,
+                        ),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Center(
+                      child: Image.asset(AppIcons.fish,
+                          width: MediaQuery.of(context).size.width * 0.15),
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
+          // Indexed(
+          //   index: 1002,
+          //   child: Positioned(
+          //     bottom: MediaQuery.of(context).size.height * 0.15,
+          //     left: MediaQuery.of(context).size.width * 0.08,
+          //     child: Container(
+          //       color: Colors.transparent,
+          //       child: Center(
+          //         child: Image.asset(AppIcons.fish,
+          //             width: MediaQuery.of(context).size.width * 0.15),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Indexed(
             index: 1004,
             child: Positioned(
@@ -474,150 +478,160 @@ class _BackgroundScreenState extends State<BackgroundUpper>
               ),
             ),
           ),
-          // Indexed(
-          //   index: 1005,
-          //   child: AnimatedBuilder(
-          //     animation: _rotateAnimation_crab1!,
-          //     builder: (context, widget) {
-          //       if (_transAnimation_crab1 != null) {
-          //         return Transform.translate(
-          //           offset: _transAnimation_crab1!.value,
-          //           child: Transform.rotate(
-          //             angle: _rotateAnimation_crab1!.value,
-          //             child: widget,
-          //           ),
-          //         );
-          //       } else {
-          //         return Container();
-          //       }
-          //     },
-          //     child: Container(
-          //       color: Colors.transparent,
-          //       child: Center(
-          //         child: Image.asset(AppIcons.crab,
-          //             width: MediaQuery.of(context).size.width * 0.08),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // Indexed(
-          //   index: 1005,
-          //   child: AnimatedBuilder(
-          //     animation: _rotateAnimation_crab2!,
-          //     builder: (context, widget) {
-          //       if (_transAnimation_crab2 != null) {
-          //         return Transform.translate(
-          //           offset: _transAnimation_crab2!.value,
-          //           child: Transform.rotate(
-          //             angle: _rotateAnimation_crab2!.value,
-          //             child: widget,
-          //           ),
-          //         );
-          //       } else {
-          //         return Container();
-          //       }
-          //     },
-          //     child: Container(
-          //       color: Colors.transparent,
-          //       child: Center(
-          //         child: Image.asset(AppIcons.crab,
-          //             width: MediaQuery.of(context).size.width * 0.06),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // Indexed(
-          //   index: 1005,
-          //   child: AnimatedBuilder(
-          //     animation: _rotateAnimation_crab3!,
-          //     builder: (context, widget) {
-          //       if (_transAnimation_crab3 != null) {
-          //         return Transform.translate(
-          //           offset: _transAnimation_crab3!.value,
-          //           child: Transform.rotate(
-          //             angle: _rotateAnimation_crab3!.value,
-          //             child: widget,
-          //           ),
-          //         );
-          //       } else {
-          //         return Container();
-          //       }
-          //     },
-          //     child: Container(
-          //       color: Colors.transparent,
-          //       child: Center(
-          //         child: Image.asset(AppIcons.crab,
-          //             width: MediaQuery.of(context).size.width * 0.06),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // Indexed(
-          //   index: 1005,
-          //   child: AnimatedBuilder(
-          //     animation: _rotateAnimation_crab4!,
-          //     builder: (context, widget) {
-          //       if (_transAnimation_crab4 != null) {
-          //         return Transform.translate(
-          //           offset: _transAnimation_crab4!.value,
-          //           child: Transform.rotate(
-          //             angle: _rotateAnimation_crab4!.value,
-          //             child: widget,
-          //           ),
-          //         );
-          //       } else {
-          //         return Container();
-          //       }
-          //     },
-          //     child: Container(
-          //       color: Colors.transparent,
-          //       child: Center(
-          //         child: Image.asset(AppIcons.crab,
-          //             width: MediaQuery.of(context).size.width * 0.06),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // Indexed(
-          //   index: 1000,
-          //   child: AnimatedBuilder(
-          //     animation: _rotateAnimation_jellyfish!,
-          //     builder: (context, widget) {
-          //       if (_transAnimation_jellyfish != null) {
-          //         return Transform.translate(
-          //           offset: _transAnimation_jellyfish!.value,
-          //           child: Transform.rotate(
-          //             angle: _rotateAnimation_jellyfish!.value,
-          //             child: widget,
-          //           ),
-          //         );
-          //       } else {
-          //         return Container();
-          //       }
-          //     },
-          //     child: Container(
-          //       color: Colors.transparent,
-          //       child: Center(
-          //         child: Image.asset(AppIcons.jellyfish,
-          //             width: MediaQuery.of(context).size.width * 0.15),
-          //       ),
-          //     ),
-          //   ),
-          // ),
           Indexed(
-            index: 1004,
-            child: Positioned(
-              bottom: MediaQuery.of(context).size.height * 0.02,
-              left: MediaQuery.of(context).size.width * 0.3,
-              child: Container(
-                color: Colors.transparent,
-                child: Center(
-                  child: Image.asset(AppIcons.crabs,
-                      width: MediaQuery.of(context).size.width * 0.25),
+            index: 1005,
+            child: IgnorePointer(
+              child: AnimatedBuilder(
+                animation: _rotateAnimation_crab1!,
+                builder: (context, widget) {
+                  if (_transAnimation_crab1 != null) {
+                    return Transform.translate(
+                      offset: _transAnimation_crab1!.value,
+                      child: Transform.rotate(
+                        angle: _rotateAnimation_crab1!.value,
+                        child: widget,
+                      ),
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Center(
+                    child: Image.asset(AppIcons.crab,
+                        width: MediaQuery.of(context).size.width * 0.08),
+                  ),
                 ),
               ),
             ),
           ),
+          Indexed(
+            index: 1005,
+            child: IgnorePointer(
+              child: AnimatedBuilder(
+                animation: _rotateAnimation_crab2!,
+                builder: (context, widget) {
+                  if (_transAnimation_crab2 != null) {
+                    return Transform.translate(
+                      offset: _transAnimation_crab2!.value,
+                      child: Transform.rotate(
+                        angle: _rotateAnimation_crab2!.value,
+                        child: widget,
+                      ),
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Center(
+                    child: Image.asset(AppIcons.crab,
+                        width: MediaQuery.of(context).size.width * 0.06),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Indexed(
+            index: 1005,
+            child: IgnorePointer(
+              child: AnimatedBuilder(
+                animation: _rotateAnimation_crab3!,
+                builder: (context, widget) {
+                  if (_transAnimation_crab3 != null) {
+                    return Transform.translate(
+                      offset: _transAnimation_crab3!.value,
+                      child: Transform.rotate(
+                        angle: _rotateAnimation_crab3!.value,
+                        child: widget,
+                      ),
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Center(
+                    child: Image.asset(AppIcons.crab,
+                        width: MediaQuery.of(context).size.width * 0.06),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Indexed(
+            index: 1005,
+            child: IgnorePointer(
+              child: AnimatedBuilder(
+                animation: _rotateAnimation_crab4!,
+                builder: (context, widget) {
+                  if (_transAnimation_crab4 != null) {
+                    return Transform.translate(
+                      offset: _transAnimation_crab4!.value,
+                      child: Transform.rotate(
+                        angle: _rotateAnimation_crab4!.value,
+                        child: widget,
+                      ),
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Center(
+                    child: Image.asset(AppIcons.crab,
+                        width: MediaQuery.of(context).size.width * 0.06),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Indexed(
+            index: 1000,
+            child: IgnorePointer(
+              child: AnimatedBuilder(
+                animation: _rotateAnimation_jellyfish!,
+                builder: (context, widget) {
+                  if (_transAnimation_jellyfish != null) {
+                    return Transform.translate(
+                      offset: _transAnimation_jellyfish!.value,
+                      child: Transform.rotate(
+                        angle: _rotateAnimation_jellyfish!.value,
+                        child: widget,
+                      ),
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Center(
+                    child: Image.asset(AppIcons.jellyfish,
+                        width: MediaQuery.of(context).size.width * 0.15),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // Indexed(
+          //   index: 1004,
+          //   child: Positioned(
+          //     bottom: MediaQuery.of(context).size.height * 0.02,
+          //     left: MediaQuery.of(context).size.width * 0.3,
+          //     child: Container(
+          //       color: Colors.transparent,
+          //       child: Center(
+          //         child: Image.asset(AppIcons.crabs,
+          //             width: MediaQuery.of(context).size.width * 0.25),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Indexed(
             index: 1005,
             child: Positioned(
@@ -632,294 +646,314 @@ class _BackgroundScreenState extends State<BackgroundUpper>
               ),
             ),
           ),
-          // AnimatedBuilder(
-          //   animation: _rotateAnimation1!,
-          //   builder: (context, widget) {
-          //     if (_transAnimation1 != null) {
-          //       return Transform.translate(
-          //         offset: _transAnimation1!.value,
-          //         child: Transform.rotate(
-          //           angle: _rotateAnimation1!.value,
-          //           child: Transform.scale(
-          //             scale: _scaleAnimation1!.value,
-          //             child: widget,
-          //           ),
-          //         ),
-          //       );
-          //     } else {
-          //       return Container();
-          //     }
-          //   },
-          //   child: Container(
-          //     color: Colors.transparent,
-          //     child: Center(
-          //       child: Image.asset(AppIcons.water_test,
-          //           width: MediaQuery.of(context).size.width * 0.14),
-          //     ),
-          //   ),
-          // ),
-          // AnimatedBuilder(
-          //   animation: _rotateAnimation2!,
-          //   builder: (context, widget) {
-          //     if (_transAnimation2 != null) {
-          //       return Transform.translate(
-          //         offset: _transAnimation2!.value,
-          //         child: Transform.rotate(
-          //           angle: _rotateAnimation2!.value,
-          //           child: Transform.scale(
-          //             scale: _scaleAnimation2!.value,
-          //             child: widget,
-          //           ),
-          //         ),
-          //       );
-          //     } else {
-          //       return Container();
-          //     }
-          //   },
-          //   child: Container(
-          //     color: Colors.transparent,
-          //     child: Center(
-          //       child: Image.asset(AppIcons.water_test,
-          //           width: MediaQuery.of(context).size.width * 0.14),
-          //     ),
-          //   ),
-          // ),
-          // AnimatedBuilder(
-          //   animation: _rotateAnimation3!,
-          //   builder: (context, widget) {
-          //     if (_transAnimation3 != null) {
-          //       return Transform.translate(
-          //         offset: _transAnimation3!.value,
-          //         child: Transform.rotate(
-          //           angle: _rotateAnimation3!.value,
-          //           child: Transform.scale(
-          //             scale: _scaleAnimation3!.value,
-          //             child: widget,
-          //           ),
-          //         ),
-          //       );
-          //     } else {
-          //       return Container();
-          //     }
-          //   },
-          //   child: Container(
-          //     color: Colors.transparent,
-          //     child: Center(
-          //       child: Image.asset(AppIcons.water_test,
-          //           width: MediaQuery.of(context).size.width * 0.14),
-          //     ),
-          //   ),
-          // ),
-          // AnimatedBuilder(
-          //   animation: _rotateAnimation4!,
-          //   builder: (context, widget) {
-          //     if (_transAnimation4 != null) {
-          //       return Transform.translate(
-          //         offset: _transAnimation4!.value,
-          //         child: Transform.rotate(
-          //           angle: _rotateAnimation4!.value,
-          //           child: Transform.scale(
-          //             scale: _scaleAnimation4!.value,
-          //             child: widget,
-          //           ),
-          //         ),
-          //       );
-          //     } else {
-          //       return Container();
-          //     }
-          //   },
-          //   child: Container(
-          //     color: Colors.transparent,
-          //     child: Center(
-          //       child: Image.asset(AppIcons.water_test,
-          //           width: MediaQuery.of(context).size.width * 0.14),
-          //     ),
-          //   ),
-          // ),
-          // AnimatedBuilder(
-          //   animation: _rotateAnimation5!,
-          //   builder: (context, widget) {
-          //     if (_transAnimation5 != null) {
-          //       return Transform.translate(
-          //         offset: _transAnimation5!.value,
-          //         child: Transform.rotate(
-          //           angle: _rotateAnimation5!.value,
-          //           child: Transform.scale(
-          //             scale: _scaleAnimation5!.value,
-          //             child: widget,
-          //           ),
-          //         ),
-          //       );
-          //     } else {
-          //       return Container();
-          //     }
-          //   },
-          //   child: Container(
-          //     color: Colors.transparent,
-          //     child: Center(
-          //       child: Image.asset(AppIcons.water_test,
-          //           width: MediaQuery.of(context).size.width * 0.14),
-          //     ),
-          //   ),
-          // ),
-          // AnimatedBuilder(
-          //   animation: _rotateAnimation6!,
-          //   builder: (context, widget) {
-          //     if (_transAnimation6 != null) {
-          //       return Transform.translate(
-          //         offset: _transAnimation6!.value,
-          //         child: Transform.rotate(
-          //           angle: _rotateAnimation6!.value,
-          //           child: Transform.scale(
-          //             scale: _scaleAnimation6!.value,
-          //             child: widget,
-          //           ),
-          //         ),
-          //       );
-          //     } else {
-          //       return Container();
-          //     }
-          //   },
-          //   child: Container(
-          //     color: Colors.transparent,
-          //     child: Center(
-          //       child: Image.asset(AppIcons.water_test,
-          //           width: MediaQuery.of(context).size.width * 0.14),
-          //     ),
-          //   ),
-          // ),
-          // AnimatedBuilder(
-          //   animation: _rotateAnimation7!,
-          //   builder: (context, widget) {
-          //     if (_transAnimation7 != null) {
-          //       return Transform.translate(
-          //         offset: _transAnimation7!.value,
-          //         child: Transform.rotate(
-          //           angle: _rotateAnimation7!.value,
-          //           child: Transform.scale(
-          //             scale: _scaleAnimation7!.value,
-          //             child: widget,
-          //           ),
-          //         ),
-          //       );
-          //     } else {
-          //       return Container();
-          //     }
-          //   },
-          //   child: Container(
-          //     color: Colors.transparent,
-          //     child: Center(
-          //       child: Image.asset(AppIcons.water_test,
-          //           width: MediaQuery.of(context).size.width * 0.14),
-          //     ),
-          //   ),
-          // ),
-          // AnimatedBuilder(
-          //   animation: _rotateAnimation8!,
-          //   builder: (context, widget) {
-          //     if (_transAnimation8 != null) {
-          //       return Transform.translate(
-          //         offset: _transAnimation8!.value,
-          //         child: Transform.rotate(
-          //           angle: _rotateAnimation8!.value,
-          //           child: Transform.scale(
-          //             scale: _scaleAnimation8!.value,
-          //             child: widget,
-          //           ),
-          //         ),
-          //       );
-          //     } else {
-          //       return Container();
-          //     }
-          //   },
-          //   child: Container(
-          //     color: Colors.transparent,
-          //     child: Center(
-          //       child: Image.asset(AppIcons.water_test,
-          //           width: MediaQuery.of(context).size.width * 0.14),
-          //     ),
-          //   ),
-          // ),
-          // AnimatedBuilder(
-          //   animation: _rotateAnimation9!,
-          //   builder: (context, widget) {
-          //     if (_transAnimation9 != null) {
-          //       return Transform.translate(
-          //         offset: _transAnimation9!.value,
-          //         child: Transform.rotate(
-          //           angle: _rotateAnimation9!.value,
-          //           child: Transform.scale(
-          //             scale: _scaleAnimation9!.value,
-          //             child: widget,
-          //           ),
-          //         ),
-          //       );
-          //     } else {
-          //       return Container();
-          //     }
-          //   },
-          //   child: Container(
-          //     color: Colors.transparent,
-          //     child: Center(
-          //       child: Image.asset(AppIcons.water_test,
-          //           width: MediaQuery.of(context).size.width * 0.14),
-          //     ),
-          //   ),
-          // ),
-          // AnimatedBuilder(
-          //   animation: _rotateAnimation10!,
-          //   builder: (context, widget) {
-          //     if (_transAnimation10 != null) {
-          //       return Transform.translate(
-          //         offset: _transAnimation10!.value,
-          //         child: Transform.rotate(
-          //           angle: _rotateAnimation10!.value,
-          //           child: Transform.scale(
-          //             scale: _scaleAnimation10!.value,
-          //             child: widget,
-          //           ),
-          //         ),
-          //       );
-          //     } else {
-          //       return Container();
-          //     }
-          //   },
-          //   child: Container(
-          //     color: Colors.transparent,
-          //     child: Center(
-          //       child: Image.asset(AppIcons.water_test,
-          //           width: MediaQuery.of(context).size.width * 0.14),
-          //     ),
-          //   ),
-          // ),
-          Indexed(
-            index: 1006,
-            child: Positioned(
-              top: MediaQuery.of(context).size.height * 0.1,
-              left: MediaQuery.of(context).size.width * 0.01,
+          IgnorePointer(
+            child: AnimatedBuilder(
+              animation: _rotateAnimation1!,
+              builder: (context, widget) {
+                if (_transAnimation1 != null) {
+                  return Transform.translate(
+                    offset: _transAnimation1!.value,
+                    child: Transform.rotate(
+                      angle: _rotateAnimation1!.value,
+                      child: Transform.scale(
+                        scale: _scaleAnimation1!.value,
+                        child: widget,
+                      ),
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
               child: Container(
                 color: Colors.transparent,
                 child: Center(
-                  child: Image.asset(AppIcons.water_left,
-                      width: MediaQuery.of(context).size.width * 0.12),
+                  child: Image.asset(AppIcons.water_test,
+                      width: MediaQuery.of(context).size.width * 0.14),
                 ),
               ),
             ),
           ),
-          Indexed(
-            index: 1006,
-            child: Positioned(
-              top: MediaQuery.of(context).size.height * 0.1,
-              right: MediaQuery.of(context).size.width * 0.01,
+          IgnorePointer(
+            child: AnimatedBuilder(
+              animation: _rotateAnimation2!,
+              builder: (context, widget) {
+                if (_transAnimation2 != null) {
+                  return Transform.translate(
+                    offset: _transAnimation2!.value,
+                    child: Transform.rotate(
+                      angle: _rotateAnimation2!.value,
+                      child: Transform.scale(
+                        scale: _scaleAnimation2!.value,
+                        child: widget,
+                      ),
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
               child: Container(
                 color: Colors.transparent,
                 child: Center(
-                  child: Image.asset(AppIcons.water_right,
-                      width: MediaQuery.of(context).size.width * 0.12),
+                  child: Image.asset(AppIcons.water_test,
+                      width: MediaQuery.of(context).size.width * 0.14),
                 ),
               ),
             ),
           ),
+          IgnorePointer(
+            child: AnimatedBuilder(
+              animation: _rotateAnimation3!,
+              builder: (context, widget) {
+                if (_transAnimation3 != null) {
+                  return Transform.translate(
+                    offset: _transAnimation3!.value,
+                    child: Transform.rotate(
+                      angle: _rotateAnimation3!.value,
+                      child: Transform.scale(
+                        scale: _scaleAnimation3!.value,
+                        child: widget,
+                      ),
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+              child: Container(
+                color: Colors.transparent,
+                child: Center(
+                  child: Image.asset(AppIcons.water_test,
+                      width: MediaQuery.of(context).size.width * 0.14),
+                ),
+              ),
+            ),
+          ),
+          IgnorePointer(
+            child: AnimatedBuilder(
+              animation: _rotateAnimation4!,
+              builder: (context, widget) {
+                if (_transAnimation4 != null) {
+                  return Transform.translate(
+                    offset: _transAnimation4!.value,
+                    child: Transform.rotate(
+                      angle: _rotateAnimation4!.value,
+                      child: Transform.scale(
+                        scale: _scaleAnimation4!.value,
+                        child: widget,
+                      ),
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+              child: Container(
+                color: Colors.transparent,
+                child: Center(
+                  child: Image.asset(AppIcons.water_test,
+                      width: MediaQuery.of(context).size.width * 0.14),
+                ),
+              ),
+            ),
+          ),
+          IgnorePointer(
+            child: AnimatedBuilder(
+              animation: _rotateAnimation5!,
+              builder: (context, widget) {
+                if (_transAnimation5 != null) {
+                  return Transform.translate(
+                    offset: _transAnimation5!.value,
+                    child: Transform.rotate(
+                      angle: _rotateAnimation5!.value,
+                      child: Transform.scale(
+                        scale: _scaleAnimation5!.value,
+                        child: widget,
+                      ),
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+              child: Container(
+                color: Colors.transparent,
+                child: Center(
+                  child: Image.asset(AppIcons.water_test,
+                      width: MediaQuery.of(context).size.width * 0.14),
+                ),
+              ),
+            ),
+          ),
+          IgnorePointer(
+            child: AnimatedBuilder(
+              animation: _rotateAnimation6!,
+              builder: (context, widget) {
+                if (_transAnimation6 != null) {
+                  return Transform.translate(
+                    offset: _transAnimation6!.value,
+                    child: Transform.rotate(
+                      angle: _rotateAnimation6!.value,
+                      child: Transform.scale(
+                        scale: _scaleAnimation6!.value,
+                        child: widget,
+                      ),
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+              child: Container(
+                color: Colors.transparent,
+                child: Center(
+                  child: Image.asset(AppIcons.water_test,
+                      width: MediaQuery.of(context).size.width * 0.14),
+                ),
+              ),
+            ),
+          ),
+          IgnorePointer(
+            child: AnimatedBuilder(
+              animation: _rotateAnimation7!,
+              builder: (context, widget) {
+                if (_transAnimation7 != null) {
+                  return Transform.translate(
+                    offset: _transAnimation7!.value,
+                    child: Transform.rotate(
+                      angle: _rotateAnimation7!.value,
+                      child: Transform.scale(
+                        scale: _scaleAnimation7!.value,
+                        child: widget,
+                      ),
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+              child: Container(
+                color: Colors.transparent,
+                child: Center(
+                  child: Image.asset(AppIcons.water_test,
+                      width: MediaQuery.of(context).size.width * 0.14),
+                ),
+              ),
+            ),
+          ),
+          IgnorePointer(
+            child: AnimatedBuilder(
+              animation: _rotateAnimation8!,
+              builder: (context, widget) {
+                if (_transAnimation8 != null) {
+                  return Transform.translate(
+                    offset: _transAnimation8!.value,
+                    child: Transform.rotate(
+                      angle: _rotateAnimation8!.value,
+                      child: Transform.scale(
+                        scale: _scaleAnimation8!.value,
+                        child: widget,
+                      ),
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+              child: Container(
+                color: Colors.transparent,
+                child: Center(
+                  child: Image.asset(AppIcons.water_test,
+                      width: MediaQuery.of(context).size.width * 0.14),
+                ),
+              ),
+            ),
+          ),
+          IgnorePointer(
+            child: AnimatedBuilder(
+              animation: _rotateAnimation9!,
+              builder: (context, widget) {
+                if (_transAnimation9 != null) {
+                  return Transform.translate(
+                    offset: _transAnimation9!.value,
+                    child: Transform.rotate(
+                      angle: _rotateAnimation9!.value,
+                      child: Transform.scale(
+                        scale: _scaleAnimation9!.value,
+                        child: widget,
+                      ),
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+              child: Container(
+                color: Colors.transparent,
+                child: Center(
+                  child: Image.asset(AppIcons.water_test,
+                      width: MediaQuery.of(context).size.width * 0.14),
+                ),
+              ),
+            ),
+          ),
+          IgnorePointer(
+            child: AnimatedBuilder(
+              animation: _rotateAnimation10!,
+              builder: (context, widget) {
+                if (_transAnimation10 != null) {
+                  return Transform.translate(
+                    offset: _transAnimation10!.value,
+                    child: Transform.rotate(
+                      angle: _rotateAnimation10!.value,
+                      child: Transform.scale(
+                        scale: _scaleAnimation10!.value,
+                        child: widget,
+                      ),
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+              child: Container(
+                color: Colors.transparent,
+                child: Center(
+                  child: Image.asset(AppIcons.water_test,
+                      width: MediaQuery.of(context).size.width * 0.14),
+                ),
+              ),
+            ),
+          ),
+          // Indexed(
+          //   index: 1006,
+          //   child: Positioned(
+          //     top: MediaQuery.of(context).size.height * 0.1,
+          //     left: MediaQuery.of(context).size.width * 0.01,
+          //     child: Container(
+          //       color: Colors.transparent,
+          //       child: Center(
+          //         child: Image.asset(AppIcons.water_left,
+          //             width: MediaQuery.of(context).size.width * 0.12),
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // Indexed(
+          //   index: 1006,
+          //   child: Positioned(
+          //     top: MediaQuery.of(context).size.height * 0.1,
+          //     right: MediaQuery.of(context).size.width * 0.01,
+          //     child: Container(
+          //       color: Colors.transparent,
+          //       child: Center(
+          //         child: Image.asset(AppIcons.water_right,
+          //             width: MediaQuery.of(context).size.width * 0.12),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
     );
   }
