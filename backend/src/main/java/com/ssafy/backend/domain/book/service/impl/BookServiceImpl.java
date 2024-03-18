@@ -3,6 +3,7 @@ package com.ssafy.backend.domain.book.service.impl;
 import com.ssafy.backend.domain.book.dto.*;
 import com.ssafy.backend.domain.book.dto.request.BookReviewRequestDto;
 import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;
+import com.ssafy.backend.domain.book.dto.response.BookReviewMyResponseDto;
 import com.ssafy.backend.domain.book.dto.response.BookReviewResponseDto;
 import com.ssafy.backend.domain.book.entity.*;
 import com.ssafy.backend.domain.book.mapper.BookMapper;
@@ -167,7 +168,7 @@ public class BookServiceImpl implements BookService {
         // Book중 isPay가 true인 booklist만 뽑아서 리스트에 저장
         List<BookPurchasedResponseDto> purchasedResponseDtos = new ArrayList<>();
         for (BookPurchasedResponseDto booklist : booklists) {
-            if (booklist.isPay() == true) {
+            if (booklist.isPay()) {
                 purchasedResponseDtos.add(booklist);
             }
         }
@@ -194,8 +195,12 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookReviewResponseDto> searchReviews(Long bookId) {
-        List<BookReviewResponseDto> bookReviews = bookReviewRepository.findByBook_bookId(bookId);
-        return bookReviews;
+        return bookReviewRepository.findByBook_bookId(bookId);
+    }
+
+    @Override
+    public List<BookReviewMyResponseDto> searchMyReviews(Long loginUserId) {
+        return bookReviewRepository.findByUser_userId(loginUserId);
     }
 
 

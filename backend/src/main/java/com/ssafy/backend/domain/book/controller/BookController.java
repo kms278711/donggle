@@ -3,6 +3,7 @@ package com.ssafy.backend.domain.book.controller;
 import com.ssafy.backend.domain.book.dto.*;
 import com.ssafy.backend.domain.book.dto.request.BookReviewRequestDto;
 import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;
+import com.ssafy.backend.domain.book.dto.response.BookReviewMyResponseDto;
 import com.ssafy.backend.domain.book.dto.response.BookReviewResponseDto;
 import com.ssafy.backend.domain.book.service.BookService;
 import com.ssafy.backend.domain.user.dto.LoginUserDto;
@@ -107,6 +108,15 @@ public class BookController {
         List<BookReviewResponseDto> bookReviews = bookService.searchReviews(bookId);
 
         return ResponseEntity.ok(bookReviews);
+    }
+
+    // 내가 남긴 리뷰 조회
+    @GetMapping("/myreview")
+    public ResponseEntity<List<BookReviewMyResponseDto>> searchMyReviews(Authentication authentication) {
+        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
+        Long loginUserId = loginUser.userId();
+        List<BookReviewMyResponseDto> myReviews = bookService.searchMyReviews(loginUserId);
+        return ResponseEntity.ok(myReviews);
     }
 
 }
