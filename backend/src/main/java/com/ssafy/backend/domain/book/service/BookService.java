@@ -1,6 +1,9 @@
 package com.ssafy.backend.domain.book.service;
 
-import com.ssafy.backend.domain.book.dto.*;
+import com.ssafy.backend.domain.book.dto.BookDto;
+import com.ssafy.backend.domain.book.dto.BookInfoDto;
+import com.ssafy.backend.domain.book.dto.BookPageDto;
+import com.ssafy.backend.domain.book.dto.UserBookProcessDto;
 import com.ssafy.backend.domain.book.dto.request.BookReviewRequestDto;
 import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;
 import com.ssafy.backend.domain.book.dto.response.BookReviewMyResponseDto;
@@ -20,4 +23,7 @@ public interface BookService {
     List<BookPurchasedResponseDto> searchPurchasedBook(Long loginUserId);
     List<BookReviewResponseDto> searchReviews(Long bookId);
     List<BookReviewMyResponseDto> searchMyReviews(Long loginUserId);
+    void changeMyReview(Long bookId, Long loginUserId, BookReviewRequestDto bookReviewRequestDto);
+
+    void deleteMyReview(Long bookId, Long loginUserId);
 }

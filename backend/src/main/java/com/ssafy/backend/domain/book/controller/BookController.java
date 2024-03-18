@@ -119,4 +119,26 @@ public class BookController {
         return ResponseEntity.ok(myReviews);
     }
 
+    // 내가 남긴 리뷰 수정
+    @PutMapping("/{bookId}/myreview")
+    public ResponseEntity<String> changeMyReview(@PathVariable("bookId") Long bookId,
+                                                 @RequestBody BookReviewRequestDto bookReviewRequestDto,
+                                                 Authentication authentication) {
+        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
+        Long loginUserId = loginUser.userId();
+        bookService.changeMyReview(bookId, loginUserId, bookReviewRequestDto);
+
+        return ResponseEntity.ok("리뷰수정이 완료되었습니다.");
+    }
+
+    // 내가 남긴 리뷰 삭제
+    @DeleteMapping("/{bookId}/myreview")
+    public ResponseEntity<String> deleteMyReview(@PathVariable("bookId") Long bookId,
+                                                 Authentication authentication) {
+        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
+        Long loginUserId = loginUser.userId();
+        bookService.deleteMyReview(bookId, loginUserId);
+
+        return ResponseEntity.ok("리뷰가 삭제되었습니다.");
+    }
 }

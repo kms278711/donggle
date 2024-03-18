@@ -23,6 +23,7 @@ public class BookReviewCustomRepositoryImpl implements BookReviewCustomRepositor
         return jpaQueryFactory
                 .select(Projections.constructor(BookReviewMyResponseDto.class,
                         qBook.bookId,
+                        qBookReview.user.userId,
                         qBook.title,
                         qBook.coverPath,
                         qBookReview.score,

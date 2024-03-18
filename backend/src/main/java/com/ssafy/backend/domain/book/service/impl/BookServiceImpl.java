@@ -53,6 +53,7 @@ public class BookServiceImpl implements BookService {
         return bookPurchasedRepository.findByUser_userId(loginUserId);
     }
 
+    // 책 정보 조회(구매창)
     @Override
     @Transactional
     public BookDto searchBook(Long bookId) {
@@ -70,6 +71,7 @@ public class BookServiceImpl implements BookService {
 
     }
 
+    // 책 페이지 조회
     @Override
     @Transactional
     public BookPageDto searchBookPage(Long bookId, int page) {
@@ -99,6 +101,7 @@ public class BookServiceImpl implements BookService {
                 .build();
     }
 
+    // 책 정보 조회(책 클릭시)
     @Override
     public BookInfoDto searchBookInfo(Long bookId, Long loginUserId) {
         // bookId를 이용해 책 검색
@@ -130,6 +133,7 @@ public class BookServiceImpl implements BookService {
                 .build();
     }
 
+    // 현재 진행중인 페이지 저장
     @Override
     @Transactional
     public void saveProgressBookPage(Long loginUserId, Long bookId, int page) {
@@ -149,6 +153,7 @@ public class BookServiceImpl implements BookService {
         userBookProcessRespository.save(bookProcess);
     }
 
+    // 진행중인 책 조회
     @Override
     @Transactional
     public List<UserBookProcessDto> searchProcessBook(Long loginUserId) {
@@ -159,8 +164,7 @@ public class BookServiceImpl implements BookService {
                 .toList();
     }
 
-
-
+    // 구매한 책 조회
     @Override
     public List<BookPurchasedResponseDto> searchPurchasedBook(Long loginUserId) {
         // 전체 책 목록 조회
@@ -175,6 +179,7 @@ public class BookServiceImpl implements BookService {
         return purchasedResponseDtos;
     }
 
+    // 리뷰 등록
     @Override
     @Transactional
     public void createReview(Long loginUserId, Long bookId, BookReviewRequestDto bookReviewRequestDto) {
@@ -193,14 +198,38 @@ public class BookServiceImpl implements BookService {
         bookReviewRepository.save(bookReview);
     }
 
+    // 리뷰 전체 조회
     @Override
     public List<BookReviewResponseDto> searchReviews(Long bookId) {
         return bookReviewRepository.findByBook_bookId(bookId);
     }
 
+    // 내가 작성한 리뷰 조회
     @Override
     public List<BookReviewMyResponseDto> searchMyReviews(Long loginUserId) {
         return bookReviewRepository.findByUser_userId(loginUserId);
+    }
+
+    // 내가 작성한 리뷰 수정
+    @Override
+    public void changeMyReview(Long bookId, Long loginUserId, BookReviewRequestDto bookReviewRequestDto) {
+        User userId = userRepository.findById(loginUserId)
+                .orElseThrow(() -> new UserException(INVALID_USER));
+        BookReview bookReview = bookReviewRepository.findByBook_bookIdAndUser_userId(bookId, loginUserId);
+        BookReview myBookReview = BookReview.builder()
+                .user(userId)
+                .book(bookReview.getBook())
+                .score(bookReviewRequestDto.score())
+                .content(bookReviewRequestDto.content())
+                .build();
+        bookReviewRepository.save(myBookReview);
+    }
+
+    // 내가 남긴 리뷰 삭제
+    @Override
+    public void deleteMyReview(Long bookId, Long loginUserId) {
+        BookReview bookReview = bookReviewRepository.findByBook_bookIdAndUser_userId(bookId, loginUserId);
+        bookReviewRepository.delete(bookReview);
     }
 
 

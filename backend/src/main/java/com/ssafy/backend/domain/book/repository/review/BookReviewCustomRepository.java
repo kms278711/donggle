@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface BookReviewCustomRepository {
     List<BookReviewMyResponseDto> findByUser_userId(Long userId);
+
 }
