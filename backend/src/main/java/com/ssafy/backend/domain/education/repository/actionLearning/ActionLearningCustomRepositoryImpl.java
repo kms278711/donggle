@@ -1,4 +1,4 @@
-package com.ssafy.backend.domain.education.repository;
+package com.ssafy.backend.domain.education.repository.actionLearning;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.backend.domain.education.entity.QActionLearning;

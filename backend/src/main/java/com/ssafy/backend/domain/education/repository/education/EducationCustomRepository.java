@@ -1,4 +1,4 @@
-package com.ssafy.backend.domain.education.repository;
+package com.ssafy.backend.domain.education.repository.education;
 
 import com.ssafy.backend.domain.education.dto.UserEducationDto;
 import com.ssafy.backend.domain.education.dto.response.EducationResponseDto;

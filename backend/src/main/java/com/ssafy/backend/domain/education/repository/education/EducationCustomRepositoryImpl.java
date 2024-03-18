@@ -1,4 +1,4 @@
-package com.ssafy.backend.domain.education.repository;
+package com.ssafy.backend.domain.education.repository.education;
 
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
