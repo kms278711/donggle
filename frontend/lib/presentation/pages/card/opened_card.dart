@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:frontend/core/utils/component/dialog_utils.dart';
+import 'package:frontend/core/utils/component/dialog_utils_card.dart';
+import 'package:frontend/domain/model/model_cards.dart' as domain;
+import 'package:frontend/presentation/provider/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class OpenedCard extends StatefulWidget {
   final String url;
@@ -13,6 +16,18 @@ class OpenedCard extends StatefulWidget {
 }
 
 class _OpenedBookState extends State<OpenedCard> {
+  late domain.CardModel cardModel;
+  late UserProvider userProvider;
+  String accessToken = "";
+
+  @override
+  void initState() {
+    super.initState();
+    cardModel = Provider.of<domain.CardModel>(context, listen: false);
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    accessToken = userProvider.getAccessToken();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -25,7 +40,8 @@ class _OpenedBookState extends State<OpenedCard> {
           // if (result == "refresh") {
           //   context.go(RoutePath.main3);
           // }
-          // DialogUtils.showCustomDialog(context, educationId: widget.educationId);
+          cardModel.getSelectedCard(accessToken, widget.educationId);
+          DialogUtilsCard.showCustomCardDialog(context, educationId: widget.educationId);
         },
         child: Center(
           child: ClipRRect(
