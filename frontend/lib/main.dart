@@ -9,6 +9,7 @@ import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/theme/theme_data.dart';
 import 'package:frontend/domain/model/model_auth.dart';
 import 'package:frontend/domain/model/model_books.dart';
+import 'package:frontend/domain/model/model_cards.dart';
 import 'package:frontend/domain/model/model_nicknameupdate.dart';
 import 'package:frontend/domain/model/model_profileupdate.dart';
 import 'package:frontend/domain/model/model_register.dart';
@@ -31,6 +32,9 @@ void main() {
       ChangeNotifierProvider(
           create: (context) =>
               BookModel(Provider.of<UserProvider>(context, listen: false))),
+      ChangeNotifierProvider(
+          create: (context) =>
+              CardModel(Provider.of<UserProvider>(context, listen: false))),
       ChangeNotifierProvider(
           create: (context) =>
               ReviewModel(Provider.of<UserProvider>(context, listen: false))),
