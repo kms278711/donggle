@@ -156,6 +156,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                           height: MediaQuery.of(context).size.height * 0.1,
                           color: Colors.blue,
                           child: const Text("My Review"))
+                  // TODO: 내 리뷰 남기기
                       : Container(),
                   Container(
                     width: MediaQuery.of(context).size.width,
@@ -172,9 +173,19 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: MediaQuery.of(context).size.width * 0.01),
-                      child: Text("평균평점: ",
-                          style: CustomFontStyle.getTextStyle(
-                              context, CustomFontStyle.titleSmall)),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text("평균평점: ",
+                                  style: CustomFontStyle.getTextStyle(
+                                      context, CustomFontStyle.titleSmall)),
+                              // TODO: 평균평점 별로 표시하기
+                            ],
+                          ),
+                          // TODO: 리뷰 받아와서 출력
+                        ],
+                      ),
                     ),
                   ),
                 ],
