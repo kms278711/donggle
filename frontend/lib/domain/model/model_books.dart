@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/domain/model/model_review.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,6 +12,7 @@ class BookModel extends ChangeNotifier {
 
   List<dynamic> books = [];
   List<dynamic> currentBooks = [];
+  Book nowBook = Book(bookId: 1, isPay: false, path: "", price: 0, title: "");
 
   int currentBookId = 1;
 
@@ -48,14 +50,35 @@ class BookModel extends ChangeNotifier {
     };
     var response = await http.get(url, headers: headers);
 
-    print(response.statusCode);
-    print(utf8.decode(response.bodyBytes));
     if (response.statusCode == 200) {
       currentBooks = json.decode(utf8.decode(response.bodyBytes));
       return "Success";
     } else if (response.statusCode == 401) {
       userProvider.refreshToken();
-      return getAllBooks(userProvider.getAccessToken());
+      return getCurrentBooks(userProvider.getAccessToken());
+    } else {
+      String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']
+      ['result_message'];
+      return msg;
+    }
+  }
+
+  Future<String> getCurrentBookPurchase(String accessToken, int bookId) async {
+    var url = Uri.https("j10c101.p.ssafy.io", "api/books/$bookId/purchase");
+    final headers = {
+      'Content-Type': 'application/json',
+      "Authorization": "Bearer $accessToken"
+    };
+    var response = await http.get(url, headers: headers);
+
+    print(json.decode(utf8.decode(response.bodyBytes)));
+
+    if (response.statusCode == 200) {
+      nowBook = Book.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+      return "Success";
+    } else if (response.statusCode == 401) {
+      userProvider.refreshToken();
+      return getCurrentBookPurchase(userProvider.getAccessToken(), bookId);
     } else {
       String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']
       ['result_message'];
@@ -71,6 +94,7 @@ class Book {
   final String path;
   final int? price;
   final bool? isPay;
+  final List<dynamic>? reviews;
 
   Book({
     required this.bookId,
@@ -79,6 +103,7 @@ class Book {
     required this.path,
     required this.price,
     required this.isPay,
+    this.reviews,
   });
 
   factory Book.fromJson(Map<String, dynamic> json) {
@@ -89,6 +114,7 @@ class Book {
       path: json['coverPath'],
       price: json['price'],
       isPay: json['isPay'],
+      reviews: json["bookReviews"],
     );
   }
 }

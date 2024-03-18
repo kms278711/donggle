@@ -6,7 +6,7 @@ import 'package:frontend/core/utils/component/icons/cards_icon_mypage.dart';
 import 'package:frontend/core/utils/component/icons/home_icon_mypage.dart';
 import 'package:frontend/core/utils/component/icons/sound_icon.dart';
 import 'package:frontend/main.dart';
-import 'package:frontend/presentation/pages/mypage/Book/book_detail.dart';
+import 'package:frontend/presentation/pages/mypage/Book/book_detail_pay.dart';
 import 'package:frontend/presentation/pages/mypage/Book/purchase_history.dart';
 import 'package:frontend/presentation/pages/mypage/current_fairytale.dart';
 import 'package:frontend/presentation/pages/mypage/my_page.dart';
@@ -28,9 +28,12 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
   @override
   void initState() {
     super.initState();
-    context.read<MainProvider>().resetDetailPageSelection();
-    context.read<MainProvider>().resetMyPageUpdate();
-    context.read<MainProvider>().resetPurchaseHistory();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Safe to interact with the context now
+      context.read<MainProvider>().resetDetailPageSelection();
+      context.read<MainProvider>().resetMyPageUpdate();
+      context.read<MainProvider>().resetPurchaseHistory();
+    });
   }
 
   @override
@@ -47,6 +50,13 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
     }
 
     super.setState(fn);
+  }
+
+  void onTabSelected(int index) {
+    setState(() {
+      selectedTab = index;
+    });
+    // Additional actions based on the selected tab can go here
   }
 
   @override
@@ -162,7 +172,7 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
       top: 0, // Adjust position based on selection
       left: width * index,
       child: GestureDetector(
-        onTap: () => setState(() => selectedTab = index),
+        onTap: () => onTabSelected(index),
         child: Container(
           width: width,
           height: height,

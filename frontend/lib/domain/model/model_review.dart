@@ -10,3 +10,20 @@ class ReviewModel extends ChangeNotifier {
   ReviewModel(this.userProvider);
 
 }
+
+class Review {
+  final int score;
+  final String content;
+
+  Review({
+    required this.score,
+    required this.content,
+  });
+
+  factory Review.fromJson(Map<String, dynamic> json) {
+    return Review(
+      score: json['score'],
+      content: json['content'],
+    );
+  }
+}
