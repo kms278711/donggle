@@ -14,7 +14,7 @@ public interface UserService {
     void changePassword(Long userId, PasswordRequestDto passwordRequestDto);
     UserResponseDto getUserInfo(Long userId);
     void updateStatus(Long userId);
-    void updateProfileImage(Long userId, MultipartFile profileImage);
+    String updateProfileImage(Long userId, MultipartFile profileImage);
     void changeNickname(Long userId, String nickname);
     void saveEducationImage(Long userId, Long educationId, MultipartFile userActionImage, boolean isSkipped);
     List<UserEducationDto> getEducationsByUser(Long userId);

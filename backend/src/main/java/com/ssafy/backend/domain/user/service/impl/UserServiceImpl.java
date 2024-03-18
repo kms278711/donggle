@@ -3,8 +3,8 @@ package com.ssafy.backend.domain.user.service.impl;
 import com.ssafy.backend.domain.education.dto.UserEducationDto;
 import com.ssafy.backend.domain.education.entity.ActionLearning;
 import com.ssafy.backend.domain.education.entity.Education;
-import com.ssafy.backend.domain.education.repository.ActionLearningRepository;
-import com.ssafy.backend.domain.education.repository.EducationRepository;
+import com.ssafy.backend.domain.education.repository.actionLearning.ActionLearningRepository;
+import com.ssafy.backend.domain.education.repository.education.EducationRepository;
 import com.ssafy.backend.domain.user.dto.request.PasswordRequestDto;
 import com.ssafy.backend.domain.user.dto.response.UserResponseDto;
 import com.ssafy.backend.domain.user.entity.User;
@@ -85,17 +85,16 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void updateProfileImage(Long userId, MultipartFile profileImage) {
+    public String updateProfileImage(Long userId, MultipartFile profileImage) {
         String folderName =  "userprofile/" + userId;
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException(INVALID_USER));
-        try {
-            s3Utils.bucketDelete(folderName, user.getProfileImage().replace(folderName+"/", ""));
-            uploadToS3(profileImage, folderName);
-            user.updateProfileImage(folderName +"/"+ profileImage.getOriginalFilename());
-            userRepository.save(user);
-        } catch (Exception e) {
-            throw new UserException(ExceptionType.AWS_DELETE_FAIL);
-        }
+
+        s3Utils.bucketDelete(folderName, user.getProfileImage().replace(folderName+"/", ""));
+        uploadToS3(profileImage, folderName);
+        user.updateProfileImage(folderName +"/"+ profileImage.getOriginalFilename());
+        userRepository.save(user);
+        return folderName +"/"+ profileImage.getOriginalFilename();
+
     }
 
     private void uploadToS3(MultipartFile image, String folderName) {

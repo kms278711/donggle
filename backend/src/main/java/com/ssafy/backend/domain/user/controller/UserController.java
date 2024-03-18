@@ -76,8 +76,8 @@ public class UserController {
     @PatchMapping("/profile-image")
     public ResponseEntity<String> updateProfileImage(Authentication authentication,@RequestParam MultipartFile profileImage) {
         Long userId = getCurrentUserId(authentication);
-        userService.updateProfileImage(userId, profileImage);
-        return ResponseEntity.ok("프로필 이미지 수정에 성공했습니다.");
+        String url = userService.updateProfileImage(userId, profileImage);
+        return ResponseEntity.ok(url);
     }
 
     @GetMapping("/educations")
