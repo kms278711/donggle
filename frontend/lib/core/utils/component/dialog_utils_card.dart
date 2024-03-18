@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/presentation/pages/home/component/book/book_detail.dart';
+import 'package:frontend/presentation/pages/card/card_deatil.dart';
 
-class DialogUtils {
-  static DialogUtils _instance = new DialogUtils.internal();
+class DialogUtilsCard {
+  static DialogUtilsCard _instance = new DialogUtilsCard.internal();
 
-  DialogUtils.internal();
+  DialogUtilsCard.internal();
 
-  factory DialogUtils() => _instance;
+  factory DialogUtilsCard() => _instance;
 
-  static Future<String> showCustomDialog(
-    BuildContext context, {
-    required int bookId,
-  }) async {
+  static Future<String> showCustomCardDialog(
+      BuildContext context, {
+        required int educationId,
+      }) async {
     final result = await showGeneralDialog(
         context: context,
         barrierDismissible: true,
         barrierLabel:
-            MaterialLocalizations.of(context).modalBarrierDismissLabel,
+        MaterialLocalizations.of(context).modalBarrierDismissLabel,
         barrierColor: Colors.black45,
         transitionDuration: const Duration(milliseconds: 200),
         pageBuilder: (BuildContext buildContext, Animation animation,
@@ -30,7 +30,7 @@ class DialogUtils {
                 color: Colors.transparent,
                 child: Column(
                   children: [
-                    BookDetail(bookId),
+                    CardDetail(educationId),
                   ],
                 ),
               ),

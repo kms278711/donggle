@@ -10,6 +10,7 @@ class CardModel extends ChangeNotifier {
   CardModel(this.userProvider);
 
   List<dynamic> cards = [];
+  late Map selectedCard = {};
 
   Future<String> getAllCards(String accessToken) async {
     var url = Uri.https("j10c101.p.ssafy.io", "api/users/educations");
@@ -28,6 +29,30 @@ class CardModel extends ChangeNotifier {
     } else {
       String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']
           ['result_message'];
+      return msg;
+    }
+  }
+
+  Future<String> getSelectedCard(String accessToken, int educationId) async {
+    var url = Uri.https("j10c101.p.ssafy.io", "api/educations/$educationId");
+    final headers = {
+      'Content-Type': 'application/json',
+      "Authorization": "Bearer $accessToken"
+    };
+    var response = await http.get(url, headers: headers);
+
+    print(response.statusCode);
+    print(utf8.decode(response.bodyBytes));
+    if (response.statusCode == 200) {
+      selectedCard = json.decode(utf8.decode(response.bodyBytes));
+      print(selectedCard);
+      return "Success";
+    } else if (response.statusCode == 401) {
+      userProvider.refreshToken();
+      return getAllCards(userProvider.getAccessToken());
+    } else {
+      String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']
+      ['result_message'];
       return msg;
     }
   }
