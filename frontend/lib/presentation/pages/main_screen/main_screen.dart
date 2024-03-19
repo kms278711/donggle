@@ -15,8 +15,6 @@ import 'package:frontend/presentation/pages/home/home_page.dart';
 import 'package:frontend/presentation/pages/quiz/quiz_page.dart';
 import 'package:indexed/indexed.dart';
 
-
-
 class MainScreen extends StatefulWidget {
   final String? id;
 
@@ -35,7 +33,6 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
     _updateSelectedIndex();
     assetsAudioPlayer.play();
-
   }
 
   @override
@@ -64,7 +61,6 @@ class _MainScreenState extends State<MainScreen> {
       }
     });
   }
-
 
   final List<Widget> _pages = [
     const HomePage(),

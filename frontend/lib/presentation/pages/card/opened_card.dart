@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:frontend/core/utils/component/dialog_utils_card.dart';
+import 'package:frontend/core/utils/component/dialog_utils.dart';
 import 'package:frontend/domain/model/model_cards.dart' as domain;
+import 'package:frontend/presentation/pages/card/card_deatil.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +42,7 @@ class _OpenedBookState extends State<OpenedCard> {
           //   context.go(RoutePath.main3);
           // }
           cardModel.getSelectedCard(accessToken, widget.educationId);
-          DialogUtilsCard.showCustomCardDialog(context, educationId: widget.educationId);
+          DialogUtils.showCustomDialog(context, contentWidget: CardDetail(widget.educationId));
         },
         child: Center(
           child: ClipRRect(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/buttons/red_button.dart';
@@ -19,20 +20,17 @@ class nickNameUpdateModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     late NickNameUpdateModel nickName =
-    Provider.of<NickNameUpdateModel>(context, listen: false);
+        Provider.of<NickNameUpdateModel>(context, listen: false);
 
     return AlertDialog(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.surface,
       title: Text(
         title,
         style: CustomFontStyle.getTextStyle(
             context, CustomFontStyle.textMediumLarge2),
       ),
       content: SizedBox(
-        height: MediaQuery
-            .of(context)
-            .size
-            .height * 0.08,
+        height: MediaQuery.of(context).size.height * 0.08,
         child: const NickNameInput(),
       ),
       actions: <Widget>[
@@ -67,29 +65,17 @@ class NickNameInput extends StatefulWidget {
 }
 
 class _NickNameInputState extends State<NickNameInput> {
-
   @override
   Widget build(BuildContext context) {
-    final nickName =
-    Provider.of<NickNameUpdateModel>(context, listen: true);
-    final userProvider =
-    Provider.of<UserProvider>(context, listen: true);
+    final nickName = Provider.of<NickNameUpdateModel>(context, listen: true);
+    final userProvider = Provider.of<UserProvider>(context, listen: true);
     final nickNameHint = userProvider.getNickName();
 
     return Container(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width * 0.47,
-      height: MediaQuery
-          .of(context)
-          .size
-          .height * 0.01,
+      width: MediaQuery.of(context).size.width * 0.47,
+      height: MediaQuery.of(context).size.height * 0.01,
       padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery
-              .of(context)
-              .size
-              .width * 0.02),
+          horizontal: MediaQuery.of(context).size.width * 0.02),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
