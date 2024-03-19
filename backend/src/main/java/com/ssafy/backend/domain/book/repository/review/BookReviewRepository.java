@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface BookReviewRepository extends JpaRepository<BookReview, Long>, BookReviewCustomRepository{
     List<BookReviewResponseDto> findByBook_bookId(Long bookId);
+
     BookReview findByBook_bookIdAndUser_userId(Long bookId, Long userId);
 }

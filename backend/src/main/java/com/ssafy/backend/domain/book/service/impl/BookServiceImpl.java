@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.ssafy.backend.global.error.exception.ExceptionType.INVALID_USER;
 import static com.ssafy.backend.global.error.exception.ExceptionType.NOT_FOUND_BOOK;
@@ -56,9 +55,10 @@ public class BookServiceImpl implements BookService {
     // 책 정보 조회(구매창)
     @Override
     @Transactional
-    public BookDto searchBook(Long bookId) {
-        Book book = bookRepository.findById(bookId).orElseThrow(() -> new UserException(NOT_FOUND_BOOK));
-        BookDto bookDto = bookMapper.toBookDto(book);
+    public BookDto searchBook(Long bookId, Long loginUserId) {
+        BookDto bookDto = bookRepository.purchasedBookInfo(bookId, loginUserId);
+        double averageScore = Math.round(bookDto.averageScore() * 2) / 2.0;
+
         return bookDto.builder()
                 .bookId(bookDto.bookId())
                 .title(bookDto.title())
@@ -66,9 +66,15 @@ public class BookServiceImpl implements BookService {
                 .coverPath(bookDto.coverPath())
                 .price(bookDto.price())
                 .isPay(bookDto.isPay())
+                .averageScore(averageScore)
                 .bookReviews(searchReviews(bookId))
                 .build();
+    }
 
+    // 리뷰 전체 조회
+    @Override
+    public List<BookReviewResponseDto> searchReviews(Long bookId) {
+        return bookReviewRepository.findByBook_bookId(bookId);
     }
 
     // 책 페이지 조회
@@ -85,7 +91,7 @@ public class BookServiceImpl implements BookService {
                 .toList();
         List<Long> bookPageSentenceIds = sentences.stream()
                 .map(BookPageSentence::getBookPageSentenceId)
-                .collect(Collectors.toList());
+                .toList();
 
         // sentenceId를 이용해 education 조회 후 Dto로 변환
         Education education = bookPageRepository.findByBookSentenceId(bookPageSentenceIds);
@@ -111,12 +117,12 @@ public class BookServiceImpl implements BookService {
         // bookId를 이용해 page 조회 후 pageId 리스트로 저장
         List<BookPage> pages = userBookProcessRespository.findByBookId(bookId);
         List<Long> pageIds = pages.stream().map(BookPage::getBookPageId)
-                .collect(Collectors.toList());
+                .toList();
 
         // pageId를 이용해 sentences 조회 후 sentenceId 리스트로 저장
         List<BookPageSentence> sentences = userBookProcessRespository.findByBookPageId(pageIds);
         List<Long> sentenceIds = sentences.stream().map(BookPageSentence::getBookPageSentenceId)
-                .collect(Collectors.toList());
+                .toList();
 
         // sentenceId를 이용해 education 조회 후 Dto로 변환
         List<Education> educations = userBookProcessRespository.findByBookSentenceId(sentenceIds);
@@ -198,11 +204,6 @@ public class BookServiceImpl implements BookService {
         bookReviewRepository.save(bookReview);
     }
 
-    // 리뷰 전체 조회
-    @Override
-    public List<BookReviewResponseDto> searchReviews(Long bookId) {
-        return bookReviewRepository.findByBook_bookId(bookId);
-    }
 
     // 내가 작성한 리뷰 조회
     @Override

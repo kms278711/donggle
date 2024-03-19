@@ -45,8 +45,11 @@ public class BookController {
 
     // 책 단일 조회(구매창)
     @GetMapping("/{bookId}/purchase")
-    public ResponseEntity<BookDto> searchBook(@PathVariable("bookId") Long bookId) {
-        BookDto bookDto = bookService.searchBook(bookId);
+    public ResponseEntity<BookDto> searchBook(@PathVariable("bookId") Long bookId,
+                                              Authentication authentication) {
+        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
+        Long loginUserId = loginUser.userId();
+        BookDto bookDto = bookService.searchBook(bookId, loginUserId);
 
         return ResponseEntity.ok(bookDto);
     }

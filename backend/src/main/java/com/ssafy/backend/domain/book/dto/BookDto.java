@@ -13,8 +13,11 @@ public record BookDto(
         String coverPath,
         int price,
         boolean isPay,
+        Double averageScore,
         List<BookReviewResponseDto> bookReviews
 )
 {
-
+    public BookDto(Long bookId, String title, String summary, String coverPath, int price, double averageScore, boolean isPay ) {
+        this(bookId, title, summary, coverPath, price, isPay, averageScore, null);
+    }
 }
