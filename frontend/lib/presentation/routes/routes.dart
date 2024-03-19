@@ -1,3 +1,4 @@
+import 'package:frontend/presentation/pages/AI_test/AI_test.dart';
 import 'package:frontend/presentation/pages/login/login_page.dart';
 import 'package:frontend/presentation/pages/main_screen/main_screen.dart';
 import 'package:frontend/presentation/pages/mypage/my_page_background.dart';
@@ -30,6 +31,11 @@ final GoRouter globalRouter = GoRouter(
       path: RoutePath.login,
       name: 'login',
       builder: (context, state) => const LoginPage(),
+    ),
+    GoRoute(
+      path: RoutePath.aiTest,
+      name: 'aitest',
+      builder: (context, state) => const AITest(),
     ),
   ],
   initialLocation: RoutePath.splash,

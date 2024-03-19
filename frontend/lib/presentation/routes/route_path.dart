@@ -15,4 +15,6 @@ class RoutePath {
   ///my_page
   static const String myPage = '/mypage';
 
+  static const String aiTest = '/aitest';
+
 }

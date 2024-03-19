@@ -10,7 +10,7 @@ class DialogUtils {
 
   static Future<String> showCustomDialog(
     BuildContext context, {
-    required int bookId,
+    required Widget contentWidget,
   }) async {
     final result = await showGeneralDialog(
         context: context,
@@ -30,7 +30,7 @@ class DialogUtils {
                 color: Colors.transparent,
                 child: Column(
                   children: [
-                    BookDetail(bookId),
+                    contentWidget,
                   ],
                 ),
               ),

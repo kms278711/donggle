@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:frontend/core/utils/component/dialog_utils.dart';
+import 'package:frontend/presentation/pages/home/component/book/book_detail.dart';
 
 class OpenedBook extends StatefulWidget {
   final String url;
@@ -25,7 +26,7 @@ class _OpenedBookState extends State<OpenedBook> {
           // if (result == "refresh") {
           //   context.go(RoutePath.main3);
           // }
-          DialogUtils.showCustomDialog(context, bookId: widget.bookId);
+          DialogUtils.showCustomDialog(context, contentWidget: BookDetail(widget.bookId));
         },
         child: Center(
           child: ClipRRect(
