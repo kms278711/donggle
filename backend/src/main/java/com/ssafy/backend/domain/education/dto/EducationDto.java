@@ -7,6 +7,7 @@ public record EducationDto(
         Education.Gubun gubun,
         Education.Category category,
         String wordName,
-        String imagePath
+        String imagePath,
+        Long bookPageSentenceId
 ) {
 }

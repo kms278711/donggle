@@ -34,4 +34,5 @@ public class BookReviewCustomRepositoryImpl implements BookReviewCustomRepositor
                 .where(qBookReview.user.userId.eq(userId))
                 .fetch();
     }
+
 }

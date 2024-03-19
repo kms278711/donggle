@@ -14,7 +14,7 @@ import java.util.List;
 public interface BookService {
 
     List<BookPurchasedResponseDto> searchAllBook(Long loginUserId);
-    BookDto searchBook(Long bookId);
+    BookDto searchBook(Long bookId, Long loginUserId);
     BookPageDto searchBookPage(Long bookId, int page);
     BookInfoDto searchBookInfo(Long bookId, Long loginUserId);
     void saveProgressBookPage(Long loginUserId, Long bookId, int page);
