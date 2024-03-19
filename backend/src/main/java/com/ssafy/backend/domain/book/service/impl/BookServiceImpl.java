@@ -67,10 +67,13 @@ public class BookServiceImpl implements BookService {
                 .price(bookDto.price())
                 .isPay(bookDto.isPay())
                 .averageScore(averageScore)
+                .myBookReview(searchMyReview(loginUserId, bookId))
                 .bookReviews(searchReviews(bookId))
                 .build();
     }
-
+    private BookReviewResponseDto searchMyReview(Long userId, Long bookId) {
+        return bookReviewRepository.searchMyReview(userId, bookId);
+    }
     // 리뷰 전체 조회
     @Override
     public List<BookReviewResponseDto> searchReviews(Long bookId) {

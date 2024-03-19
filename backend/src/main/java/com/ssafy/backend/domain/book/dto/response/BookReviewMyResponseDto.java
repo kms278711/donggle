@@ -11,4 +11,7 @@ public record BookReviewMyResponseDto(
         double score,
         String content
 ) {
+    public BookReviewMyResponseDto(double score, String content) {
+        this(null, null, null, null, score, content);
+    }
 }

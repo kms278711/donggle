@@ -62,7 +62,6 @@ public class BookController {
         return ResponseEntity.ok(bookPageDto);
     }
 
-
     // 다음 페이지로 넘어가기 전 현재 페이지 정보 저장
     @PostMapping("/{bookId}/pages/{page}")
     public ResponseEntity<String> saveProgressBookPage(@PathVariable("bookId") Long bookId, @PathVariable("page") int page, Authentication authentication) {
