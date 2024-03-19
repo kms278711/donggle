@@ -29,7 +29,7 @@ public class BookReview {
     private String content;
 
     @Builder
-    public BookReview(User user, Book book, int score, String content) {
+    public BookReview(User user, Book book, double score, String content) {
         this.user = user;
         this.book = book;
         this.score = score;
