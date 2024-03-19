@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookPage extends BaseEntity {
+public class BookPage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

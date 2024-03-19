@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookPageSentence extends BaseEntity {
+public class BookPageSentence {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
