@@ -19,7 +19,7 @@ class CardModel extends ChangeNotifier {
       "Authorization": "Bearer $accessToken"
     };
     var response = await http.get(url, headers: headers);
-    print(response.body);
+    // print(response.body);
     if (response.statusCode == 200) {
       cards = json.decode(utf8.decode(response.bodyBytes));
       return "Success";

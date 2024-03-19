@@ -12,6 +12,7 @@ import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/domain/model/model_cards.dart';
 import 'package:frontend/domain/model/model_nicknameupdate.dart';
 import 'package:frontend/domain/model/model_profileupdate.dart';
+import 'package:frontend/domain/model/model_word_quiz.dart';
 import 'package:frontend/domain/model/model_register.dart';
 import 'package:frontend/domain/model/model_review.dart';
 import 'package:frontend/presentation/provider/message_provider.dart';
@@ -38,6 +39,9 @@ void main() {
       ChangeNotifierProvider(
           create: (context) =>
               ReviewModel(Provider.of<UserProvider>(context, listen: false))),
+      ChangeNotifierProvider(
+          create: (context) =>
+              QuizWordModel(Provider.of<UserProvider>(context, listen: false))),
       ChangeNotifierProvider(
           create: (context) => NickNameUpdateModel(
               Provider.of<UserProvider>(context, listen: false))),

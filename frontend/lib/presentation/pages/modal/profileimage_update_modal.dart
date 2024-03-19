@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/buttons/red_button.dart';
@@ -60,7 +61,7 @@ class _profileImageUpdateModalState extends State<profileImageUpdateModal> {
         Provider.of<ProfileUpdateModel>(context, listen: false);
 
     return AlertDialog(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.surface,
       title: Text(
         widget.title,
         style: CustomFontStyle.getTextStyle(
