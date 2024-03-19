@@ -73,7 +73,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private boolean authenticate(HttpServletResponse response, String jwt) throws IOException {
-        UserInfoDto userInfoDto = null;
         if (StringUtils.hasText(jwt)) {
             try {
                 LoginUserDto loginUserDto = jwtService.parseAccessToken(jwt);

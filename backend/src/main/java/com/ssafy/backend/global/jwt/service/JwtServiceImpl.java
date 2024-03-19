@@ -87,9 +87,8 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private Claims parseToken(String token, Key secretKey) {
-        Claims payload = null;
         try {
-            payload = Jwts.parserBuilder()
+            return Jwts.parserBuilder()
                     .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(token).getBody();
@@ -99,8 +98,6 @@ public class JwtServiceImpl implements JwtService {
         } catch (ExpiredJwtException ex) {
             throw new TokenException(EXPIRED_TOKEN);
         }
-
-        return payload;
     }
 
     private long calculateExpiration(@NonNull String accessToken) {
