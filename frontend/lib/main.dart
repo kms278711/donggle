@@ -38,8 +38,8 @@ void main() {
           create: (context) =>
               CardModel(Provider.of<UserProvider>(context, listen: false))),
       ChangeNotifierProvider(
-          create: (context) =>
-              ReviewModel(Provider.of<UserProvider>(context, listen: false))),
+          create: (_) =>
+              ReviewModel()),
       ChangeNotifierProvider(
           create: (context) =>
               QuizWordModel(Provider.of<UserProvider>(context, listen: false))),
