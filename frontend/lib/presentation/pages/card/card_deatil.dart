@@ -1,15 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/icons/circle_back_icon.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
-import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/domain/model/model_cards.dart';
-import 'package:frontend/presentation/routes/route_path.dart';
-import 'package:frontend/presentation/routes/routes.dart';
-import 'package:go_router/go_router.dart';
+import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/domain/model/model_cards.dart' as domain;
 
@@ -33,21 +32,33 @@ class _CardDetailState extends State<CardDetail> {
 
   @override
   void initState() {
-    cardModel = Provider.of<domain.CardModel>(context, listen: false);
-    wordName = cardModel.selectedCard['wordName'];
-    imagePath = cardModel.selectedCard['imagePath'];
-    bookTitle = cardModel.selectedCard['bookTitle'];
-    bookSentence = cardModel.selectedCard['bookSentence'];
-    userImages = cardModel.selectedCard['userImages'];
-    url = Constant.s3BaseUrl + imagePath;
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await loadDataAsync();
+    });
+  }
+
+  Future loadDataAsync() async {
+    var cardModel = Provider.of<domain.CardModel>(context, listen: false);
+    var userProvider = Provider.of<UserProvider>(context, listen: false);
+    var accessToken = userProvider.getAccessToken();
+
+    await cardModel.getSelectedCard(accessToken, widget.educationId);
+    // 데이터 로딩 완료 후 상태 업데이트
+    setState(() {
+      wordName = cardModel.selectedCard['wordName'];
+      imagePath = cardModel.selectedCard['imagePath'];
+      bookTitle = cardModel.selectedCard['bookTitle'];
+      bookSentence = cardModel.selectedCard['bookSentence'];
+      userImages = cardModel.selectedCard['userImages'];
+      url = Constant.s3BaseUrl + imagePath;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return DefaultTextStyle(
-      style: CustomFontStyle.titleSmall,
+      style: CustomFontStyle.textMediumLarge,
       child: Stack(
         children: [
           Column(
@@ -113,35 +124,106 @@ class _CardDetailState extends State<CardDetail> {
                 fit: BoxFit.cover,
                 width: MediaQuery.of(context).size.width * 0.25,
                 placeholder: (context, url) =>
-                const CircularProgressIndicator(),
+                    const CircularProgressIndicator(),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.75,
-            left: MediaQuery.of(context).size.width * 0.12,
-            child: Row(
-              children: [
-                GreenButton("처음부터", onPressed: () {}),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.04,
-                ),
-                GreenButton("이어하기", onPressed: () {}),
-              ],
+            top: MediaQuery.of(context).size.height * 0.115,
+            right: MediaQuery.of(context).size.width * 0.06,
+            child: GreenButton("학습하기", onPressed: () {
+              // 캔버스 띄우기
+            }),
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.2,
+            right: MediaQuery.of(context).size.width * 0.1,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.4,
+              height: MediaQuery.of(context).size.height * 0.15,
+              // color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    '동화',
+                    style: CustomFontStyle.textSmall,
+                  ),
+                  Text(
+                    bookTitle,
+                    style: CustomFontStyle.textMedium,
+                  )
+                ],
+              ),
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.115,
-            right: MediaQuery.of(context).size.width * 0.06,
-            child: GreenButton("문제풀기", onPressed: () {
-              // Navigator.of(context).pop("refresh");
-              // context.go(RoutePath.main3);
-              Navigator.of(context).pop();
-              globalRouter.pushReplacement(RoutePath.main3);
-              // Navigator.of(context).pop();
-              // context.pushReplacement(RoutePath.main3);
-            }),
+            top: MediaQuery.of(context).size.height * 0.35,
+            right: MediaQuery.of(context).size.width * 0.1,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.4,
+              height: MediaQuery.of(context).size.height * 0.15,
+              // color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    '문장',
+                    style: CustomFontStyle.textSmall,
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Text(
+                        bookSentence,
+                        style: CustomFontStyle.textMedium,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.5,
+            right: MediaQuery.of(context).size.width * 0.1,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.4,
+              height: MediaQuery.of(context).size.height * 0.39,
+              // color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    '내가 그린 그림',
+                    style: CustomFontStyle.textSmall,
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: userImages.map((imagePath) {
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                            child: CachedNetworkImage(
+                              imageUrl: Constant.s3BaseUrl + imagePath,
+                              fit: BoxFit.cover,
+                              height: MediaQuery.of(context).size.height * 0.3,
+                              width: MediaQuery.of(context).size.width * 0.14,
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
         ],
       ),
