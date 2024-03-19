@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
+import java.util.UUID;
 
 @Service
 public class S3Utils {
@@ -27,16 +28,17 @@ public class S3Utils {
     }
 
     // 파일 업로드
-    public void fileUpload(String folderName, MultipartFile file) throws Exception {
+    public String fileUpload(String folderName, MultipartFile file) throws Exception {
         if(amazonS3Client != null) {
 
             if(!file.isEmpty()) {
                 createFolder(bucket, folderName);
             }
-
+            UUID uuid = UUID.randomUUID();
             ObjectMetadata objectMetadata = getObjectMetadata(file);
-            objectMetadata.setHeader("filename", file.getOriginalFilename());
-            amazonS3Client.putObject(new PutObjectRequest(bucket + "/" + folderName, file.getOriginalFilename(), file.getInputStream(), objectMetadata));
+            objectMetadata.setHeader("filename", uuid);
+            amazonS3Client.putObject(new PutObjectRequest(bucket + "/" + folderName, uuid.toString(), file.getInputStream(), objectMetadata));
+            return uuid.toString();
         } else {
             throw new FileException(ExceptionType.AWS_UPLOAD_FAIL);
         }

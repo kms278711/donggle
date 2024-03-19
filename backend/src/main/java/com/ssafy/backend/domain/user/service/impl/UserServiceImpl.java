@@ -66,8 +66,8 @@ public class UserServiceImpl implements UserService {
         String userPath = "";
 
         if(!userActionImage.isEmpty()) {
-            uploadToS3(userActionImage, folderName);
-            userPath = folderName+"/"+userActionImage.getOriginalFilename();
+            String fileName = uploadToS3(userActionImage, folderName);
+            userPath = folderName+"/"+fileName;
         }
 
         actionLearningRepository.save(ActionLearning.builder()
@@ -90,16 +90,16 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException(INVALID_USER));
 
         s3Utils.bucketDelete(folderName, user.getProfileImage().replace(folderName+"/", ""));
-        uploadToS3(profileImage, folderName);
-        user.updateProfileImage(folderName +"/"+ profileImage.getOriginalFilename());
+        String fileName = uploadToS3(profileImage, folderName);
+        user.updateProfileImage(folderName +"/"+ fileName);
         userRepository.save(user);
-        return folderName +"/"+ profileImage.getOriginalFilename();
+        return folderName +"/"+ fileName;
 
     }
 
-    private void uploadToS3(MultipartFile image, String folderName) {
+    private String uploadToS3(MultipartFile image, String folderName) {
         try {
-            s3Utils.fileUpload(folderName, image);
+            return s3Utils.fileUpload(folderName, image);
         } catch (Exception e) {
             throw new UserException(ExceptionType.AWS_UPLOAD_FAIL);
         }
