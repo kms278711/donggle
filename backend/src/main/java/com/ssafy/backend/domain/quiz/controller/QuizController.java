@@ -1,7 +1,7 @@
 package com.ssafy.backend.domain.quiz.controller;
 
-import com.ssafy.backend.domain.quiz.dto.request.QuizRequestDto;
 import com.ssafy.backend.domain.quiz.dto.response.QuizResponseDto;
+import com.ssafy.backend.domain.quiz.entity.WordQuiz;
 import com.ssafy.backend.domain.quiz.service.QuizService;
 import com.ssafy.backend.domain.user.dto.LoginUserDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +18,9 @@ public class QuizController {
     @Autowired
     private QuizService quizService;
     @GetMapping()
-    public ResponseEntity<List<QuizResponseDto>> getQuiz(@RequestParam QuizRequestDto quizRequestDto, Authentication authentication) {
+    public ResponseEntity<List<QuizResponseDto>> getQuiz(@RequestParam WordQuiz.Theme theme,  @RequestParam Long bookId, Authentication authentication) {
         Long userId = getCurrentUserId(authentication);
-        return ResponseEntity.ok(quizService.getQuiz(quizRequestDto, userId));
+        return ResponseEntity.ok(quizService.getQuiz(theme, bookId, userId));
     }
 
     private static Long getCurrentUserId(Authentication authentication) {
