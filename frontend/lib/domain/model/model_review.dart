@@ -1,19 +1,21 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:http/http.dart' as http;
 
 class ReviewModel extends ChangeNotifier {
-  final UserProvider userProvider;
 
-  ReviewModel(this.userProvider);
+  Review myReview = Review(score: 0, content: "");
+
+  void setMyReview(double score, String content){
+    myReview.score = score;
+    myReview.content = content;
+    notifyListeners();
+  }
 
 }
 
 class Review {
-  final int score;
-  final String content;
+  double score;
+  String content;
 
   Review({
     required this.score,

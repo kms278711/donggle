@@ -29,15 +29,13 @@ void main() {
       ChangeNotifierProvider(create: (_) => MainProvider()),
       ChangeNotifierProvider(create: (_) => MessageProvider()),
       ChangeNotifierProvider(create: (_) => UserProvider()),
+      ChangeNotifierProvider(create: (_) => ReviewModel()),
       ChangeNotifierProvider(
           create: (context) =>
               BookModel(Provider.of<UserProvider>(context, listen: false))),
       ChangeNotifierProvider(
           create: (context) =>
               CardModel(Provider.of<UserProvider>(context, listen: false))),
-      ChangeNotifierProvider(
-          create: (context) =>
-              ReviewModel(Provider.of<UserProvider>(context, listen: false))),
       ChangeNotifierProvider(
           create: (context) => NickNameUpdateModel(
               Provider.of<UserProvider>(context, listen: false))),

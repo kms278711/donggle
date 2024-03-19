@@ -8,7 +8,6 @@ import 'package:frontend/core/utils/component/icons/google_icon.dart';
 import 'package:frontend/domain/model/model_auth.dart';
 import 'package:frontend/domain/model/model_register.dart';
 import 'package:frontend/main.dart';
-import 'package:frontend/presentation/pages/home/home_page.dart';
 import 'package:frontend/presentation/provider/message_provider.dart';
 import 'package:frontend/presentation/routes/route_path.dart';
 import 'package:go_router/go_router.dart';

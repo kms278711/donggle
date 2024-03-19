@@ -5,22 +5,28 @@ import 'package:frontend/core/theme/custom/custom_font_style.dart';
 class GreenButton extends StatelessWidget {
   final String textContent;
   final VoidCallback onPressed;
+  final TextStyle? textStyle;
 
-  const GreenButton(this.textContent, {super.key, required this.onPressed});
+  const GreenButton(
+      this.textContent, {
+        super.key,
+        required this.onPressed,
+        this.textStyle,
+      });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: onPressed, // Use the passed onPressed function here.
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        textStyle: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMedium),
+        textStyle: textStyle ?? CustomFontStyle.getTextStyle(context, CustomFontStyle.textMedium),
         backgroundColor: AppColors.success,
         shadowColor: AppColors.black,
         elevation: 10,
       ),
       child: Text(
         textContent,
-        style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMedium),
+        style: textStyle ?? CustomFontStyle.getTextStyle(context, CustomFontStyle.textMedium),
       ),
     );
   }

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProvider extends ChangeNotifier {
   String _email = "";
@@ -71,13 +70,10 @@ class UserProvider extends ChangeNotifier {
     var response = await http.post(url, headers: headers, body: body);
 
     if (response.statusCode == 200) {
-      String accessToken =
+      _accessToken =
           json.decode(utf8.decode(response.bodyBytes))['access_token'];
-      String refreshToken =
+      _refreshToken =
           json.decode(utf8.decode(response.bodyBytes))['refresh_token'];
-
-      _accessToken = accessToken;
-      _refreshToken = refreshToken;
 
       return "Success";
     } else {
@@ -95,13 +91,10 @@ class UserProvider extends ChangeNotifier {
     var response = await http.get(url, headers: headers);
 
     if (response.statusCode == 200) {
-      String nickname =
+      _nickname =
           json.decode(utf8.decode(response.bodyBytes))['nickname'] ?? "";
-      String profileImage =
+      _profileImage =
           json.decode(utf8.decode(response.bodyBytes))['profileImage'] ?? "";
-
-      _nickname = nickname;
-      _profileImage = profileImage;
 
       return "Success";
     } else if (response.statusCode == 401) {
