@@ -24,7 +24,7 @@ public class BookReview {
     @ManyToOne
     private Book book;
 
-    private int score;
+    private double score;
 
     private String content;
 

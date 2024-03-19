@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record BookReviewResponseDto(
-        int score,
+        double score,
         String content
 ) {
 }

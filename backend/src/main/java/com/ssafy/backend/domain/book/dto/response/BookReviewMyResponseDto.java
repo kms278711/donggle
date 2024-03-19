@@ -8,7 +8,7 @@ public record BookReviewMyResponseDto(
         Long userId,
         String title,
         String coverPath,
-        int score,
+        double score,
         String content
 ) {
 }
