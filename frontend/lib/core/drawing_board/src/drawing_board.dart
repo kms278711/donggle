@@ -246,7 +246,7 @@ class _DrawingBoardState extends State<DrawingBoard> {
                   return Slider(
                     value: dc.strokeWidth,
                     max: 50,
-                    min: 1,
+                    min: 22,
                     onChanged: (double v) =>
                         _controller.setStyle(strokeWidth: v),
                   );
