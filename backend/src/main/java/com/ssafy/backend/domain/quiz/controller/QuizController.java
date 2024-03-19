@@ -7,10 +7,7 @@ import com.ssafy.backend.domain.user.dto.LoginUserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,7 +18,7 @@ public class QuizController {
     @Autowired
     private QuizService quizService;
     @GetMapping()
-    public ResponseEntity<List<QuizResponseDto>> getQuiz(@RequestBody QuizRequestDto quizRequestDto, Authentication authentication) {
+    public ResponseEntity<List<QuizResponseDto>> getQuiz(@RequestParam QuizRequestDto quizRequestDto, Authentication authentication) {
         Long userId = getCurrentUserId(authentication);
         return ResponseEntity.ok(quizService.getQuiz(quizRequestDto, userId));
     }
