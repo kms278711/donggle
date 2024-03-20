@@ -20,9 +20,8 @@ class QuizWordModel extends ChangeNotifier {
       "Authorization": "Bearer $accessToken"
     };
 
-    // print(accessToken);
     var response = await http.get(url, headers: headers);
-    // print(json.decode(utf8.decode(response.bodyBytes)));
+
     if (response.statusCode == 200) {
       quizzes = json.decode(utf8.decode(response.bodyBytes));
       return "Success";
