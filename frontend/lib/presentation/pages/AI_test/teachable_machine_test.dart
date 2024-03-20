@@ -92,7 +92,8 @@ class _TeachableMachineTestState extends State<TeachableMachineTest> {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     // Camera preview
-                    return ClipRect(
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(40),
                       child: FittedBox(
                           fit: BoxFit.cover,
                           child: SizedBox(
