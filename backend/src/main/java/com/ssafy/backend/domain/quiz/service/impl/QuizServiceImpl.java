@@ -27,9 +27,22 @@ public class QuizServiceImpl implements QuizService {
         } else {
             wordQuizzes = wordQuizRepository.findAllByThemeAndBook_bookId(theme, bookId);
         }
-        Collections.shuffle(wordQuizzes);
+
+        wordQuizzes = quizShuffle(wordQuizzes);
+
+        return wordQuizListToDtoList(wordQuizzes);
+    }
+
+    private List<QuizResponseDto> wordQuizListToDtoList(List<WordQuiz> wordQuizzes) {
         return wordQuizzes.stream()
                 .map(wordQuizMapper::toQuizResponseDto)
                 .toList();
+    }
+
+    private static List<WordQuiz> quizShuffle(List<WordQuiz> wordQuizzes) {
+        Collections.shuffle(wordQuizzes);
+        wordQuizzes = wordQuizzes.stream()
+                .peek(quiz -> Collections.shuffle(quiz.getQuizAnswerList())).toList();
+        return wordQuizzes;
     }
 }
