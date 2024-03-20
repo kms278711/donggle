@@ -1,10 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
+import 'package:frontend/core/utils/component/dialog_utils.dart';
 import 'package:frontend/domain/model/model_word_quiz.dart';
 import 'package:frontend/presentation/pages/home/component/title/main_title.dart';
+import 'package:frontend/presentation/pages/quiz/finish_quiz_page.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class QuizPage extends StatefulWidget {
@@ -18,9 +23,8 @@ class _QuizPageState extends State<QuizPage> {
   late QuizWordModel quizModel;
   late UserProvider userProvider;
   String accessToken = "";
-  late Future<String> quizModelFuture;
-  List quizzes = [];
   CarouselController carouselController = CarouselController();
+  late List<dynamic> selectedAnswer;
 
   @override
   void initState() {
@@ -28,8 +32,12 @@ class _QuizPageState extends State<QuizPage> {
     userProvider = Provider.of<UserProvider>(context, listen: false);
     accessToken = userProvider.getAccessToken();
     quizModel = Provider.of<QuizWordModel>(context, listen: false);
-    quizModelFuture = quizModel.getWordQuizzes(accessToken);
-    quizzes = quizModel.quizzes;
+  }
+
+  // 선택된 답변 업데이트를 위한 콜백 함수
+  void updateSelectedAnswer(int index, dynamic answer) {
+    selectedAnswer[index] = answer;
+    print(selectedAnswer);
   }
 
   @override
@@ -44,10 +52,16 @@ class _QuizPageState extends State<QuizPage> {
             left: MediaQuery.of(context).size.width * 0.1,
             child: GreenButton(
               "다 풀었어요~!",
-              onPressed: () {},
+              onPressed: () {
+                if (selectedAnswer.contains(null)) {
+                  showToast('풀지않은 문제가 있습니다.', backgroundColor: AppColors.error);
+                } else {
+                  DialogUtils.showCustomDialog(context, contentWidget: FinishQuizPage(selectedAnswer));
+                  context.pushReplacement('/main/1');
+                }
+              },
             ),
           ),
-          // Center(child: Text('$quizzes'))
           Positioned(
             top: MediaQuery.of(context).size.width * 0.12,
             left: MediaQuery.of(context).size.height * 0.16,
@@ -55,7 +69,7 @@ class _QuizPageState extends State<QuizPage> {
               width: MediaQuery.of(context).size.width * 0.8,
               height: MediaQuery.of(context).size.height * 0.7,
               child: FutureBuilder<String>(
-                future: quizModelFuture,
+                future: quizModel.getWordQuizzes(accessToken),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // 데이터 로드 중이면 로딩 인디케이터를 보여줍니다.
@@ -67,8 +81,14 @@ class _QuizPageState extends State<QuizPage> {
                     // 데이터가 성공적으로 로드되면, 로드된 데이터를 기반으로 UI를 구성합니다.
                     // 예제에서는 "Success" 문자열만 반환하지만, 실제로는 JSON 파싱 등을 수행할 수 있습니다.
                     if (snapshot.data == "Success") {
+                      selectedAnswer = List<dynamic>.generate(
+                          quizModel.quizzes.length, (index) => null);
                       // 데이터 로딩 성공 UI
-                      return QuizCarousel(quizzes: quizModel.quizzes);
+                      return QuizCarousel(
+                        quizzes: quizModel.quizzes,
+                        selectedAnswer: selectedAnswer,
+                        onAnswerSelected: updateSelectedAnswer,
+                      );
                     } else {
                       // 서버로부터 "Success" 이외의 응답을 받았을 경우의 처리
                       return Center(child: Text(snapshot.data!));
@@ -89,33 +109,37 @@ class _QuizPageState extends State<QuizPage> {
 
 class QuizCarousel extends StatefulWidget {
   final List<dynamic> quizzes;
+  final List<dynamic> selectedAnswer;
+  final Function(int, dynamic) onAnswerSelected;
 
-  const QuizCarousel({super.key, required this.quizzes});
+  const QuizCarousel(
+      {super.key,
+      required this.quizzes,
+      required this.selectedAnswer,
+      required this.onAnswerSelected});
 
   @override
   State<QuizCarousel> createState() => _QuizCarouselState();
 }
 
 class _QuizCarouselState extends State<QuizCarousel> {
-  // 퀴즈 목록을 저장하는 변수
-  late List<dynamic> selectedAnswer;
+  late List<dynamic> selectAnswer;
 
   @override
   void initState() {
     super.initState();
-    // 모든 퀴즈에 대해 선택되지 않은 상태로 초기화합니다.
-    selectedAnswer =
-        List<dynamic>.generate(widget.quizzes.length, (index) => null);
+    // quizzes 리스트에 기반하여 selectedAnswer 초기화
+    selectAnswer = List<dynamic>.filled(widget.quizzes.length, null);
   }
 
   @override
   Widget build(BuildContext context) {
     return CarouselSlider(
       options: CarouselOptions(
+        enableInfiniteScroll: false,
+        // 마지막에서 처음으로 안 가도록
         autoPlay: false,
         // 자동 재생 여부
-        enlargeCenterPage: true,
-        // 중앙 항목을 크게 표시
         viewportFraction: 1,
         // 뷰포트 대비 항목 크기 비율
         aspectRatio: 16 / 9,
@@ -152,15 +176,16 @@ class _QuizCarouselState extends State<QuizCarousel> {
                       itemCount: quiz['choices'].length, // 선택지의 수 만큼 아이템 생성
                       itemBuilder: (context, index) {
                         var choice = quiz['choices'][index]; // 현재 인덱스에 해당하는 선택지
-                        bool isSelected = selectedAnswer[quizIndex] == choice;
+                        bool isSelected = selectAnswer[quizIndex] == choice;
 
                         return Container(
                           margin: const EdgeInsets.symmetric(horizontal: 10),
                           // 가로 여백 설정
                           child: TextButton(
                             onPressed: () {
+                              widget.onAnswerSelected(quizIndex, choice);
                               setState(() {
-                                selectedAnswer[quizIndex] = choice;
+                                selectAnswer[quizIndex] = choice;
                               });
                             },
                             child: Text(
