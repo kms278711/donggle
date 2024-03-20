@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface WordQuizRepository extends JpaRepository<WordQuiz, Long>, QuizCustomRepository {
-    List<WordQuiz> findAllByThemeAndBook_bookId(WordQuiz.Theme theme, Long bookId);
+	List<WordQuiz> findAllByThemeAndBook_bookId(WordQuiz.Theme theme, Long bookId);
 }

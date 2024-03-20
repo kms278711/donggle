@@ -7,6 +7,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface EducationMapper {
-    @Mapping(source = "education.bookPageSentence.bookPageSentenceId", target = "bookPageSentenceId")
-    EducationDto toEducationDto(Education education);
+	@Mapping(source = "education.bookPageSentence.bookPageSentenceId", target = "bookPageSentenceId")
+	EducationDto toEducationDto(Education education);
 }

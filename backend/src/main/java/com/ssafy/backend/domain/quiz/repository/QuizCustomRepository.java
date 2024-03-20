@@ -7,5 +7,5 @@ import com.ssafy.backend.domain.quiz.entity.WordQuiz;
 import java.util.List;
 
 public interface QuizCustomRepository {
-    List<WordQuiz> getWordQuiz(WordQuiz.Theme theme, Long userId);
+	List<WordQuiz> getWordQuiz(WordQuiz.Theme theme, Long userId);
 }

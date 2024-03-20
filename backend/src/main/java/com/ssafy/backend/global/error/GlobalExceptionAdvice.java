@@ -1,6 +1,6 @@
 package com.ssafy.backend.global.error;
 
-import com.ssafy.backend.global.dto.Response;
+import com.ssafy.backend.global.dto.ErrorResponse;
 import com.ssafy.backend.global.error.exception.ExceptionType;
 import com.ssafy.backend.global.error.exception.FileException;
 import com.ssafy.backend.global.error.exception.UserException;
@@ -21,34 +21,34 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity accessDeniedExceptionHandler(AccessDeniedException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                .body(Response.fail(HttpStatus.FORBIDDEN.name(), FORBIDDEN_EXCEPTION.getErrorMessage()));
+                .body(ErrorResponse.fail(HttpStatus.FORBIDDEN.name(), FORBIDDEN_EXCEPTION.getErrorMessage()));
     }
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity authenticationExceptionHandler(AuthenticationException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Response.fail(HttpStatus.UNAUTHORIZED.name(), AUTHENTICATION_EXCEPTION.getErrorMessage()));
+                .body(ErrorResponse.fail(HttpStatus.UNAUTHORIZED.name(), AUTHENTICATION_EXCEPTION.getErrorMessage()));
     }
 
     @ExceptionHandler({UserException.class})
     public ResponseEntity userExceptionHandler(UserException ex) {
         ExceptionType exceptionType = ex.getExceptionType();
         return ResponseEntity.status(exceptionType.getHttpStatus())
-                .body(Response.fail(exceptionType.name(), exceptionType.getErrorMessage()));
+                .body(ErrorResponse.fail(exceptionType.name(), exceptionType.getErrorMessage()));
     }
 
     @ExceptionHandler({FileException.class})
     public ResponseEntity fileExceptionHandler(FileException ex) {
         ExceptionType exceptionType = ex.getExceptionType();
         return ResponseEntity.status(exceptionType.getHttpStatus())
-                .body(Response.fail(exceptionType.name(), exceptionType.getErrorMessage()));
+                .body(ErrorResponse.fail(exceptionType.name(), exceptionType.getErrorMessage()));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity methodArgumentTypeMismatchException(
             MethodArgumentTypeMismatchException ex) {
         return ResponseEntity.badRequest()
-                .body(Response.fail(HttpStatus.BAD_REQUEST.name(), "잘못된 요청입니다."));
+                .body(ErrorResponse.fail(HttpStatus.BAD_REQUEST.name(), "잘못된 요청입니다."));
     }
 
     @ExceptionHandler(Exception.class)
@@ -56,7 +56,7 @@ public class GlobalExceptionAdvice {
         String message = ex.getMessage();
         System.out.println(message);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Response.fail(HttpStatus.BAD_REQUEST.name(), "에러가 발생했습니다."));
+                .body(ErrorResponse.fail(HttpStatus.BAD_REQUEST.name(), "에러가 발생했습니다."));
     }
 
 }

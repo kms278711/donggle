@@ -5,11 +5,11 @@ import com.ssafy.backend.global.jwt.dto.TokenDto;
 import lombok.*;
 
 @Builder
-public record LoginResponseDto (
+public record LoginResponseDto(
 
-    @JsonProperty("user_info")
-    UserResponseDto userInfo,
+		@JsonProperty("user_info")
+		UserResponseDto userInfo,
 
-    TokenDto token
-)
-{}
+		TokenDto token
+) {
+}

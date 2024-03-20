@@ -13,30 +13,30 @@ import java.security.Key;
 @Component
 public class JwtUtils {
 
-    public static final String BEARER_PREFIX = "Bearer ";
-    public static final String KEY_ID = "id";
-    public static final String KEY_EMAIL = "email";
-    public static final String KEY_ROLE = "role";
+	public static final String BEARER_PREFIX = "Bearer ";
+	public static final String KEY_ID = "id";
+	public static final String KEY_EMAIL = "email";
+	public static final String KEY_ROLE = "role";
 
-    @Value("${jwt.secret}")
-    private String secretKey;
+	@Value("${jwt.secret}")
+	private String secretKey;
 
-    @Value("${jwt.expired-min.access}")
-    private int accessTokenExpiredMin;
+	@Value("${jwt.expired-min.access}")
+	private int accessTokenExpiredMin;
 
-    @Value("${jwt.expired-min.refresh}")
-    private int refreshTokenExpiredMin;
+	@Value("${jwt.expired-min.refresh}")
+	private int refreshTokenExpiredMin;
 
-    private final Key encodedKey;
+	private final Key encodedKey;
 
-    public JwtUtils(@Value("${jwt.secret}") String secretKey,
-                    @Value("${jwt.expired-min.access}") int accessTokenExpiredMin,
-                    @Value("${jwt.expired-min.refresh}") int refreshTokenExpiredMin) {
-        this.secretKey = secretKey;
-        this.accessTokenExpiredMin = accessTokenExpiredMin;
-        this.refreshTokenExpiredMin = refreshTokenExpiredMin;
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        this.encodedKey = Keys.hmacShaKeyFor(keyBytes);
-    }
+	public JwtUtils(@Value("${jwt.secret}") String secretKey,
+					@Value("${jwt.expired-min.access}") int accessTokenExpiredMin,
+					@Value("${jwt.expired-min.refresh}") int refreshTokenExpiredMin) {
+		this.secretKey = secretKey;
+		this.accessTokenExpiredMin = accessTokenExpiredMin;
+		this.refreshTokenExpiredMin = refreshTokenExpiredMin;
+		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+		this.encodedKey = Keys.hmacShaKeyFor(keyBytes);
+	}
 
 }

@@ -18,41 +18,41 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
-    private final JwtService jwtService;
+	private final AuthService authService;
+	private final JwtService jwtService;
 
-    @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDto) {
-        authService.signup(signupRequestDto);
-        return ResponseEntity.ok("회원가입이 완료되었습니다.");
-    }
+	@PostMapping("/signup")
+	public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDto) {
+		authService.signup(signupRequestDto);
+		return ResponseEntity.ok("회원가입이 완료되었습니다.");
+	}
 
-    @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@RequestBody LoginRequestDto loginRequestDto) {
-        UserInfoDto userInfoDto = authService.login(loginRequestDto.email(), loginRequestDto.password());
-        TokenDto tokenDto = jwtService.issueToken(userInfoDto);
+	@PostMapping("/login")
+	public ResponseEntity<TokenDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+		UserInfoDto userInfoDto = authService.login(loginRequestDto.email(), loginRequestDto.password());
+		TokenDto tokenDto = jwtService.issueToken(userInfoDto);
 
-        return ResponseEntity.ok(tokenDto);
-    }
+		return ResponseEntity.ok(tokenDto);
+	}
 
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestHeader("Authorization") String accessToken) {
-        jwtService.addBlackList(accessToken);
-        return ResponseEntity.ok("로그아웃이 정상적으로 완료되었습니다." );
+	@PostMapping("/logout")
+	public ResponseEntity<String> logout(@RequestHeader("Authorization") String accessToken) {
+		jwtService.addBlackList(accessToken);
+		return ResponseEntity.ok("로그아웃이 정상적으로 완료되었습니다.");
 
-    }
+	}
 
-    @PostMapping("/reissue")
-    public ResponseEntity<TokenDto> reissue(@RequestBody ReissueDto reissueDto) {
-        TokenDto tokenDto = authService.reissue(reissueDto.refreshToken());
-        return ResponseEntity.ok(tokenDto);
-    }
+	@PostMapping("/reissue")
+	public ResponseEntity<TokenDto> reissue(@RequestBody ReissueDto reissueDto) {
+		TokenDto tokenDto = authService.reissue(reissueDto.refreshToken());
+		return ResponseEntity.ok(tokenDto);
+	}
 
-    @GetMapping("/email-check")
-    public ResponseEntity<Boolean> duplicateCheckEmail(@RequestParam String email) {
-        if (authService.duplicateCheckEmail(email)) {
-            return ResponseEntity.ok(false);
-        }
-        return ResponseEntity.ok(true);
-    }
+	@GetMapping("/email-check")
+	public ResponseEntity<Boolean> duplicateCheckEmail(@RequestParam String email) {
+		if (authService.duplicateCheckEmail(email)) {
+			return ResponseEntity.ok(false);
+		}
+		return ResponseEntity.ok(true);
+	}
 }

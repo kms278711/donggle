@@ -13,18 +13,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QuizCustomRepositoryImpl implements QuizCustomRepository {
 
-    QWordQuiz qWordQuiz = QWordQuiz.wordQuiz;
-    QActionLearning qActionLearning = QActionLearning.actionLearning;
-    private final JPAQueryFactory jpaQueryFactory;
+	QWordQuiz qWordQuiz = QWordQuiz.wordQuiz;
+	QActionLearning qActionLearning = QActionLearning.actionLearning;
+	private final JPAQueryFactory jpaQueryFactory;
 
-    @Override
-    public List<WordQuiz> getWordQuiz(WordQuiz.Theme theme, Long userId) {
-        return jpaQueryFactory.select(
-                    qWordQuiz
-                ).from(qWordQuiz)
-                .join(qActionLearning)
-                .on(qActionLearning.education.educationId.eq(qWordQuiz.education.educationId))
-                .where(qActionLearning.user.userId.eq(userId))
-                .fetch();
-            }
+	@Override
+	public List<WordQuiz> getWordQuiz(WordQuiz.Theme theme, Long userId) {
+		return jpaQueryFactory.select(
+						qWordQuiz
+				).from(qWordQuiz)
+				.join(qActionLearning)
+				.on(qActionLearning.education.educationId.eq(qWordQuiz.education.educationId))
+				.where(qActionLearning.user.userId.eq(userId))
+				.fetch();
+	}
 }

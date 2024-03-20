@@ -5,26 +5,25 @@ import com.ssafy.backend.global.jwt.dto.UserInfoDto;
 import lombok.Builder;
 
 @Builder
-public record LoginUserDto (
+public record LoginUserDto(
 
-    @JsonProperty("user_id")
-    Long userId,
+		@JsonProperty("user_id")
+		Long userId,
 
-    String email,
-    String role,
-    String nickname,
+		String email,
+		String role,
+		String nickname,
 
-    @JsonProperty("profile_image")
-    String profileImage
-)
-{
-    public static LoginUserDto from(UserInfoDto info) {
-        return LoginUserDto.builder()
-                .userId(info.userId())
-                .email(info.email())
-                .nickname(info.nickname())
-                .profileImage(info.profileImage())
-                .role(info.role())
-                .build();
-    }
+		@JsonProperty("profile_image")
+		String profileImage
+) {
+	public static LoginUserDto from(UserInfoDto info) {
+		return LoginUserDto.builder()
+				.userId(info.userId())
+				.email(info.email())
+				.nickname(info.nickname())
+				.profileImage(info.profileImage())
+				.role(info.role())
+				.build();
+	}
 }

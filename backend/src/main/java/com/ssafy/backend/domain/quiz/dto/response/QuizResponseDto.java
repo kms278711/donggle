@@ -7,7 +7,7 @@ import java.util.List;
 
 @Builder
 public record QuizResponseDto(
-        String content,
-        List<AnswerDto> choices
+		String content,
+		List<AnswerDto> choices
 ) {
 }

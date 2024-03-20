@@ -12,55 +12,57 @@ import lombok.*;
 @AllArgsConstructor
 public class User extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long userId;
 
-    @Column(unique = true, updatable = false, nullable = false)
-    private String email;
+	@Column(unique = true, updatable = false, nullable = false)
+	private String email;
 
-    @Column(nullable = false)
-    private String password;
+	@Column(nullable = false)
+	private String password;
 
-    private String nickname;
+	private String nickname;
 
-    private String profileImage;
+	private String profileImage;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
 
-    private Status status;
+	private Status status;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Role role;
 
-    public enum Status {
-        MEMBER,
-        WITHDRAWAL
-    }
+	public enum Status {
+		MEMBER,
+		WITHDRAWAL
+	}
 
-    public enum Role {
-        ROLE_USER,
-        ROLE_ADMIN
-    }
+	public enum Role {
+		ROLE_USER,
+		ROLE_ADMIN
+	}
 
-    public void updatePassword(String password) {
-        this.password = password;
-    }
+	public void updatePassword(String password) {
+		this.password = password;
+	}
 
-    public void updateNickname(String nickname) {
-        this.nickname = nickname;
-    }
+	public void updateNickname(String nickname) {
+		this.nickname = nickname;
+	}
 
-    public void updateStatus(Status status) { this.status = status; }
+	public void updateStatus(Status status) {
+		this.status = status;
+	}
 
-    public void updateProfileImage(String profileImage) {
-        this.profileImage = profileImage;
-    }
+	public void updateProfileImage(String profileImage) {
+		this.profileImage = profileImage;
+	}
 
-    public void updateRole(Role role) {
-        this.role = role;
-    }
+	public void updateRole(Role role) {
+		this.role = role;
+	}
 }
 

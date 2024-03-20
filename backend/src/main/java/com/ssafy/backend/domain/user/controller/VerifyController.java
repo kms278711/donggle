@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/verify")
 @RequiredArgsConstructor
 public class VerifyController {
-    private final UserService userService;
-    private final VerifyEmailService verifyEmailService;
+	private final UserService userService;
+	private final VerifyEmailService verifyEmailService;
 
-    // 비밀번호 재설정 이메일 전송
-    @GetMapping
-    public ResponseEntity<String> verify(@RequestParam String email) {
-        UserResponseDto user = userService.getUserInfo(email);
-        verifyEmailService.sendVerificationMail(user.email());
-        return ResponseEntity.ok("비밀번호 변경메일 전송이 완료되었습니다.");
-    }
+	// 비밀번호 재설정 이메일 전송
+	@GetMapping
+	public ResponseEntity<String> verify(@RequestParam String email) {
+		UserResponseDto user = userService.getUserInfo(email);
+		verifyEmailService.sendVerificationMail(user.email());
+		return ResponseEntity.ok("비밀번호 변경메일 전송이 완료되었습니다.");
+	}
 
 
 }

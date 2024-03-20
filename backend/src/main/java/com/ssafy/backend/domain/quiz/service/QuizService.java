@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface QuizService {
 
-    List<QuizResponseDto> getQuiz(WordQuiz.Theme theme, Long bookId, Long userId);
+	List<QuizResponseDto> getQuiz(WordQuiz.Theme theme, Long bookId, Long userId);
 }

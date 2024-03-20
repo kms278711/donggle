@@ -6,9 +6,12 @@ import com.ssafy.backend.global.jwt.dto.UserInfoDto;
 
 public interface AuthService {
 
-    void signup(SignupRequestDto signupRequestDto);
-    UserInfoDto login(String email, String password);
-    TokenDto reissue(String refreshToken);
-    boolean duplicateCheckEmail(String email);
+	void signup(SignupRequestDto signupRequestDto);
+
+	UserInfoDto login(String email, String password);
+
+	TokenDto reissue(String refreshToken);
+
+	boolean duplicateCheckEmail(String email);
 
 }

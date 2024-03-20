@@ -7,6 +7,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface WordQuizMapper {
-    @Mapping(source = "wordQuiz.quizAnswerList", target = "choices")
-    QuizResponseDto toQuizResponseDto(WordQuiz wordQuiz);
+	@Mapping(source = "wordQuiz.quizAnswerList", target = "choices")
+	QuizResponseDto toQuizResponseDto(WordQuiz wordQuiz);
 }

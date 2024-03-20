@@ -4,11 +4,11 @@ import com.ssafy.backend.domain.user.entity.User;
 import com.ssafy.backend.domain.user.repository.UserRepository;
 import com.ssafy.backend.domain.user.service.VerifyEmailService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -19,7 +19,12 @@ public class VerifyEmailServiceImpl implements VerifyEmailService {
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender emailSender;
 
-    public void sendMail(String to, String sub, String tmpPassword) {
+    public void sendMail(String to, String title, String tmpPassword) {
+        SimpleMailMessage message = messageSetting(to, title, tmpPassword);
+        emailSender.send(message);
+    }
+
+    private static SimpleMailMessage messageSetting(String to, String sub, String tmpPassword) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject(sub);
@@ -40,9 +45,10 @@ public class VerifyEmailServiceImpl implements VerifyEmailService {
                 "\n" +
                 "동글이";
         message.setText(content);
-        emailSender.send(message);
+        return message;
     }
 
+    @Transactional
     public void sendVerificationMail(String email) {
         UUID uuid = UUID.randomUUID();
         String password = uuid.toString().substring(0, 10);

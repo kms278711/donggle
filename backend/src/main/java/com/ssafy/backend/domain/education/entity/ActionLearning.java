@@ -12,27 +12,27 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class ActionLearning {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long actionId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long actionId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
 
-    @ManyToOne
-    @JoinColumn(name="education_id")
-    private Education education;
+	@ManyToOne
+	@JoinColumn(name = "education_id")
+	private Education education;
 
-    private String userPath;
+	private String userPath;
 
-    private boolean isSkipped;
+	private boolean isSkipped;
 
-    @Builder
-    public ActionLearning(User user, Education education, String userPath, boolean isSkipped) {
-        this.user = user;
-        this.education = education;
-        this.userPath = userPath;
-        this.isSkipped = isSkipped;
-    }
+	@Builder
+	public ActionLearning(User user, Education education, String userPath, boolean isSkipped) {
+		this.user = user;
+		this.education = education;
+		this.userPath = userPath;
+		this.isSkipped = isSkipped;
+	}
 }

@@ -10,35 +10,35 @@ import lombok.*;
 @NoArgsConstructor
 public class Education {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long educationId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long educationId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Gubun gubun;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Gubun gubun;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Category category;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Category category;
 
-    private String wordName;
+	private String wordName;
 
-    private String imagePath;
+	private String imagePath;
 
-    @OneToOne()
-    @JoinColumn(name = "book_page_sentence_id")
-    private BookPageSentence bookPageSentence;
+	@OneToOne()
+	@JoinColumn(name = "book_page_sentence_id")
+	private BookPageSentence bookPageSentence;
 
 
-    public enum Gubun {
-        WORD,
-        NOWORD
-    }
+	public enum Gubun {
+		WORD,
+		NOWORD
+	}
 
-    public enum Category {
-        PICTURE,
-        ACTION,
-        EXPRESSION
-    }
+	public enum Category {
+		PICTURE,
+		ACTION,
+		EXPRESSION
+	}
 }

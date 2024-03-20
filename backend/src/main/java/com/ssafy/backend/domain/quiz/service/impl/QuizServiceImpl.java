@@ -15,38 +15,42 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QuizServiceImpl implements QuizService {
 
-    private final WordQuizRepository wordQuizRepository;
-    private final WordQuizMapper wordQuizMapper;
+	private final WordQuizRepository wordQuizRepository;
+	private final WordQuizMapper wordQuizMapper;
 
-    @Override
-    public List<QuizResponseDto> getQuiz(WordQuiz.Theme theme, Long bookId, Long userId) {
-        List<WordQuiz> wordQuizzes = null;
+	@Override
+	public List<QuizResponseDto> getQuiz(WordQuiz.Theme theme, Long bookId, Long userId) {
+		List<WordQuiz> wordQuizzes = null;
 
-        if (theme.equals(WordQuiz.Theme.WORD)) {
-            wordQuizzes = wordQuizRepository.getWordQuiz(theme, userId);
-        } else {
-            wordQuizzes = wordQuizRepository.findAllByThemeAndBook_bookId(theme, bookId);
-        }
+		if (isWordTheme(theme)) {
+			wordQuizzes = wordQuizRepository.getWordQuiz(theme, userId);
+		} else {
+			wordQuizzes = wordQuizRepository.findAllByThemeAndBook_bookId(theme, bookId);
+		}
 
-        wordQuizzes = quizShuffle(wordQuizzes);
+		wordQuizzes = quizShuffle(wordQuizzes);
 
-        return wordQuizListToDtoList(wordQuizzes);
-    }
+		return wordQuizListToDtoList(wordQuizzes);
+	}
 
-    private List<QuizResponseDto> wordQuizListToDtoList(List<WordQuiz> wordQuizzes) {
-        return wordQuizzes.stream()
-                .map(wordQuizMapper::toQuizResponseDto)
-                .toList();
-    }
+	private static boolean isWordTheme(WordQuiz.Theme theme) {
+		return theme.equals(WordQuiz.Theme.WORD);
+	}
 
-    private static List<WordQuiz> quizShuffle(List<WordQuiz> wordQuizzes) {
-        Collections.shuffle(wordQuizzes);
-        wordQuizzes = wordQuizzes.stream()
-                .map(quiz -> {
-                    Collections.shuffle(quiz.getQuizAnswerList());
-                    return quiz;
-                })
-                .toList();
-        return wordQuizzes;
-    }
+	private List<QuizResponseDto> wordQuizListToDtoList(List<WordQuiz> wordQuizzes) {
+		return wordQuizzes.stream()
+				.map(wordQuizMapper::toQuizResponseDto)
+				.toList();
+	}
+
+	private static List<WordQuiz> quizShuffle(List<WordQuiz> wordQuizzes) {
+		Collections.shuffle(wordQuizzes);
+		wordQuizzes = wordQuizzes.stream()
+				.map(quiz -> {
+					Collections.shuffle(quiz.getQuizAnswerList());
+					return quiz;
+				})
+				.toList();
+		return wordQuizzes;
+	}
 }

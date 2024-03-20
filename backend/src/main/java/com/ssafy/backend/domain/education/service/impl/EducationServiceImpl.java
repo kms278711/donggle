@@ -13,12 +13,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EducationServiceImpl implements EducationService {
 
-    private final EducationRepository educationRepository;
-    private final ActionLearningRepository actionLearningRepository;
-    @Override
-    public EducationResponseDto getEducation(Long userId, Long educationId) {
-        EducationResponseDto educationResponseDto = educationRepository.getEducationDetails(educationId);
-        List<String> imageList = actionLearningRepository.getActionImageListByUserAndEducation(userId, educationId);
-        return EducationResponseDto.from(educationResponseDto, imageList);
-    }
+	private final EducationRepository educationRepository;
+	private final ActionLearningRepository actionLearningRepository;
+
+	@Override
+	public EducationResponseDto getEducation(Long userId, Long educationId) {
+		EducationResponseDto educationResponseDto = educationRepository.getEducationDetails(educationId);
+		List<String> imageList = actionLearningRepository.getActionImageListByUserAndEducation(userId, educationId);
+		return EducationResponseDto.from(educationResponseDto, imageList);
+	}
 }

@@ -4,9 +4,9 @@ import lombok.Builder;
 
 @Builder
 public record UserEducationDto(
-        Long educationId,
-        String wordName,
-        String imagePath,
-        boolean isEducated
+		Long educationId,
+		String wordName,
+		String imagePath,
+		boolean isEducated
 ) {
 }

@@ -6,7 +6,7 @@ import com.ssafy.backend.domain.education.dto.response.EducationResponseDto;
 import java.util.List;
 
 public interface EducationCustomRepository {
-    List<UserEducationDto> findEducationByUser(Long userId);
+	List<UserEducationDto> findEducationByUser(Long userId);
 
-    EducationResponseDto getEducationDetails(Long educationId);
+	EducationResponseDto getEducationDetails(Long educationId);
 }

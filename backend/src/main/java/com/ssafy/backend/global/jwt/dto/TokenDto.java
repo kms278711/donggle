@@ -6,10 +6,10 @@ import lombok.Builder;
 
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public record TokenDto (
-    String accessToken,
-    long accessTokenExpired,
-    String refreshToken,
-    long refreshTokenExpired
-)
-{ }
+public record TokenDto(
+		String accessToken,
+		long accessTokenExpired,
+		String refreshToken,
+		long refreshTokenExpired
+) {
+}

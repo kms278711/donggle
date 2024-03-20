@@ -21,104 +21,104 @@ import static javax.management.timer.Timer.ONE_MINUTE;
 @RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService {
 
-    private final JwtUtils jwtUtils;
-    private final TokenRepository tokenRepository;
+	private final JwtUtils jwtUtils;
+	private final TokenRepository tokenRepository;
 
-    private static final String CLAIM_EMAIL = "email";
-    private static final String CLAIM_NICKNAME = "nickname";
-    private static final String CLAIM_PROFILE_IMAGE = "profileImage";
-    private static final String CLAIM_ROLE = "role";
+	private static final String CLAIM_EMAIL = "email";
+	private static final String CLAIM_NICKNAME = "nickname";
+	private static final String CLAIM_PROFILE_IMAGE = "profileImage";
+	private static final String CLAIM_ROLE = "role";
 
-    @Override
-    public String issueAccessToken(@NonNull UserInfoDto info) {
-        Claims claims = Jwts.claims()
-                .setId(String.valueOf(info.userId()));
+	@Override
+	public String issueAccessToken(@NonNull UserInfoDto info) {
+		Claims claims = Jwts.claims()
+				.setId(String.valueOf(info.userId()));
 
-        claims.put(CLAIM_EMAIL, info.email());
-        claims.put(CLAIM_ROLE, info.role());
-        claims.put(CLAIM_NICKNAME, info.nickname());
-        claims.put(CLAIM_PROFILE_IMAGE, info.profileImage());
-        return issueToken(claims, jwtUtils.getAccessTokenExpiredMin(), jwtUtils.getEncodedKey());
-    }
-    public String issueRefreshToken(@NonNull Long id) {
-        Claims claims = Jwts.claims()
-                .setId(String.valueOf(id));
-        return issueToken(claims, jwtUtils.getRefreshTokenExpiredMin(), jwtUtils.getEncodedKey());
-    }
+		claims.put(CLAIM_EMAIL, info.email());
+		claims.put(CLAIM_ROLE, info.role());
+		claims.put(CLAIM_NICKNAME, info.nickname());
+		claims.put(CLAIM_PROFILE_IMAGE, info.profileImage());
+		return issueToken(claims, jwtUtils.getAccessTokenExpiredMin(), jwtUtils.getEncodedKey());
+	}
 
-    @Override
-    public TokenDto issueToken(@NonNull UserInfoDto info) {
-        String accessToken = issueAccessToken(info);
-        String refreshToken = issueRefreshToken(Long.valueOf(info.userId()));
-        tokenRepository.save(refreshToken, accessToken, jwtUtils.getRefreshTokenExpiredMin());
-        return TokenDto.builder()
-                .accessToken(accessToken)
-                .accessTokenExpired(jwtUtils.getAccessTokenExpiredMin() * 60L)
-                .refreshToken(refreshToken)
-                .refreshTokenExpired(jwtUtils.getRefreshTokenExpiredMin() * 60L)
-                .build();
-    }
+	public String issueRefreshToken(@NonNull Long id) {
+		Claims claims = Jwts.claims()
+				.setId(String.valueOf(id));
+		return issueToken(claims, jwtUtils.getRefreshTokenExpiredMin(), jwtUtils.getEncodedKey());
+	}
 
-    private String issueToken(Claims claims, int expiresMin, Key secretKey) {
-        Date now = new Date();
-        return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + expiresMin * ONE_MINUTE))
-                .signWith(secretKey, SignatureAlgorithm.HS512)
-                .compact();
-    }
+	@Override
+	public TokenDto issueToken(@NonNull UserInfoDto info) {
+		String accessToken = issueAccessToken(info);
+		String refreshToken = issueRefreshToken(Long.valueOf(info.userId()));
+		tokenRepository.save(refreshToken, accessToken, jwtUtils.getRefreshTokenExpiredMin());
+		return TokenDto.builder()
+				.accessToken(accessToken)
+				.accessTokenExpired(jwtUtils.getAccessTokenExpiredMin() * 60L)
+				.refreshToken(refreshToken)
+				.refreshTokenExpired(jwtUtils.getRefreshTokenExpiredMin() * 60L)
+				.build();
+	}
 
-    public LoginUserDto parseAccessToken(String accessToken) {
-        Claims payload = parseToken(accessToken, jwtUtils.getEncodedKey());
+	private String issueToken(Claims claims, int expiresMin, Key secretKey) {
+		Date now = new Date();
+		return Jwts.builder()
+				.setClaims(claims)
+				.setIssuedAt(now)
+				.setExpiration(new Date(now.getTime() + expiresMin * ONE_MINUTE))
+				.signWith(secretKey, SignatureAlgorithm.HS512)
+				.compact();
+	}
 
-        return LoginUserDto.builder()
-                .userId(Long.valueOf(payload.getId()))
-                .email(payload.get(CLAIM_EMAIL, String.class))
-                .role(payload.get(CLAIM_ROLE, String.class))
-                .nickname(payload.get(CLAIM_NICKNAME, String.class))
-                .profileImage(payload.get(CLAIM_PROFILE_IMAGE, String.class))
-                .build();
-    }
+	public LoginUserDto parseAccessToken(String accessToken) {
+		Claims payload = parseToken(accessToken, jwtUtils.getEncodedKey());
 
-    public Long parseRefreshToken(String refreshToken) {
-        Claims claims = parseToken(refreshToken, jwtUtils.getEncodedKey());
-        return Long.valueOf(claims.getId());
-    }
+		return LoginUserDto.builder()
+				.userId(Long.valueOf(payload.getId()))
+				.email(payload.get(CLAIM_EMAIL, String.class))
+				.role(payload.get(CLAIM_ROLE, String.class))
+				.nickname(payload.get(CLAIM_NICKNAME, String.class))
+				.profileImage(payload.get(CLAIM_PROFILE_IMAGE, String.class))
+				.build();
+	}
 
-    private Claims parseToken(String token, Key secretKey) {
-        try {
-            return Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
-                    .build()
-                    .parseClaimsJws(token).getBody();
-        }
-        catch (SecurityException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException ex) {
-            throw new TokenException(INVALID_TOKEN);
-        } catch (ExpiredJwtException ex) {
-            throw new TokenException(EXPIRED_TOKEN);
-        }
-    }
+	public Long parseRefreshToken(String refreshToken) {
+		Claims claims = parseToken(refreshToken, jwtUtils.getEncodedKey());
+		return Long.valueOf(claims.getId());
+	}
 
-    private long calculateExpiration(@NonNull String accessToken) {
-        Claims claims = parseToken(accessToken, jwtUtils.getEncodedKey());
+	private Claims parseToken(String token, Key secretKey) {
+		try {
+			return Jwts.parserBuilder()
+					.setSigningKey(secretKey)
+					.build()
+					.parseClaimsJws(token).getBody();
+		} catch (SecurityException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException ex) {
+			throw new TokenException(INVALID_TOKEN);
+		} catch (ExpiredJwtException ex) {
+			throw new TokenException(EXPIRED_TOKEN);
+		}
+	}
 
-        long expiration = claims.getExpiration().getTime();
-        long now = new Date().getTime();
+	private long calculateExpiration(@NonNull String accessToken) {
+		Claims claims = parseToken(accessToken, jwtUtils.getEncodedKey());
 
-        return expiration - now;
-    }
+		long expiration = claims.getExpiration().getTime();
+		long now = new Date().getTime();
 
-    public void addBlackList(@NonNull String accessToken) {
-        accessToken = accessToken.substring(7);
-        LoginUserDto loginUserDto = parseAccessToken(accessToken);
-        long expiration = calculateExpiration(accessToken);
-        tokenRepository.save(accessToken, "BLACK_LIST", expiration);
-        tokenRepository.delete(String.valueOf(loginUserDto.userId()));
+		return expiration - now;
+	}
 
-    }
+	public void addBlackList(@NonNull String accessToken) {
+		accessToken = accessToken.substring(7);
+		LoginUserDto loginUserDto = parseAccessToken(accessToken);
+		long expiration = calculateExpiration(accessToken);
+		tokenRepository.save(accessToken, "BLACK_LIST", expiration);
+		tokenRepository.delete(String.valueOf(loginUserDto.userId()));
 
-    public boolean isBlack(String jwt) {
-        return tokenRepository.hasKey(jwt);
-    }
+	}
+
+	public boolean isBlack(String jwt) {
+		return tokenRepository.hasKey(jwt);
+	}
 }

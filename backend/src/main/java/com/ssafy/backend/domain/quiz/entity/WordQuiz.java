@@ -15,30 +15,30 @@ import java.util.List;
 @ToString
 public class WordQuiz {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long quiz_id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long quiz_id;
 
-    @ManyToOne
-    @JoinColumn(name = "education_id")
-    @Nullable
-    private Education education;
+	@ManyToOne
+	@JoinColumn(name = "education_id")
+	@Nullable
+	private Education education;
 
-    @ManyToOne
-    @JoinColumn(name = "book_id")
-    @Nullable
-    private Book book;
+	@ManyToOne
+	@JoinColumn(name = "book_id")
+	@Nullable
+	private Book book;
 
-    @Enumerated(EnumType.STRING)
-    private Theme theme;
-    private String content;
+	@Enumerated(EnumType.STRING)
+	private Theme theme;
+	private String content;
 
-    @OneToMany(mappedBy = "wordQuiz")
-    private List<QuizAnswer> quizAnswerList = new ArrayList<>();
+	@OneToMany(mappedBy = "wordQuiz")
+	private List<QuizAnswer> quizAnswerList = new ArrayList<>();
 
 
-    public enum Theme {
-        WORD,
-        STORY
-    }
+	public enum Theme {
+		WORD,
+		STORY
+	}
 }
