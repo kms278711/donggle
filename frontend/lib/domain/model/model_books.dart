@@ -93,7 +93,9 @@ class Book {
   final String path;
   final int? price;
   final bool? isPay;
+  final double? averageScore;
   final List<dynamic>? reviews;
+  final Map<String, dynamic>? myReview;
 
   Book({
     required this.bookId,
@@ -102,7 +104,9 @@ class Book {
     required this.path,
     required this.price,
     required this.isPay,
+    this.averageScore,
     this.reviews,
+    this.myReview,
   });
 
   factory Book.fromJson(Map<String, dynamic> json) {
@@ -113,6 +117,8 @@ class Book {
       path: json['coverPath'],
       price: json['price'],
       isPay: json['isPay'],
+      averageScore: json['averageScore'],
+      myReview: json['myBookReview'],
       reviews: json["bookReviews"],
     );
   }

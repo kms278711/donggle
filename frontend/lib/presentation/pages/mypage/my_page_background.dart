@@ -44,7 +44,7 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
       context.read<MainProvider>().resetMyPageUpdate();
     }
 
-    if(selectedTab != 1){
+    if (selectedTab != 1) {
       context.read<MainProvider>().resetDetailPageSelection();
       context.read<MainProvider>().resetPurchaseHistory();
     }
@@ -189,11 +189,11 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
             child: Text(
               text,
               textAlign: TextAlign.center,
-              style: isSelected
-                  ? CustomFontStyle.getTextStyle(
-                      context, CustomFontStyle.selectedLarge)
-                  : CustomFontStyle.getTextStyle(
-                      context, CustomFontStyle.unSelectedLarge),
+              style: CustomFontStyle.getTextStyle(
+                  context,
+                  isSelected
+                      ? CustomFontStyle.selectedLarge
+                      : CustomFontStyle.unSelectedLarge),
             ),
           ),
         ),
