@@ -8,6 +8,7 @@ import com.ssafy.backend.domain.quiz.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -19,7 +20,6 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public List<QuizResponseDto> getQuiz(WordQuiz.Theme theme, Long bookId, Long userId)
     {
-        List<QuizResponseDto> quizResponseDto = null;
         List<WordQuiz> wordQuizzes = null;
 
         if(theme.equals(WordQuiz.Theme.WORD)) {
@@ -27,9 +27,9 @@ public class QuizServiceImpl implements QuizService {
         } else {
             wordQuizzes = wordQuizRepository.findAllByThemeAndBook_bookId(theme, bookId);
         }
-        quizResponseDto = wordQuizzes.stream()
+        Collections.shuffle(wordQuizzes);
+        return wordQuizzes.stream()
                 .map(wordQuizMapper::toQuizResponseDto)
                 .toList();
-        return quizResponseDto;
     }
 }
