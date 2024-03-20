@@ -112,6 +112,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserResponseDto getUserInfo(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserException(INVALID_USER));
+        return UserResponseDto.from(user);
+    }
+
+    @Override
     @Transactional
     public void updateStatus(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserException(INVALID_USER));

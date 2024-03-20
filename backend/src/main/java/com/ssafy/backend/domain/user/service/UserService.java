@@ -13,6 +13,7 @@ public interface UserService {
     void updatePassword(User user, String password);
     void changePassword(Long userId, PasswordRequestDto passwordRequestDto);
     UserResponseDto getUserInfo(Long userId);
+    UserResponseDto getUserInfo(String email);
     void updateStatus(Long userId);
     String updateProfileImage(Long userId, MultipartFile profileImage);
     void changeNickname(Long userId, String nickname);

@@ -17,14 +17,15 @@ public class QuizController {
 
     @Autowired
     private QuizService quizService;
+
     @GetMapping()
-    public ResponseEntity<List<QuizResponseDto>> getQuiz(@RequestParam WordQuiz.Theme theme,  @RequestParam(required = false) Long bookId, Authentication authentication) {
+    public ResponseEntity<List<QuizResponseDto>> getQuiz(@RequestParam WordQuiz.Theme theme, @RequestParam(required = false) Long bookId, Authentication authentication) {
         Long userId = getCurrentUserId(authentication);
         return ResponseEntity.ok(quizService.getQuiz(theme, bookId, userId));
     }
 
     private static Long getCurrentUserId(Authentication authentication) {
-        LoginUserDto user = (LoginUserDto)(authentication.getPrincipal());
+        LoginUserDto user = (LoginUserDto) (authentication.getPrincipal());
         return user.userId();
     }
 }

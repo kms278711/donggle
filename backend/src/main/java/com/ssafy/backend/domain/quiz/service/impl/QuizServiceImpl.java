@@ -17,12 +17,12 @@ public class QuizServiceImpl implements QuizService {
 
     private final WordQuizRepository wordQuizRepository;
     private final WordQuizMapper wordQuizMapper;
+
     @Override
-    public List<QuizResponseDto> getQuiz(WordQuiz.Theme theme, Long bookId, Long userId)
-    {
+    public List<QuizResponseDto> getQuiz(WordQuiz.Theme theme, Long bookId, Long userId) {
         List<WordQuiz> wordQuizzes = null;
 
-        if(theme.equals(WordQuiz.Theme.WORD)) {
+        if (theme.equals(WordQuiz.Theme.WORD)) {
             wordQuizzes = wordQuizRepository.getWordQuiz(theme, userId);
         } else {
             wordQuizzes = wordQuizRepository.findAllByThemeAndBook_bookId(theme, bookId);
@@ -42,7 +42,11 @@ public class QuizServiceImpl implements QuizService {
     private static List<WordQuiz> quizShuffle(List<WordQuiz> wordQuizzes) {
         Collections.shuffle(wordQuizzes);
         wordQuizzes = wordQuizzes.stream()
-                .peek(quiz -> Collections.shuffle(quiz.getQuizAnswerList())).toList();
+                .map(quiz -> {
+                    Collections.shuffle(quiz.getQuizAnswerList());
+                    return quiz;
+                })
+                .toList();
         return wordQuizzes;
     }
 }
