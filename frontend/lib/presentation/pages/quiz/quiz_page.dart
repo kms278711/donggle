@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
+import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/domain/model/model_word_quiz.dart';
 import 'package:frontend/presentation/pages/home/component/title/main_title.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
@@ -17,14 +18,18 @@ class _QuizPageState extends State<QuizPage> {
   late QuizWordModel quizModel;
   late UserProvider userProvider;
   String accessToken = "";
+  late Future<String> quizModelFuture;
+  List quizzes = [];
   CarouselController carouselController = CarouselController();
 
   @override
   void initState() {
     super.initState();
-    quizModel = Provider.of<QuizWordModel>(context, listen: false);
     userProvider = Provider.of<UserProvider>(context, listen: false);
     accessToken = userProvider.getAccessToken();
+    quizModel = Provider.of<QuizWordModel>(context, listen: false);
+    quizModelFuture = quizModel.getWordQuizzes(accessToken);
+    quizzes = quizModel.quizzes;
   }
 
   @override
@@ -35,48 +40,73 @@ class _QuizPageState extends State<QuizPage> {
         children: [
           const MainTitle(" Quiz"),
           Positioned(
-            top: MediaQuery.of(context).size.width * 0.12,
-            left: MediaQuery.of(context).size.height * 0.16,
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.height * 0.7,
-              child: FutureBuilder<String>(
-                future: quizModel.getWordQuizzes(accessToken),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    // 데이터 로드 중이면 로딩 인디케이터를 보여줍니다.
-                    return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    // 에러가 발생했으면 에러 메시지를 보여줍니다.
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else if (snapshot.hasData) {
-                    // 데이터가 성공적으로 로드되면, 로드된 데이터를 기반으로 UI를 구성합니다.
-                    // 예제에서는 "Success" 문자열만 반환하지만, 실제로는 JSON 파싱 등을 수행할 수 있습니다.
-                    if (snapshot.data == "Success") {
-                      // 데이터 로딩 성공 UI
-                      return QuizCarousel(quizzes: quizModel.quizzes);
-                    } else {
-                      // 서버로부터 "Success" 이외의 응답을 받았을 경우의 처리
-                      return Center(child: Text(snapshot.data!));
-                    }
-                  } else {
-                    // 그 외의 경우
-                    return Center(child: Text('Unknown error'));
-                  }
-                },
-              ),
+            top: MediaQuery.of(context).size.height * 0.12,
+            left: MediaQuery.of(context).size.width * 0.1,
+            child: GreenButton(
+              "다 풀었어요~!",
+              onPressed: () {},
             ),
-          )
+          ),
+          Center(child: Text('$quizzes'))
+          // Positioned(
+          //   top: MediaQuery.of(context).size.width * 0.12,
+          //   left: MediaQuery.of(context).size.height * 0.16,
+          //   child: Container(
+          //     width: MediaQuery.of(context).size.width * 0.8,
+          //     height: MediaQuery.of(context).size.height * 0.7,
+          //     child: FutureBuilder<String>(
+          //       future: quizModelFuture,
+          //       builder: (context, snapshot) {
+          //         if (snapshot.connectionState == ConnectionState.waiting) {
+          //           // 데이터 로드 중이면 로딩 인디케이터를 보여줍니다.
+          //           return Center(child: CircularProgressIndicator());
+          //         } else if (snapshot.hasError) {
+          //           // 에러가 발생했으면 에러 메시지를 보여줍니다.
+          //           return Center(child: Text('Error: ${snapshot.error}'));
+          //         } else if (snapshot.hasData) {
+          //           // 데이터가 성공적으로 로드되면, 로드된 데이터를 기반으로 UI를 구성합니다.
+          //           // 예제에서는 "Success" 문자열만 반환하지만, 실제로는 JSON 파싱 등을 수행할 수 있습니다.
+          //           if (snapshot.data == "Success") {
+          //             // 데이터 로딩 성공 UI
+          //             return QuizCarousel(quizzes: quizModel.quizzes);
+          //           } else {
+          //             // 서버로부터 "Success" 이외의 응답을 받았을 경우의 처리
+          //             return Center(child: Text(snapshot.data!));
+          //           }
+          //         } else {
+          //           // 그 외의 경우
+          //           return Center(child: Text('Unknown error'));
+          //         }
+          //       },
+          //     ),
+          //   ),
+          // )
         ],
       ),
     );
   }
 }
 
-class QuizCarousel extends StatelessWidget {
-  final List<dynamic> quizzes; // 퀴즈 목록을 저장하는 변수
+class QuizCarousel extends StatefulWidget {
+  final List<dynamic> quizzes;
 
   QuizCarousel({Key? key, required this.quizzes}) : super(key: key);
+
+  @override
+  State<QuizCarousel> createState() => _QuizCarouselState();
+}
+
+class _QuizCarouselState extends State<QuizCarousel> {
+  // 퀴즈 목록을 저장하는 변수
+  late List<dynamic> selectedAnswer;
+
+  @override
+  void initState() {
+    super.initState();
+    // 모든 퀴즈에 대해 선택되지 않은 상태로 초기화합니다.
+    selectedAnswer =
+        List<dynamic>.generate(widget.quizzes.length, (index) => null);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,15 +122,18 @@ class QuizCarousel extends StatelessWidget {
         // 항목의 종횡비
         initialPage: 0, // 초기 페이지 인덱스
       ),
-      items: quizzes.map((quiz) {
+      items: widget.quizzes.asMap().entries.map((entry) {
+        int quizIndex = entry.key; // 현재 퀴즈 인덱스
+        var quiz = entry.value; // 핸재 퀴즈 객체
+
         // 퀴즈 목록을 캐러셀 항목으로 변환
         return Builder(
           builder: (BuildContext context) {
             return Container(
-              width: MediaQuery.of(context).size.width * 0.7,
+              width: MediaQuery.of(context).size.width * 0.75,
               decoration: BoxDecoration(
-                // color: Colors.white,
-              ),
+                  // color: Colors.white,
+                  ),
               child: Column(
                 children: [
                   Container(
@@ -115,15 +148,27 @@ class QuizCarousel extends StatelessWidget {
                   ),
                   Expanded(
                     child: ListView.builder(
-                      scrollDirection: Axis.horizontal, // 리스트를 가로로 스크롤 가능하게 설정
+                      scrollDirection: Axis.horizontal, // 리스트 가로로
                       itemCount: quiz['choices'].length, // 선택지의 수 만큼 아이템 생성
                       itemBuilder: (context, index) {
                         var choice = quiz['choices'][index]; // 현재 인덱스에 해당하는 선택지
+                        bool isSelected = selectedAnswer[quizIndex] == choice;
+
                         return Container(
-                          margin: EdgeInsets.symmetric(horizontal: 10), // 가로 여백 설정
-                          child: Text(
-                            choice['choice'],
-                            style: CustomFontStyle.textSmall,
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          // 가로 여백 설정
+                          child: TextButton(
+                            onPressed: () {
+                              setState(() {
+                                selectedAnswer[quizIndex] = choice;
+                              });
+                            },
+                            child: Text(
+                              choice['choice'],
+                              style: isSelected
+                                  ? CustomFontStyle.textMedium
+                                  : CustomFontStyle.textSmall,
+                            ),
                           ),
                         );
                       },

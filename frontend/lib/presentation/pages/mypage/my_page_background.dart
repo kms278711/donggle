@@ -69,6 +69,7 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
         (provider) => provider.isPurchaseHistorySelected);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
@@ -77,6 +78,7 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
           ),
         ),
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
           body: Column(
             children: [
