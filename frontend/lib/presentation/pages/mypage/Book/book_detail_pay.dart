@@ -25,6 +25,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
   late BookModel bookModel;
   late UserProvider userProvider;
   late ReviewModel reviewModel;
+
   int bookId = 0;
   String accessToken = "";
   String title = "";
@@ -34,6 +35,8 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
   int price = 0;
   double averageScore = 0.0;
   bool isPay = false;
+  Book book = Book(bookId: 0, title: '', path: '', price: 0, isPay: false);
+  bool isReviewed = false;
   List<dynamic> reviews = [];
   Review myReview = Review(score: 0, content: "");
   var f = NumberFormat('###,###,###,###');
@@ -64,9 +67,9 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
           price = book.price ?? 0;
           isPay = book.isPay ?? false;
           averageScore = book.averageScore ?? 0.0;
-          myReview =
-              Review.fromJson(book.myReview ?? {'score': 0.0, 'content': ""});
+          myReview = Review.fromJson(book.myReview ?? {'score': 0.0, 'content': ""});
           reviews = book.reviews ?? [];
+          isReviewed = myReview.score != 0.0 || myReview.content != "";
         });
       }
     });
@@ -91,17 +94,13 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: url.isEmpty
-                        ? const Center(
-                            child:
-                                CircularProgressIndicator()) // Show loader when URL is empty
+                        ? const Center(child: CircularProgressIndicator()) // Show loader when URL is empty
                         : CachedNetworkImage(
                             imageUrl: url,
                             fit: BoxFit.cover,
                             width: MediaQuery.of(context).size.width * 0.25,
-                            placeholder: (context, url) =>
-                                const CircularProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
+                            placeholder: (context, url) => const CircularProgressIndicator(),
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
                           ),
                   ),
                 ),
@@ -109,8 +108,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                     ? Container()
                     : Text(
                         "${f.format(price)}원",
-                        style: CustomFontStyle.getTextStyle(
-                            context, CustomFontStyle.titleSmall),
+                        style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleSmall),
                       ),
                 isPay
                     ? GreenButton("구매완료", onPressed: () {
@@ -139,22 +137,18 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                           Container(
                             margin: EdgeInsets.zero,
                             padding: EdgeInsets.zero,
-                            child: Text("줄거리",
-                                style: CustomFontStyle.getTextStyle(
-                                    context, CustomFontStyle.titleSmallSmall)),
+                            child:
+                                Text("줄거리", style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleSmallSmall)),
                           ),
                           Container(
                             margin: EdgeInsets.zero,
                             padding: EdgeInsets.zero,
-                            constraints: BoxConstraints(
-                                maxHeight:
-                                    MediaQuery.of(context).size.height * 0.14),
+                            constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.14),
                             // Set a maxHeight for scrolling
                             child: SingleChildScrollView(
                               child: Text(
                                 summary,
-                                style: CustomFontStyle.getTextStyle(
-                                    context, CustomFontStyle.textMoreSmall),
+                                style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMoreSmall),
                               ),
                             ),
                           ),
@@ -171,15 +165,13 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                       borderRadius: const BorderRadius.all(Radius.circular(50)),
                     ),
                     child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.width * 0.01),
+                      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.01),
                       child: Column(
                         children: [
                           isPay
                               ? Container(
                                   width: MediaQuery.of(context).size.width,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.14,
+                                  height: MediaQuery.of(context).size.height * 0.14,
                                   decoration: const BoxDecoration(
                                       border: Border(
                                           bottom: BorderSide(
@@ -187,90 +179,66 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                                     color: AppColors.primaryContainer,
                                   ))),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text("내 리뷰",
-                                          style: CustomFontStyle.getTextStyle(
-                                              context,
-                                              CustomFontStyle.titleSmallSmall)),
+                                          style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleSmallSmall)),
                                       Row(
                                         children: [
                                           //
-                                          myReview.score == 0 &&
-                                                  myReview.content == ""
-                                              ? GreenButton(
-                                                  "내 리뷰 등록하기",
-                                                  onPressed: () {
-                                                    DialogUtils.showCustomDialog(
-                                                        context,
-                                                        contentWidget:
-                                                            const NewReviewModal());
-                                                  },
-                                                  textStyle: CustomFontStyle
-                                                      .getTextStyle(
-                                                          context,
-                                                          CustomFontStyle
-                                                              .textMoreSmall),
-                                                )
-                                              : Row(
+                                          isReviewed
+                                              ? Row(
                                                   children: [
                                                     RatingBar.builder(
-                                                      initialRating:
-                                                          myReview.score,
+                                                      initialRating: myReview.score,
                                                       minRating: 1,
-                                                      direction:
-                                                          Axis.horizontal,
+                                                      direction: Axis.horizontal,
                                                       allowHalfRating: true,
                                                       ignoreGestures: true,
                                                       itemCount: 5,
-                                                      itemPadding:
-                                                          const EdgeInsets
-                                                              .symmetric(
-                                                              horizontal: 1.0),
-                                                      itemBuilder:
-                                                          (context, _) =>
-                                                              const Icon(
+                                                      itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
+                                                      itemBuilder: (context, _) => const Icon(
                                                         Icons.star,
                                                         color: Colors.amber,
                                                       ),
-                                                      onRatingUpdate:
-                                                          (double value) {},
+                                                      onRatingUpdate: (double value) {},
                                                     ),
                                                     SizedBox(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.01,
+                                                      width: MediaQuery.of(context).size.width * 0.01,
                                                     ),
                                                     SizedBox(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.31,
-                                                      height:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.05,
-                                                      child:
-                                                          SingleChildScrollView(
-                                                        scrollDirection:
-                                                            Axis.horizontal,
+                                                      width: MediaQuery.of(context).size.width * 0.31,
+                                                      height: MediaQuery.of(context).size.height * 0.05,
+                                                      child: SingleChildScrollView(
+                                                        scrollDirection: Axis.horizontal,
                                                         child: Text(
                                                           myReview.content,
-                                                          style: CustomFontStyle
-                                                              .getTextStyle(
-                                                                  context,
-                                                                  CustomFontStyle
-                                                                      .textMoreSmall),
+                                                          style: CustomFontStyle.getTextStyle(
+                                                              context, CustomFontStyle.textMoreSmall),
                                                         ),
                                                       ),
                                                     ),
                                                   ],
-                                                ),
+                                                )
+                                              : GreenButton(
+                                                  "내 리뷰 등록하기",
+                                                  onPressed: () {
+                                                    DialogUtils.showCustomDialog(context,
+                                                        contentWidget: NewReviewModal(onModalClose: () {
+                                                      setState(() {
+                                                        Book book = bookModel.nowBook;
+                                                        averageScore = book.averageScore ?? 0.0;
+                                                        myReview =
+                                                            Review.fromJson(book.myReview ?? {'score': 0.0, 'content': ""});
+                                                        reviews = book.reviews ?? [];
+                                                        isReviewed = true;
+                                                        isPay = true;
+                                                      });
+                                                    }));
+                                                  },
+                                                  textStyle:
+                                                      CustomFontStyle.getTextStyle(context, CustomFontStyle.textMoreSmall),
+                                                )
                                         ],
                                       ),
                                     ],
@@ -279,9 +247,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                               : Container(),
                           Row(
                             children: [
-                              Text("평균평점: ",
-                                  style: CustomFontStyle.getTextStyle(context,
-                                      CustomFontStyle.titleSmallSmall)),
+                              Text("평균평점: ", style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleSmallSmall)),
                               RatingBar.builder(
                                 initialRating: averageScore,
                                 minRating: 1,
@@ -289,8 +255,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                                 allowHalfRating: true,
                                 ignoreGestures: true,
                                 itemCount: 5,
-                                itemPadding:
-                                    const EdgeInsets.symmetric(horizontal: 1.0),
+                                itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
                                 itemBuilder: (context, _) => const Icon(
                                   Icons.star,
                                   color: Colors.amber,
@@ -300,9 +265,8 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                             ],
                           ),
                           SizedBox(
-                            height: isPay
-                                ? MediaQuery.of(context).size.width * 0.10
-                                : MediaQuery.of(context).size.width * 0.17,
+                            height:
+                                isPay ? MediaQuery.of(context).size.width * 0.10 : MediaQuery.of(context).size.width * 0.17,
                             child: ListView.builder(
                               padding: const EdgeInsets.all(8),
                               itemCount: reviews.length,
@@ -317,8 +281,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                                       allowHalfRating: true,
                                       ignoreGestures: true,
                                       itemCount: 5,
-                                      itemPadding: const EdgeInsets.symmetric(
-                                          horizontal: 1.0),
+                                      itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
                                       itemBuilder: (context, _) => const Icon(
                                         Icons.star,
                                         color: Colors.amber,
@@ -326,16 +289,13 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                                       onRatingUpdate: (double value) {},
                                     ),
                                     SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.02,
+                                      width: MediaQuery.of(context).size.width * 0.02,
                                     ),
                                     Flexible(
                                       child: RichText(
                                         text: TextSpan(
                                           text: reviews[index]['content'],
-                                          style: CustomFontStyle.getTextStyle(
-                                              context,
-                                              CustomFontStyle.textMoreSmall),
+                                          style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMoreSmall),
                                         ),
                                       ),
                                     ),

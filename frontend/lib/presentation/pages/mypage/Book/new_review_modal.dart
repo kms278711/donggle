@@ -11,7 +11,8 @@ import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class NewReviewModal extends StatefulWidget {
-  const NewReviewModal({super.key});
+  final VoidCallback? onModalClose;
+  const NewReviewModal({this.onModalClose, super.key});
 
   @override
   State<NewReviewModal> createState() => _NewReviewModalState();
@@ -46,7 +47,7 @@ class _NewReviewModalState extends State<NewReviewModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.95,
       child: Scaffold(
@@ -142,12 +143,14 @@ class _NewReviewModalState extends State<NewReviewModal> {
                             showToast("리뷰를 남겨주세요.", backgroundColor: AppColors.error);
                           }
                           else {
-                            // myReview.score = score;
-                            // myReview.content = content;
-                            bookModel.setNowReview(score, content);
+                            myReview.score = score;
+                            myReview.content = content;
+                            // bookModel.setNowReview(score, content);
                             String result = await reviewModel.setMyReview(accessToken, bookId, score, content);
                             if(result == "Success") {
                               showToast("리뷰를 성공적으로 남겼습니다!");
+                              await bookModel.getCurrentBookPurchase(accessToken, bookId);
+                              widget.onModalClose?.call();
                               if (!context.mounted) return;
                               Navigator.of(context).pop();
                             }else{
