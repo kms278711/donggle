@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/presentation/provider/main_provider.dart';
@@ -10,7 +9,7 @@ class PaidBook extends StatelessWidget {
   final String url;
   final int bookId;
 
-  const PaidBook(this.url, this.bookId, {Key? key}) : super(key: key);
+  const PaidBook(this.url, this.bookId, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +18,8 @@ class PaidBook extends StatelessWidget {
       color: Colors.transparent, // Avoid any undesired coloring
       child: InkWell(
         onTap: () {
-          /// TODO: 누르면 동화책 리뷰 불러오기
           context.read<BookModel>().setCurrentBookId(bookId);
           context.read<MainProvider>().detailPageSelectionToggle();
-          /// TODO: 내 동화책 리뷰 남길 수 있게 하기
         },
         child: Stack(
           children: [

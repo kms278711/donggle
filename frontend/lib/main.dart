@@ -30,16 +30,15 @@ void main() {
       ChangeNotifierProvider(create: (_) => MainProvider()),
       ChangeNotifierProvider(create: (_) => MessageProvider()),
       ChangeNotifierProvider(create: (_) => UserProvider()),
-      ChangeNotifierProvider(create: (_) => ReviewModel()),
       ChangeNotifierProvider(
           create: (context) =>
               BookModel(Provider.of<UserProvider>(context, listen: false))),
       ChangeNotifierProvider(
           create: (context) =>
-              CardModel(Provider.of<UserProvider>(context, listen: false))),
+              ReviewModel(Provider.of<UserProvider>(context, listen: false))),
       ChangeNotifierProvider(
-          create: (_) =>
-              ReviewModel()),
+          create: (context) =>
+              CardModel(Provider.of<UserProvider>(context, listen: false))),
       ChangeNotifierProvider(
           create: (context) =>
               QuizWordModel(Provider.of<UserProvider>(context, listen: false))),
