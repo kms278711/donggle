@@ -15,6 +15,13 @@ class BookModel extends ChangeNotifier {
 
   int currentBookId = 1;
 
+  void setNowReview(double score, String content){
+   nowBook.myReview?["score"] = score;
+   nowBook.myReview?["content"] = content;
+
+   notifyListeners();
+  }
+
   void setCurrentBookId(int currentBookId){
     this.currentBookId = currentBookId;
     notifyListeners();

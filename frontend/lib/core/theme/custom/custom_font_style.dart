@@ -39,6 +39,14 @@ class CustomFontStyle {
     fontWeight: CustomFontWeight.semiBold,
   );
 
+  static const titleMediumSmall = TextStyle(
+    fontFamily: "Nanumson_jangmi",
+    color: AppColors.black,
+    fontSize: 65,
+    fontWeight: CustomFontWeight.semiBold,
+  );
+
+
   static const titleSmall = TextStyle(
     fontFamily: "Nanumson_jangmi",
     color: AppColors.black,
