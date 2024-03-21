@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:frontend/core/utils/component/dialog_utils.dart';
+import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/presentation/pages/home/component/book/book_detail.dart';
+import 'package:frontend/presentation/provider/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class OpenedBook extends StatefulWidget {
   final String url;
@@ -14,6 +17,18 @@ class OpenedBook extends StatefulWidget {
 }
 
 class _OpenedBookState extends State<OpenedBook> {
+  late BookModel bookModel;
+  late UserProvider userProvider;
+  String accessToken = "";
+
+  @override
+  void initState() {
+    super.initState();
+    bookModel = Provider.of<BookModel>(context, listen: false);
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    accessToken = userProvider.getAccessToken();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -26,6 +41,7 @@ class _OpenedBookState extends State<OpenedBook> {
           // if (result == "refresh") {
           //   context.go(RoutePath.main3);
           // }
+          bookModel.getBookDetail(accessToken, widget.bookId);
           DialogUtils.showCustomDialog(context, contentWidget: BookDetail(widget.bookId));
         },
         child: Center(
