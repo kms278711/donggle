@@ -60,7 +60,7 @@ class _BookQuizPageState extends State<BookQuizPage> {
                   print(quizProvider.selectedAnswers);
                 } else {
                   DialogUtils.showCustomDialog(context, contentWidget: FinishQuizPage(quizProvider.selectedAnswers!));
-                  context.pushReplacement('/main/1');
+                  context.pushReplacement('/main/0/0');
                 }
               },
             ),
@@ -191,6 +191,7 @@ class _QuizCarouselState extends State<QuizCarousel> {
                           child: TextButton(
                             onPressed: () {
                               widget.onAnswerSelected(quizIndex, choice);
+                              print(quizProvider.selectedAnswers);
                               setState(() {
                                 quizProvider.selectedAnswers![quizIndex] = choice;
                               });

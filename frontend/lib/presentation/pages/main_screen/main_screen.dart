@@ -13,6 +13,7 @@ import 'package:frontend/presentation/pages/home/component/background/back_groun
 import 'package:frontend/presentation/pages/home/component/background/background_screen.dart';
 import 'package:frontend/presentation/pages/home/component/background/background_upper.dart';
 import 'package:frontend/presentation/pages/home/home_page.dart';
+import 'package:frontend/presentation/pages/quiz/book_quiz_page.dart';
 import 'package:frontend/presentation/pages/quiz/quiz_page.dart';
 import 'package:frontend/presentation/provider/quiz_provider.dart';
 import 'package:go_router/go_router.dart';
@@ -21,8 +22,13 @@ import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   final String? id;
+  final String? bookId;
 
-  const MainScreen({this.id, super.key});
+  const MainScreen({
+    this.id,
+    this.bookId,
+    super.key,
+  });
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -70,12 +76,28 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  final List<Widget> _pages = [
-    const HomePage(),
-    const CardPage(),
-    const QuizPage(),
-    const QuizPage(),
-  ];
+  // final List<Widget> _pages = [
+  //   const HomePage(),
+  //   const CardPage(),
+  //   const QuizPage(),
+  //   const BookQuizPage(bookId: bookId),
+  // ];
+
+  Widget _buildPage() {
+    switch (_selectedIndex) {
+      case 0:
+        return const HomePage();
+      case 1:
+        return const CardPage();
+      case 2:
+        return const QuizPage();
+      case 3:
+        // 여기서 widget.bookId를 전달합니다. 동적 생성이므로 문제없습니다.
+        return BookQuizPage(bookId: widget.bookId);
+      default:
+        return const HomePage(); // 기본값으로 홈페이지를 반환
+    }
+  }
 
   final List _icons = [
     const CardsIconMain(),
@@ -104,11 +126,7 @@ class _MainScreenState extends State<MainScreen> {
           const Indexed(index: -5, child: BackGroundBelow()),
           Indexed(
             index: 0,
-            child: IndexedStack(
-              key: ValueKey(widget.id),
-              index: _selectedIndex,
-              children: _pages,
-            ),
+            child: _buildPage(),
           ),
           Indexed(
             index: 1000,
@@ -126,8 +144,23 @@ class _MainScreenState extends State<MainScreen> {
                     onPressed: () {
                       _selectedIndex == 0
                           ? _onButtonPressed(1)
-                          : _onButtonPressed(0);
-                      quizProvider.clearAnswers(quizModel.quizzes);
+                          : _selectedIndex == 1
+                              ? _onButtonPressed(0)
+                              : _selectedIndex == 2
+                                  ? () {
+                                      _onButtonPressed(0);
+                                      quizProvider
+                                          .clearAnswers(quizModel.quizzes);
+                                    }()
+                                  : () {
+                                      _onButtonPressed(0);
+                                      quizProvider
+                                          .clearAnswers(quizModel.bookQuizzes);
+                                    }();
+                      // _selectedIndex == 0
+                      //     ? _onButtonPressed(1)
+                      //     : _onButtonPressed(0);
+                      // quizProvider.clearAnswers(quizModel.quizzes);
                     },
                   ),
                   SizedBox(
@@ -151,8 +184,8 @@ class _MainScreenState extends State<MainScreen> {
                     child: GreenButton(
                       "문제 풀기",
                       onPressed: () {
-                        // _onButtonPressed(2);
-                        context.pushReplacement('/main/2');
+                        _onButtonPressed(2);
+                        // context.pushReplacement('/main/2');
                       },
                     ),
                   ),
@@ -168,6 +201,23 @@ class _MainScreenState extends State<MainScreen> {
                         icon: const CloseCircle(),
                         onPressed: () {
                           _onButtonPressed(1);
+                          // context.pushReplacement('/main/1');
+                          quizProvider.clearAnswers(quizModel.quizzes);
+                          // print(quizProvider.selectedAnswers);
+                        }),
+                  ),
+                )
+              : Container(),
+          (_selectedIndex == 3)
+              ? Indexed(
+                  index: 1000,
+                  child: Positioned(
+                    top: MediaQuery.of(context).size.height * 0.1,
+                    right: MediaQuery.of(context).size.width * 0.065,
+                    child: IconButton(
+                        icon: const CloseCircle(),
+                        onPressed: () {
+                          _onButtonPressed(0);
                           // context.pushReplacement('/main/1');
                           quizProvider.clearAnswers(quizModel.quizzes);
                           // print(quizProvider.selectedAnswers);

@@ -51,7 +51,7 @@ class _FinishQuizPageState extends State<FinishQuizPage> {
                         fit: BoxFit.cover,
                         placeholder: (context, url) =>
                             const CircularProgressIndicator(),
-                        // errorWidget: (context, url, error) => const Icon(Icons.error),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
                       ),
                     ),
                     Text('$name'),

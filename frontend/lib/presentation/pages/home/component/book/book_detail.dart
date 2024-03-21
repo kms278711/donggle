@@ -130,8 +130,8 @@ class _BookDetailState extends State<BookDetail> {
               // Navigator.of(context).pop("refresh");
               // context.go(RoutePath.main3);
               Navigator.of(context).pop();
-              // globalRouter.pushReplacement(RoutePath.main3);
-              globalRouter.pushReplacement(RoutePath.bookquiz.replaceAll(":bookId", widget.bookId.toString()));
+              globalRouter.pushReplacement('/main/3/${widget.bookId}');
+              // globalRouter.pushReplacement(RoutePath.main3.replaceAll(":bookId", widget.bookId.toString()));
               // Navigator.of(context).pop();
               // context.pushReplacement(RoutePath.main3);
             }),

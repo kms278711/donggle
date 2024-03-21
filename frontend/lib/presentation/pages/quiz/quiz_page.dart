@@ -59,7 +59,7 @@ class _QuizPageState extends State<QuizPage> {
                   print(quizProvider.selectedAnswers);
                 } else {
                   DialogUtils.showCustomDialog(context, contentWidget: FinishQuizPage(quizProvider.selectedAnswers!));
-                  context.pushReplacement('/main/1');
+                  context.pushReplacement('/main/1/0');
                 }
               },
             ),
