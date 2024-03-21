@@ -313,10 +313,10 @@ packages:
     dependency: "direct main"
     description:
       name: image
-      sha256: "4c68bfd5ae83e700b5204c1e74451e7bf3cf750e6843c6e158289cf56bda018e"
+      sha256: "8e9d133755c3e84c73288363e6343157c383a0c6c56fc51afcc5d4d7180306d6"
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.7"
+    version: "3.3.0"
   image_gallery_saver:
     dependency: "direct main"
     description:
@@ -581,14 +581,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.2"
-  quiver:
-    dependency: transitive
-    description:
-      name: quiver
-      sha256: b1c1ac5ce6688d77f65f3375a9abb9319b3cb32486bdc7a1e0fdf004d7ba4e47
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.2.1"
   rxdart:
     dependency: transitive
     description:
@@ -738,14 +730,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.1"
-  tflite_flutter:
+  tflite_v2:
     dependency: "direct main"
     description:
-      name: tflite_flutter
-      sha256: ffb8651fdb116ab0131d6dc47ff73883e0f634ad1ab12bb2852eef1bbeab4a6a
+      name: tflite_v2
+      sha256: cedfa87aea6d0feb009a3d6f56ef7f2076617a916d3b002ff867c00aa3c69125
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.4"
+    version: "1.0.0"
   transparent_image:
     dependency: "direct main"
     description:
