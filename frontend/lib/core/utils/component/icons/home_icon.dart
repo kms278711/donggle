@@ -9,7 +9,7 @@ class HomeIcon extends StatelessWidget {
     return InkWell(
       onTap: () {},
       child: Image.asset(AppIcons.home_icon,
-          width: MediaQuery.of(context).size.width * 0.05),
+          width: MediaQuery.of(context).size.width * 0.1),
     );
   }
 }

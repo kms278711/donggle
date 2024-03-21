@@ -1,6 +1,7 @@
 class AppIcons {
 
   static const String donggle = "assets/images/donggle.png";
+  static const String donggle_quiz = "assets/images/donggle_quiz.png";
   static const String background = "assets/images/background.png";
   static const String bottle = "assets/images/bottle.png";
   static const String crabs = "assets/images/crabs.png";

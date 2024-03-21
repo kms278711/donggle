@@ -13,14 +13,15 @@ import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-class QuizPage extends StatefulWidget {
-  const QuizPage({super.key});
+class BookQuizPage extends StatefulWidget {
+  final String? bookId;
+  const BookQuizPage({super.key, required this.bookId});
 
   @override
-  State<QuizPage> createState() => _QuizPageState();
+  State<BookQuizPage> createState() => _BookQuizPageState();
 }
 
-class _QuizPageState extends State<QuizPage> {
+class _BookQuizPageState extends State<BookQuizPage> {
   late QuizModel quizModel;
   late UserProvider userProvider;
   String accessToken = "";
@@ -59,7 +60,7 @@ class _QuizPageState extends State<QuizPage> {
                   print(quizProvider.selectedAnswers);
                 } else {
                   DialogUtils.showCustomDialog(context, contentWidget: FinishQuizPage(quizProvider.selectedAnswers!));
-                  context.pushReplacement('/main/1/0');
+                  context.pushReplacement('/main/0/0');
                 }
               },
             ),
@@ -71,7 +72,7 @@ class _QuizPageState extends State<QuizPage> {
               width: MediaQuery.of(context).size.width * 0.8,
               height: MediaQuery.of(context).size.height * 0.7,
               child: FutureBuilder<String>(
-                future: quizModel.getWordQuizzes(accessToken),
+                future: quizModel.getBookQuizzes(accessToken, widget.bookId),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // 데이터 로드 중이면 로딩 인디케이터를 보여줍니다.
@@ -84,10 +85,10 @@ class _QuizPageState extends State<QuizPage> {
                     // 예제에서는 "Success" 문자열만 반환하지만, 실제로는 JSON 파싱 등을 수행할 수 있습니다.
                     if (snapshot.data == "Success") {
                       quizProvider.selectedAnswers = List<dynamic>.generate(
-                          quizModel.quizzes.length, (index) => null);
+                          quizModel.bookQuizzes.length, (index) => null);
                       // 데이터 로딩 성공 UI
                       return QuizCarousel(
-                        quizzes: quizModel.quizzes,
+                        bookQuizzes: quizModel.bookQuizzes,
                         onAnswerSelected: updateSelectedAnswer,
                       );
                     } else {
@@ -109,13 +110,13 @@ class _QuizPageState extends State<QuizPage> {
 }
 
 class QuizCarousel extends StatefulWidget {
-  final List<dynamic> quizzes;
+  final List<dynamic> bookQuizzes;
   final Function(int, dynamic) onAnswerSelected;
 
   const QuizCarousel(
       {super.key,
-      required this.quizzes,
-      required this.onAnswerSelected});
+        required this.bookQuizzes,
+        required this.onAnswerSelected});
 
   @override
   State<QuizCarousel> createState() => _QuizCarouselState();
@@ -152,7 +153,7 @@ class _QuizCarouselState extends State<QuizCarousel> {
         // 항목의 종횡비
         initialPage: 0, // 초기 페이지 인덱스
       ),
-      items: widget.quizzes.asMap().entries.map((entry) {
+      items: widget.bookQuizzes.asMap().entries.map((entry) {
         int quizIndex = entry.key; // 현재 퀴즈 인덱스
         var quiz = entry.value; // 핸재 퀴즈 객체
 
@@ -162,8 +163,8 @@ class _QuizCarouselState extends State<QuizCarousel> {
             return Container(
               width: MediaQuery.of(context).size.width * 0.75,
               decoration: const BoxDecoration(
-                  // color: Colors.white,
-                  ),
+                // color: Colors.white,
+              ),
               child: Column(
                 children: [
                   Container(
@@ -190,6 +191,7 @@ class _QuizCarouselState extends State<QuizCarousel> {
                           child: TextButton(
                             onPressed: () {
                               widget.onAnswerSelected(quizIndex, choice);
+                              print(quizProvider.selectedAnswers);
                               setState(() {
                                 quizProvider.selectedAnswers![quizIndex] = choice;
                               });

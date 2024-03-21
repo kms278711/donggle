@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
@@ -31,7 +32,7 @@ class _FinishQuizPageState extends State<FinishQuizPage> {
           children: [
             GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
+                crossAxisCount: 4,
                 mainAxisSpacing: MediaQuery.of(context).size.height * 0.5,
               ),
               scrollDirection: Axis.vertical,
@@ -50,7 +51,7 @@ class _FinishQuizPageState extends State<FinishQuizPage> {
                         fit: BoxFit.cover,
                         placeholder: (context, url) =>
                             const CircularProgressIndicator(),
-                        // errorWidget: (context, url, error) => const Icon(Icons.error),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
                       ),
                     ),
                     Text('$name'),
@@ -59,14 +60,26 @@ class _FinishQuizPageState extends State<FinishQuizPage> {
               },
             ),
             Positioned(
-                right: MediaQuery.of(context).size.width * 0.2,
-                bottom: MediaQuery.of(context).size.width * 0.03,
-                child: GreenButton(
-                  '참 잘했어요~!',
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ))
+              right: MediaQuery.of(context).size.width * 0.2,
+              bottom: MediaQuery.of(context).size.width * 0.03,
+              child: GreenButton(
+                '참 잘했어요~!',
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ),
+            Positioned(
+              bottom: MediaQuery.of(context).size.height * 0.06,
+              right: -2,
+              child: Container(
+                color: Colors.transparent,
+                child: Center(
+                  child: Image.asset(AppIcons.donggle_quiz,
+                      width: MediaQuery.of(context).size.width * 0.25),
+                ),
+              ),
+            ),
           ],
         ),
       ),
