@@ -41,18 +41,12 @@ public class ApprovalServiceImpl implements ApprovalService {
                 .build();
 
         Approval approval = approvalMapper.toApproval(approvalDto);
-        System.out.println("approvalId : " + approval.getApprovalId());
-        System.out.println("approvalPrice : " + approval.getPrice());
-        System.out.println("approvalDate : " + approval.getApprovalDate());
-        System.out.println("approvalBookId : " + approval.getBook().getBookId());
-        System.out.println("approvalUserId : " + approval.getUser().getUserId());
-
         approvalRepository.save(approval);
     }
 
     @Override
-    public List<ApprovalResponseDto> searchApprovals(Long loginuserId) {
-        List<Approval> approvals = approvalRepository.findByUser_userId(loginuserId);
+    public List<ApprovalResponseDto> searchApprovals(Long loginUserId) {
+        List<Approval> approvals = approvalRepository.findByUser_userId(loginUserId);
         List<ApprovalResponseDto> approvalList = approvals.stream()
                 .map(approvalMapper::toApprovalResponseDto)
                 .toList();

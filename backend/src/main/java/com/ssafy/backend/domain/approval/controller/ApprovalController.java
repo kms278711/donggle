@@ -21,16 +21,16 @@ public class ApprovalController {
     public ResponseEntity<String> saveApproval(@PathVariable("bookId") Long bookId,
                                                Authentication authentication,
                                                @RequestParam int price) {
-        Long loginuserId = AuthenticationUtil.getCurrentUserId(authentication);
-        approvalService.saveApproval(loginuserId, bookId, price);
+        Long loginUserId = AuthenticationUtil.getCurrentUserId(authentication);
+        approvalService.saveApproval(loginUserId, bookId, price);
 
         return ResponseEntity.ok("결제 내역이 저장되었습니다.");
     }
 
     @GetMapping
     public ResponseEntity<List<ApprovalResponseDto>> searchApprovals(Authentication authentication) {
-        Long loginuserId = AuthenticationUtil.getCurrentUserId(authentication);
-        List<ApprovalResponseDto> approvals =  approvalService.searchApprovals(loginuserId);
+        Long loginUserId = AuthenticationUtil.getCurrentUserId(authentication);
+        List<ApprovalResponseDto> approvals =  approvalService.searchApprovals(loginUserId);
 
         return ResponseEntity.ok(approvals);
     }

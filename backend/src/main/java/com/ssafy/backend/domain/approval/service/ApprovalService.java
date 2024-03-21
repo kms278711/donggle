@@ -5,7 +5,7 @@ import com.ssafy.backend.domain.approval.dto.response.ApprovalResponseDto;
 import java.util.List;
 
 public interface ApprovalService {
-    void saveApproval(Long loginuserId, Long bookId, int price);
+    void saveApproval(Long loginUserId, Long bookId, int price);
 
-    List<ApprovalResponseDto> searchApprovals(Long loginuserId);
+    List<ApprovalResponseDto> searchApprovals(Long loginUserId);
 }
