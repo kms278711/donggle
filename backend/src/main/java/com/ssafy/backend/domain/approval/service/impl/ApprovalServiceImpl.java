@@ -1,0 +1,61 @@
+package com.ssafy.backend.domain.approval.service.impl;
+
+import com.ssafy.backend.domain.approval.dto.ApprovalDto;
+import com.ssafy.backend.domain.approval.dto.response.ApprovalResponseDto;
+import com.ssafy.backend.domain.approval.entity.Approval;
+import com.ssafy.backend.domain.approval.mapper.ApprovalMapper;
+import com.ssafy.backend.domain.approval.repository.ApprovalRepository;
+import com.ssafy.backend.domain.approval.service.ApprovalService;
+import com.ssafy.backend.domain.book.entity.Book;
+import com.ssafy.backend.domain.book.repository.book.BookRepository;
+import com.ssafy.backend.domain.user.entity.User;
+import com.ssafy.backend.domain.user.repository.UserRepository;
+import com.ssafy.backend.global.error.exception.UserException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static com.ssafy.backend.global.error.exception.ExceptionType.INVALID_USER;
+import static com.ssafy.backend.global.error.exception.ExceptionType.NOT_FOUND_BOOK;
+
+@Service
+@RequiredArgsConstructor
+public class ApprovalServiceImpl implements ApprovalService {
+
+    private final UserRepository userRepository;
+    private final BookRepository bookRepository;
+    private final ApprovalMapper approvalMapper;
+    private final ApprovalRepository approvalRepository;
+    @Override
+    public void saveApproval(Long loginUserId, Long bookId, int price) {
+        User userId = userRepository.findById(loginUserId)
+                .orElseThrow(() -> new UserException(INVALID_USER));
+        Book purchasedBookId = bookRepository.findById(bookId)
+                .orElseThrow(() -> new UserException(NOT_FOUND_BOOK));
+
+        ApprovalDto approvalDto = ApprovalDto.builder()
+                .price(price)
+                .user(userId)
+                .book(purchasedBookId)
+                .build();
+
+        Approval approval = approvalMapper.toApproval(approvalDto);
+        System.out.println("approvalId : " + approval.getApprovalId());
+        System.out.println("approvalPrice : " + approval.getPrice());
+        System.out.println("approvalDate : " + approval.getApprovalDate());
+        System.out.println("approvalBookId : " + approval.getBook().getBookId());
+        System.out.println("approvalUserId : " + approval.getUser().getUserId());
+
+        approvalRepository.save(approval);
+    }
+
+    @Override
+    public List<ApprovalResponseDto> searchApprovals(Long loginuserId) {
+        List<Approval> approvals = approvalRepository.findByUser_userId(loginuserId);
+        List<ApprovalResponseDto> approvalList = approvals.stream()
+                .map(approvalMapper::toApprovalResponseDto)
+                .toList();
+        return approvalList;
+    }
+}

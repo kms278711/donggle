@@ -18,4 +18,5 @@ public interface BookMapper {
     @Mapping(source = "userBookProcess.book.coverPath", target = "coverPath")
     UserBookProcessDto toUserBookProcessDto(UserBookProcess userBookProcess);
 
+
 }
