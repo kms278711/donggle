@@ -12,6 +12,7 @@ class BookModel extends ChangeNotifier {
   List<dynamic> books = [];
   List<dynamic> currentBooks = [];
   Book nowBook = Book(bookId: 1, isPay: false, path: "", price: 0, title: "");
+  Map BookDetail = {};
 
   int currentBookId = 1;
 
@@ -77,7 +78,7 @@ class BookModel extends ChangeNotifier {
     };
     var response = await http.get(url, headers: headers);
 
-    print(json.decode(utf8.decode(response.bodyBytes)));
+    // print(json.decode(utf8.decode(response.bodyBytes)));
 
     if (response.statusCode == 200) {
       nowBook = Book.fromJson(json.decode(utf8.decode(response.bodyBytes)));
@@ -85,6 +86,30 @@ class BookModel extends ChangeNotifier {
     } else if (response.statusCode == 401) {
       userProvider.refreshToken();
       return getCurrentBookPurchase(userProvider.getAccessToken(), bookId);
+    } else {
+      String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']
+      ['result_message'];
+      return msg;
+    }
+  }
+
+  Future<String> getBookDetail(String accessToken, int bookId) async {
+    // print(bookId.toString());
+    var url = Uri.https("j10c101.p.ssafy.io", "api/books/$bookId");
+    final headers = {
+      'Content-Type': 'application/json',
+      "Authorization": "Bearer $accessToken"
+    };
+    var response = await http.get(url, headers: headers);
+
+    print(json.decode(utf8.decode(response.bodyBytes)));
+
+    if (response.statusCode == 200) {
+      BookDetail = json.decode(utf8.decode(response.bodyBytes));
+      return "Success";
+    } else if (response.statusCode == 401) {
+      userProvider.refreshToken();
+      return getBookDetail(userProvider.getAccessToken(), bookId);
     } else {
       String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']
       ['result_message'];
