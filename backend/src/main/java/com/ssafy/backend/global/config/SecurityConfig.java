@@ -34,7 +34,8 @@ public class SecurityConfig {
 	public WebSecurityCustomizer webSecurityCustomizer() {
 		return (web) -> web.ignoring()
 				.requestMatchers("/api/auth/**")
-				.requestMatchers("/api/verify/**");
+				.requestMatchers("/api/verify/**")
+				.requestMatchers("/api/donggle/**");
 	}
 
 	@Bean
@@ -48,6 +49,7 @@ public class SecurityConfig {
 						authorizeRequests
 								.requestMatchers("/api/auth/**").permitAll()
 								.requestMatchers("/api/verify/**").permitAll()
+								.requestMatchers("/api/donggle/**").permitAll()
 								.anyRequest().authenticated());
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 

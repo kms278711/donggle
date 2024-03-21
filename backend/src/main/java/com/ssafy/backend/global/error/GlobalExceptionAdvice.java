@@ -1,6 +1,7 @@
 package com.ssafy.backend.global.error;
 
 import com.ssafy.backend.global.dto.ErrorResponse;
+import com.ssafy.backend.global.error.exception.DonggleException;
 import com.ssafy.backend.global.error.exception.ExceptionType;
 import com.ssafy.backend.global.error.exception.FileException;
 import com.ssafy.backend.global.error.exception.UserException;
@@ -32,16 +33,17 @@ public class GlobalExceptionAdvice {
 
     @ExceptionHandler({UserException.class})
     public ResponseEntity userExceptionHandler(UserException ex) {
-        ExceptionType exceptionType = ex.getExceptionType();
-        return ResponseEntity.status(exceptionType.getHttpStatus())
-                .body(ErrorResponse.fail(exceptionType.name(), exceptionType.getErrorMessage()));
+        return getErrorResponse(ex.getExceptionType());
     }
 
     @ExceptionHandler({FileException.class})
     public ResponseEntity fileExceptionHandler(FileException ex) {
-        ExceptionType exceptionType = ex.getExceptionType();
-        return ResponseEntity.status(exceptionType.getHttpStatus())
-                .body(ErrorResponse.fail(exceptionType.name(), exceptionType.getErrorMessage()));
+        return getErrorResponse(ex.getExceptionType());
+    }
+
+    @ExceptionHandler({DonggleException.class})
+    public ResponseEntity donggleExceptionHandler(DonggleException ex) {
+        return getErrorResponse(ex.getExceptionType());
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -59,4 +61,8 @@ public class GlobalExceptionAdvice {
                 .body(ErrorResponse.fail(HttpStatus.BAD_REQUEST.name(), "에러가 발생했습니다."));
     }
 
+    private static ResponseEntity<ErrorResponse<Object>> getErrorResponse(ExceptionType ex) {
+		return ResponseEntity.status(ex.getHttpStatus())
+                .body(ErrorResponse.fail(ex.name(), ex.getErrorMessage()));
+    }
 }
