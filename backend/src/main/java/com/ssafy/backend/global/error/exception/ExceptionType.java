@@ -34,7 +34,9 @@ public enum ExceptionType {
 	FAIL_RESPONSE(HttpStatus.BAD_REQUEST, "RESPONSE가 없습니다."),
 
 	NOT_FOUND_BOOK(HttpStatus.BAD_REQUEST, "해당 책이 존재하지 않습니다."),
-	NOT_FOUND_BOOKPAGE(HttpStatus.BAD_REQUEST, "해당페이지가 존재하지 않습니다."),
+	NOT_FOUND_BOOKPAGE(HttpStatus.BAD_REQUEST, "해당 페이지가 존재하지 않습니다."),
+	NOT_FOUND_BOOKREVIEW(HttpStatus.BAD_REQUEST, "리뷰가 존재하지 않습니다."),
+
 	AWS_UPLOAD_FAIL(HttpStatus.BAD_REQUEST, "AWS에서 파일 업로드에 실패하였습니다."),
 	AWS_DELETE_FAIL(HttpStatus.BAD_REQUEST, "AWS에서 파일 제거에 실패하였습니다.");
 

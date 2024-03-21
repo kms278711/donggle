@@ -5,10 +5,11 @@ import com.ssafy.backend.domain.book.entity.BookPageSentence;
 import com.ssafy.backend.domain.education.entity.Education;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookPageCustomRepository {
 
-    BookPage findByBookPage(Long bookId, int bookPage);
+    Optional<BookPage> findByBookPage(Long bookId, int bookPage);
 
     List<BookPageSentence> findByBookPageId(Long bookPageId);
 

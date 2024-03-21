@@ -6,6 +6,7 @@ import com.ssafy.backend.domain.education.entity.Education;
 import com.ssafy.backend.domain.education.entity.QEducation;
 
 import java.util.List;
+import java.util.Optional;
 
 public class BookPageCustomRepositoryImpl implements BookPageCustomRepository {
 
@@ -19,14 +20,14 @@ public class BookPageCustomRepositoryImpl implements BookPageCustomRepository {
     }
 
     @Override
-    public BookPage findByBookPage(Long bookId, int bookPage) {
-        return jpaQueryFactory
+    public Optional<BookPage> findByBookPage(Long bookId, int bookPage) {
+        return Optional.ofNullable(jpaQueryFactory
                 .select(qBookPage)
                 .from(qBook)
                 .innerJoin(qBookPage)
                 .on(qBook.bookId.eq(qBookPage.book.bookId))
                 .where(qBook.bookId.eq(bookId).and(qBookPage.page.eq(bookPage)))
-                .fetchOne();
+                .fetchOne());
     }
 
     @Override
