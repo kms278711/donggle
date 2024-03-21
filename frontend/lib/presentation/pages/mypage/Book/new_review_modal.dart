@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 
 class NewReviewModal extends StatefulWidget {
   final VoidCallback? onModalClose;
+
   const NewReviewModal({this.onModalClose, super.key});
 
   @override
@@ -33,23 +34,47 @@ class _NewReviewModalState extends State<NewReviewModal> {
   @override
   void initState() {
     super.initState();
-    bookModel = Provider.of<BookModel>(context, listen: false);
-    reviewModel = Provider.of<ReviewModel>(context, listen: false);
-    userProvider = Provider.of<UserProvider>(context, listen: false);
-    Book book = bookModel.nowBook;
-    bookId = book.bookId;
-    myReview = Review.fromJson(book.myReview ?? {'score': 0.0, 'content': ""});
-    isReviewed = myReview.score != 0.0 || myReview.content != "";
-    score = myReview.score;
-    content = myReview.content;
-    accessToken = userProvider.getAccessToken();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // It's now safe to perform the async operations
+      bookModel = Provider.of<BookModel>(context, listen: false);
+      reviewModel = Provider.of<ReviewModel>(context, listen: false);
+      userProvider = Provider.of<UserProvider>(context, listen: false);
+
+      // Check if the widget is still mounted before updating its state
+      if (mounted) {
+        setState(() {
+          Book book = bookModel.nowBook;
+          bookId = book.bookId;
+          myReview = Review.fromJson(book.myReview ?? {'score': 0.0, 'content': ""});
+          isReviewed = myReview.score != 0.0 || myReview.content != "";
+          score = myReview.score;
+          content = myReview.content;
+          accessToken = userProvider.getAccessToken();
+          _editTextController.text = content;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // Dispose of the controller when the widget is removed from the widget tree.
+    _editTextController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.95,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
+      height: MediaQuery
+          .of(context)
+          .size
+          .height * 0.95,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Center(
@@ -58,8 +83,14 @@ class _NewReviewModalState extends State<NewReviewModal> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                width: MediaQuery.of(context).size.width * 0.5,
-                height: MediaQuery.of(context).size.height * 0.5,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.5,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * 0.5,
                 decoration: BoxDecoration(
                   color: AppColors.surface,
                   borderRadius: BorderRadius.circular(30),
@@ -70,7 +101,10 @@ class _NewReviewModalState extends State<NewReviewModal> {
                         style: CustomFontStyle.getTextStyle(
                             context, CustomFontStyle.titleMediumSmall)),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.02,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.02,
                     ),
                     RatingBar.builder(
                       initialRating: myReview.score,
@@ -79,7 +113,8 @@ class _NewReviewModalState extends State<NewReviewModal> {
                       allowHalfRating: true,
                       itemCount: 5,
                       itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
-                      itemBuilder: (context, _) => const Icon(
+                      itemBuilder: (context, _) =>
+                      const Icon(
                         Icons.star,
                         color: Colors.amber,
                       ),
@@ -88,13 +123,25 @@ class _NewReviewModalState extends State<NewReviewModal> {
                       },
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.03,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.03,
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.47,
-                      height: MediaQuery.of(context).size.height * 0.2,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.47,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.2,
                       padding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery.of(context).size.width * 0.02),
+                          horizontal: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 0.02),
                       decoration: BoxDecoration(
                         color: AppColors.white,
                         borderRadius: BorderRadius.circular(15),
@@ -106,7 +153,7 @@ class _NewReviewModalState extends State<NewReviewModal> {
                           children: [
                             TextField(
                               textAlignVertical:
-                                  const TextAlignVertical(y: -1.0),
+                              const TextAlignVertical(y: -1.0),
                               controller: _editTextController,
                               onChanged: (String value) {
                                 content = value;
@@ -116,10 +163,9 @@ class _NewReviewModalState extends State<NewReviewModal> {
                               maxLines: null,
                               style: CustomFontStyle.getTextStyle(
                                   context, CustomFontStyle.textMoreSmall),
-                              decoration: InputDecoration(
-                                hintText: myReview.content,
+                              decoration: const InputDecoration(
                                 contentPadding:
-                                    const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                EdgeInsets.fromLTRB(0, 0, 0, 0),
                                 filled: true,
                                 fillColor: Colors.transparent,
                                 border: InputBorder.none,
@@ -130,36 +176,53 @@ class _NewReviewModalState extends State<NewReviewModal> {
                       ),
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.02,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.02,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        GreenButton("확인", onPressed: () async{
-                          if(score == 0.0){
+                        GreenButton("확인", onPressed: () async {
+                          if (score == 0.0) {
                             showToast("평점을 설정해주세요.", backgroundColor: AppColors.error);
                           }
-                          else if(content == ""){
+                          else if (content == "") {
                             showToast("리뷰를 남겨주세요.", backgroundColor: AppColors.error);
                           }
                           else {
-                            myReview.score = score;
-                            myReview.content = content;
-                            // bookModel.setNowReview(score, content);
-                            String result = await reviewModel.setMyReview(accessToken, bookId, score, content);
-                            if(result == "Success") {
-                              showToast("리뷰를 성공적으로 남겼습니다!");
-                              await bookModel.getCurrentBookPurchase(accessToken, bookId);
-                              widget.onModalClose?.call();
-                              if (!context.mounted) return;
-                              Navigator.of(context).pop();
-                            }else{
-                              showToast(result, backgroundColor: AppColors.error);
+                            if (isReviewed) {
+                              String result = await reviewModel.editMyReview(accessToken, bookId, score, content);
+                              if(result == "Success"){
+                                showToast("리뷰를 성공적으로 수정했습니다!");
+                                widget.onModalClose?.call();
+                                if (!context.mounted) return;
+                                Navigator.of(context).pop();
+                              }else{
+                                showToast(result, backgroundColor: AppColors.error);
+                              }
+
+                            }
+                            else {
+                              String result = await reviewModel.setMyReview(accessToken, bookId, score, content);
+                              if (result == "Success") {
+                                showToast("리뷰를 성공적으로 남겼습니다!");
+                                await bookModel.getCurrentBookPurchase(accessToken, bookId);
+                                widget.onModalClose?.call();
+                                if (!context.mounted) return;
+                                Navigator.of(context).pop();
+                              } else {
+                                showToast(result, backgroundColor: AppColors.error);
+                              }
                             }
                           }
                         }),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.01,
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 0.01,
                         ),
                         RedButton("취소", onPressed: () {
                           score = myReview.score;
@@ -168,7 +231,10 @@ class _NewReviewModalState extends State<NewReviewModal> {
                           Navigator.of(context).pop();
                         }),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.01,
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width * 0.01,
                         ),
                       ],
                     )

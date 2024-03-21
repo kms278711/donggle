@@ -19,6 +19,7 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   Future<bool> checkLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (!context.mounted) return false;
     final authProvider = Provider.of<AuthModel>(context, listen: false);
     bool isLogin = prefs.getBool('isLogin') ?? false;
     if(isLogin){

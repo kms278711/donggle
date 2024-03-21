@@ -136,7 +136,7 @@ class _MyPageState extends State<MyPage> {
                 color: AppColors.primaryContainer, // Border color
                 width: 10.0, // Border width
               ),
-              borderRadius: const BorderRadius.all(Radius.circular(50)),
+              borderRadius: const BorderRadius.all(Radius.circular(30)),
             ),
             child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.5,

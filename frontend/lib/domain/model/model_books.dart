@@ -23,11 +23,14 @@ class BookModel extends ChangeNotifier {
    notifyListeners();
   }
 
-  void setCurrentBookId(int currentBookId){
+  Future<void> setCurrentBookId(int currentBookId) async{
     this.currentBookId = currentBookId;
+    await getCurrentBookPurchase(userProvider.getAccessToken(), currentBookId);
+
     notifyListeners();
   }
 
+  /// 동화책 전체 조회
   Future<String> getAllBooks(String accessToken) async {
     var url = Uri.https("j10c101.p.ssafy.io", "api/books");
     final headers = {
@@ -49,6 +52,7 @@ class BookModel extends ChangeNotifier {
     }
   }
 
+  /// 진행 중인 책 조회 (마이페이지)
   Future<String> getCurrentBooks(String accessToken) async {
     var url = Uri.https("j10c101.p.ssafy.io", "api/books/my-books");
     final headers = {
@@ -70,6 +74,7 @@ class BookModel extends ChangeNotifier {
     }
   }
 
+  /// 동화책 단일 조회 (동화책 결제)
   Future<String> getCurrentBookPurchase(String accessToken, int bookId) async {
     var url = Uri.https("j10c101.p.ssafy.io", "api/books/$bookId/purchase");
     final headers = {
@@ -93,6 +98,7 @@ class BookModel extends ChangeNotifier {
     }
   }
 
+  /// 동화책 단일 조회 (메인 페이지 동화책 클릭)
   Future<String> getBookDetail(String accessToken, int bookId) async {
     // print(bookId.toString());
     var url = Uri.https("j10c101.p.ssafy.io", "api/books/$bookId");
@@ -102,7 +108,7 @@ class BookModel extends ChangeNotifier {
     };
     var response = await http.get(url, headers: headers);
 
-    print(json.decode(utf8.decode(response.bodyBytes)));
+    // print(json.decode(utf8.decode(response.bodyBytes)));
 
     if (response.statusCode == 200) {
       BookDetail = json.decode(utf8.decode(response.bodyBytes));

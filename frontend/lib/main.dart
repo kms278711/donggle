@@ -8,6 +8,7 @@ import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/theme/theme_data.dart';
+import 'package:frontend/domain/model/model_approvals.dart';
 import 'package:frontend/domain/model/model_auth.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/domain/model/model_cards.dart';
@@ -44,6 +45,9 @@ void main() async{
       ChangeNotifierProvider(
           create: (context) =>
               ReviewModel(Provider.of<UserProvider>(context, listen: false))),
+      ChangeNotifierProvider(
+          create: (context) =>
+              ApprovalsModel(Provider.of<UserProvider>(context, listen: false))),
       ChangeNotifierProvider(
           create: (context) =>
               CardModel(Provider.of<UserProvider>(context, listen: false))),

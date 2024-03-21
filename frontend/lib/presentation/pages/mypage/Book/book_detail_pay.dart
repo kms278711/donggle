@@ -91,7 +91,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                 icon: CloseCircle(
                   size: MediaQuery.of(context).size.width * 0.035,
                 ),
-                onPressed: () {context.read<MainProvider>().detailPageSelectionToggle();},
+                onPressed: () {context.read<MainProvider>().resetDetailPageSelection();},
               )),
           Padding(
             padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),

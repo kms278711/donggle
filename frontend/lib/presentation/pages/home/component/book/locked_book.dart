@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
@@ -27,10 +28,11 @@ class LockedBook extends StatelessWidget {
             Center(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child: FadeInImage.memoryNetwork(
-                  placeholder: kTransparentImage, // Defined in the transparent_image package
-                  image: url,
+                child: CachedNetworkImage(
+                  imageUrl: url,
                   fit: BoxFit.cover,
+                  placeholder: (context, url) => const CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
             ),

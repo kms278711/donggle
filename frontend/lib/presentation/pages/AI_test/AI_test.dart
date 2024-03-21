@@ -12,7 +12,7 @@ import 'package:frontend/presentation/pages/home/component/background/background
 import 'package:frontend/presentation/pages/AI_test/test_component.dart';
 import 'package:frontend/presentation/pages/home/component/title/main_title.dart';
 import 'package:frontend/presentation/routes/route_path.dart';
-import 'package:go_router/go_router.dart';
+import 'package:frontend/presentation/routes/routes.dart';
 import 'package:provider/provider.dart';
 
 class AITest extends StatelessWidget {
@@ -32,9 +32,9 @@ class AITest extends StatelessWidget {
             child: Row(
               children: [
                 IconButton(
-                  icon: HomeIconMain(), // replace with actual icons
+                  icon: const HomeIconMain(), // replace with actual icons
                   onPressed: () {
-                    context.go(RoutePath.main0);
+                    globalRouter.pushReplacement(RoutePath.main0);
                   },
                 ),
                 SizedBox(

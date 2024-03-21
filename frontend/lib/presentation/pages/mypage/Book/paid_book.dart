@@ -1,9 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/presentation/provider/main_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class PaidBook extends StatelessWidget {
   final String url;
@@ -26,11 +26,11 @@ class PaidBook extends StatelessWidget {
             Center(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child: FadeInImage.memoryNetwork(
-                  placeholder: kTransparentImage,
-                  // Defined in the transparent_image package
-                  image: url,
+                child: CachedNetworkImage(
+                  imageUrl: url,
                   fit: BoxFit.cover,
+                  placeholder: (context, url) => const CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
             ),

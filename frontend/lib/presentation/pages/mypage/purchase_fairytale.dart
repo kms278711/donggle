@@ -6,6 +6,7 @@ import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/presentation/pages/mypage/Book/paid_book.dart';
 import 'package:frontend/presentation/pages/mypage/Book/unpaid_book.dart';
+import 'package:frontend/presentation/provider/main_provider.dart';
 import 'package:provider/provider.dart';
 
 class PurchaseFairytale extends StatefulWidget {
@@ -78,7 +79,7 @@ class _PurchaseFairytaleState extends State<PurchaseFairytale> {
         Positioned(
             bottom: MediaQuery.of(context).size.height * 0.03,
             right: MediaQuery.of(context).size.width * 0.015,
-            child: GreenButton("구매내역", onPressed: () {})),
+            child: GreenButton("구매내역", onPressed: () {context.read<MainProvider>().purchaseHistoryToggle();})),
       ],
     );
   }
