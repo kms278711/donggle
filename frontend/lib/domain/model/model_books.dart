@@ -49,7 +49,7 @@ class BookModel extends ChangeNotifier {
   }
 
   Future<String> getCurrentBooks(String accessToken) async {
-    var url = Uri.https("j10c101.p.ssafy.io", "api/books/mybooks");
+    var url = Uri.https("j10c101.p.ssafy.io", "api/books/my-books");
     final headers = {
       'Content-Type': 'application/json',
       "Authorization": "Bearer $accessToken"
