@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:http/http.dart' as http;
 
-class QuizWordModel extends ChangeNotifier {
+class QuizModel extends ChangeNotifier {
   final UserProvider userProvider;
 
-  QuizWordModel(this.userProvider);
+  QuizModel(this.userProvider);
 
   List<dynamic> quizzes = [];
 
@@ -32,6 +32,34 @@ class QuizWordModel extends ChangeNotifier {
     } else {
       String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']
           ['result_message'];
+      return msg;
+    }
+  }
+
+  List<dynamic> bookQuizzes = [];
+
+  Future<String> getBookQuizzes(String accessToken, bookId) async {
+    var url = Uri.https("j10c101.p.ssafy.io", "api/quizzes", {
+      'theme': 'STORY',
+      'bookId': bookId,
+    });
+    final headers = {
+      'Content-Type': 'application/json',
+      "Authorization": "Bearer $accessToken"
+    };
+
+    var response = await http.get(url, headers: headers);
+
+    if (response.statusCode == 200) {
+      bookQuizzes = json.decode(utf8.decode(response.bodyBytes));
+      print(bookQuizzes);
+      return "Success";
+    } else if (response.statusCode == 401) {
+      userProvider.refreshToken();
+      return getBookQuizzes(userProvider.getAccessToken(), bookId);
+    } else {
+      String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']
+      ['result_message'];
       return msg;
     }
   }

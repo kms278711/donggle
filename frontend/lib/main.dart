@@ -13,10 +13,11 @@ import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/domain/model/model_cards.dart';
 import 'package:frontend/domain/model/model_nicknameupdate.dart';
 import 'package:frontend/domain/model/model_profileupdate.dart';
-import 'package:frontend/domain/model/model_word_quiz.dart';
+import 'package:frontend/domain/model/model_quiz.dart';
 import 'package:frontend/domain/model/model_register.dart';
 import 'package:frontend/domain/model/model_review.dart';
 import 'package:frontend/presentation/provider/message_provider.dart';
+import 'package:frontend/presentation/provider/quiz_provider.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:frontend/presentation/routes/routes.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +37,7 @@ void main() async{
       ChangeNotifierProvider(create: (_) => MainProvider()),
       ChangeNotifierProvider(create: (_) => MessageProvider()),
       ChangeNotifierProvider(create: (_) => UserProvider()),
+      ChangeNotifierProvider(create: (_) => QuizProvider()),
       ChangeNotifierProvider(
           create: (context) =>
               BookModel(Provider.of<UserProvider>(context, listen: false))),
@@ -47,7 +49,7 @@ void main() async{
               CardModel(Provider.of<UserProvider>(context, listen: false))),
       ChangeNotifierProvider(
           create: (context) =>
-              QuizWordModel(Provider.of<UserProvider>(context, listen: false))),
+              QuizModel(Provider.of<UserProvider>(context, listen: false))),
       ChangeNotifierProvider(
           create: (context) => NickNameUpdateModel(
               Provider.of<UserProvider>(context, listen: false))),
