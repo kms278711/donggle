@@ -1,12 +1,12 @@
 package com.ssafy.backend.domain.book.controller;
 
-import com.ssafy.backend.domain.book.dto.*;
-import com.ssafy.backend.domain.book.dto.request.BookReviewRequestDto;
+import com.ssafy.backend.domain.book.dto.BookDto;
+import com.ssafy.backend.domain.book.dto.BookInfoDto;
+import com.ssafy.backend.domain.book.dto.BookPageDto;
+import com.ssafy.backend.domain.book.dto.UserBookProcessDto;
 import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;
-import com.ssafy.backend.domain.book.dto.response.BookReviewMyResponseDto;
-import com.ssafy.backend.domain.book.dto.response.BookReviewResponseDto;
 import com.ssafy.backend.domain.book.service.BookService;
-import com.ssafy.backend.domain.user.dto.LoginUserDto;
+import com.ssafy.backend.global.util.AuthenticationUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +26,7 @@ public class BookController {
     // 책 목록 전체 조회
     @GetMapping
     public ResponseEntity<List<BookPurchasedResponseDto>> searchAllBook(Authentication authentication) {
-        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
-        Long loginUserId = loginUser.userId();
+        Long loginUserId = AuthenticationUtil.getCurrentUserId(authentication);
         List<BookPurchasedResponseDto> books = bookService.searchAllBook(loginUserId);
 
         return ResponseEntity.ok(books);
@@ -36,8 +35,7 @@ public class BookController {
     // 책 정보 조회(책 클릭시)
     @GetMapping("/{bookId}")
     public ResponseEntity<BookInfoDto> searchBookInfo(@PathVariable("bookId") Long bookId, Authentication authentication) {
-        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
-        Long loginUserId = loginUser.userId();
+        Long loginUserId = AuthenticationUtil.getCurrentUserId(authentication);
         BookInfoDto bookInfo = bookService.searchBookInfo(bookId, loginUserId);
 
         return ResponseEntity.ok(bookInfo);
@@ -47,8 +45,7 @@ public class BookController {
     @GetMapping("/{bookId}/purchase")
     public ResponseEntity<BookDto> searchBook(@PathVariable("bookId") Long bookId,
                                               Authentication authentication) {
-        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
-        Long loginUserId = loginUser.userId();
+        Long loginUserId = AuthenticationUtil.getCurrentUserId(authentication);
         BookDto bookDto = bookService.searchBook(bookId, loginUserId);
 
         return ResponseEntity.ok(bookDto);
@@ -62,85 +59,30 @@ public class BookController {
         return ResponseEntity.ok(bookPageDto);
     }
 
-    // 다음 페이지로 넘어가기 전 현재 페이지 정보 저장
-    @PostMapping("/{bookId}/pages/{page}")
-    public ResponseEntity<String> saveProgressBookPage(@PathVariable("bookId") Long bookId, @PathVariable("page") int page, Authentication authentication) {
-        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
-        Long loginUserId = loginUser.userId();
-        bookService.saveProgressBookPage(loginUserId, bookId, page);
-
-        return ResponseEntity.ok("진행중인 페이지가 저장되었습니다.");
-    }
-
     // 진행중인 책 조회
-    @GetMapping("/mybooks")
+    @GetMapping("/my-books")
     public ResponseEntity<List<UserBookProcessDto>> searchProcessBook(Authentication authentication) {
-        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
-        Long loginUserId = loginUser.userId();
+        Long loginUserId = AuthenticationUtil.getCurrentUserId(authentication);
         List<UserBookProcessDto> processBooks = bookService.searchProcessBook(loginUserId);
 
         return ResponseEntity.ok(processBooks);
     }
 
     // 구매한 책 조회
-    @GetMapping("/purchase")
+    @GetMapping("/purchased")
     public ResponseEntity<List<BookPurchasedResponseDto>> searchPurchasedBook(Authentication authentication) {
-        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
-        Long loginUserId = loginUser.userId();
+        Long loginUserId = AuthenticationUtil.getCurrentUserId(authentication);
         List<BookPurchasedResponseDto> purchasedBooks = bookService.searchPurchasedBook(loginUserId);
 
         return ResponseEntity.ok(purchasedBooks);
     }
 
-    // 리뷰 등록
-    @PostMapping("{bookId}/review")
-    public ResponseEntity<String> createReview(@PathVariable("bookId") Long bookId,
-                                               @RequestBody BookReviewRequestDto bookReviewRequestDto,
-                                               Authentication authentication) {
-        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
-        Long loginUserId = loginUser.userId();
-        bookService.createReview(loginUserId, bookId, bookReviewRequestDto);
+    // 다음 페이지로 넘어가기 전 현재 페이지 정보 저장
+    @PostMapping("/{bookId}/pages/{page}")
+    public ResponseEntity<String> saveProgressBookPage(@PathVariable("bookId") Long bookId, @PathVariable("page") int page, Authentication authentication) {
+        Long loginUserId = AuthenticationUtil.getCurrentUserId(authentication);
+        bookService.saveProgressBookPage(loginUserId, bookId, page);
 
-        return ResponseEntity.ok("리뷰가 등록되었습니다.");
-    }
-
-    // 책에 남겨진 리뷰 조회
-    @GetMapping("{bookId}/review")
-    public ResponseEntity<List<BookReviewResponseDto>> searchReviews(@PathVariable("bookId") Long bookId) {
-        List<BookReviewResponseDto> bookReviews = bookService.searchReviews(bookId);
-
-        return ResponseEntity.ok(bookReviews);
-    }
-
-    // 내가 남긴 리뷰 조회
-    @GetMapping("/myreview")
-    public ResponseEntity<List<BookReviewMyResponseDto>> searchMyReviews(Authentication authentication) {
-        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
-        Long loginUserId = loginUser.userId();
-        List<BookReviewMyResponseDto> myReviews = bookService.searchMyReviews(loginUserId);
-        return ResponseEntity.ok(myReviews);
-    }
-
-    // 내가 남긴 리뷰 수정
-    @PutMapping("/{bookId}/myreview")
-    public ResponseEntity<String> changeMyReview(@PathVariable("bookId") Long bookId,
-                                                 @RequestBody BookReviewRequestDto bookReviewRequestDto,
-                                                 Authentication authentication) {
-        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
-        Long loginUserId = loginUser.userId();
-        bookService.changeMyReview(bookId, loginUserId, bookReviewRequestDto);
-
-        return ResponseEntity.ok("리뷰수정이 완료되었습니다.");
-    }
-
-    // 내가 남긴 리뷰 삭제
-    @DeleteMapping("/{bookId}/myreview")
-    public ResponseEntity<String> deleteMyReview(@PathVariable("bookId") Long bookId,
-                                                 Authentication authentication) {
-        LoginUserDto loginUser = (LoginUserDto) authentication.getPrincipal();
-        Long loginUserId = loginUser.userId();
-        bookService.deleteMyReview(bookId, loginUserId);
-
-        return ResponseEntity.ok("리뷰가 삭제되었습니다.");
+        return ResponseEntity.ok("진행중인 페이지가 저장되었습니다.");
     }
 }

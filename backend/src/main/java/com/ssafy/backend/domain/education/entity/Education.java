@@ -19,7 +19,7 @@ public class Education {
 	private Gubun gubun;
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private Category category;
 
 	private String wordName;

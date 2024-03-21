@@ -9,6 +9,8 @@ import com.ssafy.backend.domain.book.entity.QBook;
 import com.ssafy.backend.domain.book.entity.QBookPurchasedLearning;
 import com.ssafy.backend.domain.book.entity.QBookReview;
 
+import java.util.Optional;
+
 public class BookCustomRepositoryImpl implements BookCustomRepository{
 
     private final JPAQueryFactory jpaQueryFactory;
@@ -21,8 +23,8 @@ public class BookCustomRepositoryImpl implements BookCustomRepository{
     }
 
     @Override
-    public BookDto purchasedBookInfo(Long bookId, Long loginUSerId) {
-        return jpaQueryFactory
+    public Optional<BookDto> purchasedBookInfo(Long bookId, Long loginUSerId) {
+        return Optional.ofNullable(jpaQueryFactory
                 .select(Projections.constructor(BookDto.class,
                         qBook.bookId,
                         qBook.title,
@@ -42,7 +44,7 @@ public class BookCustomRepositoryImpl implements BookCustomRepository{
                 .on(qBook.bookId.eq(qBookReview.book.bookId))
                 .groupBy(qBook.bookId)
                 .where(qBook.bookId.eq(bookId))
-                .fetchOne();
+                .fetchOne());
     }
 
 
