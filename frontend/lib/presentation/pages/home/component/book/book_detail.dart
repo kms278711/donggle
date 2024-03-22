@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
@@ -134,36 +135,50 @@ class _BookDetailState extends State<BookDetail> {
               ),
             ),
           ),
-          // Expanded(
-          //   child: GridView.builder(
-          //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          //         crossAxisCount: 2,
-          //         mainAxisSpacing: MediaQuery.of(context).size.height * 0.5,
-          //       ),
-          //       scrollDirection: Axis.vertical,
-          //       physics: ScrollPhysics(),
-          //       itemCount: educations.length,
-          //       itemBuilder: (context, index) {
-          //         String url = educations[index]["imagePath"];
-          //         String name = educations[index]["wordName"];
-          //         return Column(
-          //           children: [
-          //             ClipRRect(
-          //               borderRadius: BorderRadius.circular(20),
-          //               child: CachedNetworkImage(
-          //                 imageUrl: Constant.s3BaseUrl + url,
-          //                 fit: BoxFit.cover,
-          //                 placeholder: (context, url) =>
-          //                 const CircularProgressIndicator(),
-          //                 errorWidget: (context, url, error) => const Icon(Icons.error),
-          //               ),
-          //             ),
-          //             Text('$name'),
-          //           ],
-          //         );
-          //       },
-          //     ),
-          // ),
+          Positioned(
+            top: 150,
+            right: 150,
+            child: Container(
+              width: 430,
+              height: 500,
+              decoration: BoxDecoration(color: Colors.white),
+              child: Expanded(
+                child: GridView.count(
+                  crossAxisCount: 2, // 한 줄에 2개의 항목을 표시
+                  crossAxisSpacing: 20, // 가로 간격
+                  mainAxisSpacing: 50, // 세로 간격
+                  children: educations.map((education) {
+                    return education["gubun"] == "WORD"
+                        ? Container(
+                            decoration: BoxDecoration(color: Colors.red),
+                            child: Column(
+                              children: [
+                                CachedNetworkImage(
+                                  imageUrl: Constant.s3BaseUrl +
+                                      education["imagePath"],
+                                  fit: BoxFit.cover,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.2,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.14,
+                                  placeholder: (context, url) =>
+                                      const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
+                                ),
+                                Text(
+                                  education["wordName"],
+                                  style: CustomFontStyle.textSmall,
+                                )
+                              ],
+                            ),
+                          )
+                        : Container();
+                  }).toList(),
+                ),
+              ),
+            ),
+          ),
           Positioned(
             top: MediaQuery.of(context).size.height * 0.75,
             left: MediaQuery.of(context).size.width * 0.12,
