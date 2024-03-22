@@ -1,5 +1,10 @@
+import 'package:bootpay/bootpay.dart';
+import 'package:bootpay/model/extra.dart';
+import 'package:bootpay/model/payload.dart';
+import 'package:bootpay/model/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
@@ -8,6 +13,7 @@ import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/dialog_utils.dart';
 import 'package:frontend/core/utils/component/icons/close_circle.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
+import 'package:frontend/domain/model/model_approvals.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/domain/model/model_review.dart';
 import 'package:frontend/presentation/pages/mypage/Book/new_review_modal.dart';
@@ -27,6 +33,13 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
   late BookModel bookModel;
   late UserProvider userProvider;
   late ReviewModel reviewModel;
+  late ApprovalsModel approvalsModel;
+  Payload payload = Payload();
+  String webApplicationId = dotenv.env['BOOTPAY_WEB']!;
+  String androidApplicationId = dotenv.env['BOOTPAY_ANDROID']!;
+  String iosApplicationId = dotenv.env['BOOTPAY_IOS']!;
+  String restApplicationId = dotenv.env['BOOTPAY_REST']!;
+  String pk = dotenv.env['BOOTPAY_PRIVATE']!;
 
   int bookId = 0;
   String accessToken = "";
@@ -34,6 +47,8 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
   String summary = "";
   String path = "";
   String url = "";
+  String nickname = "";
+  String email = "";
   int price = 0;
   double averageScore = 0.0;
   bool isPay = false;
@@ -53,6 +68,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
       bookModel = Provider.of<BookModel>(context, listen: false);
       userProvider = Provider.of<UserProvider>(context, listen: false);
       reviewModel = Provider.of<ReviewModel>(context, listen: false);
+      approvalsModel = Provider.of<ApprovalsModel>(context, listen: false);
       accessToken = userProvider.getAccessToken();
       bookId = bookModel.currentBookId;
 
@@ -72,6 +88,14 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
           myReview = Review.fromJson(book.myReview ?? {'score': 0.0, 'content': ""});
           reviews = book.reviews ?? [];
           isReviewed = myReview.score != 0.0 || myReview.content != "";
+
+          bookModel = Provider.of<BookModel>(context, listen: false);
+          userProvider = Provider.of<UserProvider>(context, listen: false);
+
+          nickname = userProvider.getNickName();
+          email = userProvider.getEmail();
+
+          bootpayReqeustDataInit(nickname, email);
         });
       }
     });
@@ -91,7 +115,9 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                 icon: CloseCircle(
                   size: MediaQuery.of(context).size.width * 0.035,
                 ),
-                onPressed: () {context.read<MainProvider>().resetDetailPageSelection();},
+                onPressed: () {
+                  context.read<MainProvider>().resetDetailPageSelection();
+                },
               )),
           Padding(
             padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
@@ -131,7 +157,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                             );
                           })
                         : GreenButton("구매하기", onPressed: () {
-                            /// TODO: 결제로 넘어가기
+                            goBootpayTest(context);
                           }),
                   ],
                 ),
@@ -238,15 +264,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                                                       onPressed: () {
                                                         DialogUtils.showCustomDialog(context,
                                                             contentWidget: NewReviewModal(onModalClose: () {
-                                                          setState(() {
-                                                            Book book = bookModel.nowBook;
-                                                            averageScore = book.averageScore ?? 0.0;
-                                                            myReview = Review.fromJson(
-                                                                book.myReview ?? {'score': 0.0, 'content': ""});
-                                                            reviews = book.reviews ?? [];
-                                                            isReviewed = true;
-                                                            isPay = true;
-                                                          });
+                                                          setState(() {});
                                                         }));
                                                       },
                                                       textStyle: CustomFontStyle.getTextStyle(
@@ -331,6 +349,67 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
           ),
         ],
       ),
+    );
+  }
+
+  bootpayReqeustDataInit(String nickname, String email) {
+    payload.webApplicationId = webApplicationId; // web application id
+    payload.androidApplicationId = androidApplicationId; // android application id
+    payload.iosApplicationId = iosApplicationId; // ios application id
+
+    payload.pg = 'kcp';
+    payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao', 'payco'];
+
+    payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
+
+    User user = User(); // 구매자 정보
+    user.id = "";
+    user.username = nickname;
+    user.email = email;
+    user.area = "";
+    user.phone = "";
+    user.addr = '';
+
+    Extra extra = Extra(); // 결제 옵션
+    extra.appScheme = 'bootpayFlutter';
+
+
+    payload.user = user as User?;
+    payload.extra = extra;
+  }
+
+  void goBootpayTest(BuildContext context) {
+    payload.name = title;
+    payload.price = price.toDouble();
+
+    Bootpay().request(
+      context: context,
+      payload: payload,
+      showCloseButton: true,
+      closeButton: const Icon(Icons.close, size: 35.0, color: Colors.black54),
+      onError: (String data) {
+        showToast(data, backgroundColor: AppColors.error);
+      },
+      onClose: () {
+        Future.delayed(const Duration(seconds: 0)).then((value) {
+          if (mounted) {
+            Bootpay().dismiss(context);
+          }
+        });
+      },
+      onConfirm: (String data) {
+        approvalsModel.setApprovals(accessToken, bookId, price).then((result) {
+          if (result == "Success") {
+            showToast("구매가 완료되었습니다.");
+            context.read<MainProvider>().resetDetailPageSelection();
+          } else {
+            showToast(result, backgroundColor: AppColors.error);
+          }
+        });
+        Bootpay().dismiss(context);
+
+        return false;
+      },
     );
   }
 }

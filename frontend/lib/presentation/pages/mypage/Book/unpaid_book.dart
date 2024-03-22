@@ -21,7 +21,6 @@ class _OpenedBookState extends State<UnpaidBook> {
       color: Colors.transparent,
       child: InkWell(
         onTap: () async {
-          /// TODO: 동화책 리뷰 화면 불러오기
           context.read<BookModel>().setCurrentBookId(widget.bookId);
           context.read<MainProvider>().detailPageSelectionToggle();
           /// TODO: 동화책 구매
