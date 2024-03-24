@@ -76,7 +76,7 @@ async def analyze_object(file: UploadFile = File(...)):
         contents = await file.read()
 
         # 클래스 이름을 읽음
-        with open("./class_names.txt", "r") as ins:
+        with open("./app/class_names.txt", "r") as ins:
             class_names = [line.rstrip('\n') for line in ins]
 
         # 모델 로드

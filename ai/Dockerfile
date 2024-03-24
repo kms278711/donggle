@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 # Copy the ./app directory inside the /code directory.
 COPY ./app /code/app
-COPY ./class_names.txt /code/class_names.txt
+# COPY ./class_names.txt /code/class_names.txt
 
 RUN apt-get update
 RUN apt-get -y install libgl1-mesa-glx
