@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:frontend/core/utils/constant/constant.dart';
+import 'package:frontend/domain/model/model_books.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -14,16 +18,51 @@ import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
-class TestComponent extends StatefulWidget {
-  const TestComponent({super.key});
+class PictureQuiz extends StatefulWidget {
+  final VoidCallback? onModalClose;
+
+  const PictureQuiz({this.onModalClose, super.key});
 
   @override
-  State<TestComponent> createState() => _TestComponentState();
+  State<PictureQuiz> createState() => _PictureQuizState();
 }
 
-class _TestComponentState extends State<TestComponent> {
+class _PictureQuizState extends State<PictureQuiz> {
+  late BookModel bookModel;
   final DrawingController _drawingController = DrawingController();
+  Education education = Education(educationId: 0, gubun: "", wordName: "", imagePath: "", bookSentenceId: 0);
+  String url = "";
+
+  String postPositionText(String name) {
+    // Get the last character of the name
+    final String? lastText = name.isNotEmpty ? name.characters.last : null;
+
+    if (lastText == null) {
+      return name;
+    }
+    // Convert to Unicode
+    final int unicodeVal = lastText.runes.first;
+    // Return the name if it's not a Hangul syllable
+    if (unicodeVal < 0xAC00 || unicodeVal > 0xD7A3) {
+      return name;
+    }
+    // Check if there's a final consonant
+    final int last = (unicodeVal - 0xAC00) % 28;
+    // Append '을' if there is a final consonant, otherwise '를'
+    final String str = last > 0 ? "을" : "를";
+    return name + str;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+      bookModel = Provider.of<BookModel>(context, listen: false);
+      education = bookModel.nowEducation;
+      url = Constant.s3BaseUrl + education.imagePath;
+  }
 
   @override
   void dispose() {
@@ -33,8 +72,6 @@ class _TestComponentState extends State<TestComponent> {
 
   @override
   Widget build(BuildContext context) {
-    const String imageUrl = 'https://web-strapi.mrmilu.com/uploads/flutter_logo_470e9f7491.png';
-
     Future<Uint8List> resizeImageData(Uint8List data, {int width = 600, int height = 600}) async {
       // Decode the image to an Image object
       img.Image? image = img.decodeImage(data);
@@ -52,7 +89,7 @@ class _TestComponentState extends State<TestComponent> {
         final resizedImg = await resizeImageData(data);
         // Using image_gallery_saver
         String dir = (await getApplicationDocumentsDirectory()).path;
-        File file = File("$dir/" + DateTime.now().millisecondsSinceEpoch.toString() + ".png");
+        File file = File("$dir/${DateTime.now().millisecondsSinceEpoch}.png");
         await file.writeAsBytes(resizedImg);
         final result = await ImageGallerySaver.saveFile(file.path);
         return result['isSuccess'];
@@ -97,8 +134,8 @@ class _TestComponentState extends State<TestComponent> {
                 width: MediaQuery.of(context).size.width * 0.43,
                 height: MediaQuery.of(context).size.width * 0.43,
                 decoration: BoxDecoration(
-                  image: const DecorationImage(
-                    image: NetworkImage(imageUrl),
+                  image: DecorationImage(
+                    image: CachedNetworkImageProvider(url),
                     fit: BoxFit.fill,
                   ),
                   borderRadius: BorderRadius.circular(20),
@@ -126,8 +163,8 @@ class _TestComponentState extends State<TestComponent> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
-                    "도끼를 그려보세요.",
+                  Text(
+                    "${postPositionText(education.wordName)} 그려보세요.",
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.03,
@@ -161,6 +198,7 @@ class _TestComponentState extends State<TestComponent> {
                 onPressed: () {
                   Navigator.of(context).pop();
                   getImageData();
+                  widget.onModalClose?.call();
                 },
               ),
             ),

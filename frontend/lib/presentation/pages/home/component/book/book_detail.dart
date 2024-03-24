@@ -1,7 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
@@ -184,11 +182,17 @@ class _BookDetailState extends State<BookDetail> {
             left: MediaQuery.of(context).size.width * 0.12,
             child: Row(
               children: [
-                GreenButton("처음부터", onPressed: () {}),
+                GreenButton("처음부터", onPressed: () {
+                  Navigator.of(context).pop();
+                  globalRouter.pushReplacement('/bookProgress/${widget.bookId}/1');
+                }),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.04,
                 ),
-                GreenButton("이어하기", onPressed: () {}),
+                GreenButton("이어하기", onPressed: () {
+                  Navigator.of(context).pop();
+                  globalRouter.pushReplacement('/bookProgress/${widget.bookId}/$bookPage');
+                }),
               ],
             ),
           ),

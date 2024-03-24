@@ -1,8 +1,11 @@
 import 'package:bootpay/bootpay.dart';
+import 'package:bootpay/model/browser_open_type.dart';
 import 'package:bootpay/model/extra.dart';
 import 'package:bootpay/model/payload.dart';
 import 'package:bootpay/model/user.dart';
+import 'package:bootpay/config/bootpay_config.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -221,7 +224,8 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text("내 리뷰",
-                                              style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleSmallSmall)),
+                                              style: CustomFontStyle.getTextStyle(
+                                                  context, CustomFontStyle.titleSmallSmall)),
                                           Row(
                                             children: [
                                               //
@@ -264,7 +268,16 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                                                       onPressed: () {
                                                         DialogUtils.showCustomDialog(context,
                                                             contentWidget: NewReviewModal(onModalClose: () {
-                                                          setState(() {});
+                                                          setState(() {
+                                                            Book book = bookModel.nowBook;
+                                                            averageScore = book.averageScore ?? 0.0;
+                                                            myReview = Review.fromJson(
+                                                                book.myReview ?? {'score': 0.0, 'content': ""});
+                                                            reviews = book.reviews ?? [];
+                                                            isReviewed = true;
+                                                            isPay = true;
+
+                                                          });
                                                         }));
                                                       },
                                                       textStyle: CustomFontStyle.getTextStyle(
@@ -279,7 +292,8 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                               Row(
                                 children: [
                                   Text("평균평점: ",
-                                      style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleSmallSmall)),
+                                      style:
+                                          CustomFontStyle.getTextStyle(context, CustomFontStyle.titleSmallSmall)),
                                   RatingBar.builder(
                                     initialRating: averageScore,
                                     minRating: 1,
@@ -328,7 +342,8 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                                           child: RichText(
                                             text: TextSpan(
                                               text: reviews[index]['content'],
-                                              style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMoreSmall),
+                                              style: CustomFontStyle.getTextStyle(
+                                                  context, CustomFontStyle.textMoreSmall),
                                             ),
                                           ),
                                         ),
@@ -358,7 +373,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
     payload.iosApplicationId = iosApplicationId; // ios application id
 
     payload.pg = 'kcp';
-    payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakao', 'payco'];
+    payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakaopay', 'payco', 'naverpay'];
 
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
 
@@ -372,43 +387,62 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
 
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutter';
+    // payload.extra?.openType = "iframe";
 
+    if (BootpayConfig.ENV == -1) {
+      payload.extra?.redirectUrl = 'https://dev-api.bootpay.co.kr/v2';
+    } else if (BootpayConfig.ENV == -2) {
+      payload.extra?.redirectUrl = 'https://stage-api.bootpay.co.kr/v2';
+    } else {
+      payload.extra?.redirectUrl = 'https://api.bootpay.co.kr/v2';
+    }
+
+    BootpayConfig.IS_FORCE_WEB = true;
 
     payload.user = user as User?;
     payload.extra = extra;
   }
 
   void goBootpayTest(BuildContext context) {
-    payload.name = title;
+    payload.orderName = title;
     payload.price = price.toDouble();
+    String result = "";
 
-    Bootpay().request(
+    Bootpay().requestPayment(
       context: context,
       payload: payload,
-      showCloseButton: true,
+      showCloseButton: false,
       closeButton: const Icon(Icons.close, size: 35.0, color: Colors.black54),
       onError: (String data) {
         showToast(data, backgroundColor: AppColors.error);
       },
       onClose: () {
+        print('------- onClose');
         Future.delayed(const Duration(seconds: 0)).then((value) {
           if (mounted) {
             Bootpay().dismiss(context);
           }
         });
       },
-      onConfirm: (String data) {
-        approvalsModel.setApprovals(accessToken, bookId, price).then((result) {
-          if (result == "Success") {
-            showToast("구매가 완료되었습니다.");
-            context.read<MainProvider>().resetDetailPageSelection();
-          } else {
-            showToast(result, backgroundColor: AppColors.error);
-          }
-        });
-        Bootpay().dismiss(context);
+      onConfirmAsync: (String data) async {
+        print('------- onConfirmAsync11: $data');
+        result = await approvalsModel.setApprovals(accessToken, bookId, price);
 
-        return false;
+        if (!context.mounted) return false;
+
+        if (result == "Success") {
+          result = approvalsModel.setApprovals(accessToken, bookId, price) as String;
+          showToast("구매가 완료되었습니다.");
+          context.read<MainProvider>().resetDetailPageSelection();
+        } else {
+          showToast(result, backgroundColor: AppColors.error);
+        }
+        print('------- onConfirmAsync22: $data');
+        return true;
+      },
+      onDone: (String data) {
+        print('------- onDone: $data');
+
       },
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/presentation/pages/AI_test/AI_test.dart';
+import 'package:frontend/presentation/pages/book/book_progress.dart';
 import 'package:frontend/presentation/pages/login/login_page.dart';
 import 'package:frontend/presentation/pages/main_screen/main_screen.dart';
 import 'package:frontend/presentation/pages/mypage/my_page_background.dart';
@@ -40,6 +41,15 @@ final GoRouter globalRouter = GoRouter(
       name: 'aitest',
       builder: (context, state) => const AITest(),
     ),
+    GoRoute(
+      path: RoutePath.bookProgress,
+      name: 'bookProgress',
+      builder: (context, state) {
+        final id = state.pathParameters['id'];
+        final pageId = state.pathParameters['pageId'];
+        return BookProgress(id ?? '0', pageId??'0');
+      },
+    )
     // GoRoute(
     //   path: RoutePath.bookquiz,
     //   builder: (context, state) {

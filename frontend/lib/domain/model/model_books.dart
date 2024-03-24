@@ -12,18 +12,28 @@ class BookModel extends ChangeNotifier {
   List<dynamic> books = [];
   List<dynamic> currentBooks = [];
   Book nowBook = Book(bookId: 1, isPay: false, path: "", price: 0, title: "");
+  BookPage nowPage = BookPage(
+    bookPageId: 0,
+    bookImagePath: "",
+    page: 0,
+    content: "",
+    bookPageSentences: [
+      BookPageSentences(bookPageSentenceId: 0, sequence: 0, sentence: "", sentenceSoundPath: "")
+    ],
+  );
   Map BookDetail = {};
+  Education nowEducation = Education(educationId: 0, gubun: "", wordName: "", imagePath: "", bookSentenceId: 0);
 
   int currentBookId = 1;
 
-  void setNowReview(double score, String content){
-   nowBook.myReview?["score"] = score;
-   nowBook.myReview?["content"] = content;
+  void setNowReview(double score, String content) {
+    nowBook.myReview?["score"] = score;
+    nowBook.myReview?["content"] = content;
 
-   notifyListeners();
+    notifyListeners();
   }
 
-  Future<void> setCurrentBookId(int currentBookId) async{
+  Future<void> setCurrentBookId(int currentBookId) async {
     this.currentBookId = currentBookId;
     await getCurrentBookPurchase(userProvider.getAccessToken(), currentBookId);
 
@@ -33,10 +43,7 @@ class BookModel extends ChangeNotifier {
   /// 동화책 전체 조회
   Future<String> getAllBooks(String accessToken) async {
     var url = Uri.https("j10c101.p.ssafy.io", "api/books");
-    final headers = {
-      'Content-Type': 'application/json',
-      "Authorization": "Bearer $accessToken"
-    };
+    final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
     var response = await http.get(url, headers: headers);
 
     if (response.statusCode == 200) {
@@ -46,8 +53,7 @@ class BookModel extends ChangeNotifier {
       userProvider.refreshToken();
       return getAllBooks(userProvider.getAccessToken());
     } else {
-      String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']
-          ['result_message'];
+      String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']['result_message'];
       return msg;
     }
   }
@@ -55,10 +61,7 @@ class BookModel extends ChangeNotifier {
   /// 진행 중인 책 조회 (마이페이지)
   Future<String> getCurrentBooks(String accessToken) async {
     var url = Uri.https("j10c101.p.ssafy.io", "api/books/my-books");
-    final headers = {
-      'Content-Type': 'application/json',
-      "Authorization": "Bearer $accessToken"
-    };
+    final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
     var response = await http.get(url, headers: headers);
 
     if (response.statusCode == 200) {
@@ -68,8 +71,7 @@ class BookModel extends ChangeNotifier {
       userProvider.refreshToken();
       return getCurrentBooks(userProvider.getAccessToken());
     } else {
-      String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']
-      ['result_message'];
+      String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']['result_message'];
       return msg;
     }
   }
@@ -77,10 +79,7 @@ class BookModel extends ChangeNotifier {
   /// 동화책 단일 조회 (동화책 결제)
   Future<String> getCurrentBookPurchase(String accessToken, int bookId) async {
     var url = Uri.https("j10c101.p.ssafy.io", "api/books/$bookId/purchase");
-    final headers = {
-      'Content-Type': 'application/json',
-      "Authorization": "Bearer $accessToken"
-    };
+    final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
     var response = await http.get(url, headers: headers);
 
     // print(json.decode(utf8.decode(response.bodyBytes)));
@@ -92,8 +91,7 @@ class BookModel extends ChangeNotifier {
       userProvider.refreshToken();
       return getCurrentBookPurchase(userProvider.getAccessToken(), bookId);
     } else {
-      String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']
-      ['result_message'];
+      String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']['result_message'];
       return msg;
     }
   }
@@ -102,13 +100,10 @@ class BookModel extends ChangeNotifier {
   Future<String> getBookDetail(String accessToken, int bookId) async {
     // print(bookId.toString());
     var url = Uri.https("j10c101.p.ssafy.io", "api/books/$bookId");
-    final headers = {
-      'Content-Type': 'application/json',
-      "Authorization": "Bearer $accessToken"
-    };
+    final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
     var response = await http.get(url, headers: headers);
 
-    // print(json.decode(utf8.decode(response.bodyBytes)));
+    print(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
       BookDetail = json.decode(utf8.decode(response.bodyBytes));
@@ -117,8 +112,50 @@ class BookModel extends ChangeNotifier {
       userProvider.refreshToken();
       return getBookDetail(userProvider.getAccessToken(), bookId);
     } else {
-      String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']
-      ['result_message'];
+      String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']['result_message'];
+      return msg;
+    }
+  }
+
+  ///동화책 페이지 조회
+  Future<String> getBookPage(String accessToken, int bookId, int pageId) async {
+    // print(bookId.toString());
+    var url = Uri.https("j10c101.p.ssafy.io", "api/books/$bookId/pages/$pageId");
+    final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
+    var response = await http.get(url, headers: headers);
+
+    print(utf8.decode(response.bodyBytes));
+
+    if (response.statusCode == 200) {
+      nowPage = BookPage.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+      nowEducation = nowPage.education ??
+          Education(educationId: 0, gubun: "", wordName: "", imagePath: "", bookSentenceId: 0);
+      return "Success";
+    } else if (response.statusCode == 401) {
+      userProvider.refreshToken();
+      return getBookPage(userProvider.getAccessToken(), bookId, pageId);
+    } else {
+      String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']['result_message'];
+      return msg;
+    }
+  }
+
+  ///진행중인 책 페이지 저장
+  Future<String> setBookPage(String accessToken, int bookId, int pageId) async {
+    // print(bookId.toString());
+    var url = Uri.https("j10c101.p.ssafy.io", "api/books/$bookId/pages/$pageId");
+    final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
+    var response = await http.post(url, headers: headers);
+
+    print(utf8.decode(response.bodyBytes));
+
+    if (response.statusCode == 200) {
+      return "Success";
+    } else if (response.statusCode == 401) {
+      userProvider.refreshToken();
+      return setBookPage(userProvider.getAccessToken(), bookId, pageId);
+    } else {
+      String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']['result_message'];
       return msg;
     }
   }
@@ -130,6 +167,7 @@ class Book {
   final String? summary;
   final String path;
   final int? price;
+  final int? page;
   final bool? isPay;
   final double? averageScore;
   final List<dynamic>? reviews;
@@ -141,6 +179,7 @@ class Book {
     this.summary,
     required this.path,
     required this.price,
+    this.page,
     required this.isPay,
     this.averageScore,
     this.reviews,
@@ -153,11 +192,101 @@ class Book {
       title: json['title'],
       summary: json['summary'],
       path: json['coverPath'],
+      page: json['page'],
       price: json['price'],
       isPay: json['isPay'],
       averageScore: json['averageScore'],
       myReview: json['myBookReview'],
       reviews: json["bookReviews"],
+    );
+  }
+}
+
+class BookPage {
+  final int bookPageId;
+  final String bookImagePath;
+  final int page;
+  final String content;
+  final List<BookPageSentences> bookPageSentences;
+  final Education? education;
+
+  BookPage({
+    required this.bookPageId,
+    required this.bookImagePath,
+    required this.page,
+    required this.content,
+    required this.bookPageSentences,
+    this.education,
+  });
+
+  factory BookPage.fromJson(Map<String, dynamic> json) {
+    var sentencesList = json['bookPageSentences'] as List<dynamic>;
+    List<BookPageSentences> sentences =
+        sentencesList.map((dynamic item) => BookPageSentences.fromJson(item)).toList();
+
+    Education? education;
+    if (json['education'] != null) {
+      education = Education.fromJson(json['education']);
+    }
+
+    return BookPage(
+      bookPageId: json['bookPageId'],
+      bookImagePath: json['bookImagePath'],
+      page: json['page'],
+      content: json['content'],
+      bookPageSentences: sentences,
+      education: education,
+    );
+  }
+}
+
+class BookPageSentences {
+  final int bookPageSentenceId;
+  final int sequence;
+  final String sentence;
+  final String sentenceSoundPath;
+
+  BookPageSentences({
+    required this.bookPageSentenceId,
+    required this.sequence,
+    required this.sentence,
+    required this.sentenceSoundPath,
+  });
+
+  factory BookPageSentences.fromJson(Map<String, dynamic> json) {
+    return BookPageSentences(
+        bookPageSentenceId: json['bookPageSentenceId'],
+        sequence: json['sequence'],
+        sentence: json['sentence'],
+        sentenceSoundPath: json['sentenceSoundPath']);
+  }
+}
+
+class Education {
+  final int educationId;
+  final String gubun;
+  final String? category;
+  final String wordName;
+  final String imagePath;
+  final int bookSentenceId;
+
+  Education({
+    required this.educationId,
+    required this.gubun,
+    this.category,
+    required this.wordName,
+    required this.imagePath,
+    required this.bookSentenceId,
+  });
+
+  factory Education.fromJson(Map<String, dynamic> json) {
+    return Education(
+      educationId: json['educationId'],
+      gubun: json['gubun'],
+      category: json['category'],
+      wordName: json['wordName'],
+      imagePath: json['imagePath'],
+      bookSentenceId: json['bookPageSentenceId'],
     );
   }
 }

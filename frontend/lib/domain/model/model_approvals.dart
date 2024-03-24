@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:http/http.dart' as http;
 
-class ApprovalsModel extends ChangeNotifier{
+class ApprovalsModel extends ChangeNotifier {
   final UserProvider userProvider;
 
   ApprovalsModel(this.userProvider);
@@ -79,6 +79,32 @@ class Approval {
       approvalDate: json['approvalDate'],
       approvalId: json['approvalId'],
       bookTitle: json['bookTitle'],
+    );
+  }
+}
+
+class ApprovalData {
+  String receiptId;
+  String orderId;
+  String purchasedAt;
+  String receiptURL;
+  String statusLocale;
+
+  ApprovalData({
+    required this.receiptId,
+    required this.orderId,
+    required this.purchasedAt,
+    required this.receiptURL,
+    required this.statusLocale,
+  });
+
+  factory ApprovalData.fromJson(Map<String, dynamic> json) {
+    return ApprovalData(
+      receiptId: json['receipt_id'],
+      orderId: json['order_id'],
+      purchasedAt: json['purchased_at'],
+      receiptURL: json['receipt_url'],
+      statusLocale: json['status_locale'],
     );
   }
 }

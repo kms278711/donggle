@@ -17,6 +17,9 @@ class RoutePath {
 
   static const String aiTest = '/aitest';
 
+  /// book_progress
+  static const String bookProgress = '/bookProgress/:id/:pageId';
+
   ///quiz
   // static const String bookquiz = '/bookquiz/:bookId';
 }
