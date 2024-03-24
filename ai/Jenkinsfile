@@ -1,0 +1,87 @@
+def component = [
+        front: false,
+        nginx: false,
+        redis: false,
+        back: false,
+        ai: true
+]
+pipeline {
+    agent any
+    environment {
+        REPO = "s10-ai-image-sub2/S10P22C101"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage("Build") {
+            steps {
+                script {
+                    sh "ls -al"
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Docker-Hub', usernameVariable: 'DOCKER_USER_ID', passwordVariable: 'DOCKER_USER_PASSWORD']]) {
+                        sh "docker build --no-cache -t ${DOCKER_USER_ID}/ai ai"
+                    }
+                }
+            }
+        }
+
+        stage("Login") {
+            steps {
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Docker-Hub', usernameVariable: 'DOCKER_USER_ID', passwordVariable: 'DOCKER_USER_PASSWORD']]) {
+                    sh """
+                        set +x
+                        echo $DOCKER_USER_PASSWORD | docker login -u $DOCKER_USER_ID --password-stdin
+                        set -x
+                    """
+                }
+            }
+        }
+
+        stage("Tag and Push") {
+            steps {
+                script {
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Docker-Hub', usernameVariable: 'DOCKER_USER_ID', passwordVariable: 'DOCKER_USER_PASSWORD']]) {
+                        sh "docker push ${DOCKER_USER_ID}/ai"
+                    }
+                }
+            }
+        }
+
+        // stage('Prune old images') {
+        //     steps {
+        //         script {
+        //             sh "docker system prune --filter until=1h"
+        //         }
+        //     }
+        // }
+        stage('Pull') {
+            steps {
+                script {
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Docker-Hub', usernameVariable: 'DOCKER_USER_ID', passwordVariable: 'DOCKER_USER_PASSWORD']]) {
+                        sh "docker pull ${DOCKER_USER_ID}/ai"
+                    }
+                }
+            }
+        }
+
+        stage('Up') {
+            steps {
+                script {
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'Docker-Hub', usernameVariable: 'DOCKER_USER_ID', passwordVariable: 'DOCKER_USER_PASSWORD']]) {
+                        try{
+                            sh "docker run -d --name ai -p 8083:3000 \
+                            ${DOCKER_USER_ID}/ai"
+                        } catch (Exception e){
+                            sh "docker restart ai"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
