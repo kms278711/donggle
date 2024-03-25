@@ -15,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
+
 import static com.ssafy.backend.global.error.exception.ExceptionType.*;
 
 @Service
@@ -34,8 +36,8 @@ public class AuthServiceImpl implements AuthService {
 	 */
 	@Override
 	@Transactional
-	public void signup(SignupRequestDto signupRequestDto) {
-		if (isUserExist(signupRequestDto)) {
+	public void signUp(SignupRequestDto signupRequestDto) {
+		if (isUserExist(signupRequestDto.email())) {
 			userRepository.findByEmail(signupRequestDto.email()).ifPresent(user -> {
 				if (isWithdrawal(user)) {
 					throw new UserException(WITHDRAW_USER);
@@ -50,6 +52,27 @@ public class AuthServiceImpl implements AuthService {
 		userRepository.save(user);
 	}
 
+	@Override
+	@Transactional
+	public UserInfoDto SNSLogin(Map<String, Object> userinfo) {
+		String email = userinfo.get("id") + "_" + userinfo.get("email");
+		if (isUserExist(email)) {
+			userRepository.findByEmail(email).ifPresent(user -> {
+				if (isWithdrawal(user)) {
+					throw new UserException(WITHDRAW_USER);
+				}
+			});
+		} else {
+			User user = User.builder()
+					.email(email)
+					.provider(User.Provider.NAVER)
+					.build();
+			InitialSetting(user);
+			userRepository.save(user);
+		}
+		return login(email, "");
+	}
+
 	/**
 	 * 로그인
 	 */
@@ -62,7 +85,7 @@ public class AuthServiceImpl implements AuthService {
 		}
 
 		String savedPassword = user.getPassword();
-		if (!passwordEncoder.matches(password, savedPassword)) {
+		if (savedPassword != null && !passwordEncoder.matches(password, savedPassword)) {
 			throw new UserException(INVALID_PASSWORD);
 		}
 
@@ -119,7 +142,7 @@ public class AuthServiceImpl implements AuthService {
 		user.updatePassword(password);
 	}
 
-	private boolean isUserExist(SignupRequestDto signupRequestDto) {
-		return userRepository.countByEmail(signupRequestDto.email()) > 0;
+	private boolean isUserExist(String email) {
+		return userRepository.countByEmail(email) > 0;
 	}
 }

@@ -36,6 +36,7 @@ public class SecurityConfig {
 				.requestMatchers("/api/auth/**")
 				.requestMatchers("/api/verify/**")
 				.requestMatchers("/api/donggle/**")
+				.requestMatchers("/ai/**")
 				.requestMatchers("/api/naver/**");
 	}
 

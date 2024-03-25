@@ -19,7 +19,6 @@ public class User extends BaseEntity {
 	@Column(unique = true, updatable = false, nullable = false)
 	private String email;
 
-	@Column(nullable = false)
 	private String password;
 
 	private String nickname;
@@ -35,6 +34,9 @@ public class User extends BaseEntity {
 	@Column(nullable = false)
 	private Role role;
 
+	@Enumerated(EnumType.STRING)
+	private Provider provider;
+
 	public enum Status {
 		MEMBER,
 		WITHDRAWAL
@@ -43,6 +45,12 @@ public class User extends BaseEntity {
 	public enum Role {
 		ROLE_USER,
 		ROLE_ADMIN
+	}
+
+	public enum Provider {
+		GOOGLE,
+		NAVER,
+		KAKAO
 	}
 
 	public void updatePassword(String password) {
