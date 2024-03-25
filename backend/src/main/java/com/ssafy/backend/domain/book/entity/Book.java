@@ -32,5 +32,4 @@ public class Book {
     @OneToMany(mappedBy = "book")
     private List<BookPage> bookPageList = new ArrayList<>();
 
-
 }

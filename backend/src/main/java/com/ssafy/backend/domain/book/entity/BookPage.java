@@ -32,7 +32,7 @@ public class BookPage {
     @JoinColumn(name = "book_id")
     private Book book;
 
-    @OneToMany(mappedBy = "bookPage")
+    @OneToMany(mappedBy = "bookPage", fetch = FetchType.LAZY)
     private List<BookPageSentence> bookPageSentenceList = new ArrayList<>();
 
 }

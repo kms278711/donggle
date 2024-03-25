@@ -2,8 +2,12 @@ package com.ssafy.backend.domain.book.service.impl;
 
 import com.ssafy.backend.domain.approval.entity.Approval;
 import com.ssafy.backend.domain.approval.repository.ApprovalRepository;
-import com.ssafy.backend.domain.book.dto.*;
+import com.ssafy.backend.domain.book.dto.BookDto;
+import com.ssafy.backend.domain.book.dto.BookPageSentenceDto;
+import com.ssafy.backend.domain.book.dto.UserBookProcessDto;
+import com.ssafy.backend.domain.book.dto.response.BookInfoResponseDto;
 import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;
+import com.ssafy.backend.domain.book.dto.response.BookReviewResponseDto;
 import com.ssafy.backend.domain.book.entity.*;
 import com.ssafy.backend.domain.book.mapper.BookMapper;
 import com.ssafy.backend.domain.book.repository.book.BookRepository;
@@ -12,9 +16,11 @@ import com.ssafy.backend.domain.book.repository.bookprocess.UserBookProcessRespo
 import com.ssafy.backend.domain.book.repository.bookpurchased.BookPurchasedRepository;
 import com.ssafy.backend.domain.book.service.BookService;
 import com.ssafy.backend.domain.book.service.ReviewService;
+import com.ssafy.backend.domain.education.dto.BookEducationDto;
 import com.ssafy.backend.domain.education.dto.EducationDto;
 import com.ssafy.backend.domain.education.entity.Education;
 import com.ssafy.backend.domain.education.mapper.EducationMapper;
+import com.ssafy.backend.domain.education.repository.education.EducationRepository;
 import com.ssafy.backend.domain.user.entity.User;
 import com.ssafy.backend.domain.user.repository.UserRepository;
 import com.ssafy.backend.global.error.exception.UserException;
@@ -41,6 +47,7 @@ public class BookServiceImpl implements BookService {
     private final BookPurchasedRepository bookPurchasedRepository;
     private final ReviewService reviewService;
     private final ApprovalRepository approvalRepository;
+    private final EducationRepository educationRepository;
 
     // 책 정보 전체 조회
     @Override
@@ -71,40 +78,38 @@ public class BookServiceImpl implements BookService {
 
     // 책 정보 조회(책 클릭시)
     @Override
-    public BookInfoDto searchBookInfo(Long bookId, Long loginUserId) {
+    public BookInfoResponseDto searchBookInfo(Long bookId, Long loginUserId) {
+        System.out.println("bookId" + bookId + "loginUserId" + loginUserId);
         // bookId와 loginUserId를 구매한 이용해 책 검색
-        UserBookProcess bookProcess = userBookProcessRespository.findByUser_userIdAndBook_bookId(loginUserId, bookId)
+        UserBookProcess bookProcesses = userBookProcessRespository.findByUser_userIdAndBook_bookId(loginUserId, bookId)
                 .orElseThrow(() -> new UserException(NOT_FOUND_BOOK));
 
-        // bookId를 이용해 page 조회 후 pageId 리스트로 저장
-        List<BookPage> pages = userBookProcessRespository.findByBookId(bookId);
-        List<Long> pageIds = pages.stream().map(BookPage::getBookPageId)
-                .toList();
+        List<Long> ids = new ArrayList<>();
+        for (BookPage bookPage : bookProcesses.getBook().getBookPageList()) {
+            for (BookPageSentence bookPageSentence : bookPage.getBookPageSentenceList()) {
+                ids.add(bookPageSentence.getBookPageSentenceId());
+            }
+        }
+        System.out.println("ids : " + ids);
 
-        // pageId를 이용해 sentences 조회 후 sentenceId 리스트로 저장
-        List<BookPageSentence> sentences = userBookProcessRespository.findByBookPageId(pageIds);
-        List<Long> sentenceIds = sentences.stream().map(BookPageSentence::getBookPageSentenceId)
-                .toList();
+        List<BookEducationDto> educationList = educationRepository.findAllByBookPageSentence_BookPageSentenceIdIn(ids);
 
-        // sentenceId를 이용해 education 조회 후 Dto로 변환
-        List<Education> educations = userBookProcessRespository.findByBookSentenceId(sentenceIds);
-        List<EducationDto> educationDtos = educations.stream()
-                .map(educationMapper::toEducationDto)
-                .toList();
-
-        return BookInfoDto.builder()
-                .bookId(bookProcess.getBook().getBookId())
-                .title(bookProcess.getBook().getTitle())
-                .coverImagePath(bookProcess.getBook().getCoverPath())
-                .page(bookProcess.getPage())
-                .educations(educationDtos)
+        return BookInfoResponseDto.builder()
+                .bookId(bookProcesses.getBook().getBookId())
+                .title(bookProcesses.getBook().getTitle())
+                .coverImagePath(bookProcesses.getBook().getCoverPath())
+                .totalPage(bookProcesses.getBook().getBookPageList().size())
+                .processPage(bookProcesses.getPage())
+                //.bookPageList(bookProcesses.getBook().getBookPageList())
+                .educationList(educationList)
                 .build();
+
     }
 
     // 책 페이지 조회
     @Override
     @Transactional
-    public BookPageDto searchBookPage(Long bookId, int page) {
+    public BookReviewResponseDto.BookPageResponseDto searchBookPage(Long bookId, int page) {
         // bookId와 page를 통해 bookPage 조회
         BookPage bookPage = bookPageRepository.findByBookPage(bookId, page)
                 .orElseThrow(() -> new UserException(NOT_FOUND_BOOKPAGE));
@@ -122,7 +127,7 @@ public class BookServiceImpl implements BookService {
         Education education = bookPageRepository.findByBookSentenceId(bookPageSentenceIds);
         EducationDto educationDto = educationMapper.toEducationDto(education);
 
-        return BookPageDto.builder()
+        return BookReviewResponseDto.BookPageResponseDto.builder()
                 .bookPageId(bookPage.getBookPageId())
                 .bookImagePath(bookPage.getBookImagePath())
                 .page(bookPage.getPage())
