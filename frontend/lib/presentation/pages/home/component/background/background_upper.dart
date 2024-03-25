@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
+import 'package:frontend/core/utils/component/donggle_talk.dart';
+import 'package:frontend/domain/model/model_donggle_talk.dart';
 import 'package:indexed/indexed.dart';
+import 'package:provider/provider.dart';
 
 class BackgroundUpper extends StatefulWidget {
   const BackgroundUpper({super.key});
@@ -70,9 +73,11 @@ class _BackgroundScreenState extends State<BackgroundUpper>
   Animation<double>? _rotateAnimation_jellyfish;
   Animation<Offset>? _transAnimation_jellyfish;
 
+
   @override
   void initState() {
     super.initState();
+
     _animationController1 = AnimationController(
         duration: const Duration(milliseconds: 6000), vsync: this);
     _rotateAnimation1 =
@@ -86,8 +91,8 @@ class _BackgroundScreenState extends State<BackgroundUpper>
       final screenWidth = MediaQuery.of(context).size.width;
       final screenHeight = MediaQuery.of(context).size.height;
       _transAnimation1 = Tween<Offset>(
-          begin: Offset(screenWidth * -0.42, screenHeight * 0.25),
-          end: Offset(screenWidth * -0.44, screenHeight * -0.65))
+              begin: Offset(screenWidth * -0.42, screenHeight * 0.25),
+              end: Offset(screenWidth * -0.44, screenHeight * -0.65))
           .animate(_animationController1!);
     });
 
@@ -101,8 +106,8 @@ class _BackgroundScreenState extends State<BackgroundUpper>
       final screenWidth = MediaQuery.of(context).size.width;
       final screenHeight = MediaQuery.of(context).size.height;
       _transAnimation2 = Tween<Offset>(
-          begin: Offset(screenWidth * -0.43, screenHeight * 0.25),
-          end: Offset(screenWidth * -0.465, screenHeight * -0.6))
+              begin: Offset(screenWidth * -0.43, screenHeight * 0.25),
+              end: Offset(screenWidth * -0.465, screenHeight * -0.6))
           .animate(_animationController2!);
     });
 
@@ -116,8 +121,8 @@ class _BackgroundScreenState extends State<BackgroundUpper>
       final screenWidth = MediaQuery.of(context).size.width;
       final screenHeight = MediaQuery.of(context).size.height;
       _transAnimation3 = Tween<Offset>(
-          begin: Offset(screenWidth * -0.45, screenHeight * 0.25),
-          end: Offset(screenWidth * -0.5, screenHeight * -0.85))
+              begin: Offset(screenWidth * -0.45, screenHeight * 0.25),
+              end: Offset(screenWidth * -0.5, screenHeight * -0.85))
           .animate(_animationController3!);
     });
 
@@ -131,8 +136,8 @@ class _BackgroundScreenState extends State<BackgroundUpper>
       final screenWidth = MediaQuery.of(context).size.width;
       final screenHeight = MediaQuery.of(context).size.height;
       _transAnimation4 = Tween<Offset>(
-          begin: Offset(screenWidth * -0.4, screenHeight * 0.25),
-          end: Offset(screenWidth * -0.41, screenHeight * -0.77))
+              begin: Offset(screenWidth * -0.4, screenHeight * 0.25),
+              end: Offset(screenWidth * -0.41, screenHeight * -0.77))
           .animate(_animationController4!);
     });
 
@@ -146,8 +151,8 @@ class _BackgroundScreenState extends State<BackgroundUpper>
       final screenWidth = MediaQuery.of(context).size.width;
       final screenHeight = MediaQuery.of(context).size.height;
       _transAnimation5 = Tween<Offset>(
-          begin: Offset(screenWidth * -0.38, screenHeight * 0.25),
-          end: Offset(screenWidth * -0.36, screenHeight * -0.9))
+              begin: Offset(screenWidth * -0.38, screenHeight * 0.25),
+              end: Offset(screenWidth * -0.36, screenHeight * -0.9))
           .animate(_animationController5!);
     });
 
@@ -161,8 +166,8 @@ class _BackgroundScreenState extends State<BackgroundUpper>
       final screenWidth = MediaQuery.of(context).size.width;
       final screenHeight = MediaQuery.of(context).size.height;
       _transAnimation6 = Tween<Offset>(
-          begin: Offset(screenWidth * 0.42, screenHeight * 0.25),
-          end: Offset(screenWidth * 0.44, screenHeight * -0.77))
+              begin: Offset(screenWidth * 0.42, screenHeight * 0.25),
+              end: Offset(screenWidth * 0.44, screenHeight * -0.77))
           .animate(_animationController6!);
     });
 
@@ -176,8 +181,8 @@ class _BackgroundScreenState extends State<BackgroundUpper>
       final screenWidth = MediaQuery.of(context).size.width;
       final screenHeight = MediaQuery.of(context).size.height;
       _transAnimation7 = Tween<Offset>(
-          begin: Offset(screenWidth * 0.43, screenHeight * 0.25),
-          end: Offset(screenWidth * 0.465, screenHeight * -0.9))
+              begin: Offset(screenWidth * 0.43, screenHeight * 0.25),
+              end: Offset(screenWidth * 0.465, screenHeight * -0.9))
           .animate(_animationController7!);
     });
 
@@ -191,8 +196,8 @@ class _BackgroundScreenState extends State<BackgroundUpper>
       final screenWidth = MediaQuery.of(context).size.width;
       final screenHeight = MediaQuery.of(context).size.height;
       _transAnimation8 = Tween<Offset>(
-          begin: Offset(screenWidth * 0.45, screenHeight * 0.25),
-          end: Offset(screenWidth * 0.5, screenHeight * -0.9))
+              begin: Offset(screenWidth * 0.45, screenHeight * 0.25),
+              end: Offset(screenWidth * 0.5, screenHeight * -0.9))
           .animate(_animationController8!);
     });
 
@@ -206,8 +211,8 @@ class _BackgroundScreenState extends State<BackgroundUpper>
       final screenWidth = MediaQuery.of(context).size.width;
       final screenHeight = MediaQuery.of(context).size.height;
       _transAnimation9 = Tween<Offset>(
-          begin: Offset(screenWidth * 0.4, screenHeight * 0.25),
-          end: Offset(screenWidth * 0.41, screenHeight * -0.63))
+              begin: Offset(screenWidth * 0.4, screenHeight * 0.25),
+              end: Offset(screenWidth * 0.41, screenHeight * -0.63))
           .animate(_animationController9!);
     });
 
@@ -221,8 +226,8 @@ class _BackgroundScreenState extends State<BackgroundUpper>
       final screenWidth = MediaQuery.of(context).size.width;
       final screenHeight = MediaQuery.of(context).size.height;
       _transAnimation10 = Tween<Offset>(
-          begin: Offset(screenWidth * 0.38, screenHeight * 0.25),
-          end: Offset(screenWidth * 0.36, screenHeight * -0.7))
+              begin: Offset(screenWidth * 0.38, screenHeight * 0.25),
+              end: Offset(screenWidth * 0.36, screenHeight * -0.7))
           .animate(_animationController10!);
     });
 
@@ -234,8 +239,8 @@ class _BackgroundScreenState extends State<BackgroundUpper>
       final screenWidth = MediaQuery.of(context).size.width;
       final screenHeight = MediaQuery.of(context).size.height;
       _transAnimation_fish = Tween<Offset>(
-          begin: Offset(screenWidth * -0.37, screenHeight * 0.25),
-          end: Offset(screenWidth * -0.33, screenHeight * 0.22))
+              begin: Offset(screenWidth * -0.37, screenHeight * 0.25),
+              end: Offset(screenWidth * -0.33, screenHeight * 0.22))
           .animate(_animationController_fish!);
     });
 
@@ -247,8 +252,8 @@ class _BackgroundScreenState extends State<BackgroundUpper>
       final screenWidth = MediaQuery.of(context).size.width;
       final screenHeight = MediaQuery.of(context).size.height;
       _transAnimation_crab1 = Tween<Offset>(
-          begin: Offset(screenWidth * -0.07, screenHeight * 0.405),
-          end: Offset(screenWidth * -0.14, screenHeight * 0.4))
+              begin: Offset(screenWidth * -0.07, screenHeight * 0.405),
+              end: Offset(screenWidth * -0.14, screenHeight * 0.4))
           .animate(_animationController_crab1!);
     });
 
@@ -260,8 +265,8 @@ class _BackgroundScreenState extends State<BackgroundUpper>
       final screenWidth = MediaQuery.of(context).size.width;
       final screenHeight = MediaQuery.of(context).size.height;
       _transAnimation_crab2 = Tween<Offset>(
-          begin: Offset(screenWidth * 0, screenHeight * 0.39),
-          end: Offset(screenWidth * -0.05, screenHeight * 0.415))
+              begin: Offset(screenWidth * 0, screenHeight * 0.39),
+              end: Offset(screenWidth * -0.05, screenHeight * 0.415))
           .animate(_animationController_crab2!);
     });
 
@@ -273,8 +278,8 @@ class _BackgroundScreenState extends State<BackgroundUpper>
       final screenWidth = MediaQuery.of(context).size.width;
       final screenHeight = MediaQuery.of(context).size.height;
       _transAnimation_crab3 = Tween<Offset>(
-          begin: Offset(screenWidth * 0.06, screenHeight * 0.37),
-          end: Offset(screenWidth * 0.01, screenHeight * 0.38))
+              begin: Offset(screenWidth * 0.06, screenHeight * 0.37),
+              end: Offset(screenWidth * 0.01, screenHeight * 0.38))
           .animate(_animationController_crab3!);
     });
 
@@ -286,8 +291,8 @@ class _BackgroundScreenState extends State<BackgroundUpper>
       final screenWidth = MediaQuery.of(context).size.width;
       final screenHeight = MediaQuery.of(context).size.height;
       _transAnimation_crab4 = Tween<Offset>(
-          begin: Offset(screenWidth * 0.12, screenHeight * 0.375),
-          end: Offset(screenWidth * 0.07, screenHeight * 0.37))
+              begin: Offset(screenWidth * 0.12, screenHeight * 0.375),
+              end: Offset(screenWidth * 0.07, screenHeight * 0.37))
           .animate(_animationController_crab4!);
     });
 
@@ -299,8 +304,8 @@ class _BackgroundScreenState extends State<BackgroundUpper>
       final screenWidth = MediaQuery.of(context).size.width;
       final screenHeight = MediaQuery.of(context).size.height;
       _transAnimation_jellyfish = Tween<Offset>(
-          begin: Offset(screenWidth * 0.36, screenHeight * 0.2),
-          end: Offset(screenWidth * 0.33, screenHeight * 0.15))
+              begin: Offset(screenWidth * 0.36, screenHeight * 0.2),
+              end: Offset(screenWidth * 0.33, screenHeight * 0.15))
           .animate(_animationController_jellyfish!);
     });
 
@@ -363,130 +368,75 @@ class _BackgroundScreenState extends State<BackgroundUpper>
 
   @override
   Widget build(BuildContext context) {
-    return
-      Indexer(
-        children: <Widget>[
-          Indexed(
-            index: 1001,
-            child: Positioned(
-              left: 0,
-              bottom: 0,
+    return Indexer(
+      children: <Widget>[
+        Indexed(
+          index: 1001,
+          child: Positioned(
+            left: 0,
+            bottom: 0,
+            child: IgnorePointer(
               child: Container(
                 color: Colors.transparent,
                 child: Image.asset(AppIcons.seaweedLeft,
-                    width: MediaQuery.of(context).size.width * 0.225
-                ),
+                    width: MediaQuery.of(context).size.width * 0.225),
               ),
             ),
           ),
-          Indexed(
-            index: 1001,
-            child: Positioned(
-              right: 0,
-              bottom: 0,
+        ),
+        Indexed(
+          index: 1001,
+          child: Positioned(
+            right: 0,
+            bottom: 0,
+            child: IgnorePointer(
               child: Container(
                 color: Colors.transparent,
                 child: Image.asset(AppIcons.seaweedRight2,
-                    width: MediaQuery.of(context).size.width * 0.18
-                ),
+                    width: MediaQuery.of(context).size.width * 0.18),
               ),
             ),
           ),
-          Indexed(
-            index: 1002,
-            child: Positioned(
-              right: MediaQuery.of(context).size.width * 0.1,
-              bottom: 0,
+        ),
+        Indexed(
+          index: 1002,
+          child: Positioned(
+            right: MediaQuery.of(context).size.width * 0.1,
+            bottom: 0,
+            child: IgnorePointer(
               child: Container(
                 color: Colors.transparent,
                 child: Image.asset(AppIcons.seaweedRight1,
-                    width: MediaQuery.of(context).size.width * 0.18
-                ),
+                    width: MediaQuery.of(context).size.width * 0.18),
               ),
             ),
           ),
-          Indexed(
-            index: 1003,
-            child: Positioned(
-              bottom: 0,
-              child: Container(
-                color: Colors.transparent,
-                child: Center(
-                  child: Image.asset(AppIcons.ground,
-                      width: MediaQuery.of(context).size.width),
-                ),
+        ),
+        Indexed(
+          index: 1003,
+          child: Positioned(
+            bottom: 0,
+            child: Container(
+              color: Colors.transparent,
+              child: Center(
+                child: Image.asset(AppIcons.ground,
+                    width: MediaQuery.of(context).size.width),
               ),
             ),
           ),
-          Indexed(
-            index: 1003,
-            child: Positioned(
-              child: IgnorePointer(
-                child: AnimatedBuilder(
-                  animation: _rotateAnimation_fish!,
-                  builder: (context, widget) {
-                    if (_transAnimation_fish != null) {
-                      return Transform.translate(
-                        offset: _transAnimation_fish!.value,
-                        child: Transform.rotate(
-                          angle: _rotateAnimation_fish!.value,
-                          child: widget,
-                        ),
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
-                  child: Container(
-                    color: Colors.transparent,
-                    child: Center(
-                      child: Image.asset(AppIcons.fish,
-                          width: MediaQuery.of(context).size.width * 0.15),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          // Indexed(
-          //   index: 1002,
-          //   child: Positioned(
-          //     bottom: MediaQuery.of(context).size.height * 0.15,
-          //     left: MediaQuery.of(context).size.width * 0.08,
-          //     child: Container(
-          //       color: Colors.transparent,
-          //       child: Center(
-          //         child: Image.asset(AppIcons.fish,
-          //             width: MediaQuery.of(context).size.width * 0.15),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          Indexed(
-            index: 1004,
-            child: Positioned(
-              bottom: MediaQuery.of(context).size.height * 0.01,
-              right: MediaQuery.of(context).size.width * 0.01,
-              child: Container(
-                color: Colors.transparent,
-                child: Center(
-                  child: Image.asset(AppIcons.stars,
-                      width: MediaQuery.of(context).size.width * 0.08),
-                ),
-              ),
-            ),
-          ),
-          Indexed(
-            index: 1005,
+        ),
+        Indexed(
+          index: 1003,
+          child: Positioned(
             child: IgnorePointer(
               child: AnimatedBuilder(
-                animation: _rotateAnimation_crab1!,
+                animation: _rotateAnimation_fish!,
                 builder: (context, widget) {
-                  if (_transAnimation_crab1 != null) {
+                  if (_transAnimation_fish != null) {
                     return Transform.translate(
-                      offset: _transAnimation_crab1!.value,
+                      offset: _transAnimation_fish!.value,
                       child: Transform.rotate(
-                        angle: _rotateAnimation_crab1!.value,
+                        angle: _rotateAnimation_fish!.value,
                         child: widget,
                       ),
                     );
@@ -497,166 +447,54 @@ class _BackgroundScreenState extends State<BackgroundUpper>
                 child: Container(
                   color: Colors.transparent,
                   child: Center(
-                    child: Image.asset(AppIcons.crab,
-                        width: MediaQuery.of(context).size.width * 0.08),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Indexed(
-            index: 1005,
-            child: IgnorePointer(
-              child: AnimatedBuilder(
-                animation: _rotateAnimation_crab2!,
-                builder: (context, widget) {
-                  if (_transAnimation_crab2 != null) {
-                    return Transform.translate(
-                      offset: _transAnimation_crab2!.value,
-                      child: Transform.rotate(
-                        angle: _rotateAnimation_crab2!.value,
-                        child: widget,
-                      ),
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-                child: Container(
-                  color: Colors.transparent,
-                  child: Center(
-                    child: Image.asset(AppIcons.crab,
-                        width: MediaQuery.of(context).size.width * 0.06),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Indexed(
-            index: 1005,
-            child: IgnorePointer(
-              child: AnimatedBuilder(
-                animation: _rotateAnimation_crab3!,
-                builder: (context, widget) {
-                  if (_transAnimation_crab3 != null) {
-                    return Transform.translate(
-                      offset: _transAnimation_crab3!.value,
-                      child: Transform.rotate(
-                        angle: _rotateAnimation_crab3!.value,
-                        child: widget,
-                      ),
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-                child: Container(
-                  color: Colors.transparent,
-                  child: Center(
-                    child: Image.asset(AppIcons.crab,
-                        width: MediaQuery.of(context).size.width * 0.06),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Indexed(
-            index: 1005,
-            child: IgnorePointer(
-              child: AnimatedBuilder(
-                animation: _rotateAnimation_crab4!,
-                builder: (context, widget) {
-                  if (_transAnimation_crab4 != null) {
-                    return Transform.translate(
-                      offset: _transAnimation_crab4!.value,
-                      child: Transform.rotate(
-                        angle: _rotateAnimation_crab4!.value,
-                        child: widget,
-                      ),
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-                child: Container(
-                  color: Colors.transparent,
-                  child: Center(
-                    child: Image.asset(AppIcons.crab,
-                        width: MediaQuery.of(context).size.width * 0.06),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Indexed(
-            index: 1000,
-            child: IgnorePointer(
-              child: AnimatedBuilder(
-                animation: _rotateAnimation_jellyfish!,
-                builder: (context, widget) {
-                  if (_transAnimation_jellyfish != null) {
-                    return Transform.translate(
-                      offset: _transAnimation_jellyfish!.value,
-                      child: Transform.rotate(
-                        angle: _rotateAnimation_jellyfish!.value,
-                        child: widget,
-                      ),
-                    );
-                  } else {
-                    return Container();
-                  }
-                },
-                child: Container(
-                  color: Colors.transparent,
-                  child: Center(
-                    child: Image.asset(AppIcons.jellyfish,
+                    child: Image.asset(AppIcons.fish,
                         width: MediaQuery.of(context).size.width * 0.15),
                   ),
                 ),
               ),
             ),
           ),
-          // Indexed(
-          //   index: 1004,
-          //   child: Positioned(
-          //     bottom: MediaQuery.of(context).size.height * 0.02,
-          //     left: MediaQuery.of(context).size.width * 0.3,
-          //     child: Container(
-          //       color: Colors.transparent,
-          //       child: Center(
-          //         child: Image.asset(AppIcons.crabs,
-          //             width: MediaQuery.of(context).size.width * 0.25),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          Indexed(
-            index: 1005,
-            child: Positioned(
-              bottom: MediaQuery.of(context).size.height * 0.04,
-              right: 0,
-              child: Container(
-                color: Colors.transparent,
-                child: Center(
-                  child: Image.asset(AppIcons.donggle,
-                      width: MediaQuery.of(context).size.width * 0.22),
-                ),
+        ),
+        // Indexed(
+        //   index: 1002,
+        //   child: Positioned(
+        //     bottom: MediaQuery.of(context).size.height * 0.15,
+        //     left: MediaQuery.of(context).size.width * 0.08,
+        //     child: Container(
+        //       color: Colors.transparent,
+        //       child: Center(
+        //         child: Image.asset(AppIcons.fish,
+        //             width: MediaQuery.of(context).size.width * 0.15),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        Indexed(
+          index: 1004,
+          child: Positioned(
+            bottom: MediaQuery.of(context).size.height * 0.01,
+            right: MediaQuery.of(context).size.width * 0.01,
+            child: Container(
+              color: Colors.transparent,
+              child: Center(
+                child: Image.asset(AppIcons.stars,
+                    width: MediaQuery.of(context).size.width * 0.08),
               ),
             ),
           ),
-          IgnorePointer(
+        ),
+        Indexed(
+          index: 1005,
+          child: IgnorePointer(
             child: AnimatedBuilder(
-              animation: _rotateAnimation1!,
+              animation: _rotateAnimation_crab1!,
               builder: (context, widget) {
-                if (_transAnimation1 != null) {
+                if (_transAnimation_crab1 != null) {
                   return Transform.translate(
-                    offset: _transAnimation1!.value,
+                    offset: _transAnimation_crab1!.value,
                     child: Transform.rotate(
-                      angle: _rotateAnimation1!.value,
-                      child: Transform.scale(
-                        scale: _scaleAnimation1!.value,
-                        child: widget,
-                      ),
+                      angle: _rotateAnimation_crab1!.value,
+                      child: widget,
                     ),
                   );
                 } else {
@@ -666,25 +504,25 @@ class _BackgroundScreenState extends State<BackgroundUpper>
               child: Container(
                 color: Colors.transparent,
                 child: Center(
-                  child: Image.asset(AppIcons.water_test,
-                      width: MediaQuery.of(context).size.width * 0.14),
+                  child: Image.asset(AppIcons.crab,
+                      width: MediaQuery.of(context).size.width * 0.08),
                 ),
               ),
             ),
           ),
-          IgnorePointer(
+        ),
+        Indexed(
+          index: 1005,
+          child: IgnorePointer(
             child: AnimatedBuilder(
-              animation: _rotateAnimation2!,
+              animation: _rotateAnimation_crab2!,
               builder: (context, widget) {
-                if (_transAnimation2 != null) {
+                if (_transAnimation_crab2 != null) {
                   return Transform.translate(
-                    offset: _transAnimation2!.value,
+                    offset: _transAnimation_crab2!.value,
                     child: Transform.rotate(
-                      angle: _rotateAnimation2!.value,
-                      child: Transform.scale(
-                        scale: _scaleAnimation2!.value,
-                        child: widget,
-                      ),
+                      angle: _rotateAnimation_crab2!.value,
+                      child: widget,
                     ),
                   );
                 } else {
@@ -694,25 +532,25 @@ class _BackgroundScreenState extends State<BackgroundUpper>
               child: Container(
                 color: Colors.transparent,
                 child: Center(
-                  child: Image.asset(AppIcons.water_test,
-                      width: MediaQuery.of(context).size.width * 0.14),
+                  child: Image.asset(AppIcons.crab,
+                      width: MediaQuery.of(context).size.width * 0.06),
                 ),
               ),
             ),
           ),
-          IgnorePointer(
+        ),
+        Indexed(
+          index: 1005,
+          child: IgnorePointer(
             child: AnimatedBuilder(
-              animation: _rotateAnimation3!,
+              animation: _rotateAnimation_crab3!,
               builder: (context, widget) {
-                if (_transAnimation3 != null) {
+                if (_transAnimation_crab3 != null) {
                   return Transform.translate(
-                    offset: _transAnimation3!.value,
+                    offset: _transAnimation_crab3!.value,
                     child: Transform.rotate(
-                      angle: _rotateAnimation3!.value,
-                      child: Transform.scale(
-                        scale: _scaleAnimation3!.value,
-                        child: widget,
-                      ),
+                      angle: _rotateAnimation_crab3!.value,
+                      child: widget,
                     ),
                   );
                 } else {
@@ -722,25 +560,25 @@ class _BackgroundScreenState extends State<BackgroundUpper>
               child: Container(
                 color: Colors.transparent,
                 child: Center(
-                  child: Image.asset(AppIcons.water_test,
-                      width: MediaQuery.of(context).size.width * 0.14),
+                  child: Image.asset(AppIcons.crab,
+                      width: MediaQuery.of(context).size.width * 0.06),
                 ),
               ),
             ),
           ),
-          IgnorePointer(
+        ),
+        Indexed(
+          index: 1005,
+          child: IgnorePointer(
             child: AnimatedBuilder(
-              animation: _rotateAnimation4!,
+              animation: _rotateAnimation_crab4!,
               builder: (context, widget) {
-                if (_transAnimation4 != null) {
+                if (_transAnimation_crab4 != null) {
                   return Transform.translate(
-                    offset: _transAnimation4!.value,
+                    offset: _transAnimation_crab4!.value,
                     child: Transform.rotate(
-                      angle: _rotateAnimation4!.value,
-                      child: Transform.scale(
-                        scale: _scaleAnimation4!.value,
-                        child: widget,
-                      ),
+                      angle: _rotateAnimation_crab4!.value,
+                      child: widget,
                     ),
                   );
                 } else {
@@ -750,25 +588,25 @@ class _BackgroundScreenState extends State<BackgroundUpper>
               child: Container(
                 color: Colors.transparent,
                 child: Center(
-                  child: Image.asset(AppIcons.water_test,
-                      width: MediaQuery.of(context).size.width * 0.14),
+                  child: Image.asset(AppIcons.crab,
+                      width: MediaQuery.of(context).size.width * 0.06),
                 ),
               ),
             ),
           ),
-          IgnorePointer(
+        ),
+        Indexed(
+          index: 1000,
+          child: IgnorePointer(
             child: AnimatedBuilder(
-              animation: _rotateAnimation5!,
+              animation: _rotateAnimation_jellyfish!,
               builder: (context, widget) {
-                if (_transAnimation5 != null) {
+                if (_transAnimation_jellyfish != null) {
                   return Transform.translate(
-                    offset: _transAnimation5!.value,
+                    offset: _transAnimation_jellyfish!.value,
                     child: Transform.rotate(
-                      angle: _rotateAnimation5!.value,
-                      child: Transform.scale(
-                        scale: _scaleAnimation5!.value,
-                        child: widget,
-                      ),
+                      angle: _rotateAnimation_jellyfish!.value,
+                      child: widget,
                     ),
                   );
                 } else {
@@ -778,181 +616,364 @@ class _BackgroundScreenState extends State<BackgroundUpper>
               child: Container(
                 color: Colors.transparent,
                 child: Center(
-                  child: Image.asset(AppIcons.water_test,
-                      width: MediaQuery.of(context).size.width * 0.14),
+                  child: Image.asset(AppIcons.jellyfish,
+                      width: MediaQuery.of(context).size.width * 0.15),
                 ),
               ),
             ),
           ),
-          IgnorePointer(
-            child: AnimatedBuilder(
-              animation: _rotateAnimation6!,
-              builder: (context, widget) {
-                if (_transAnimation6 != null) {
-                  return Transform.translate(
-                    offset: _transAnimation6!.value,
-                    child: Transform.rotate(
-                      angle: _rotateAnimation6!.value,
-                      child: Transform.scale(
-                        scale: _scaleAnimation6!.value,
-                        child: widget,
-                      ),
+        ),
+        // Indexed(
+        //   index: 1004,
+        //   child: Positioned(
+        //     bottom: MediaQuery.of(context).size.height * 0.02,
+        //     left: MediaQuery.of(context).size.width * 0.3,
+        //     child: Container(
+        //       color: Colors.transparent,
+        //       child: Center(
+        //         child: Image.asset(AppIcons.crabs,
+        //             width: MediaQuery.of(context).size.width * 0.25),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        Indexed(
+          index: 1005,
+          child: Positioned(
+            bottom: MediaQuery.of(context).size.height * 0.1,
+            right: 0,
+            child: const donggleTalk(),
+            ),
+          ),
+        // Indexed(
+        //   index: 1005,
+        //   child: Positioned(
+        //     bottom: MediaQuery.of(context).size.height * 0.04,
+        //     right: 0,
+        //     child: Container(
+        //       color: Colors.transparent,
+        //       child: Center(
+        //         child: GestureDetector(
+        //           onTap: () {
+        //             setTouchedDonggle();
+        //             donggleTalkModel.getDonggleTalk();
+        //           },
+        //           child: Image.asset(AppIcons.donggle,
+        //               width: MediaQuery.of(context).size.width * 0.22),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        IgnorePointer(
+          child: AnimatedBuilder(
+            animation: _rotateAnimation1!,
+            builder: (context, widget) {
+              if (_transAnimation1 != null) {
+                return Transform.translate(
+                  offset: _transAnimation1!.value,
+                  child: Transform.rotate(
+                    angle: _rotateAnimation1!.value,
+                    child: Transform.scale(
+                      scale: _scaleAnimation1!.value,
+                      child: widget,
                     ),
-                  );
-                } else {
-                  return Container();
-                }
-              },
-              child: Container(
-                color: Colors.transparent,
-                child: Center(
-                  child: Image.asset(AppIcons.water_test,
-                      width: MediaQuery.of(context).size.width * 0.14),
-                ),
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
+            child: Container(
+              color: Colors.transparent,
+              child: Center(
+                child: Image.asset(AppIcons.water_test,
+                    width: MediaQuery.of(context).size.width * 0.14),
               ),
             ),
           ),
-          IgnorePointer(
-            child: AnimatedBuilder(
-              animation: _rotateAnimation7!,
-              builder: (context, widget) {
-                if (_transAnimation7 != null) {
-                  return Transform.translate(
-                    offset: _transAnimation7!.value,
-                    child: Transform.rotate(
-                      angle: _rotateAnimation7!.value,
-                      child: Transform.scale(
-                        scale: _scaleAnimation7!.value,
-                        child: widget,
-                      ),
+        ),
+        IgnorePointer(
+          child: AnimatedBuilder(
+            animation: _rotateAnimation2!,
+            builder: (context, widget) {
+              if (_transAnimation2 != null) {
+                return Transform.translate(
+                  offset: _transAnimation2!.value,
+                  child: Transform.rotate(
+                    angle: _rotateAnimation2!.value,
+                    child: Transform.scale(
+                      scale: _scaleAnimation2!.value,
+                      child: widget,
                     ),
-                  );
-                } else {
-                  return Container();
-                }
-              },
-              child: Container(
-                color: Colors.transparent,
-                child: Center(
-                  child: Image.asset(AppIcons.water_test,
-                      width: MediaQuery.of(context).size.width * 0.14),
-                ),
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
+            child: Container(
+              color: Colors.transparent,
+              child: Center(
+                child: Image.asset(AppIcons.water_test,
+                    width: MediaQuery.of(context).size.width * 0.14),
               ),
             ),
           ),
-          IgnorePointer(
-            child: AnimatedBuilder(
-              animation: _rotateAnimation8!,
-              builder: (context, widget) {
-                if (_transAnimation8 != null) {
-                  return Transform.translate(
-                    offset: _transAnimation8!.value,
-                    child: Transform.rotate(
-                      angle: _rotateAnimation8!.value,
-                      child: Transform.scale(
-                        scale: _scaleAnimation8!.value,
-                        child: widget,
-                      ),
+        ),
+        IgnorePointer(
+          child: AnimatedBuilder(
+            animation: _rotateAnimation3!,
+            builder: (context, widget) {
+              if (_transAnimation3 != null) {
+                return Transform.translate(
+                  offset: _transAnimation3!.value,
+                  child: Transform.rotate(
+                    angle: _rotateAnimation3!.value,
+                    child: Transform.scale(
+                      scale: _scaleAnimation3!.value,
+                      child: widget,
                     ),
-                  );
-                } else {
-                  return Container();
-                }
-              },
-              child: Container(
-                color: Colors.transparent,
-                child: Center(
-                  child: Image.asset(AppIcons.water_test,
-                      width: MediaQuery.of(context).size.width * 0.14),
-                ),
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
+            child: Container(
+              color: Colors.transparent,
+              child: Center(
+                child: Image.asset(AppIcons.water_test,
+                    width: MediaQuery.of(context).size.width * 0.14),
               ),
             ),
           ),
-          IgnorePointer(
-            child: AnimatedBuilder(
-              animation: _rotateAnimation9!,
-              builder: (context, widget) {
-                if (_transAnimation9 != null) {
-                  return Transform.translate(
-                    offset: _transAnimation9!.value,
-                    child: Transform.rotate(
-                      angle: _rotateAnimation9!.value,
-                      child: Transform.scale(
-                        scale: _scaleAnimation9!.value,
-                        child: widget,
-                      ),
+        ),
+        IgnorePointer(
+          child: AnimatedBuilder(
+            animation: _rotateAnimation4!,
+            builder: (context, widget) {
+              if (_transAnimation4 != null) {
+                return Transform.translate(
+                  offset: _transAnimation4!.value,
+                  child: Transform.rotate(
+                    angle: _rotateAnimation4!.value,
+                    child: Transform.scale(
+                      scale: _scaleAnimation4!.value,
+                      child: widget,
                     ),
-                  );
-                } else {
-                  return Container();
-                }
-              },
-              child: Container(
-                color: Colors.transparent,
-                child: Center(
-                  child: Image.asset(AppIcons.water_test,
-                      width: MediaQuery.of(context).size.width * 0.14),
-                ),
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
+            child: Container(
+              color: Colors.transparent,
+              child: Center(
+                child: Image.asset(AppIcons.water_test,
+                    width: MediaQuery.of(context).size.width * 0.14),
               ),
             ),
           ),
-          IgnorePointer(
-            child: AnimatedBuilder(
-              animation: _rotateAnimation10!,
-              builder: (context, widget) {
-                if (_transAnimation10 != null) {
-                  return Transform.translate(
-                    offset: _transAnimation10!.value,
-                    child: Transform.rotate(
-                      angle: _rotateAnimation10!.value,
-                      child: Transform.scale(
-                        scale: _scaleAnimation10!.value,
-                        child: widget,
-                      ),
+        ),
+        IgnorePointer(
+          child: AnimatedBuilder(
+            animation: _rotateAnimation5!,
+            builder: (context, widget) {
+              if (_transAnimation5 != null) {
+                return Transform.translate(
+                  offset: _transAnimation5!.value,
+                  child: Transform.rotate(
+                    angle: _rotateAnimation5!.value,
+                    child: Transform.scale(
+                      scale: _scaleAnimation5!.value,
+                      child: widget,
                     ),
-                  );
-                } else {
-                  return Container();
-                }
-              },
-              child: Container(
-                color: Colors.transparent,
-                child: Center(
-                  child: Image.asset(AppIcons.water_test,
-                      width: MediaQuery.of(context).size.width * 0.14),
-                ),
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
+            child: Container(
+              color: Colors.transparent,
+              child: Center(
+                child: Image.asset(AppIcons.water_test,
+                    width: MediaQuery.of(context).size.width * 0.14),
               ),
             ),
           ),
-          // Indexed(
-          //   index: 1006,
-          //   child: Positioned(
-          //     top: MediaQuery.of(context).size.height * 0.1,
-          //     left: MediaQuery.of(context).size.width * 0.01,
-          //     child: Container(
-          //       color: Colors.transparent,
-          //       child: Center(
-          //         child: Image.asset(AppIcons.water_left,
-          //             width: MediaQuery.of(context).size.width * 0.12),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // Indexed(
-          //   index: 1006,
-          //   child: Positioned(
-          //     top: MediaQuery.of(context).size.height * 0.1,
-          //     right: MediaQuery.of(context).size.width * 0.01,
-          //     child: Container(
-          //       color: Colors.transparent,
-          //       child: Center(
-          //         child: Image.asset(AppIcons.water_right,
-          //             width: MediaQuery.of(context).size.width * 0.12),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-        ],
+        ),
+        IgnorePointer(
+          child: AnimatedBuilder(
+            animation: _rotateAnimation6!,
+            builder: (context, widget) {
+              if (_transAnimation6 != null) {
+                return Transform.translate(
+                  offset: _transAnimation6!.value,
+                  child: Transform.rotate(
+                    angle: _rotateAnimation6!.value,
+                    child: Transform.scale(
+                      scale: _scaleAnimation6!.value,
+                      child: widget,
+                    ),
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
+            child: Container(
+              color: Colors.transparent,
+              child: Center(
+                child: Image.asset(AppIcons.water_test,
+                    width: MediaQuery.of(context).size.width * 0.14),
+              ),
+            ),
+          ),
+        ),
+        IgnorePointer(
+          child: AnimatedBuilder(
+            animation: _rotateAnimation7!,
+            builder: (context, widget) {
+              if (_transAnimation7 != null) {
+                return Transform.translate(
+                  offset: _transAnimation7!.value,
+                  child: Transform.rotate(
+                    angle: _rotateAnimation7!.value,
+                    child: Transform.scale(
+                      scale: _scaleAnimation7!.value,
+                      child: widget,
+                    ),
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
+            child: Container(
+              color: Colors.transparent,
+              child: Center(
+                child: Image.asset(AppIcons.water_test,
+                    width: MediaQuery.of(context).size.width * 0.14),
+              ),
+            ),
+          ),
+        ),
+        IgnorePointer(
+          child: AnimatedBuilder(
+            animation: _rotateAnimation8!,
+            builder: (context, widget) {
+              if (_transAnimation8 != null) {
+                return Transform.translate(
+                  offset: _transAnimation8!.value,
+                  child: Transform.rotate(
+                    angle: _rotateAnimation8!.value,
+                    child: Transform.scale(
+                      scale: _scaleAnimation8!.value,
+                      child: widget,
+                    ),
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
+            child: Container(
+              color: Colors.transparent,
+              child: Center(
+                child: Image.asset(AppIcons.water_test,
+                    width: MediaQuery.of(context).size.width * 0.14),
+              ),
+            ),
+          ),
+        ),
+        IgnorePointer(
+          child: AnimatedBuilder(
+            animation: _rotateAnimation9!,
+            builder: (context, widget) {
+              if (_transAnimation9 != null) {
+                return Transform.translate(
+                  offset: _transAnimation9!.value,
+                  child: Transform.rotate(
+                    angle: _rotateAnimation9!.value,
+                    child: Transform.scale(
+                      scale: _scaleAnimation9!.value,
+                      child: widget,
+                    ),
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
+            child: Container(
+              color: Colors.transparent,
+              child: Center(
+                child: Image.asset(AppIcons.water_test,
+                    width: MediaQuery.of(context).size.width * 0.14),
+              ),
+            ),
+          ),
+        ),
+        IgnorePointer(
+          child: AnimatedBuilder(
+            animation: _rotateAnimation10!,
+            builder: (context, widget) {
+              if (_transAnimation10 != null) {
+                return Transform.translate(
+                  offset: _transAnimation10!.value,
+                  child: Transform.rotate(
+                    angle: _rotateAnimation10!.value,
+                    child: Transform.scale(
+                      scale: _scaleAnimation10!.value,
+                      child: widget,
+                    ),
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
+            child: Container(
+              color: Colors.transparent,
+              child: Center(
+                child: Image.asset(AppIcons.water_test,
+                    width: MediaQuery.of(context).size.width * 0.14),
+              ),
+            ),
+          ),
+        ),
+        // Indexed(
+        //   index: 1006,
+        //   child: Positioned(
+        //     top: MediaQuery.of(context).size.height * 0.1,
+        //     left: MediaQuery.of(context).size.width * 0.01,
+        //     child: Container(
+        //       color: Colors.transparent,
+        //       child: Center(
+        //         child: Image.asset(AppIcons.water_left,
+        //             width: MediaQuery.of(context).size.width * 0.12),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        // Indexed(
+        //   index: 1006,
+        //   child: Positioned(
+        //     top: MediaQuery.of(context).size.height * 0.1,
+        //     right: MediaQuery.of(context).size.width * 0.01,
+        //     child: Container(
+        //       color: Colors.transparent,
+        //       child: Center(
+        //         child: Image.asset(AppIcons.water_right,
+        //             width: MediaQuery.of(context).size.width * 0.12),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+      ],
     );
   }
 }

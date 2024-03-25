@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/icons/cards_icon_main.dart';
 import 'package:frontend/core/utils/component/icons/close_circle.dart';
@@ -13,6 +14,7 @@ import 'package:frontend/presentation/pages/home/component/background/back_groun
 import 'package:frontend/presentation/pages/home/component/background/background_screen.dart';
 import 'package:frontend/presentation/pages/home/component/background/background_upper.dart';
 import 'package:frontend/presentation/pages/home/home_page.dart';
+import 'package:frontend/presentation/pages/modal/stop_quiz_modal.dart';
 import 'package:frontend/presentation/pages/quiz/book_quiz_page.dart';
 import 'package:frontend/presentation/pages/quiz/quiz_page.dart';
 import 'package:frontend/presentation/provider/quiz_provider.dart';
@@ -197,14 +199,30 @@ class _MainScreenState extends State<MainScreen> {
                   child: Positioned(
                     top: MediaQuery.of(context).size.height * 0.1,
                     right: MediaQuery.of(context).size.width * 0.065,
-                    child: IconButton(
-                        icon: const CloseCircle(),
-                        onPressed: () {
-                          _onButtonPressed(1);
-                          // context.pushReplacement('/main/1');
-                          quizProvider.clearAnswers(quizModel.quizzes);
-                          // print(quizProvider.selectedAnswers);
-                        }),
+                    child: Builder(
+                      builder: (newContext) {
+                        return IconButton(
+                          icon: const CloseCircle(),
+                          onPressed: () {
+                            showDialog(
+                              context: newContext,
+                              builder: (BuildContext dialogContext) {
+                                return stopQuiz(
+                                  title: "퀴즈 종료",
+                                  content: "퀴즈를 종료하시겠습니까?",
+                                  onConfirm: () {
+                                    _onButtonPressed(1);
+                                    quizProvider
+                                        .clearAnswers(quizModel.quizzes);
+                                    showToast('종료되었습니다.');
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
                 )
               : Container(),
@@ -214,14 +232,30 @@ class _MainScreenState extends State<MainScreen> {
                   child: Positioned(
                     top: MediaQuery.of(context).size.height * 0.1,
                     right: MediaQuery.of(context).size.width * 0.065,
-                    child: IconButton(
-                        icon: const CloseCircle(),
-                        onPressed: () {
-                          _onButtonPressed(0);
-                          // context.pushReplacement('/main/1');
-                          quizProvider.clearAnswers(quizModel.quizzes);
-                          // print(quizProvider.selectedAnswers);
-                        }),
+                    child: Builder(
+                      builder: (newContext) {
+                        return IconButton(
+                          icon: const CloseCircle(),
+                          onPressed: () {
+                            showDialog(
+                              context: newContext,
+                              builder: (BuildContext dialogContext) {
+                                return stopQuiz(
+                                  title: "퀴즈 종료",
+                                  content: "퀴즈를 종료하시겠습니까?",
+                                  onConfirm: () {
+                                    _onButtonPressed(0);
+                                    quizProvider
+                                        .clearAnswers(quizModel.quizzes);
+                                    showToast('종료되었습니다.');
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
                 )
               : Container(),
