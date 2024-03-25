@@ -66,10 +66,10 @@ except Exception as e:
 ####################################################################
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Hello World th"}
 
 
-@app.post("/analyze/drawing")
+@app.post("/api/analyze/drawing")
 async def analyze_object(file: UploadFile = File(...)):
     try:
         # 업로드된 파일을 읽음
