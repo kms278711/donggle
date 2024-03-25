@@ -39,7 +39,7 @@ spring:
             client-name: Naver
             client-id: Bfl2aUwRqotbANC0uU_5
             client-secret: 6rB4gfwGfd
-            redirect-uri: "http://localhost:8080/api/naver/callback"
+            redirect-uri: "https://j10c101.p.ssafy.io/api/naver/callback"
             authorization-grant-type: authorization_code
             scope: email
             client-authentication-method: basic
