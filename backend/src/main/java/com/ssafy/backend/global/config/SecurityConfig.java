@@ -37,7 +37,7 @@ public class SecurityConfig {
 				.requestMatchers("/api/verify/**")
 				.requestMatchers("/api/donggle/**")
 				.requestMatchers("/ai/**")
-				.requestMatchers("/api/naver/**");
+				.requestMatchers("/api/oauth/**");
 	}
 
 	@Bean
@@ -53,7 +53,7 @@ public class SecurityConfig {
 								.requestMatchers("/api/verify/**").permitAll()
 								.requestMatchers("/api/donggle/**").permitAll()
 								.requestMatchers("/ai/**").permitAll()
-								.requestMatchers("/api/naver/**").permitAll()
+								.requestMatchers("/api/oauth/**").permitAll()
 								.anyRequest().authenticated());
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
