@@ -1,5 +1,6 @@
 package com.ssafy.backend.domain.education.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.backend.domain.book.entity.BookPageSentence;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,7 +27,8 @@ public class Education {
 
 	private String imagePath;
 
-	@OneToOne()
+	@JsonIgnore
+	@OneToOne
 	@JoinColumn(name = "book_page_sentence_id")
 	private BookPageSentence bookPageSentence;
 

@@ -24,6 +24,6 @@ public interface BookService {
     List<UserBookProcessDto> searchProcessBook(Long loginUserId);
     // 구매한 책 조회
     List<BookPurchasedResponseDto> searchPurchasedBook(Long loginUserId);
-
-
+    // 구매내역 구매한 책 테이블에 반영
+    void savePurchasedBook(Long loginUserId, Long bookId);
 }

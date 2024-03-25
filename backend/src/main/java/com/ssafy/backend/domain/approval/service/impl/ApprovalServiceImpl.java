@@ -8,6 +8,7 @@ import com.ssafy.backend.domain.approval.repository.ApprovalRepository;
 import com.ssafy.backend.domain.approval.service.ApprovalService;
 import com.ssafy.backend.domain.book.entity.Book;
 import com.ssafy.backend.domain.book.repository.book.BookRepository;
+import com.ssafy.backend.domain.book.repository.bookpurchased.BookPurchasedRepository;
 import com.ssafy.backend.domain.user.entity.User;
 import com.ssafy.backend.domain.user.repository.UserRepository;
 import com.ssafy.backend.global.error.exception.UserException;
@@ -27,6 +28,8 @@ public class ApprovalServiceImpl implements ApprovalService {
     private final BookRepository bookRepository;
     private final ApprovalMapper approvalMapper;
     private final ApprovalRepository approvalRepository;
+    private final BookPurchasedRepository bookPurchasedRepository;
+
     @Override
     public void saveApproval(Long loginUserId, Long bookId, int price) {
         User userId = userRepository.findById(loginUserId)
@@ -42,6 +45,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 
         Approval approval = approvalMapper.toApproval(approvalDto);
         approvalRepository.save(approval);
+
     }
 
     @Override

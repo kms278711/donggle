@@ -85,4 +85,14 @@ public class BookController {
 
         return ResponseEntity.ok("진행중인 페이지가 저장되었습니다.");
     }
+
+    // 구매 내역 저장 후 구매한 책 테이블에 결과 반영
+    @PostMapping("/{bookId}/approval")
+    public ResponseEntity<String> savePurchasedBook(@PathVariable("bookId") Long bookId,
+                                                    Authentication authentication) {
+        Long loginUserId = AuthenticationUtil.getCurrentUserId(authentication);
+        bookService.savePurchasedBook(loginUserId, bookId);
+
+        return ResponseEntity.ok("구매한 책 테이블에 저장되었습니다.");
+    }
 }

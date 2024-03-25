@@ -1,6 +1,7 @@
 package com.ssafy.backend.domain.book.entity;
 
-import com.ssafy.backend.global.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.backend.domain.education.entity.Education;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,8 +23,11 @@ public class BookPageSentence {
 
     private String sentenceSoundPath;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "book_page_id")
     private BookPage bookPage;
 
+    @OneToOne
+    private Education education;
 }

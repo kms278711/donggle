@@ -1,11 +1,10 @@
 package com.ssafy.backend.domain.book.service.impl;
 
+import com.ssafy.backend.domain.approval.entity.Approval;
+import com.ssafy.backend.domain.approval.repository.ApprovalRepository;
 import com.ssafy.backend.domain.book.dto.*;
 import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;
-import com.ssafy.backend.domain.book.entity.Book;
-import com.ssafy.backend.domain.book.entity.BookPage;
-import com.ssafy.backend.domain.book.entity.BookPageSentence;
-import com.ssafy.backend.domain.book.entity.UserBookProcess;
+import com.ssafy.backend.domain.book.entity.*;
 import com.ssafy.backend.domain.book.mapper.BookMapper;
 import com.ssafy.backend.domain.book.repository.book.BookRepository;
 import com.ssafy.backend.domain.book.repository.bookpage.BookPageRepository;
@@ -41,6 +40,7 @@ public class BookServiceImpl implements BookService {
     private final UserRepository userRepository;
     private final BookPurchasedRepository bookPurchasedRepository;
     private final ReviewService reviewService;
+    private final ApprovalRepository approvalRepository;
 
     // 책 정보 전체 조회
     @Override
@@ -176,5 +176,19 @@ public class BookServiceImpl implements BookService {
 
         // 읽은 페이지 저장
         userBookProcessRespository.save(bookProcess);
+    }
+
+    // 결제 내역 구매한 책 테이블에 반영
+    public void savePurchasedBook(Long userId, Long bookId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(INVALID_USER));
+        Approval approval = approvalRepository.findByUser_userIdAndBook_bookId(user.getUserId(), bookId)
+                .orElseThrow(() -> new UserException(NOT_FOUND_BOOK));
+        
+        BookPurchasedLearning purchasedBook = BookPurchasedLearning.builder()
+                .user(approval.getUser())
+                .book(approval.getBook())
+                .build();
+        bookPurchasedRepository.save(purchasedBook);
     }
 }

@@ -1,6 +1,6 @@
 package com.ssafy.backend.domain.book.entity;
 
-import com.ssafy.backend.global.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,9 +27,12 @@ public class BookPage {
 
     private String content;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "book_id")
     private Book book;
 
+    @OneToMany(mappedBy = "bookPage")
+    private List<BookPageSentence> bookPageSentenceList = new ArrayList<>();
 
 }
