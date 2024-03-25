@@ -66,7 +66,7 @@ except Exception as e:
 ####################################################################
 @app.get("/")
 async def root():
-    return {"message": "Hello World th"}
+    return {"message": "Hello World th949"}
 
 
 @app.post("/api/analyze/drawing")
