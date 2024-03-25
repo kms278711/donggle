@@ -10,7 +10,7 @@ public record BookInfoDto(
         Long bookId,
         String title,
         String coverImagePath,
-        int page,
+        int processPage,
         List<EducationDto> educations
 ) {
 }

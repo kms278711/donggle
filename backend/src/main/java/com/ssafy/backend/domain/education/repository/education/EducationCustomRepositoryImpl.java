@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.backend.domain.book.entity.QBook;
 import com.ssafy.backend.domain.book.entity.QBookPage;
 import com.ssafy.backend.domain.book.entity.QBookPageSentence;
+import com.ssafy.backend.domain.education.dto.BookEducationDto;
 import com.ssafy.backend.domain.education.dto.UserEducationDto;
 import com.ssafy.backend.domain.education.dto.response.EducationResponseDto;
 import com.ssafy.backend.domain.education.entity.Education;
@@ -68,5 +69,24 @@ public class EducationCustomRepositoryImpl implements EducationCustomRepository 
 				.on(qBook.bookId.eq(qBookPage.book.bookId))
 				.where(qEducation.educationId.eq(educationId))
 				.fetchOne();
+	}
+
+	@Override
+	public List<BookEducationDto> findAllByBookPageSentence_BookPageSentenceIdIn(List<Long> bookPageSentenceId) {
+		return jpaQueryFactory
+				.select(
+						Projections.constructor(BookEducationDto.class,
+								qEducation.wordName, qEducation.imagePath
+						)
+				)
+				.from(qEducation)
+				.innerJoin(qBookPageSentence)
+				.on(qBookPageSentence.bookPageSentenceId.eq(qEducation.bookPageSentence.bookPageSentenceId))
+				.innerJoin(qBookPage)
+				.on(qBookPage.bookPageId.eq(qBookPageSentence.bookPage.bookPageId))
+				.innerJoin(qBook)
+				.on(qBook.bookId.eq(qBookPage.book.bookId))
+				.where(qEducation.gubun.eq(Education.Gubun.WORD).and(qEducation.bookPageSentence.bookPageSentenceId.in(bookPageSentenceId)))
+				.fetch();
 	}
 }

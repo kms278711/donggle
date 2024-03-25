@@ -3,7 +3,9 @@ package com.ssafy.backend.domain.education.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.backend.domain.book.entity.BookPageSentence;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
@@ -26,6 +28,8 @@ public class Education {
 	private String wordName;
 
 	private String imagePath;
+
+	private String traceImagePath;
 
 	@JsonIgnore
 	@OneToOne

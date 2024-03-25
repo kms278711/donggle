@@ -1,10 +1,10 @@
 package com.ssafy.backend.domain.book.controller;
 
 import com.ssafy.backend.domain.book.dto.BookDto;
-import com.ssafy.backend.domain.book.dto.BookInfoDto;
-import com.ssafy.backend.domain.book.dto.BookPageDto;
 import com.ssafy.backend.domain.book.dto.UserBookProcessDto;
+import com.ssafy.backend.domain.book.dto.response.BookInfoResponseDto;
 import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;
+import com.ssafy.backend.domain.book.dto.response.BookReviewResponseDto;
 import com.ssafy.backend.domain.book.service.BookService;
 import com.ssafy.backend.global.util.AuthenticationUtil;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +34,9 @@ public class BookController {
 
     // 책 정보 조회(책 클릭시)
     @GetMapping("/{bookId}")
-    public ResponseEntity<BookInfoDto> searchBookInfo(@PathVariable("bookId") Long bookId, Authentication authentication) {
+    public ResponseEntity<BookInfoResponseDto> searchBookInfo(@PathVariable("bookId") Long bookId, Authentication authentication) {
         Long loginUserId = AuthenticationUtil.getCurrentUserId(authentication);
-        BookInfoDto bookInfo = bookService.searchBookInfo(bookId, loginUserId);
+        BookInfoResponseDto bookInfo = bookService.searchBookInfo(bookId, loginUserId);
 
         return ResponseEntity.ok(bookInfo);
     }
@@ -53,10 +53,10 @@ public class BookController {
 
     // 책 페이지 조회
     @GetMapping("/{bookId}/pages/{page}")
-    public  ResponseEntity<BookPageDto> searchBookPage(@PathVariable("bookId") Long bookId, @PathVariable("page") int page) {
-        BookPageDto bookPageDto = bookService.searchBookPage(bookId, page);
+    public  ResponseEntity<BookReviewResponseDto.BookPageResponseDto> searchBookPage(@PathVariable("bookId") Long bookId, @PathVariable("page") int page) {
+        BookReviewResponseDto.BookPageResponseDto bookPageResponseDto = bookService.searchBookPage(bookId, page);
 
-        return ResponseEntity.ok(bookPageDto);
+        return ResponseEntity.ok(bookPageResponseDto);
     }
 
     // 진행중인 책 조회

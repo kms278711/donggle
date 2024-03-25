@@ -9,7 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface UserBookProcessRespository extends JpaRepository<UserBookProcess, Long>, UserBookProcessCustomRepository{
-    Optional<UserBookProcess> findByUser_userIdAndBook_bookId(Long userId, Long bookId);
     List<UserBookProcess> findByUser_userId(Long userId);
-
+    Optional<UserBookProcess> findByUser_userIdAndBook_bookId(Long userId, Long bookId);
 }
