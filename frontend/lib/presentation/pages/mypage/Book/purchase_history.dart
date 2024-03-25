@@ -21,14 +21,14 @@ class _PurchaseHistoryState extends State<PurchaseHistory> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async{
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       approvalsModel = Provider.of<ApprovalsModel>(context, listen: false);
       userProvider = Provider.of<UserProvider>(context, listen: false);
       String accessToken = userProvider.getAccessToken();
 
       await approvalsModel.getApprovals(accessToken);
 
-      if(mounted){
+      if (mounted) {
         setState(() {
           approvals = approvalsModel.myApprovals;
         });
@@ -40,21 +40,26 @@ class _PurchaseHistoryState extends State<PurchaseHistory> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Column(
-          children: [
-            Flexible(
-              child: ListView.builder(
-                itemCount: approvals.length,
-                itemBuilder: (BuildContext context, int index) {
-                  Approval approval = Approval.fromJson(approvals[index]);
-                  return ApprovalCard(approval);
-                },
-                shrinkWrap: true,
-              ),
-            )
-          ],
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.725,
+          child: Column(
+            children: [
+              Flexible(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: ListView.builder(
+                    itemCount: approvals.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      Approval approval = Approval.fromJson(approvals[index]);
+                      return ApprovalCard(approval);
+                    },
+                    shrinkWrap: true,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
-
         Positioned(
             bottom: MediaQuery.of(context).size.height * 0.03,
             right: MediaQuery.of(context).size.width * 0.015,

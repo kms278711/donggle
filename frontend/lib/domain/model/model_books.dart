@@ -17,9 +17,7 @@ class BookModel extends ChangeNotifier {
     bookImagePath: "",
     page: 0,
     content: "",
-    bookPageSentences: [
-      BookPageSentences(bookPageSentenceId: 0, sequence: 0, sentence: "", sentenceSoundPath: "")
-    ],
+    bookPageSentences: [BookPageSentences(bookPageSentenceId: 0, sequence: 0, sentence: "", sentenceSoundPath: "")],
   );
   Map BookDetail = {};
   Education nowEducation = Education(educationId: 0, gubun: "", wordName: "", imagePath: "", bookSentenceId: 0);
@@ -48,6 +46,7 @@ class BookModel extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       books = json.decode(utf8.decode(response.bodyBytes));
+      notifyListeners();
       return "Success";
     } else if (response.statusCode == 401) {
       userProvider.refreshToken();
@@ -128,8 +127,8 @@ class BookModel extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       nowPage = BookPage.fromJson(json.decode(utf8.decode(response.bodyBytes)));
-      nowEducation = nowPage.education ??
-          Education(educationId: 0, gubun: "", wordName: "", imagePath: "", bookSentenceId: 0);
+      nowEducation =
+          nowPage.education ?? Education(educationId: 0, gubun: "", wordName: "", imagePath: "", bookSentenceId: 0);
       return "Success";
     } else if (response.statusCode == 401) {
       userProvider.refreshToken();
@@ -221,8 +220,7 @@ class BookPage {
 
   factory BookPage.fromJson(Map<String, dynamic> json) {
     var sentencesList = json['bookPageSentences'] as List<dynamic>;
-    List<BookPageSentences> sentences =
-        sentencesList.map((dynamic item) => BookPageSentences.fromJson(item)).toList();
+    List<BookPageSentences> sentences = sentencesList.map((dynamic item) => BookPageSentences.fromJson(item)).toList();
 
     Education? education;
     if (json['education'] != null) {

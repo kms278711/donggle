@@ -103,12 +103,6 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
   }
 
   @override
-  void didUpdateWidget(covariant BooksDetailPay oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
@@ -228,8 +222,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text("내 리뷰",
-                                              style: CustomFontStyle.getTextStyle(
-                                                  context, CustomFontStyle.titleSmallSmall)),
+                                              style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleSmallSmall)),
                                           Row(
                                             children: [
                                               //
@@ -295,8 +288,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                               Row(
                                 children: [
                                   Text("평균평점: ",
-                                      style:
-                                          CustomFontStyle.getTextStyle(context, CustomFontStyle.titleSmallSmall)),
+                                      style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleSmallSmall)),
                                   RatingBar.builder(
                                     initialRating: averageScore,
                                     minRating: 1,
@@ -345,8 +337,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                                           child: RichText(
                                             text: TextSpan(
                                               text: reviews[index]['content'],
-                                              style: CustomFontStyle.getTextStyle(
-                                                  context, CustomFontStyle.textMoreSmall),
+                                              style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMoreSmall),
                                             ),
                                           ),
                                         ),
@@ -390,7 +381,6 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
 
     Extra extra = Extra(); // 결제 옵션
     extra.appScheme = 'bootpayFlutter';
-    // payload.extra?.openType = "iframe";
 
     if (BootpayConfig.ENV == -1) {
       payload.extra?.redirectUrl = 'https://dev-api.bootpay.co.kr/v2';
@@ -424,23 +414,23 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
       onConfirmAsync: (String data) async {
         return true;
       },
-      onDone: (String data) async{
-        print('------- onDone: $data');
+      onDone: (String data) async {
         result = await approvalsModel.setApprovals(accessToken, bookId, price);
 
         if (result == "Success") {
           showToast("구매가 완료되었습니다.");
           if (!context.mounted) return;
+          setState(() {
+            isPay = true;
+          });
           context.read<MainProvider>().resetDetailPageSelection();
         } else {
           showToast(result, backgroundColor: AppColors.error);
         }
-        // Bootpay().dismiss(context);
       },
       onClose: () {
-        print('------- onClose');
         if (mounted) {
-          Navigator.of(context).pop(); //명시적으로 부트페이 뷰 종료 호출
+          Navigator.of(context).pop();
         }
       },
     );
