@@ -46,7 +46,24 @@ class ApprovalsModel extends ChangeNotifier {
     print(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
-      return "Success";
+      var url2 = Uri.https("j10c101.p.ssafy.io", "api/books/$bookId/approval");
+      final headers2 = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
+      var response2 = await http.post(url2, headers: headers2);
+
+      print("[*] ${response2.statusCode}");
+      print(utf8.decode(response2.bodyBytes));
+
+      if(response2.statusCode == 200){
+        return "Success";
+      }
+      else if (response2.statusCode == 401) {
+        userProvider.refreshToken();
+        return setApprovals(userProvider.getAccessToken(), bookId, price);
+      }
+      else{
+        String msg = json.decode(utf8.decode(response2.bodyBytes))['data_header']['result_message'];
+        return msg;
+      }
     } else if (response.statusCode == 401) {
       userProvider.refreshToken();
       return setApprovals(userProvider.getAccessToken(), bookId, price);

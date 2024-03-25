@@ -88,6 +88,7 @@ class MyApp extends StatelessWidget {
       loopMode: LoopMode.single, //반복 여부 (LoopMode.none : 없음)
       autoStart: false, //자동 시작 여부
       showNotification: false, //스마트폰 알림 창에 띄울지 여부
+      playInBackground: PlayInBackground.enabled,
     );
 
     return StyledToast(

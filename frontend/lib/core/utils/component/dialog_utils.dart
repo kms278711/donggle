@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/presentation/pages/home/component/book/book_detail.dart';
 
 class DialogUtils {
-  static DialogUtils _instance = new DialogUtils.internal();
+  static final DialogUtils _instance = DialogUtils.internal();
 
   DialogUtils.internal();
 
@@ -26,7 +25,7 @@ class DialogUtils {
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.95,
                 height: MediaQuery.of(context).size.height,
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 color: Colors.transparent,
                 child: Column(
                   children: [

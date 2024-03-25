@@ -7,6 +7,7 @@ import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/buttons/red_button.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/domain/model/model_review.dart';
+import 'package:frontend/main.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -66,6 +67,8 @@ class _NewReviewModalState extends State<NewReviewModal> {
 
   @override
   Widget build(BuildContext context) {
+    assetsAudioPlayer.pause();
+    assetsAudioPlayer.play();
     return SizedBox(
       width: MediaQuery
           .of(context)

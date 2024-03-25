@@ -8,7 +8,7 @@ class UnpaidBook extends StatefulWidget {
   final String url;
   final int bookId;
 
-  const UnpaidBook(this.url, this.bookId, {Key? key}) : super(key: key);
+  const UnpaidBook(this.url, this.bookId, {super.key});
 
   @override
   State<UnpaidBook> createState() => _OpenedBookState();
@@ -23,9 +23,6 @@ class _OpenedBookState extends State<UnpaidBook> {
         onTap: () async {
           context.read<BookModel>().setCurrentBookId(widget.bookId);
           context.read<MainProvider>().detailPageSelectionToggle();
-          /// TODO: 동화책 구매
-          /// TODO: 책 전체 리스트 업데이트
-          print("[*] TODO: Pay for book");
         },
         child: Center(
           child: ClipRRect(

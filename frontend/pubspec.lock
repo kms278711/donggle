@@ -61,10 +61,10 @@ packages:
     dependency: "direct main"
     description:
       name: bootpay
-      sha256: "3f64bdc53a77245788827117c7e7cb9dfd5288c750210b6dfb834576140947c0"
+      sha256: "01c7c91096de021d8ebe27546da36acd50ac04f3a640f6e2a25613deca1f6392"
       url: "https://pub.dev"
     source: hosted
-    version: "4.8.9-beta.3"
+    version: "4.9.0"
   bootpay_webview_flutter:
     dependency: transitive
     description:

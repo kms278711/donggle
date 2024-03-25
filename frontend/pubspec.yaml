@@ -34,7 +34,7 @@ dependencies:
   camera: ^0.10.5+9
   tflite_v2: ^1.0.0
   flutter_dotenv: ^5.1.0
-  bootpay: ^4.8.9-beta.3
+  bootpay: ^4.9.0
 
 dev_dependencies:
   flutter_test:

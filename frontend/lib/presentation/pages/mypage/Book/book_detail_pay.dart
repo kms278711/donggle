@@ -1,11 +1,9 @@
 import 'package:bootpay/bootpay.dart';
-import 'package:bootpay/model/browser_open_type.dart';
 import 'package:bootpay/model/extra.dart';
 import 'package:bootpay/model/payload.dart';
 import 'package:bootpay/model/user.dart';
 import 'package:bootpay/config/bootpay_config.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -102,6 +100,12 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
         });
       }
     });
+  }
+
+  @override
+  void didUpdateWidget(covariant BooksDetailPay oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
   }
 
   @override
@@ -276,7 +280,6 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                                                             reviews = book.reviews ?? [];
                                                             isReviewed = true;
                                                             isPay = true;
-
                                                           });
                                                         }));
                                                       },
@@ -398,6 +401,8 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
     }
 
     BootpayConfig.IS_FORCE_WEB = true;
+    BootpayConfig.DISPLAY_TABLET_FULLSCREEN = true;
+    BootpayConfig.DISPLAY_WITH_HYBRID_COMPOSITION = true;
 
     payload.user = user as User?;
     payload.extra = extra;
@@ -416,33 +421,27 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
       onError: (String data) {
         showToast(data, backgroundColor: AppColors.error);
       },
-      onClose: () {
-        print('------- onClose');
-        Future.delayed(const Duration(seconds: 0)).then((value) {
-          if (mounted) {
-            Bootpay().dismiss(context);
-          }
-        });
-      },
       onConfirmAsync: (String data) async {
-        print('------- onConfirmAsync11: $data');
+        return true;
+      },
+      onDone: (String data) async{
+        print('------- onDone: $data');
         result = await approvalsModel.setApprovals(accessToken, bookId, price);
 
-        if (!context.mounted) return false;
-
         if (result == "Success") {
-          result = approvalsModel.setApprovals(accessToken, bookId, price) as String;
           showToast("구매가 완료되었습니다.");
+          if (!context.mounted) return;
           context.read<MainProvider>().resetDetailPageSelection();
         } else {
           showToast(result, backgroundColor: AppColors.error);
         }
-        print('------- onConfirmAsync22: $data');
-        return true;
+        // Bootpay().dismiss(context);
       },
-      onDone: (String data) {
-        print('------- onDone: $data');
-
+      onClose: () {
+        print('------- onClose');
+        if (mounted) {
+          Navigator.of(context).pop(); //명시적으로 부트페이 뷰 종료 호출
+        }
       },
     );
   }
