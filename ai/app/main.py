@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Form
 import tensorflow as tf
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -70,7 +70,7 @@ async def root():
 
 
 @app.post("/ai/analyze/drawing")
-async def analyze_object(file: UploadFile = File(...)):
+async def analyze_object(file: UploadFile = File(...), filename: Optional[str] = Form(None)):
     try:
         # 업로드된 파일을 읽음
         contents = await file.read()
@@ -93,7 +93,14 @@ async def analyze_object(file: UploadFile = File(...)):
         pred = test_model.predict(np.expand_dims(input_img, axis=0))[0]
         ind = (-pred).argsort()[:10]
         index = [class_names[x] for x in ind]
+        answer = False
+        for i in range(len(index)):
+            # print(index[i], "file이름 : ",filename)
+            if index[i] == filename:
+                print(index[i])
+                answer = True
+            
         print(index)
-        return index
+        return answer
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
