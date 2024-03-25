@@ -160,15 +160,12 @@ class _BookDetailState extends State<BookDetail> {
                                   errorWidget: (context, url, error) => const Icon(Icons.error),
                                 ),
                               ),
-                              Container(
-                                width: MediaQuery.of(context).size.width,
-                                child: Positioned(
-                                  bottom: MediaQuery.of(context).size.height * 0.045,
-                                  child: Text(
-                                    education["wordName"],
-                                    style: CustomFontStyle.textSmall,
-                                    textAlign: TextAlign.center,
-                                  ),
+                              Positioned(
+                                bottom: MediaQuery.of(context).size.height * 0.045,
+                                left: MediaQuery.of(context).size.width * 0.075,
+                                child: Text(
+                                  education["wordName"],
+                                  style: CustomFontStyle.textSmall,
                                 ),
                               )
                             ],
