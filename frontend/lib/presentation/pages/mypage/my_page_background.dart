@@ -101,7 +101,7 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
                         SizedBox(
                             width: MediaQuery.of(context).size.width * 0.01),
                         // Toggle between SoundIcon and SoundOffIcon based on isSoundOn
-                        SoundIcon(assetsAudioPlayer),
+                        SoundIcon(player),
                       ],
                     ),
                   ],

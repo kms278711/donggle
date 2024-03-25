@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     Provider.of<RegisterFieldModel>(context, listen: false).resetFields();
-    assetsAudioPlayer.stop();
+    player.stop();
   }
 
   @override

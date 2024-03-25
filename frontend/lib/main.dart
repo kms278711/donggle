@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
@@ -23,16 +22,37 @@ import 'package:frontend/presentation/provider/message_provider.dart';
 import 'package:frontend/presentation/provider/quiz_provider.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:frontend/presentation/routes/routes.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/presentation/provider/main_provider.dart';
 
-AssetsAudioPlayer assetsAudioPlayer = AssetsAudioPlayer.newPlayer();
+late AudioPlayer player;
 
-void main() async{
+Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: "assets/config/.env");
   final cameras = await availableCameras();
   final firstCamera = cameras.last;
+
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
+  );
+
+  player = AudioPlayer();
+
+  final audioSource = AudioSource.uri(
+    Uri.parse('asset:///assets/music/background.mp3'),
+    tag: const MediaItem(
+      // Specify a unique ID for each media item:
+      id: '1',
+      title: "background music",
+    ),
+  );
+
+  await player.setAudioSource(audioSource);
 
   HttpOverrides.global = MyHttpOverrides();
   runApp(MultiProvider(
@@ -84,14 +104,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
-
-    assetsAudioPlayer.open(
-      Audio("assets/music/background.mp3"),
-      loopMode: LoopMode.single, //반복 여부 (LoopMode.none : 없음)
-      autoStart: false, //자동 시작 여부
-      showNotification: false, //스마트폰 알림 창에 띄울지 여부
-      playInBackground: PlayInBackground.enabled,
-    );
 
     return StyledToast(
       locale: const Locale('ko', 'KR'),

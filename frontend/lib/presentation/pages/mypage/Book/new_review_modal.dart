@@ -67,8 +67,6 @@ class _NewReviewModalState extends State<NewReviewModal> {
 
   @override
   Widget build(BuildContext context) {
-    assetsAudioPlayer.pause();
-    assetsAudioPlayer.play();
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.95,

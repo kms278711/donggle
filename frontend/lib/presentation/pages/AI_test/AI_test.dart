@@ -44,7 +44,7 @@ class AITest extends StatelessWidget {
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.01,
                 ),
-                SoundIcon(assetsAudioPlayer),
+                SoundIcon(player),
               ],
             ),
           ),

@@ -118,7 +118,7 @@ class _BookProgressState extends State<BookProgress> {
   @override
   void initState() {
     super.initState();
-    assetsAudioPlayer.pause();
+    player.pause();
     bookId = int.parse(widget.bookId);
     pageId = int.parse(widget.bookPageId);
     isForward = int.parse(widget.isForward);

@@ -1,12 +1,13 @@
-import 'package:assets_audio_player/assets_audio_player.dart';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/core/utils/component/icons/sound_off_icon.dart';
 import 'package:frontend/core/utils/component/icons/sound_on_icon.dart';
+import 'package:just_audio/just_audio.dart';
 
 class SoundIcon extends StatefulWidget {
-  final AssetsAudioPlayer assetsAudioPlayer;
+  final AudioPlayer player;
 
-  const SoundIcon(this.assetsAudioPlayer, {super.key});
+  const SoundIcon(this.player, {super.key});
 
   @override
   State<SoundIcon> createState() => _SoundIconState();
@@ -19,7 +20,7 @@ class _SoundIconState extends State<SoundIcon> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        isSoundOn ? widget.assetsAudioPlayer.pause() : widget.assetsAudioPlayer.play();
+        isSoundOn ? widget.player.pause() : widget.player.play();
         setState(() {
           // Toggle the sound state
           isSoundOn = !isSoundOn;

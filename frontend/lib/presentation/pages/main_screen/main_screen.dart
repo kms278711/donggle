@@ -46,7 +46,7 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _updateSelectedIndex();
-    assetsAudioPlayer.play();
+    player.play();
     quizProvider = Provider.of<QuizProvider>(context, listen: false);
     quizModel = Provider.of<QuizModel>(context, listen: false);
   }
@@ -172,7 +172,7 @@ class _MainScreenState extends State<MainScreen> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.01,
                   ),
-                  SoundIcon(assetsAudioPlayer),
+                  SoundIcon(player),
                 ],
               ),
             ),
