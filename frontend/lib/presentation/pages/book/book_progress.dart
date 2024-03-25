@@ -178,7 +178,10 @@ class _BookProgressState extends State<BookProgress> {
             right: MediaQuery.of(context).size.width * 0.01,
             child: Row(
               children: [
-                SkipIcon(onTap: finishSentence),
+                SkipIcon(
+                    // onTap: finishSentence
+                  onTap: goNext,
+                ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.01,
                 ),

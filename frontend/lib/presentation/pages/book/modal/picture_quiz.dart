@@ -1,11 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:frontend/core/utils/component/icons/close_circle.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
+import 'package:frontend/data/data_source/remote/drawing.api.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter/material.dart';
@@ -34,6 +35,7 @@ class _PictureQuizState extends State<PictureQuiz> {
   final DrawingController _drawingController = DrawingController();
   Education education = Education(educationId: 0, gubun: "", wordName: "", imagePath: "", bookSentenceId: 0);
   String url = "";
+  String? apiResult;
 
   String postPositionText(String name) {
     // Get the last character of the name
@@ -59,9 +61,9 @@ class _PictureQuizState extends State<PictureQuiz> {
   void initState() {
     super.initState();
 
-      bookModel = Provider.of<BookModel>(context, listen: false);
-      education = bookModel.nowEducation;
-      url = Constant.s3BaseUrl + education.imagePath;
+    bookModel = Provider.of<BookModel>(context, listen: false);
+    education = bookModel.nowEducation;
+    url = Constant.s3BaseUrl + education.imagePath;
   }
 
   @override
@@ -72,6 +74,16 @@ class _PictureQuizState extends State<PictureQuiz> {
 
   @override
   Widget build(BuildContext context) {
+    Widget resultWidget;
+    if (apiResult == "true") {
+      resultWidget = Image.asset("assets/images/correct.png");
+    } else if (apiResult == "false") {
+      resultWidget = Image.asset("assets/images/incorrect.png");
+    } else {
+      // Placeholder or empty container when there's no result or an error
+      resultWidget = Container();
+    }
+
     Future<Uint8List> resizeImageData(Uint8List data, {int width = 600, int height = 600}) async {
       // Decode the image to an Image object
       img.Image? image = img.decodeImage(data);
@@ -99,10 +111,10 @@ class _PictureQuizState extends State<PictureQuiz> {
       }
     }
 
-    Future<void> getImageData() async {
+    Future<void> saveImageData() async {
       final Uint8List? data = (await _drawingController.getImageData())?.buffer.asUint8List();
       if (data == null) {
-        debugPrint('获取图片数据失败');
+        debugPrint('Failed to get image data');
         return;
       }
       if (!context.mounted) return;
@@ -114,6 +126,53 @@ class _PictureQuizState extends State<PictureQuiz> {
           showToast("Failed to save image");
         }
       }
+    }
+
+    Future<Uint8List> addWhiteBackground(Uint8List imageData) async {
+      // Decode the image from the data
+      img.Image? originalImage = img.decodeImage(imageData);
+      if (originalImage == null) return imageData;
+
+      // Create a new image with a white background
+      img.Image newImage = img.Image(originalImage.width, originalImage.height, channels: img.Channels.rgba);
+      img.fill(newImage, img.getColor(255, 255, 255, 255)); // Fill the image with white color
+
+      // Draw the original image onto the new image
+      img.drawImage(newImage, originalImage);
+
+      // Encode the new image back to Uint8List
+      Uint8List newData = Uint8List.fromList(img.encodePng(newImage));
+      return newData;
+    }
+
+    Future<File> getImageData() async {
+      final Uint8List? data = (await _drawingController.getImageData())?.buffer.asUint8List();
+      if (data == null) {
+        debugPrint('Failed to get image data');
+        throw Exception('Failed to get image data'); // Throw an exception or handle the error as needed
+      }
+
+      Uint8List newData = await addWhiteBackground(data);
+
+      // Get a temporary directory (you can choose a different directory if you like)
+      final Directory tempDir = await getTemporaryDirectory();
+      final String filePath = '${tempDir.path}/image_${DateTime.now().millisecondsSinceEpoch}.png';
+
+      // Write the image data to a file
+      final File file = File(filePath);
+      await file.writeAsBytes(newData);
+
+      return file;
+    }
+
+    String extractFileNameWithoutExtension(String url) {
+      // Split the URL by '/'
+      List<String> parts = url.split('/');
+      // Take the last part, which should be 'axe.png' in your example
+      String fileNameWithExtension = parts.last;
+      // Split by '.' and take the first part to remove the extension
+      String fileName = fileNameWithExtension.split('.').first;
+      return fileName;
     }
 
     return DefaultTextStyle(
@@ -191,15 +250,65 @@ class _PictureQuizState extends State<PictureQuiz> {
               ),
             ),
             Positioned(
-              right: MediaQuery.of(context).size.width * 0.05,
-              bottom: MediaQuery.of(context).size.height * 0.03,
-              child: GreenButton(
-                "완료",
+              top: MediaQuery.of(context).size.height * 0.01,
+              right: MediaQuery.of(context).size.width * 0.01,
+              child: IconButton(
+                icon: const CloseCircle(),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  getImageData();
                   widget.onModalClose?.call();
                 },
+              ),
+            ),
+            Positioned(
+              right: MediaQuery.of(context).size.width * 0.05,
+              bottom: MediaQuery.of(context).size.height * 0.03,
+              child: Row(
+                children: [
+                  GreenButton("저장", onPressed: () {
+                    saveImageData();
+                  }),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.02,
+                  ),
+                  GreenButton(
+                    "완료",
+                    onPressed: () async {
+                      String fileName = extractFileNameWithoutExtension(education.imagePath);
+                      DrawingApi drawingApi = DrawingApi(file: await getImageData(), filename: fileName);
+
+                      String result = await drawingApi.drawingAI();
+
+                      if (!context.mounted) return;
+
+                      setState(() {
+                        apiResult = result; // Update state with the API call result
+                      });
+
+                      if (result != "true" && result != "false") {
+                        showToast(result, backgroundColor: AppColors.error);
+                      }
+
+                      Timer(const Duration(milliseconds: 1000), () {
+                        if (!context.mounted) return; // Always check mounted status before calling setState
+                        setState(() {
+                          apiResult = ""; // Reset apiResult to hide the sign
+                        });
+
+                        if (result == "true") {
+                          Navigator.of(context).pop();
+                          widget.onModalClose?.call();
+                        }
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              // Add the result widget to your UI
+              child: Center(
+                child: SizedBox(height: MediaQuery.of(context).size.height, child: resultWidget),
               ),
             ),
           ],

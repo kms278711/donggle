@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 
-class SkipIcon extends StatelessWidget {
+class BackIcon extends StatelessWidget {
   final VoidCallback onTap;
 
-  const SkipIcon({super.key, required this.onTap,});
+  const BackIcon({super.key, required this.onTap,});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      child: Image.asset(AppIcons.skip_icon,
+      child: Image.asset(AppIcons.back_icon,
           width: MediaQuery.of(context).size.width * 0.05),
     );
   }

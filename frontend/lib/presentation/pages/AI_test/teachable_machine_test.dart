@@ -1,15 +1,11 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/camera.dart';
 import 'package:frontend/core/utils/component/icons/close_circle.dart';
 import 'package:tflite_v2/tflite_v2.dart';
-
-// import 'package:tflite_flutter/tflite_flutter.dart';
-// import 'package:tflite_flutter_helper_plus/tflite_flutter_helper_plus.dart';
 
 class TeachableMachineTest extends StatefulWidget {
   final CameraDescription camera;
@@ -120,161 +116,9 @@ class _TeachableMachineTestState extends State<TeachableMachineTest> {
                           ],
                         ),
                       ),
-                      // Align(
-                      //   alignment: Alignment.bottomCenter,
-                      //   child: Container(
-                      //     child: Padding(
-                      //       padding: const EdgeInsets.all(16.0),
-                      //       child: Card(
-                      //         child: Column(
-                      //           crossAxisAlignment: CrossAxisAlignment.stretch,
-                      //           mainAxisSize: MainAxisSize.min,
-                      //           children: [
-                      //             Padding(
-                      //               padding: const EdgeInsets.all(8.0),
-                      //               child: Column(
-                      //                 children: [
-                      //                   Row(
-                      //                     children: [
-                      //                       const Expanded(
-                      //                         flex: 2,
-                      //                         child: Text(
-                      //                           'O',
-                      //                           style: TextStyle(
-                      //                               color: Colors.redAccent, fontWeight: FontWeight.w600, fontSize: 20.0),
-                      //                         ),
-                      //                       ),
-                      //                       const SizedBox(
-                      //                         width: 16.0,
-                      //                       ),
-                      //                       Expanded(
-                      //                         flex: 8,
-                      //                         child: SizedBox(
-                      //                           height: 32.0,
-                      //                           child: Stack(
-                      //                             children: [
-                      //                               LinearProgressIndicator(
-                      //                                 valueColor: const AlwaysStoppedAnimation<Color>(Colors.redAccent),
-                      //                                 value: index == 0 ? confidence : 0.0,
-                      //                                 backgroundColor: Colors.redAccent.withOpacity(0.2),
-                      //                                 minHeight: 50.0,
-                      //                               ),
-                      //                               Align(
-                      //                                 alignment: Alignment.centerRight,
-                      //                                 child: Text(
-                      //                                   '${index == 0 ? (confidence * 100).toStringAsFixed(0) : 0} %',
-                      //                                   style: const TextStyle(
-                      //                                       color: Colors.white,
-                      //                                       fontWeight: FontWeight.w600,
-                      //                                       fontSize: 20.0),
-                      //                                 ),
-                      //                               ),
-                      //                             ],
-                      //                           ),
-                      //                         ),
-                      //                       )
-                      //                     ],
-                      //                   ),
-                      //                   const SizedBox(
-                      //                     height: 16.0,
-                      //                   ),
-                      //                   Row(
-                      //                     children: [
-                      //                       const Expanded(
-                      //                         flex: 2,
-                      //                         child: Text(
-                      //                           'X',
-                      //                           style: TextStyle(
-                      //                               color: Colors.orangeAccent, fontWeight: FontWeight.w600, fontSize: 20.0),
-                      //                         ),
-                      //                       ),
-                      //                       const SizedBox(
-                      //                         width: 16.0,
-                      //                       ),
-                      //                       Expanded(
-                      //                         flex: 8,
-                      //                         child: SizedBox(
-                      //                           height: 32.0,
-                      //                           child: Stack(
-                      //                             children: [
-                      //                               LinearProgressIndicator(
-                      //                                 valueColor: const AlwaysStoppedAnimation<Color>(Colors.orangeAccent),
-                      //                                 value: index == 1 ? confidence : 0.0,
-                      //                                 backgroundColor: Colors.orangeAccent.withOpacity(0.2),
-                      //                                 minHeight: 50.0,
-                      //                               ),
-                      //                               Align(
-                      //                                 alignment: Alignment.centerRight,
-                      //                                 child: Text(
-                      //                                   '${index == 1 ? (confidence * 100).toStringAsFixed(0) : 0} %',
-                      //                                   style: const TextStyle(
-                      //                                       color: Colors.white,
-                      //                                       fontWeight: FontWeight.w600,
-                      //                                       fontSize: 20.0),
-                      //                                 ),
-                      //                               ),
-                      //                             ],
-                      //                           ),
-                      //                         ),
-                      //                       )
-                      //                     ],
-                      //                   ),
-                      //                   const SizedBox(
-                      //                     height: 16.0,
-                      //                   ),
-                      //                   Row(
-                      //                     children: [
-                      //                       const Expanded(
-                      //                         flex: 2,
-                      //                         child: Text(
-                      //                           'NA',
-                      //                           style:
-                      //                           TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.w600, fontSize: 20.0),
-                      //                         ),
-                      //                       ),
-                      //                       const SizedBox(
-                      //                         width: 16.0,
-                      //                       ),
-                      //                       Expanded(
-                      //                         flex: 8,
-                      //                         child: SizedBox(
-                      //                           height: 32.0,
-                      //                           child: Stack(
-                      //                             children: [
-                      //                               LinearProgressIndicator(
-                      //                                 valueColor: const AlwaysStoppedAnimation<Color>(Colors.blueAccent),
-                      //                                 value: index == 2 ? confidence : 0.0,
-                      //                                 backgroundColor: Colors.blueAccent.withOpacity(0.2),
-                      //                                 minHeight: 50.0,
-                      //                               ),
-                      //                               Align(
-                      //                                 alignment: Alignment.centerRight,
-                      //                                 child: Text(
-                      //                                   '${index == 2 ? (confidence * 100).toStringAsFixed(0) : 0} %',
-                      //                                   style: const TextStyle(
-                      //                                       color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20.0),
-                      //                                 ),
-                      //                               ),
-                      //                             ],
-                      //                           ),
-                      //                         ),
-                      //                       )
-                      //                     ],
-                      //                   ),
-                      //                 ],
-                      //               ),
-                      //             )
-                      //           ],
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   )
-                : Container(
-                    child: const CircularProgressIndicator(),
-                  ),
+                : const CircularProgressIndicator(),
             Positioned(
               top: MediaQuery.of(context).size.height * 0.01,
               right: MediaQuery.of(context).size.width * 0.01,
