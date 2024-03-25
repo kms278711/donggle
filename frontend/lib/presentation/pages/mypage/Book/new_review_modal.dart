@@ -70,14 +70,8 @@ class _NewReviewModalState extends State<NewReviewModal> {
     assetsAudioPlayer.pause();
     assetsAudioPlayer.play();
     return SizedBox(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
-      height: MediaQuery
-          .of(context)
-          .size
-          .height * 0.95,
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.95,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Center(
@@ -86,14 +80,8 @@ class _NewReviewModalState extends State<NewReviewModal> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.5,
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.5,
+                width: MediaQuery.of(context).size.width * 0.5,
+                height: MediaQuery.of(context).size.height * 0.5,
                 decoration: BoxDecoration(
                   color: AppColors.surface,
                   borderRadius: BorderRadius.circular(30),
@@ -101,13 +89,9 @@ class _NewReviewModalState extends State<NewReviewModal> {
                 child: Column(
                   children: [
                     Text(isReviewed ? "내 리뷰 수정하기" : "내 리뷰 남기기",
-                        style: CustomFontStyle.getTextStyle(
-                            context, CustomFontStyle.titleMediumSmall)),
+                        style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleMediumSmall)),
                     SizedBox(
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0.02,
+                      height: MediaQuery.of(context).size.height * 0.02,
                     ),
                     RatingBar.builder(
                       initialRating: myReview.score,
@@ -116,8 +100,7 @@ class _NewReviewModalState extends State<NewReviewModal> {
                       allowHalfRating: true,
                       itemCount: 5,
                       itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
-                      itemBuilder: (context, _) =>
-                      const Icon(
+                      itemBuilder: (context, _) => const Icon(
                         Icons.star,
                         color: Colors.amber,
                       ),
@@ -126,25 +109,12 @@ class _NewReviewModalState extends State<NewReviewModal> {
                       },
                     ),
                     SizedBox(
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0.03,
+                      height: MediaQuery.of(context).size.height * 0.03,
                     ),
                     Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width * 0.47,
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0.2,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 0.02),
+                      width: MediaQuery.of(context).size.width * 0.47,
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.02),
                       decoration: BoxDecoration(
                         color: AppColors.white,
                         borderRadius: BorderRadius.circular(15),
@@ -155,8 +125,7 @@ class _NewReviewModalState extends State<NewReviewModal> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             TextField(
-                              textAlignVertical:
-                              const TextAlignVertical(y: -1.0),
+                              textAlignVertical: const TextAlignVertical(y: -1.0),
                               controller: _editTextController,
                               onChanged: (String value) {
                                 content = value;
@@ -164,11 +133,9 @@ class _NewReviewModalState extends State<NewReviewModal> {
                               maxLength: 85,
                               keyboardType: TextInputType.multiline,
                               maxLines: null,
-                              style: CustomFontStyle.getTextStyle(
-                                  context, CustomFontStyle.textMoreSmall),
+                              style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMoreSmall),
                               decoration: const InputDecoration(
-                                contentPadding:
-                                EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                 filled: true,
                                 fillColor: Colors.transparent,
                                 border: InputBorder.none,
@@ -179,10 +146,7 @@ class _NewReviewModalState extends State<NewReviewModal> {
                       ),
                     ),
                     SizedBox(
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0.02,
+                      height: MediaQuery.of(context).size.height * 0.02,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -190,24 +154,20 @@ class _NewReviewModalState extends State<NewReviewModal> {
                         GreenButton("확인", onPressed: () async {
                           if (score == 0.0) {
                             showToast("평점을 설정해주세요.", backgroundColor: AppColors.error);
-                          }
-                          else if (content == "") {
+                          } else if (content == "") {
                             showToast("리뷰를 남겨주세요.", backgroundColor: AppColors.error);
-                          }
-                          else {
+                          } else {
                             if (isReviewed) {
                               String result = await reviewModel.editMyReview(accessToken, bookId, score, content);
-                              if(result == "Success"){
+                              if (result == "Success") {
                                 showToast("리뷰를 성공적으로 수정했습니다!");
                                 widget.onModalClose?.call();
                                 if (!context.mounted) return;
                                 Navigator.of(context).pop();
-                              }else{
+                              } else {
                                 showToast(result, backgroundColor: AppColors.error);
                               }
-
-                            }
-                            else {
+                            } else {
                               String result = await reviewModel.setMyReview(accessToken, bookId, score, content);
                               if (result == "Success") {
                                 showToast("리뷰를 성공적으로 남겼습니다!");
@@ -222,10 +182,7 @@ class _NewReviewModalState extends State<NewReviewModal> {
                           }
                         }),
                         SizedBox(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 0.01,
+                          width: MediaQuery.of(context).size.width * 0.01,
                         ),
                         RedButton("취소", onPressed: () {
                           score = myReview.score;
@@ -234,10 +191,7 @@ class _NewReviewModalState extends State<NewReviewModal> {
                           Navigator.of(context).pop();
                         }),
                         SizedBox(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width * 0.01,
+                          width: MediaQuery.of(context).size.width * 0.01,
                         ),
                       ],
                     )

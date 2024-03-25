@@ -27,6 +27,7 @@ class _BookDetailState extends State<BookDetail> {
   String bookTitle = "";
   String bookCover = "";
   int bookPage = 0;
+  int bookTotalPage = 0;
   List educations = [];
   String url = "";
 
@@ -53,8 +54,9 @@ class _BookDetailState extends State<BookDetail> {
       bookId = bookModel.BookDetail['bookId'];
       bookTitle = bookModel.BookDetail['title'];
       bookCover = bookModel.BookDetail['coverImagePath'];
-      bookPage = bookModel.BookDetail['page'];
-      educations = bookModel.BookDetail['educations'];
+      bookTotalPage = bookModel.BookDetail['totalPage'];
+      bookPage = bookModel.BookDetail['processPage'];
+      educations = bookModel.BookDetail['educationList'];
       url = Constant.s3BaseUrl + bookCover;
     });
   }
@@ -184,14 +186,14 @@ class _BookDetailState extends State<BookDetail> {
               children: [
                 GreenButton("처음부터", onPressed: () {
                   Navigator.of(context).pop();
-                  globalRouter.pushReplacement('/bookProgress/${widget.bookId}/1');
+                  globalRouter.pushReplacement('/bookProgress/${widget.bookId}/1/0');
                 }),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.04,
                 ),
                 GreenButton("이어하기", onPressed: () {
                   Navigator.of(context).pop();
-                  globalRouter.pushReplacement('/bookProgress/${widget.bookId}/$bookPage');
+                  globalRouter.pushReplacement('/bookProgress/${widget.bookId}/$bookPage/0');
                 }),
               ],
             ),

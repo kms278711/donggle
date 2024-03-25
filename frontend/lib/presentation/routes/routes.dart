@@ -47,7 +47,8 @@ final GoRouter globalRouter = GoRouter(
       builder: (context, state) {
         final id = state.pathParameters['id'];
         final pageId = state.pathParameters['pageId'];
-        return BookProgress(id ?? '0', pageId??'0');
+        final isForward = state.pathParameters['isForward'];
+        return BookProgress(id ?? '0', pageId ?? '0', isForward ?? '0');
       },
     )
     // GoRoute(

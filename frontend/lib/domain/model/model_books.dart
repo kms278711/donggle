@@ -167,6 +167,7 @@ class Book {
   final String path;
   final int? price;
   final int? page;
+  final int? totalPage;
   final bool? isPay;
   final double? averageScore;
   final List<dynamic>? reviews;
@@ -179,6 +180,7 @@ class Book {
     required this.path,
     required this.price,
     this.page,
+    this.totalPage,
     required this.isPay,
     this.averageScore,
     this.reviews,
@@ -191,7 +193,8 @@ class Book {
       title: json['title'],
       summary: json['summary'],
       path: json['coverPath'],
-      page: json['page'],
+      page: json['processPage'],
+      totalPage: json['totalPage'],
       price: json['price'],
       isPay: json['isPay'],
       averageScore: json['averageScore'],
