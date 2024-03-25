@@ -69,7 +69,7 @@ async def root():
     return {"message": "Hello World th949"}
 
 
-@app.post("/api/analyze/drawing")
+@app.post("/ai/analyze/drawing")
 async def analyze_object(file: UploadFile = File(...)):
     try:
         # 업로드된 파일을 읽음
