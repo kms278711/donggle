@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
@@ -85,8 +86,7 @@ class _BookDetailState extends State<BookDetail> {
             child: Container(
               color: Colors.transparent,
               child: Center(
-                child: Image.asset(AppIcons.bottle,
-                    width: MediaQuery.of(context).size.width * 0.35),
+                child: Image.asset(AppIcons.bottle, width: MediaQuery.of(context).size.width * 0.35),
               ),
             ),
           ),
@@ -129,53 +129,53 @@ class _BookDetailState extends State<BookDetail> {
                 imageUrl: url,
                 fit: BoxFit.cover,
                 width: MediaQuery.of(context).size.width * 0.25,
-                placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
+                placeholder: (context, url) => const CircularProgressIndicator(),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             ),
           ),
           Positioned(
-            top: 150,
-            right: 150,
+            top: MediaQuery.of(context).size.height * 0.2,
+            right: MediaQuery.of(context).size.width * 0.1,
             child: Container(
-              width: 430,
-              height: 500,
+              width: MediaQuery.of(context).size.width * 0.4,
+              height: MediaQuery.of(context).size.height * 0.65,
               decoration: BoxDecoration(color: Colors.white),
-              child: Expanded(
-                child: GridView.count(
-                  crossAxisCount: 2, // 한 줄에 2개의 항목을 표시
-                  crossAxisSpacing: 20, // 가로 간격
-                  mainAxisSpacing: 50, // 세로 간격
-                  children: educations.map((education) {
-                    return education["gubun"] == "WORD"
-                        ? Container(
-                            decoration: BoxDecoration(color: Colors.red),
-                            child: Column(
-                              children: [
-                                CachedNetworkImage(
-                                  imageUrl: Constant.s3BaseUrl +
-                                      education["imagePath"],
+              child: GridView.count(
+                crossAxisCount: 2, // 한 줄에 2개의 항목을 표시
+                crossAxisSpacing: 20, // 가로 간격
+                mainAxisSpacing: 50, // 세로 간격
+                children: educations.map((education) {
+                  return  Container(
+                          decoration: BoxDecoration(color: Colors.red),
+                          child: Stack(
+                            children: [
+                              Center(
+                                child: CachedNetworkImage(
+                                  imageUrl: Constant.s3BaseUrl + education["imagePath"],
                                   fit: BoxFit.cover,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.2,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.14,
-                                  placeholder: (context, url) =>
-                                      const CircularProgressIndicator(),
-                                  errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
+                                  height: MediaQuery.of(context).size.height * 0.3,
+                                  // width: MediaQuery.of(context).size.width * 0.14,
+                                  placeholder: (context, url) => const CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) => const Icon(Icons.error),
                                 ),
-                                Text(
-                                  education["wordName"],
-                                  style: CustomFontStyle.textSmall,
-                                )
-                              ],
-                            ),
-                          )
-                        : Container();
-                  }).toList(),
-                ),
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                child: Positioned(
+                                  bottom: MediaQuery.of(context).size.height * 0.045,
+                                  child: Text(
+                                    education["wordName"],
+                                    style: CustomFontStyle.textSmall,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+
+                }).toList(),
               ),
             ),
           ),
