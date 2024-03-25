@@ -13,6 +13,7 @@ import 'package:frontend/domain/model/model_approvals.dart';
 import 'package:frontend/domain/model/model_auth.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/domain/model/model_cards.dart';
+import 'package:frontend/domain/model/model_donggle_talk.dart';
 import 'package:frontend/domain/model/model_nicknameupdate.dart';
 import 'package:frontend/domain/model/model_profileupdate.dart';
 import 'package:frontend/domain/model/model_quiz.dart';
@@ -41,6 +42,7 @@ void main() async{
       ChangeNotifierProvider(create: (_) => MessageProvider()),
       ChangeNotifierProvider(create: (_) => UserProvider()),
       ChangeNotifierProvider(create: (_) => QuizProvider()),
+      ChangeNotifierProvider(create: (_) => DonggleTalkModel()),
       ChangeNotifierProvider(
           create: (context) =>
               BookModel(Provider.of<UserProvider>(context, listen: false))),
