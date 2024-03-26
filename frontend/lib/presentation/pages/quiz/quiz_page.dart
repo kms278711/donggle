@@ -1,17 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
+import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/dialog_utils.dart';
 import 'package:frontend/core/utils/component/donggle_talk.dart';
+import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_quiz.dart';
 import 'package:frontend/presentation/pages/home/component/title/main_title.dart';
 import 'package:frontend/presentation/pages/quiz/finish_quiz_page.dart';
 import 'package:frontend/presentation/provider/quiz_provider.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:indexed/indexed.dart';
 import 'package:provider/provider.dart';
 
 class QuizPage extends StatefulWidget {
@@ -59,7 +63,9 @@ class _QuizPageState extends State<QuizPage> {
                   showToast('풀지않은 문제가 있습니다.', backgroundColor: AppColors.error);
                   print(quizProvider.selectedAnswers);
                 } else {
-                  DialogUtils.showCustomDialog(context, contentWidget: FinishQuizPage(quizProvider.selectedAnswers!));
+                  DialogUtils.showCustomDialog(context,
+                      contentWidget:
+                          FinishQuizPage(quizProvider.selectedAnswers!));
                   context.pushReplacement('/main/1/0');
                 }
               },
@@ -103,11 +109,6 @@ class _QuizPageState extends State<QuizPage> {
               ),
             ),
           ),
-          Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.1,
-            right: 0,
-            child: const donggleTalk(situation: "QUIZ"),
-          ),
         ],
       ),
     );
@@ -119,9 +120,7 @@ class QuizCarousel extends StatefulWidget {
   final Function(int, dynamic) onAnswerSelected;
 
   const QuizCarousel(
-      {super.key,
-      required this.quizzes,
-      required this.onAnswerSelected});
+      {super.key, required this.quizzes, required this.onAnswerSelected});
 
   @override
   State<QuizCarousel> createState() => _QuizCarouselState();
@@ -135,6 +134,7 @@ class _QuizCarouselState extends State<QuizCarousel> {
     super.initState();
     quizProvider = Provider.of<QuizProvider>(context, listen: false);
   }
+
   // late List<dynamic> selectAnswer;
   //
   // @override
@@ -173,7 +173,7 @@ class _QuizCarouselState extends State<QuizCarousel> {
               child: Column(
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.7,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                     // decoration: BoxDecoration(color: Colors.red),
                     child: Text(
@@ -182,29 +182,67 @@ class _QuizCarouselState extends State<QuizCarousel> {
                       style: CustomFontStyle.textMediumLarge,
                     ),
                   ),
-                  Expanded(
+                  quiz['content'].toString().length >= 27
+                      ? SizedBox()
+                      : SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.07,
+                        ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: MediaQuery.of(context).size.height * 0.4,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal, // 리스트 가로로
                       itemCount: quiz['choices'].length, // 선택지의 수 만큼 아이템 생성
                       itemBuilder: (context, index) {
                         var choice = quiz['choices'][index]; // 현재 인덱스에 해당하는 선택지
-                        bool isSelected = quizProvider.selectedAnswers![quizIndex] == choice;
-
-                        return Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 10),
-                          // 가로 여백 설정
-                          child: TextButton(
-                            onPressed: () {
-                              widget.onAnswerSelected(quizIndex, choice);
-                              setState(() {
-                                quizProvider.selectedAnswers![quizIndex] = choice;
-                              });
-                            },
-                            child: Text(
-                              choice['choice'],
-                              style: isSelected
-                                  ? CustomFontStyle.textMedium
-                                  : CustomFontStyle.textSmall,
+                        bool isSelected =
+                            quizProvider.selectedAnswers![quizIndex] == choice;
+                        return GestureDetector(
+                          onTap: () {
+                            widget.onAnswerSelected(quizIndex, choice);
+                            setState(() {
+                              quizProvider.selectedAnswers![quizIndex] = choice;
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            // 가로 여백 설정
+                            child: Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: CachedNetworkImage(
+                                    imageUrl: Constant.s3BaseUrl +
+                                        choice['choiceImagePath'],
+                                    fit: BoxFit.cover,
+                                    placeholder: (context, url) =>
+                                        const CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
+                                  ),
+                                ),
+                                isSelected
+                                    ? Positioned(
+                                        bottom:
+                                            MediaQuery.of(context).size.height *
+                                                0.11,
+                                        right:
+                                            MediaQuery.of(context).size.width *
+                                                0.01,
+                                        child: Image.asset(
+                                          AppIcons.check_mark,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.17,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.2,
+                                        ),
+                                      )
+                                    : Container(),
+                              ],
                             ),
                           ),
                         );

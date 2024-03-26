@@ -22,6 +22,7 @@ class AppIcons {
   static const String crab = "assets/images/crab.png";
   static const String jellyfish = "assets/images/jellyfish.png";
   static const String donggle_talk_balloon = "assets/images/donggle_talk_balloon.png";
+  static const String check_mark = "assets/images/check_mark.png";
 
   //icons
   static const String close_circle = "assets/images/icons/close-circle.png";

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
+import 'package:frontend/core/utils/component/donggle_talk.dart';
 import 'package:frontend/core/utils/component/icons/cards_icon_main.dart';
 import 'package:frontend/core/utils/component/icons/close_circle.dart';
 import 'package:frontend/core/utils/component/icons/home_icon_main.dart';
@@ -257,7 +258,22 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 )
               : Container(),
-          BackgroundUpper()
+          Indexed(
+            index: 1005,
+            child: BackgroundUpper(),
+          ),
+          Indexed(
+            index: 1006,
+            child: Positioned(
+              bottom: MediaQuery.of(context).size.height * 0.1,
+              right: 0,
+              child: _selectedIndex == 0
+                  ? donggleTalk(situation: "BOOKLIST")
+                  : _selectedIndex == 1
+                      ? donggleTalk(situation: "WORDLIST")
+                      : donggleTalk(situation: "QUIZ"),
+            ),
+          ),
         ],
       ),
     );
