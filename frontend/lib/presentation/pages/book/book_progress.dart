@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
@@ -14,8 +13,11 @@ import 'package:frontend/main.dart';
 import 'package:frontend/presentation/pages/book/modal/book_finish_modal.dart';
 import 'package:frontend/presentation/pages/book/modal/expression_quiz.dart';
 import 'package:frontend/presentation/pages/book/modal/picture_quiz.dart';
+import 'package:frontend/presentation/pages/modal/stop_quiz_modal.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
+import 'package:frontend/presentation/routes/route_path.dart';
 import 'package:frontend/presentation/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class BookProgress extends StatefulWidget {
@@ -81,7 +83,7 @@ class _BookProgressState extends State<BookProgress> {
         finishSentence();
       } else if (nowPage.education?.category == "PICTURE") {
         /// 그림문제
-        print("------------ picture");
+        // print("------------ picture");
         DialogUtils.showCustomDialog(context, contentWidget: PictureQuiz(
           onModalClose: () {
             finishSentence();
@@ -89,7 +91,7 @@ class _BookProgressState extends State<BookProgress> {
         ));
       } else if (nowPage.education?.category == "EXPRESSION") {
         /// 표정문제
-        print("------------ expression");
+        // print("------------ expression");
         DialogUtils.showCustomDialog(context,
             contentWidget: ExpressionQuiz(
               onModalClose: () {
@@ -218,7 +220,20 @@ class _BookProgressState extends State<BookProgress> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.01,
                 ),
-                const EndIcon(),
+                EndIcon(onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext dialogContext) {
+                      return stopQuiz(
+                        title: "동화",
+                        onConfirm: () {
+                          showToast('종료되었습니다.');
+                          context.go(RoutePath.main0);
+                        },
+                      );
+                    },
+                  );
+                }),
               ],
             ),
           ),

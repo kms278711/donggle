@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/dialog_utils.dart';
 import 'package:frontend/domain/model/model_cards.dart' as domain;
 import 'package:frontend/presentation/pages/card/card_deatil.dart';
@@ -9,8 +10,9 @@ import 'package:provider/provider.dart';
 class OpenedCard extends StatefulWidget {
   final String url;
   final int educationId;
+  final String word;
 
-  const OpenedCard(this.url, this.educationId, {Key? key}) : super(key: key);
+  const OpenedCard(this.url, this.educationId, this.word, {super.key});
 
   @override
   State<OpenedCard> createState() => _OpenedBookState();
@@ -44,16 +46,29 @@ class _OpenedBookState extends State<OpenedCard> {
           cardModel.getSelectedCard(accessToken, widget.educationId);
           DialogUtils.showCustomDialog(context, contentWidget: CardDetail(widget.educationId));
         },
-        child: Center(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: CachedNetworkImage(
-              imageUrl: widget.url,
-              fit: BoxFit.cover,
-              placeholder: (context, url) => const CircularProgressIndicator(),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
+        child: Stack(
+          children: [
+            Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  child: CachedNetworkImage(
+                    imageUrl: widget.url,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                  ),
+                ),
+              ),
             ),
-          ),
+            Positioned(
+                bottom: MediaQuery.of(context).size.height * 0.015,
+                left: MediaQuery.of(context).size.width * 0.065,
+                child: Text(
+                  widget.word,
+                  style: CustomFontStyle.getTextStyle(context, CustomFontStyle.unSelectedLarge),
+                )),
+          ],
         ),
       ),
     );

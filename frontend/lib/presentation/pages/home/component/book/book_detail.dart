@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
@@ -11,15 +10,13 @@ import 'package:frontend/core/utils/component/icons/circle_back_icon.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
-import 'package:frontend/presentation/routes/route_path.dart';
 import 'package:frontend/presentation/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class BookDetail extends StatefulWidget {
-  int bookId;
+  final int bookId;
 
-  BookDetail(this.bookId, {super.key});
+  const BookDetail(this.bookId, {super.key});
 
   @override
   State<BookDetail> createState() => _BookDetailState();
@@ -165,11 +162,15 @@ class _BookDetailState extends State<BookDetail> {
                           ),
                         ),
                         Positioned(
-                          bottom: MediaQuery.of(context).size.height * 0.045,
-                          left: MediaQuery.of(context).size.width * 0.075,
-                          child: Text(
-                            education["wordName"],
-                            style: CustomFontStyle.textSmall,
+                          bottom: MediaQuery.of(context).size.height * 0.055,
+                          left: 0,
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.185,
+                            child: Text(
+                              education["wordName"],
+                              style: CustomFontStyle.textSmall,
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
                       ],
@@ -182,20 +183,30 @@ class _BookDetailState extends State<BookDetail> {
           Positioned(
             top: MediaQuery.of(context).size.height * 0.75,
             left: MediaQuery.of(context).size.width * 0.12,
-            child: Row(
-              children: [
-                GreenButton("처음부터", onPressed: () {
-                  Navigator.of(context).pop();
-                  globalRouter.pushReplacement('/bookProgress/${widget.bookId}/1/0');
-                }),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.04,
-                ),
-                GreenButton("이어하기", onPressed: () {
-                  Navigator.of(context).pop();
-                  globalRouter.pushReplacement('/bookProgress/${widget.bookId}/$bookPage/0');
-                }),
-              ],
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width * 0.27,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GreenButton("처음부터", onPressed: () {
+                    Navigator.of(context).pop();
+                    globalRouter.pushReplacement('/bookProgress/${widget.bookId}/1/0');
+                  }),
+                  bookPage == 0 ? Container():
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.04,
+                      ),
+                      GreenButton("이어하기", onPressed: () {
+                        Navigator.of(context).pop();
+                        globalRouter.pushReplacement('/bookProgress/${widget.bookId}/$bookPage/0');
+                      }),
+                    ],
+                  ),
+
+                ],
+              ),
             ),
           ),
           Positioned(

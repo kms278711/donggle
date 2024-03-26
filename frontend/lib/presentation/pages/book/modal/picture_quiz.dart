@@ -44,7 +44,8 @@ class _PictureQuizState extends State<PictureQuiz> {
 
     bookModel = Provider.of<BookModel>(context, listen: false);
     education = bookModel.nowEducation;
-    url = Constant.s3BaseUrl + education.imagePath;
+    String path = education.traceImagePath ?? "";
+    url = Constant.s3BaseUrl + path;
   }
 
   @override

@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
+import 'package:frontend/core/utils/add_post_position_text.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/buttons/red_button.dart';
 
 class stopQuiz extends StatelessWidget {
   final String title;
-  final String content;
   final Function onConfirm;
 
   const stopQuiz({
     super.key,
     required this.title,
-    required this.content,
     required this.onConfirm,
   });
 
@@ -20,14 +19,14 @@ class stopQuiz extends StatelessWidget {
     return AlertDialog(
       backgroundColor: Colors.white,
       title: Text(
-        title,
+        "$title 종료",
         style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textLarge),
       ),
       content: SizedBox(
         width: MediaQuery.of(context).size.width * 0.5,
         height: MediaQuery.of(context).size.width * 0.1,
         child: Text(
-          content,
+          "${postPositionText(title)} 종료하시겠습니까?",
           style: CustomFontStyle.getTextStyle(
               (context), CustomFontStyle.textMediumLarge),
         ),

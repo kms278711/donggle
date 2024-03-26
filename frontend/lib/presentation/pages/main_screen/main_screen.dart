@@ -208,8 +208,7 @@ class _MainScreenState extends State<MainScreen> {
                               context: newContext,
                               builder: (BuildContext dialogContext) {
                                 return stopQuiz(
-                                  title: "퀴즈 종료",
-                                  content: "퀴즈를 종료하시겠습니까?",
+                                  title: "퀴즈",
                                   onConfirm: () {
                                     _onButtonPressed(1);
                                     quizProvider
@@ -241,8 +240,7 @@ class _MainScreenState extends State<MainScreen> {
                               context: newContext,
                               builder: (BuildContext dialogContext) {
                                 return stopQuiz(
-                                  title: "퀴즈 종료",
-                                  content: "퀴즈를 종료하시겠습니까?",
+                                  title: "퀴즈",
                                   onConfirm: () {
                                     _onButtonPressed(0);
                                     quizProvider

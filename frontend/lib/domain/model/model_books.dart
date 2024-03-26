@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
@@ -158,6 +159,26 @@ class BookModel extends ChangeNotifier {
       return msg;
     }
   }
+
+  ///유저가 그린 그림(그림, 행동, 표정) 저장
+  Future<String> saveEducationImage(String accessToken, int educationId, File actionImage) async {
+    // print(bookId.toString());
+    var url = Uri.https("j10c101.p.ssafy.io", "api/users/educations/$educationId");
+    final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
+    var response = await http.post(url, headers: headers);
+
+    print(utf8.decode(response.bodyBytes));
+
+    if (response.statusCode == 200) {
+      return "Success";
+    } else if (response.statusCode == 401) {
+      userProvider.refreshToken();
+      return saveEducationImage(userProvider.getAccessToken(), educationId, actionImage);
+    } else {
+      String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']['result_message'];
+      return msg;
+    }
+  }
 }
 
 class Book {
@@ -270,6 +291,7 @@ class Education {
   final String wordName;
   final String imagePath;
   final int bookSentenceId;
+  final String? traceImagePath;
 
   Education({
     required this.educationId,
@@ -278,6 +300,7 @@ class Education {
     required this.wordName,
     required this.imagePath,
     required this.bookSentenceId,
+    this.traceImagePath,
   });
 
   factory Education.fromJson(Map<String, dynamic> json) {
@@ -288,6 +311,7 @@ class Education {
       wordName: json['wordName'],
       imagePath: json['imagePath'],
       bookSentenceId: json['bookPageSentenceId'],
+      traceImagePath: json['traceImagePath'],
     );
   }
 }

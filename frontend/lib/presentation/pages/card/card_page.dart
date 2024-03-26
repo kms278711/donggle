@@ -47,8 +47,7 @@ class _CardPageState extends State<CardPage> {
                   child: FutureBuilder<String>(
                     future: cardModel.getAllCards(accessToken),
                     // Your Future<String> function call
-                    builder:
-                        (BuildContext context, AsyncSnapshot<String> snapshot) {
+                    builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         // While waiting for the future to complete, show a loading spinner.
                         return const Center(child: CircularProgressIndicator());
@@ -60,23 +59,19 @@ class _CardPageState extends State<CardPage> {
                         if (snapshot.data == "Success") {
                           int bookLength = cardModel.cards.length;
                           return GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 4,
-                              mainAxisSpacing:
-                                  MediaQuery.of(context).size.height * 0.05,
+                              mainAxisSpacing: MediaQuery.of(context).size.height * 0.05,
                             ),
                             scrollDirection: Axis.vertical,
                             physics: const ScrollPhysics(),
                             itemCount: bookLength,
                             itemBuilder: (context, index) {
-                              final card =
-                                  domain.Card.fromJson(cardModel.cards[index]);
+                              final card = domain.Card.fromJson(cardModel.cards[index]);
                               final url = Constant.s3BaseUrl + card.imagePath;
                               final id = card.educationId;
-                              return card.isEducated ?? false
-                                  ? OpenedCard(url, id)
-                                  : LockedCard(url, id);
+                              final word = card.wordName;
+                              return card.isEducated ? OpenedCard(url, id, word) : LockedCard(url, id);
                             },
                           );
                         } else {
@@ -87,8 +82,7 @@ class _CardPageState extends State<CardPage> {
                                 snapshot.data!,
                                 // Use the data from the snapshot
                                 textAlign: TextAlign.center,
-                                style: CustomFontStyle.getTextStyle(
-                                    context, CustomFontStyle.unSelectedLarge),
+                                style: CustomFontStyle.getTextStyle(context, CustomFontStyle.unSelectedLarge),
                               ),
                             ],
                           );
