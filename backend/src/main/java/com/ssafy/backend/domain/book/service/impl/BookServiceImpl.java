@@ -6,8 +6,8 @@ import com.ssafy.backend.domain.book.dto.BookDto;
 import com.ssafy.backend.domain.book.dto.BookPageSentenceDto;
 import com.ssafy.backend.domain.book.dto.UserBookProcessDto;
 import com.ssafy.backend.domain.book.dto.response.BookInfoResponseDto;
+import com.ssafy.backend.domain.book.dto.response.BookPageResponseDto;
 import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;
-import com.ssafy.backend.domain.book.dto.response.BookReviewResponseDto;
 import com.ssafy.backend.domain.book.entity.*;
 import com.ssafy.backend.domain.book.mapper.BookMapper;
 import com.ssafy.backend.domain.book.repository.book.BookRepository;
@@ -90,7 +90,7 @@ public class BookServiceImpl implements BookService {
             }
         }
 
-        int bookProcessPage = isUserBookProcess(loginUserId, bookId);
+        int bookProcessPage = getBookProcessPage(loginUserId, bookId);
 
         List<BookEducationDto> educationList = educationRepository.findAllByBookPageSentence_BookPageSentenceIdIn(ids);
 
@@ -106,7 +106,7 @@ public class BookServiceImpl implements BookService {
     }
 
     // 진행중인 페이지 정보 가져오기
-    private int isUserBookProcess(Long loginUserId, Long bookId) {
+    private int getBookProcessPage(Long loginUserId, Long bookId) {
         UserBookProcess bookProcesses = userBookProcessRespository.findByUser_userIdAndBook_bookId(loginUserId, bookId);
         int bookProcessePage = 0;
         if (bookProcesses != null) {
@@ -121,7 +121,7 @@ public class BookServiceImpl implements BookService {
     // 책 페이지 조회
     @Override
     @Transactional
-    public BookReviewResponseDto.BookPageResponseDto searchBookPage(Long bookId, int page) {
+    public BookPageResponseDto searchBookPage(Long bookId, int page) {
         // bookId와 page를 통해 bookPage 조회
         BookPage bookPage = bookPageRepository.findByBookPage(bookId, page)
                 .orElseThrow(() -> new UserException(NOT_FOUND_BOOKPAGE));
@@ -139,7 +139,7 @@ public class BookServiceImpl implements BookService {
         Education education = bookPageRepository.findByBookSentenceId(bookPageSentenceIds);
         EducationDto educationDto = educationMapper.toEducationDto(education);
 
-        return BookReviewResponseDto.BookPageResponseDto.builder()
+        return BookPageResponseDto.builder()
                 .bookPageId(bookPage.getBookPageId())
                 .bookImagePath(bookPage.getBookImagePath())
                 .page(bookPage.getPage())
