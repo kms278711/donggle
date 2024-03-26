@@ -17,6 +17,7 @@ public class ApprovalController {
     @Autowired
     private ApprovalService approvalService;
 
+    // 결제내역 조회
     @PostMapping("{bookId}")
     public ResponseEntity<String> saveApproval(@PathVariable("bookId") Long bookId,
                                                Authentication authentication,
@@ -27,6 +28,7 @@ public class ApprovalController {
         return ResponseEntity.ok("결제 내역이 저장되었습니다.");
     }
 
+    // 결제 내역 조회
     @GetMapping
     public ResponseEntity<List<ApprovalResponseDto>> searchApprovals(Authentication authentication) {
         Long loginUserId = AuthenticationUtil.getCurrentUserId(authentication);

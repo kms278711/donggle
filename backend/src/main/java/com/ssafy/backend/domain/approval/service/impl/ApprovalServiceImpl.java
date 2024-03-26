@@ -30,6 +30,7 @@ public class ApprovalServiceImpl implements ApprovalService {
     private final ApprovalRepository approvalRepository;
     private final BookPurchasedRepository bookPurchasedRepository;
 
+    // 결제 내역 저장
     @Override
     public void saveApproval(Long loginUserId, Long bookId, int price) {
         User userId = userRepository.findById(loginUserId)
@@ -48,6 +49,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 
     }
 
+    // 결제 내역 조회
     @Override
     public List<ApprovalResponseDto> searchApprovals(Long loginUserId) {
         List<Approval> approvals = approvalRepository.findByUser_userId(loginUserId);

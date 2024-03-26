@@ -12,7 +12,6 @@ public record BookInfoResponseDto(
         String coverImagePath,
         int totalPage,
         int processPage,
-        //List<BookPage> bookPageList,
         List<BookEducationDto> educationList
 ) {
 }

@@ -12,5 +12,6 @@ public interface ApprovalMapper {
 
     @Mapping(source = "approval.book.bookId", target = "bookId")
     @Mapping(source = "approval.book.title", target = "bookTitle")
+    @Mapping(source = "approval.book.coverPath", target = "coverPath")
     ApprovalResponseDto toApprovalResponseDto(Approval approval);
 }
