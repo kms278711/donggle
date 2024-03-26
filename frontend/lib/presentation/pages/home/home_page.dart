@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
+import 'package:frontend/core/utils/component/donggle_talk.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/presentation/pages/home/component/book/locked_book.dart';
@@ -102,6 +103,11 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
+          ),
+          Positioned(
+            bottom: MediaQuery.of(context).size.height * 0.1,
+            right: 0,
+            child: const donggleTalk(situation: "BOOKLIST"),
           ),
         ],
       ),

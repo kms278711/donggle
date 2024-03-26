@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
+import 'package:frontend/core/utils/component/donggle_talk.dart';
 import 'package:frontend/core/utils/component/icons/circle_back_icon.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
@@ -86,7 +87,8 @@ class _BookDetailState extends State<BookDetail> {
             child: Container(
               color: Colors.transparent,
               child: Center(
-                child: Image.asset(AppIcons.bottle, width: MediaQuery.of(context).size.width * 0.35),
+                child: Image.asset(AppIcons.bottle,
+                    width: MediaQuery.of(context).size.width * 0.35),
               ),
             ),
           ),
@@ -129,7 +131,8 @@ class _BookDetailState extends State<BookDetail> {
                 imageUrl: url,
                 fit: BoxFit.cover,
                 width: MediaQuery.of(context).size.width * 0.25,
-                placeholder: (context, url) => const CircularProgressIndicator(),
+                placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             ),
@@ -146,32 +149,34 @@ class _BookDetailState extends State<BookDetail> {
                 crossAxisSpacing: 20, // 가로 간격
                 mainAxisSpacing: 50, // 세로 간격
                 children: educations.map((education) {
-                  return  Container(
-                          decoration: BoxDecoration(color: Colors.red),
-                          child: Stack(
-                            children: [
-                              Center(
-                                child: CachedNetworkImage(
-                                  imageUrl: Constant.s3BaseUrl + education["imagePath"],
-                                  fit: BoxFit.cover,
-                                  height: MediaQuery.of(context).size.height * 0.3,
-                                  // width: MediaQuery.of(context).size.width * 0.14,
-                                  placeholder: (context, url) => const CircularProgressIndicator(),
-                                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                                ),
-                              ),
-                              Positioned(
-                                bottom: MediaQuery.of(context).size.height * 0.045,
-                                left: MediaQuery.of(context).size.width * 0.075,
-                                child: Text(
-                                  education["wordName"],
-                                  style: CustomFontStyle.textSmall,
-                                ),
-                              )
-                            ],
+                  return Container(
+                    decoration: BoxDecoration(color: Colors.red),
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: CachedNetworkImage(
+                            imageUrl:
+                                Constant.s3BaseUrl + education["imagePath"],
+                            fit: BoxFit.cover,
+                            height: MediaQuery.of(context).size.height * 0.3,
+                            // width: MediaQuery.of(context).size.width * 0.14,
+                            placeholder: (context, url) =>
+                                const CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
                           ),
-                        );
-
+                        ),
+                        Positioned(
+                          bottom: MediaQuery.of(context).size.height * 0.045,
+                          left: MediaQuery.of(context).size.width * 0.075,
+                          child: Text(
+                            education["wordName"],
+                            style: CustomFontStyle.textSmall,
+                          ),
+                        )
+                      ],
+                    ),
+                  );
                 }).toList(),
               ),
             ),
@@ -183,14 +188,16 @@ class _BookDetailState extends State<BookDetail> {
               children: [
                 GreenButton("처음부터", onPressed: () {
                   Navigator.of(context).pop();
-                  globalRouter.pushReplacement('/bookProgress/${widget.bookId}/1/0');
+                  globalRouter
+                      .pushReplacement('/bookProgress/${widget.bookId}/1/0');
                 }),
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.04,
                 ),
                 GreenButton("이어하기", onPressed: () {
                   Navigator.of(context).pop();
-                  globalRouter.pushReplacement('/bookProgress/${widget.bookId}/$bookPage/0');
+                  globalRouter.pushReplacement(
+                      '/bookProgress/${widget.bookId}/$bookPage/0');
                 }),
               ],
             ),
@@ -207,6 +214,11 @@ class _BookDetailState extends State<BookDetail> {
               // Navigator.of(context).pop();
               // context.pushReplacement(RoutePath.main3);
             }),
+          ),
+          const Positioned(
+            bottom: 0,
+            right: 0,
+            child: donggleTalk(situation: "BOOK"),
           ),
         ],
       ),

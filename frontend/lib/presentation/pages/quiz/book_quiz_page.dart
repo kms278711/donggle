@@ -5,6 +5,7 @@ import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/dialog_utils.dart';
+import 'package:frontend/core/utils/component/donggle_talk.dart';
 import 'package:frontend/domain/model/model_quiz.dart';
 import 'package:frontend/presentation/pages/home/component/title/main_title.dart';
 import 'package:frontend/presentation/pages/quiz/finish_quiz_page.dart';
@@ -102,7 +103,12 @@ class _BookQuizPageState extends State<BookQuizPage> {
                 },
               ),
             ),
-          )
+          ),
+          Positioned(
+            bottom: MediaQuery.of(context).size.height * 0.1,
+            right: 0,
+            child: const donggleTalk(situation: "QUIZ"),
+          ),
         ],
       ),
     );

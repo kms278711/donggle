@@ -637,14 +637,14 @@ class _BackgroundScreenState extends State<BackgroundUpper>
         //     ),
         //   ),
         // ),
-        Indexed(
-          index: 1005,
-          child: Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.1,
-            right: 0,
-            child: const donggleTalk(),
-            ),
-          ),
+        // Indexed(
+        //   index: 1005,
+        //   child: Positioned(
+        //     bottom: MediaQuery.of(context).size.height * 0.1,
+        //     right: 0,
+        //     child: const donggleTalk(),
+        //   ),
+        // ),
         // Indexed(
         //   index: 1005,
         //   child: Positioned(
