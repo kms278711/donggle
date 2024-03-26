@@ -31,7 +31,6 @@ public class AuthServiceImpl implements AuthService {
 
 	/**
 	 * 회원가입
-	 *
 	 * @param signupRequestDto 회원가입 요청 정보
 	 */
 	@Override
@@ -54,8 +53,14 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	@Transactional
-	public UserInfoDto SNSLogin(Map<String, Object> userinfo) {
-		String email = userinfo.get("id") + "_" + userinfo.get("email");
+	public UserInfoDto SNSLogin(String publisher, Map<String, Object> userinfo) {
+		String email = "";
+		if(publisher.equals("NAVER")) {
+			email += userinfo.get("id") + "_";
+		} else if(publisher.equals("GOOGLE")) {
+			email += userinfo.get("azp") + "_";
+		}
+		email += userinfo.get("email");
 		if (isUserExist(email)) {
 			userRepository.findByEmail(email).ifPresent(user -> {
 				if (isWithdrawal(user)) {
@@ -65,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
 		} else {
 			User user = User.builder()
 					.email(email)
-					.provider(User.Provider.NAVER)
+					.provider(User.Provider.valueOf(publisher))
 					.build();
 			InitialSetting(user);
 			userRepository.save(user);

@@ -9,7 +9,7 @@ import java.util.Map;
 public interface AuthService {
 
 	void signUp(SignupRequestDto signupRequestDto);
-	UserInfoDto SNSLogin(Map<String, Object> userinfo);
+	UserInfoDto SNSLogin(String publisher, Map<String, Object> userinfo);
 
 	UserInfoDto login(String email, String password);
 
