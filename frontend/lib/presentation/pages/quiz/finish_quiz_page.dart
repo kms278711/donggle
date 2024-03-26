@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
+import 'package:frontend/core/utils/component/donggle_talk.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/presentation/routes/route_path.dart';
 import 'package:go_router/go_router.dart';
@@ -69,16 +70,21 @@ class _FinishQuizPageState extends State<FinishQuizPage> {
                 },
               ),
             ),
+            // Positioned(
+            //   bottom: MediaQuery.of(context).size.height * 0.06,
+            //   right: -2,
+            //   child: Container(
+            //     color: Colors.transparent,
+            //     child: Center(
+            //       child: Image.asset(AppIcons.donggle_quiz,
+            //           width: MediaQuery.of(context).size.width * 0.25),
+            //     ),
+            //   ),
+            // ),
             Positioned(
-              bottom: MediaQuery.of(context).size.height * 0.06,
-              right: -2,
-              child: Container(
-                color: Colors.transparent,
-                child: Center(
-                  child: Image.asset(AppIcons.donggle_quiz,
-                      width: MediaQuery.of(context).size.width * 0.25),
-                ),
-              ),
+              bottom: MediaQuery.of(context).size.height * 0.1,
+              right: 0,
+              child: const donggleTalk(situation: "QUIZRESULT"),
             ),
           ],
         ),

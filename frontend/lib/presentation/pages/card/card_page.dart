@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
+import 'package:frontend/core/utils/component/donggle_talk.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_cards.dart' as domain;
 import 'package:frontend/presentation/pages/card/locked_card.dart';
@@ -98,7 +99,12 @@ class _CardPageState extends State<CardPage> {
                 ),
               ],
             ),
-          )
+          ),
+          Positioned(
+            bottom: MediaQuery.of(context).size.height * 0.1,
+            right: 0,
+            child: const donggleTalk(situation: "WORDLIST"),
+          ),
         ],
       ),
     );

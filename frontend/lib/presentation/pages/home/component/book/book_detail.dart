@@ -1,15 +1,19 @@
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
+import 'package:frontend/core/utils/component/donggle_talk.dart';
 import 'package:frontend/core/utils/component/icons/circle_back_icon.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
+import 'package:frontend/presentation/routes/route_path.dart';
 import 'package:frontend/presentation/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class BookDetail extends StatefulWidget {
@@ -85,7 +89,8 @@ class _BookDetailState extends State<BookDetail> {
             child: Container(
               color: Colors.transparent,
               child: Center(
-                child: Image.asset(AppIcons.bottle, width: MediaQuery.of(context).size.width * 0.35),
+                child: Image.asset(AppIcons.bottle,
+                    width: MediaQuery.of(context).size.width * 0.35),
               ),
             ),
           ),
@@ -205,6 +210,11 @@ class _BookDetailState extends State<BookDetail> {
               // Navigator.of(context).pop();
               // context.pushReplacement(RoutePath.main3);
             }),
+          ),
+          const Positioned(
+            bottom: 0,
+            right: 0,
+            child: donggleTalk(situation: "BOOK"),
           ),
         ],
       ),
