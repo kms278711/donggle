@@ -36,7 +36,7 @@ class donggleTalk extends StatefulWidget {
 }
 
 class _donggleTalkState extends State<donggleTalk>
-    with TickerProviderStateMixin {
+    with SingleTickerProviderStateMixin {
   late DonggleTalkModel donggleTalkModel;
   String donggleTalk = "";
   bool touched_donggle = false;
@@ -253,10 +253,15 @@ class _donggleTalkState extends State<donggleTalk>
                 });
                 setTouchedDonggle(true);
               },
-              child: Image.asset(
-                AppIcons.donggle,
-                width: MediaQuery.of(context).size.width * 0.22,
-              ),
+              child: widget.situation == 'QUIZRESULT'
+                  ? Image.asset(
+                      AppIcons.donggle_quiz,
+                      width: MediaQuery.of(context).size.width * 0.22,
+                    )
+                  : Image.asset(
+                      AppIcons.donggle,
+                      width: MediaQuery.of(context).size.width * 0.22,
+                    ),
             ),
           ),
         ),

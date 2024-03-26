@@ -104,11 +104,6 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.1,
-            right: 0,
-            child: const donggleTalk(situation: "BOOKLIST"),
-          ),
         ],
       ),
     );
