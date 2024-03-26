@@ -79,32 +79,44 @@ public class BookServiceImpl implements BookService {
     // 책 정보 조회(책 클릭시)
     @Override
     public BookInfoResponseDto searchBookInfo(Long bookId, Long loginUserId) {
-        System.out.println("bookId" + bookId + "loginUserId" + loginUserId);
         // bookId와 loginUserId를 구매한 이용해 책 검색
-        UserBookProcess bookProcesses = userBookProcessRespository.findByUser_userIdAndBook_bookId(loginUserId, bookId)
+        BookPurchasedLearning bookPurchasedLearning = bookPurchasedRepository.findByUser_userIdAndBook_bookId(loginUserId, bookId)
                 .orElseThrow(() -> new UserException(NOT_FOUND_BOOK));
 
         List<Long> ids = new ArrayList<>();
-        for (BookPage bookPage : bookProcesses.getBook().getBookPageList()) {
+        for (BookPage bookPage : bookPurchasedLearning.getBook().getBookPageList()) {
             for (BookPageSentence bookPageSentence : bookPage.getBookPageSentenceList()) {
                 ids.add(bookPageSentence.getBookPageSentenceId());
             }
         }
-        System.out.println("ids : " + ids);
+
+        int bookProcessPage = isUserBookProcess(loginUserId, bookId);
 
         List<BookEducationDto> educationList = educationRepository.findAllByBookPageSentence_BookPageSentenceIdIn(ids);
 
         return BookInfoResponseDto.builder()
-                .bookId(bookProcesses.getBook().getBookId())
-                .title(bookProcesses.getBook().getTitle())
-                .coverImagePath(bookProcesses.getBook().getCoverPath())
-                .totalPage(bookProcesses.getBook().getBookPageList().size())
-                .processPage(bookProcesses.getPage())
-                //.bookPageList(bookProcesses.getBook().getBookPageList())
+                .bookId(bookPurchasedLearning.getBook().getBookId())
+                .title(bookPurchasedLearning.getBook().getTitle())
+                .coverImagePath(bookPurchasedLearning.getBook().getCoverPath())
+                .totalPage(bookPurchasedLearning.getBook().getBookPageList().size())
+                .processPage(bookProcessPage)
                 .educationList(educationList)
                 .build();
 
     }
+
+    // 진행중인 페이지 정보 가져오기
+    private int isUserBookProcess(Long loginUserId, Long bookId) {
+        UserBookProcess bookProcesses = userBookProcessRespository.findByUser_userIdAndBook_bookId(loginUserId, bookId);
+        int bookProcessePage = 0;
+        if (bookProcesses != null) {
+            bookProcessePage = bookProcesses.getPage();
+        } else {
+            bookProcessePage = 0;
+        }
+        return bookProcessePage;
+    }
+
 
     // 책 페이지 조회
     @Override
