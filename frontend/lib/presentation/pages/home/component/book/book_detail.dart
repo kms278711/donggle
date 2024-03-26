@@ -1,5 +1,6 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
@@ -8,9 +9,7 @@ import 'package:frontend/core/utils/component/icons/circle_back_icon.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
-import 'package:frontend/presentation/routes/route_path.dart';
 import 'package:frontend/presentation/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class BookDetail extends StatefulWidget {
@@ -135,45 +134,44 @@ class _BookDetailState extends State<BookDetail> {
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.2,
+            top: MediaQuery.of(context).size.height * 0.18,
             right: MediaQuery.of(context).size.width * 0.1,
             child: Container(
               width: MediaQuery.of(context).size.width * 0.4,
-              height: MediaQuery.of(context).size.height * 0.65,
-              decoration: BoxDecoration(color: Colors.white),
+              height: MediaQuery.of(context).size.height * 0.7,
+              padding: EdgeInsets.zero,
               child: GridView.count(
                 crossAxisCount: 2, // 한 줄에 2개의 항목을 표시
-                crossAxisSpacing: 20, // 가로 간격
-                mainAxisSpacing: 50, // 세로 간격
-                children: educations.map((education) {
-                  return  Container(
-                          decoration: BoxDecoration(color: Colors.red),
-                          child: Stack(
-                            children: [
-                              Center(
-                                child: CachedNetworkImage(
-                                  imageUrl: Constant.s3BaseUrl + education["imagePath"],
-                                  fit: BoxFit.cover,
-                                  height: MediaQuery.of(context).size.height * 0.3,
-                                  // width: MediaQuery.of(context).size.width * 0.14,
-                                  placeholder: (context, url) => const CircularProgressIndicator(),
-                                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                                ),
-                              ),
-                              Positioned(
-                                bottom: MediaQuery.of(context).size.height * 0.045,
-                                left: MediaQuery.of(context).size.width * 0.075,
-                                child: Text(
-                                  education["wordName"],
-                                  style: CustomFontStyle.textSmall,
-                                ),
-                              )
-                            ],
+                crossAxisSpacing: MediaQuery.of(context).size.width * 0.01, // 가로 간격
+                mainAxisSpacing: MediaQuery.of(context).size.height * 0.01, // 세로 간격
+                physics: const NeverScrollableScrollPhysics(),
+                children: List.generate(educations.length, (index) {
+                  var education = educations[index];
+                  return Transform.rotate(
+                    angle: index % 2 == 0 ? 350 * pi / 180 : 10 * pi / 180,
+                    child: Stack(
+                      children: [
+                        Center(
+                          child: CachedNetworkImage(
+                            imageUrl: Constant.s3BaseUrl + education["imagePath"],
+                            fit: BoxFit.cover,
+                            height: MediaQuery.of(context).size.height * 0.3,
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
                           ),
-                        );
-
-                }).toList(),
-              ),
+                        ),
+                        Positioned(
+                          bottom: MediaQuery.of(context).size.height * 0.045,
+                          left: MediaQuery.of(context).size.width * 0.075,
+                          child: Text(
+                            education["wordName"],
+                            style: CustomFontStyle.textSmall,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              )
             ),
           ),
           Positioned(

@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:frontend/core/utils/add_post_position_text.dart';
 import 'package:frontend/core/utils/component/icons/close_circle.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/data/data_source/remote/drawing.api.dart';
@@ -36,26 +37,6 @@ class _PictureQuizState extends State<PictureQuiz> {
   Education education = Education(educationId: 0, gubun: "", wordName: "", imagePath: "", bookSentenceId: 0);
   String url = "";
   String? apiResult;
-
-  String postPositionText(String name) {
-    // Get the last character of the name
-    final String? lastText = name.isNotEmpty ? name.characters.last : null;
-
-    if (lastText == null) {
-      return name;
-    }
-    // Convert to Unicode
-    final int unicodeVal = lastText.runes.first;
-    // Return the name if it's not a Hangul syllable
-    if (unicodeVal < 0xAC00 || unicodeVal > 0xD7A3) {
-      return name;
-    }
-    // Check if there's a final consonant
-    final int last = (unicodeVal - 0xAC00) % 28;
-    // Append '을' if there is a final consonant, otherwise '를'
-    final String str = last > 0 ? "을" : "를";
-    return name + str;
-  }
 
   @override
   void initState() {

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
@@ -11,6 +12,7 @@ import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/presentation/pages/book/modal/book_finish_modal.dart';
+import 'package:frontend/presentation/pages/book/modal/expression_quiz.dart';
 import 'package:frontend/presentation/pages/book/modal/picture_quiz.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:frontend/presentation/routes/routes.dart';
@@ -54,15 +56,12 @@ class _BookProgressState extends State<BookProgress> {
     // if(_isLastSentence && _isLastPage){
     //   globalRouter.pushReplacement(RoutePath.main0);
     // }
-    if (_isLastSentence && _isLastPage){
+    if (_isLastSentence && _isLastPage) {
       DialogUtils.showCustomDialog(context,
           contentWidget: BookFinishModal(bookId, onModalClose: () {
-            setState(() {
-
-            });
+            setState(() {});
           }));
-    }
-    else if (_isLastSentence) {
+    } else if (_isLastSentence) {
       globalRouter.pushReplacement('/bookProgress/$bookId/${pageId + 1}/0');
     } else {
       setState(() {
@@ -91,7 +90,12 @@ class _BookProgressState extends State<BookProgress> {
       } else if (nowPage.education?.category == "EXPRESSION") {
         /// 표정문제
         print("------------ expression");
-        finishSentence();
+        DialogUtils.showCustomDialog(context,
+            contentWidget: ExpressionQuiz(
+              onModalClose: () {
+                finishSentence();
+              },
+            ));
       } else if (nowPage.education?.category == "ACTION") {
         /// 동작문제
         print("------------ action");
@@ -110,7 +114,7 @@ class _BookProgressState extends State<BookProgress> {
     } else {
       setState(() {
         sentenceId--;
-        if(_isLastSentence) _isLastSentence = false;
+        if (_isLastSentence) _isLastSentence = false;
       });
     }
   }
@@ -128,7 +132,7 @@ class _BookProgressState extends State<BookProgress> {
       userProvider = Provider.of<UserProvider>(context, listen: false);
       accessToken = userProvider.getAccessToken();
       totalPage = bookModel.BookDetail['totalPage'];
-      if(pageId == totalPage) _isLastPage = true;
+      if (pageId == totalPage) _isLastPage = true;
 
       String result = await bookModel.getBookPage(accessToken, bookId, pageId);
       if (result == "Success") {

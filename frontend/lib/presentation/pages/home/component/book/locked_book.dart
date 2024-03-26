@@ -18,7 +18,8 @@ class LockedBook extends StatelessWidget {
       child: InkWell(
         onTap: () {
           showToast(
-            "구매하지 않은 동화책입니다.",
+            "마이페이지에서 동화책을 구매해주세요.",
+            duration: Duration(seconds: 3),
             context: context,
             backgroundColor: AppColors.error,
           );
