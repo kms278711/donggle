@@ -259,7 +259,7 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 )
               : Container(),
-          const Indexed(index: 100, child: BackgroundUpper())
+          BackgroundUpper()
         ],
       ),
     );

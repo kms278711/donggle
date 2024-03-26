@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
+import 'package:frontend/core/utils/component/donggle_talk.dart';
 import 'package:frontend/core/utils/component/icons/circle_back_icon.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
@@ -141,7 +142,7 @@ class _BookDetailState extends State<BookDetail> {
             child: Container(
               width: 430,
               height: 500,
-              decoration: BoxDecoration(color: Colors.white),
+              decoration: const BoxDecoration(color: Colors.white),
               child: Expanded(
                 child: GridView.count(
                   crossAxisCount: 2, // 한 줄에 2개의 항목을 표시
@@ -150,7 +151,7 @@ class _BookDetailState extends State<BookDetail> {
                   children: educations.map((education) {
                     return education["gubun"] == "WORD"
                         ? Container(
-                            decoration: BoxDecoration(color: Colors.red),
+                            decoration: const BoxDecoration(color: Colors.red),
                             child: Column(
                               children: [
                                 CachedNetworkImage(
@@ -210,6 +211,11 @@ class _BookDetailState extends State<BookDetail> {
               // Navigator.of(context).pop();
               // context.pushReplacement(RoutePath.main3);
             }),
+          ),
+          const Positioned(
+            bottom: 0,
+            right: 0,
+            child: donggleTalk(situation: "BOOK"),
           ),
         ],
       ),

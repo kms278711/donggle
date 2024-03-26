@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
+import 'package:frontend/core/utils/component/donggle_talk.dart';
 import 'package:frontend/core/utils/component/icons/circle_back_icon.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_cards.dart';
@@ -224,6 +225,11 @@ class _CardDetailState extends State<CardDetail> {
                 ],
               ),
             ),
+          ),
+          const Positioned(
+            bottom: 0,
+            right: 0,
+            child: donggleTalk(situation: "WORD"),
           ),
         ],
       ),

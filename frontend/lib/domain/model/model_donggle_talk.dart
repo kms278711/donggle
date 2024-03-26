@@ -7,9 +7,9 @@ class DonggleTalkModel extends ChangeNotifier {
 
   Map dongglesTalk = {};
 
-  Future<String> getDonggleTalk() async {
+  Future<String> getDonggleTalk(String situation) async {
     var url = Uri.https("j10c101.p.ssafy.io", "api/donggle/message", {
-      'situation': 'BOOKLIST',
+      'situation': situation,
     });
     final headers = {
       'Content-Type': 'application/json',
@@ -20,6 +20,7 @@ class DonggleTalkModel extends ChangeNotifier {
     if (response.statusCode == 200) {
       dongglesTalk = json.decode(utf8.decode(response.bodyBytes));
       print(dongglesTalk);
+      notifyListeners();
       return "Success";
     }  else {
       String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']
