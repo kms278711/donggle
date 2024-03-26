@@ -8,6 +8,7 @@ public record EducationDto(
 		Education.Category category,
 		String wordName,
 		String imagePath,
+		String traceImagePath,
 		Long bookPageSentenceId
 ) {
 }

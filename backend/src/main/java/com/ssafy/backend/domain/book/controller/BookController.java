@@ -3,8 +3,8 @@ package com.ssafy.backend.domain.book.controller;
 import com.ssafy.backend.domain.book.dto.BookDto;
 import com.ssafy.backend.domain.book.dto.UserBookProcessDto;
 import com.ssafy.backend.domain.book.dto.response.BookInfoResponseDto;
+import com.ssafy.backend.domain.book.dto.response.BookPageResponseDto;
 import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;
-import com.ssafy.backend.domain.book.dto.response.BookReviewResponseDto;
 import com.ssafy.backend.domain.book.service.BookService;
 import com.ssafy.backend.global.util.AuthenticationUtil;
 import lombok.RequiredArgsConstructor;
@@ -53,8 +53,8 @@ public class BookController {
 
     // 책 페이지 조회
     @GetMapping("/{bookId}/pages/{page}")
-    public  ResponseEntity<BookReviewResponseDto.BookPageResponseDto> searchBookPage(@PathVariable("bookId") Long bookId, @PathVariable("page") int page) {
-        BookReviewResponseDto.BookPageResponseDto bookPageResponseDto = bookService.searchBookPage(bookId, page);
+    public  ResponseEntity<BookPageResponseDto> searchBookPage(@PathVariable("bookId") Long bookId, @PathVariable("page") int page) {
+        BookPageResponseDto bookPageResponseDto = bookService.searchBookPage(bookId, page);
 
         return ResponseEntity.ok(bookPageResponseDto);
     }
