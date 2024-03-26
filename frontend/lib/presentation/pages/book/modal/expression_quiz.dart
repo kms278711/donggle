@@ -6,6 +6,7 @@ import 'package:frontend/core/utils/add_post_position_text.dart';
 import 'package:frontend/core/utils/component/icons/close_circle.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
+import 'package:frontend/presentation/pages/book/modal/expression_camera.dart';
 import 'package:provider/provider.dart';
 
 class ExpressionQuiz extends StatefulWidget {
@@ -19,8 +20,7 @@ class ExpressionQuiz extends StatefulWidget {
 
 class _ExpressionQuizState extends State<ExpressionQuiz> {
   late BookModel bookModel;
-  late CameraDescription camera;
-  late CameraController cameraController;
+
   bool _isLoading = true;
   String url = "";
   String educationWord = "";
@@ -31,10 +31,6 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       bookModel = Provider.of<BookModel>(context, listen: false);
-      camera = Provider.of<CameraDescription>(context, listen: false);
-      cameraController = CameraController(camera, ResolutionPreset.medium);
-
-      await cameraController.initialize();
 
       if (mounted) {
         setState(() {
@@ -46,12 +42,6 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
         });
       }
     });
-  }
-
-  @override
-  void dispose() {
-    cameraController.dispose();
-    super.dispose();
   }
 
   @override
@@ -102,13 +92,9 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
                               height: MediaQuery.of(context).size.width * 0.4,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(40),
-                                child: FittedBox(
+                                child: const FittedBox(
                                   fit: BoxFit.cover,
-                                  child: SizedBox(
-                                    width: cameraController.value.previewSize!.width,
-                                    height: cameraController.value.previewSize!.height,
-                                    child: CameraPreview(cameraController),
-                                  ),
+                                  child: ExpressionCamera(),
                                 ),
                               ),
                             ),

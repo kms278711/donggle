@@ -46,8 +46,8 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    _updateSelectedIndex();
     player.play();
+    _updateSelectedIndex();
     quizProvider = Provider.of<QuizProvider>(context, listen: false);
     quizModel = Provider.of<QuizModel>(context, listen: false);
   }

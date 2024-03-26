@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/domain/model/model_auth.dart';
+import 'package:frontend/main.dart';
 import 'package:frontend/presentation/routes/route_path.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -39,6 +40,7 @@ class _SplashPageState extends State<SplashPage> {
     await checkLogin().then((isLogin) {
       if (isLogin) {
         context.go(RoutePath.main0);
+        player.play();
       } else {
         context.go(RoutePath.login);
       }

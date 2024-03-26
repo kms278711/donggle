@@ -14,19 +14,21 @@ class SoundIcon extends StatefulWidget {
 }
 
 class _SoundIconState extends State<SoundIcon> {
+
   bool isSoundOn = true;
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: () {
-        isSoundOn ? widget.player.pause() : widget.player.play();
+        widget.player.playing ? widget.player.pause() : widget.player.play();
         setState(() {
           // Toggle the sound state
-          isSoundOn = !isSoundOn;
+          isSoundOn = !widget.player.playing;
         });
       },
-      child: isSoundOn ? const SoundOnIcon() : const SoundOffIcon(),
+      child: widget.player.playing ? const SoundOnIcon() : const SoundOffIcon(),
     );
   }
 }
