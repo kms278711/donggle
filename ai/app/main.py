@@ -75,6 +75,10 @@ async def analyze_object(file: UploadFile = File(...), filename: Optional[str] =
         # 업로드된 파일을 읽음
         contents = await file.read()
 
+        # 파일을 내 로컬에 다운로드
+        with open(f"./{filename}.png", "wb") as f:
+            f.write(contents)
+
         # 클래스 이름을 읽음
         with open("./app/class_names.txt", "r") as ins:
             class_names = [line.rstrip('\n') for line in ins]
