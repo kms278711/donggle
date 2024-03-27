@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.ssafy.backend.global.error.exception.ExceptionType.*;
 
@@ -91,6 +92,8 @@ public class BookServiceImpl implements BookService {
         }
 
         int bookProcessPage = getBookProcessPage(loginUserId, bookId);
+        int totalPage = bookPurchasedLearning.getBook().getBookPageList().size();
+        boolean isRead = userBookProcessRespository.findByUser_userIdAndBook_bookId(loginUserId, bookId).get().isRead();
 
         List<BookEducationDto> educationList = educationRepository.findAllByBookPageSentence_BookPageSentenceIdIn(ids);
 
@@ -98,8 +101,9 @@ public class BookServiceImpl implements BookService {
                 .bookId(bookPurchasedLearning.getBook().getBookId())
                 .title(bookPurchasedLearning.getBook().getTitle())
                 .coverImagePath(bookPurchasedLearning.getBook().getCoverPath())
-                .totalPage(bookPurchasedLearning.getBook().getBookPageList().size())
+                .totalPage(totalPage)
                 .processPage(bookProcessPage)
+                .isRead(isRead)
                 .educationList(educationList)
                 .build();
 
@@ -107,16 +111,12 @@ public class BookServiceImpl implements BookService {
 
     // 진행중인 페이지 정보 가져오기
     private int getBookProcessPage(Long loginUserId, Long bookId) {
-        UserBookProcess bookProcesses = userBookProcessRespository.findByUser_userIdAndBook_bookId(loginUserId, bookId);
+        Optional<UserBookProcess> bookProcesses = userBookProcessRespository.findByUser_userIdAndBook_bookId(loginUserId, bookId);
         int bookProcessePage = 0;
-        if (bookProcesses != null) {
-            bookProcessePage = bookProcesses.getPage();
-        } else {
-            bookProcessePage = 0;
-        }
+        bookProcessePage = bookProcesses.map(UserBookProcess::getPage).orElse(0);
+
         return bookProcessePage;
     }
-
 
     // 책 페이지 조회
     @Override
@@ -184,11 +184,13 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new UserException(INVALID_USER));
         Book processbookId = bookRepository.findById(bookId)
                 .orElseThrow(() -> new UserException(NOT_FOUND_BOOK));
+        Optional<UserBookProcess> userBookProcess = userBookProcessRespository.findByUser_userIdAndBook_bookId(loginUserId, bookId);
 
         UserBookProcess bookProcess = UserBookProcess.builder()
                 .user(userId)
                 .book(processbookId)
                 .page(page)
+                .isRead(userBookProcess.map(UserBookProcess::isRead).orElse(false))
                 .build();
 
         // 읽은 페이지 저장
@@ -207,5 +209,22 @@ public class BookServiceImpl implements BookService {
                 .book(approval.getBook())
                 .build();
         bookPurchasedRepository.save(purchasedBook);
+    }
+
+    // isRead 여부 저장
+    @Override
+    public void saveIsRead(Long loginUserId, Long bookId) {
+        UserBookProcess userBookProcess = userBookProcessRespository.findByUser_userIdAndBook_bookId(loginUserId, bookId)
+                .orElseThrow(() -> new UserException(NOT_FOUND_BOOK));
+        boolean isRead = true;
+
+        UserBookProcess bookProcess = UserBookProcess.builder()
+                .user(userBookProcess.getUser())
+                .book(userBookProcess.getBook())
+                .page(userBookProcess.getPage())
+                .isRead(isRead)
+                .build();
+
+        userBookProcessRespository.save(bookProcess);
     }
 }

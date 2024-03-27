@@ -26,4 +26,6 @@ public interface BookService {
     List<BookPurchasedResponseDto> searchPurchasedBook(Long loginUserId);
     // 구매내역 구매한 책 테이블에 반영
     void savePurchasedBook(Long loginUserId, Long bookId);
+    // isRead 여부 저장
+    void saveIsRead(Long loginUserId, Long bookId);
 }

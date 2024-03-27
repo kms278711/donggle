@@ -24,10 +24,13 @@ public class UserBookProcess {
     @Column(name = "progress_page")
     private int page;
 
+    private boolean isRead;
+
     @Builder
-    public UserBookProcess(User user, Book book, int page) {
+    public UserBookProcess(User user, Book book, int page, boolean isRead) {
         this.user = user;
         this.book = book;
         this.page = page;
+        this.isRead = isRead;
     }
 }
