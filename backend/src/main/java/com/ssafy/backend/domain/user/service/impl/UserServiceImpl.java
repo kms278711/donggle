@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public void saveEducationImage(Long userId, Long educationId, MultipartFile userActionImage) {
-		String folderName = "word/" + educationId + "/" + userId;
+		String folderName = "word/user/" + userId + "/" + educationId;
 		User user = getUserById(userId);
 		Education education = educationRepository.findById(educationId).orElseThrow(() -> new UserException(INVALID_USER));
 		String imagePath = uploadImage(userActionImage, folderName);
