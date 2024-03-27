@@ -95,4 +95,14 @@ public class BookController {
 
         return ResponseEntity.ok("구매한 책 테이블에 저장되었습니다.");
     }
+
+    // 완독 여부 저장
+    @PostMapping("/{bookId}/is-read")
+    public ResponseEntity<String> saveIsRead(@PathVariable("bookId") Long bookId,
+                                             Authentication authentication) {
+        Long loginUserId = AuthenticationUtil.getCurrentUserId(authentication);
+        bookService.saveIsRead(loginUserId, bookId);
+
+        return ResponseEntity.ok("isRead가 저장되었습니다.");
+    }
 }
