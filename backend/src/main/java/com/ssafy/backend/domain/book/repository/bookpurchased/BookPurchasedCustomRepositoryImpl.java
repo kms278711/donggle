@@ -7,6 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;
 import com.ssafy.backend.domain.book.entity.QBook;
 import com.ssafy.backend.domain.book.entity.QBookPurchasedLearning;
+import com.ssafy.backend.domain.book.entity.QUserBookProcess;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class BookPurchasedCustomRepositoryImpl implements BookPurchasedCustomRep
 
     QBook qBook = QBook.book;
     QBookPurchasedLearning qBookPurchasedLearning = QBookPurchasedLearning.bookPurchasedLearning;
+    QUserBookProcess qUserBookProcess = QUserBookProcess.userBookProcess;
     public BookPurchasedCustomRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
         this.jpaQueryFactory = jpaQueryFactory;
     }
@@ -34,8 +36,18 @@ public class BookPurchasedCustomRepositoryImpl implements BookPurchasedCustomRep
                                         .from(qBookPurchasedLearning)
                                         .where(qBook.bookId.eq(qBookPurchasedLearning.book.bookId)
                                                 .and(qBookPurchasedLearning.user.userId.eq(loginUserId))),
-                                "isPay"))
-                ).from(qBook)
+                                "isPay"),
+                        ExpressionUtils.as(
+                                JPAExpressions.select(
+                                        qUserBookProcess.isRead.when(true).then(true)
+                                                .otherwise(false)
+                                )
+                                        .from(qUserBookProcess)
+                                        .where(qUserBookProcess.book.bookId.eq(qBook.bookId)
+                                                .and(qUserBookProcess.user.userId.eq(loginUserId))),
+                                "isRead")
+                ))
+                .from(qBook)
                 .fetch();
     }
 }

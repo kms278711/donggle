@@ -8,6 +8,7 @@ public record BookPurchasedResponseDto(
         String title,
         String coverPath,
         int price,
-        boolean isPay
+        boolean isPay,
+        boolean isRead
 ) {
 }

@@ -17,8 +17,8 @@ public class ApprovalController {
     @Autowired
     private ApprovalService approvalService;
 
-    // 결제내역 조회
-    @PostMapping("{bookId}")
+    // 결제내역 저장
+    @PostMapping("/{bookId}")
     public ResponseEntity<String> saveApproval(@PathVariable("bookId") Long bookId,
                                                Authentication authentication,
                                                @RequestParam int price) {

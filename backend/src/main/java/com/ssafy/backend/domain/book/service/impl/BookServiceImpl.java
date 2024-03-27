@@ -93,7 +93,6 @@ public class BookServiceImpl implements BookService {
 
         int bookProcessPage = getBookProcessPage(loginUserId, bookId);
         int totalPage = bookPurchasedLearning.getBook().getBookPageList().size();
-        boolean isRead = userBookProcessRespository.findByUser_userIdAndBook_bookId(loginUserId, bookId).get().isRead();
 
         List<BookEducationDto> educationList = educationRepository.findAllByBookPageSentence_BookPageSentenceIdIn(ids);
 
@@ -103,7 +102,6 @@ public class BookServiceImpl implements BookService {
                 .coverImagePath(bookPurchasedLearning.getBook().getCoverPath())
                 .totalPage(totalPage)
                 .processPage(bookProcessPage)
-                .isRead(isRead)
                 .educationList(educationList)
                 .build();
 
