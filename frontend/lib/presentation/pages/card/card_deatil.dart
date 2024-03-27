@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -116,17 +118,40 @@ class _CardDetailState extends State<CardDetail> {
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.2,
-            left: MediaQuery.of(context).size.width * 0.13,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: CachedNetworkImage(
-                imageUrl: url,
-                fit: BoxFit.cover,
-                width: MediaQuery.of(context).size.width * 0.25,
-                placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
+            top: MediaQuery.of(context).size.height * 0.22,
+            left: MediaQuery.of(context).size.width * 0.09,
+            child: Container(
+              color: Colors.transparent,
+              child: Transform.rotate(
+                angle: 356 * pi / 180,
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: CachedNetworkImage(
+                        imageUrl: url,
+                        fit: BoxFit.cover,
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: MediaQuery.of(context).size.height * 0.1,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.29,
+                        color: Colors.transparent,
+                        child: Text(
+                          wordName,
+                          textAlign: TextAlign.center,
+                          style: CustomFontStyle.textLarge,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
@@ -197,7 +222,7 @@ class _CardDetailState extends State<CardDetail> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    '내가 그린 그림',
+                    '내 학습',
                     style: CustomFontStyle.textSmall,
                   ),
                   Expanded(

@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
@@ -174,7 +176,8 @@ class _QuizCarouselState extends State<QuizCarousel> {
               child: Column(
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    // color: Colors.blue,
+                    width: MediaQuery.of(context).size.width * 0.9,
                     padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                     // decoration: BoxDecoration(color: Colors.red),
                     child: Text(
@@ -186,11 +189,13 @@ class _QuizCarouselState extends State<QuizCarousel> {
                   quiz['content'].toString().length >= 27
                       ? SizedBox()
                       : SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.07,
-                  ),
+                          height: MediaQuery.of(context).size.height * 0.07,
+                        ),
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    height: MediaQuery.of(context).size.height * 0.4,
+                    // color: Colors.red,
+                    padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
+                    // width: MediaQuery.of(context).size.width * 0.7,
+                    height: MediaQuery.of(context).size.height * 0.37,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal, // 리스트 가로로
                       itemCount: quiz['choices'].length, // 선택지의 수 만큼 아이템 생성
@@ -206,7 +211,7 @@ class _QuizCarouselState extends State<QuizCarousel> {
                             });
                           },
                           child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            // margin: const EdgeInsets.symmetric(horizontal: 1),
                             // 가로 여백 설정
                             child: Stack(
                               children: [
@@ -243,6 +248,18 @@ class _QuizCarouselState extends State<QuizCarousel> {
                                         ),
                                       )
                                     : Container(),
+                                Positioned(
+                                  bottom: MediaQuery.of(context).size.height * 0.04,
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * 0.166,
+                                    color: Colors.transparent,
+                                    child: Text(
+                                      choice["choice"],
+                                      textAlign: TextAlign.center,
+                                      style: CustomFontStyle.textMedium,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
