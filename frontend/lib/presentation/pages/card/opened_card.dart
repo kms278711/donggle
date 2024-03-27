@@ -62,11 +62,15 @@ class _OpenedBookState extends State<OpenedCard> {
               ),
             ),
             Positioned(
-                bottom: MediaQuery.of(context).size.height * 0.015,
-                left: MediaQuery.of(context).size.width * 0.065,
-                child: Text(
-                  widget.word,
-                  style: CustomFontStyle.getTextStyle(context, CustomFontStyle.unSelectedLarge),
+                bottom: MediaQuery.of(context).size.height * 0.035,
+                child: Container(
+                  color: Colors.transparent,
+                  width: MediaQuery.of(context).size.width * 0.195,
+                  child: Text(
+                    widget.word,
+                    textAlign: TextAlign.center,
+                    style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMediumLarge),
+                  ),
                 )),
           ],
         ),

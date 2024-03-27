@@ -11,6 +11,8 @@ import 'package:frontend/core/utils/component/donggle_talk.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_quiz.dart';
 import 'package:frontend/presentation/pages/home/component/title/main_title.dart';
+import 'package:frontend/presentation/pages/modal/finish_quiz_modal.dart';
+import 'package:frontend/presentation/pages/modal/stop_quiz_modal.dart';
 import 'package:frontend/presentation/pages/quiz/finish_quiz_page.dart';
 import 'package:frontend/presentation/provider/quiz_provider.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
@@ -63,10 +65,20 @@ class _QuizPageState extends State<QuizPage> {
                   showToast('풀지않은 문제가 있습니다.', backgroundColor: AppColors.error);
                   print(quizProvider.selectedAnswers);
                 } else {
-                  DialogUtils.showCustomDialog(context,
-                      contentWidget:
-                          FinishQuizPage(quizProvider.selectedAnswers!));
-                  context.pushReplacement('/main/1/0');
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext dialogContext) {
+                      return finishQuiz(
+                        title: "퀴즈",
+                        onConfirm: () {
+                          DialogUtils.showCustomDialog(context,
+                              contentWidget:
+                                  FinishQuizPage(quizProvider.selectedAnswers!));
+                          context.pushReplacement('/main/1/0');
+                        },
+                      );
+                    },
+                  );
                 }
               },
             ),
@@ -173,7 +185,7 @@ class _QuizCarouselState extends State<QuizCarousel> {
               child: Column(
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.9,
                     padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                     // decoration: BoxDecoration(color: Colors.red),
                     child: Text(
@@ -188,8 +200,9 @@ class _QuizCarouselState extends State<QuizCarousel> {
                           height: MediaQuery.of(context).size.height * 0.07,
                         ),
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    height: MediaQuery.of(context).size.height * 0.4,
+                    padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
+                    // width: MediaQuery.of(context).size.width * 0.8,
+                    height: MediaQuery.of(context).size.height * 0.37,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal, // 리스트 가로로
                       itemCount: quiz['choices'].length, // 선택지의 수 만큼 아이템 생성
@@ -205,7 +218,7 @@ class _QuizCarouselState extends State<QuizCarousel> {
                             });
                           },
                           child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            // margin: const EdgeInsets.symmetric(horizontal: 10),
                             // 가로 여백 설정
                             child: Stack(
                               children: [
