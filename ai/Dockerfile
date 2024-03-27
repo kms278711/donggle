@@ -9,6 +9,7 @@ COPY ./requirements.txt /code/requirements.txt
 
 # Install the package dependencies in the requirements file.
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+RUN pip install --no-cache-dir boto3
 
 # Copy the ./app directory inside the /code directory.
 COPY ./app /code/app
