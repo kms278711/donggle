@@ -81,13 +81,9 @@ async def analyze_object(file: UploadFile = File(...), filename: Optional[str] =
         # 업로드된 파일을 읽음
         contents = await file.read()
 
-        # 파일을 내 로컬에 다운로드
-        with open(f"./{filename}.png", "wb") as f:
-            f.write(contents)
-        
         # S3에 업로드
         s3.upload_fileobj(BytesIO(contents), "donggle", f"{filename}.png")
-        
+
         # 클래스 이름을 읽음
         with open("./app/class_names.txt", "r") as ins:
             class_names = [line.rstrip('\n') for line in ins]
@@ -117,3 +113,15 @@ async def analyze_object(file: UploadFile = File(...), filename: Optional[str] =
         return answer
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
+
+@app.post("/ai/analyze/emotions")
+async def analyze_object(file: UploadFile = File(...), filename: Optional[str] = Form(None)):
+    try:
+        # 업로드된 파일을 읽음
+        contents = await file.read()
+        
+        
+    
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+        
