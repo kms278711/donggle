@@ -124,6 +124,7 @@ class _MainScreenState extends State<MainScreen> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Indexer(
         children: [
           const Indexed(index: -5, child: BackGroundBelow()),

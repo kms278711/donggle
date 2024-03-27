@@ -35,6 +35,7 @@ class _BookProgressState extends State<BookProgress> {
   bool _isLoading = true;
   bool _isLastPage = false;
   bool _isLastSentence = false;
+  bool _isUnexsist = false;
 
   late BookModel bookModel;
   late UserProvider userProvider;
@@ -145,6 +146,13 @@ class _BookProgressState extends State<BookProgress> {
         await bookModel.setBookPage(accessToken, bookId, pageId);
       } else {
         showToast(result, backgroundColor: AppColors.error);
+        setState(() {
+          _isLastSentence = true;
+          _isLastPage = true;
+          _isUnexsist = true;
+          finishSentence();
+        });
+
       }
 
       nowPage = bookModel.nowPage;
@@ -172,7 +180,7 @@ class _BookProgressState extends State<BookProgress> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    return Scaffold(
+    return _isUnexsist ? Container() : Scaffold(
       body: Stack(
         children: [
           CachedNetworkImage(

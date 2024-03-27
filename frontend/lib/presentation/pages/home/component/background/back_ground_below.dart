@@ -15,12 +15,14 @@ class BackGroundBelow extends StatelessWidget {
         ),
       ),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
         body: Indexer(
           children: <Widget>[
             Indexed(
               index: -5,
               child: Scaffold(
+                resizeToAvoidBottomInset: false,
                 body: Center(
                   child: Image.asset(
                     AppIcons.parchment,

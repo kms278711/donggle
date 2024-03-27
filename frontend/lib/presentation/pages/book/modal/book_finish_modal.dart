@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
+import 'package:frontend/core/utils/component/dialog_utils.dart';
+import 'package:frontend/domain/model/model_books.dart';
+import 'package:frontend/domain/model/model_review.dart';
+import 'package:frontend/presentation/pages/mypage/Book/new_review_modal.dart';
+import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:frontend/presentation/routes/route_path.dart';
 import 'package:frontend/presentation/routes/routes.dart';
+import 'package:provider/provider.dart';
 
 class BookFinishModal extends StatefulWidget {
   final int bookId;
@@ -16,6 +22,36 @@ class BookFinishModal extends StatefulWidget {
 }
 
 class _BookFinishModalState extends State<BookFinishModal> {
+  late BookModel bookModel;
+  late UserProvider userProvider;
+  String accessToken = "";
+  bool _notRead = true;
+  bool _notReviewed = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Schedule a callback for the end of this frame
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // It's now safe to perform the async operations
+      bookModel = Provider.of<BookModel>(context, listen: false);
+      userProvider = Provider.of<UserProvider>(context, listen: false);
+      accessToken = userProvider.getAccessToken();
+
+
+      await bookModel.getCurrentBookPurchase(accessToken, widget.bookId);
+
+      if (mounted) {
+        setState(() {
+          _notRead = !bookModel.books[widget.bookId - 1]['isRead'];
+          Book book = bookModel.nowBook;
+          Review myReview = Review.fromJson(book.myReview ?? {'score': 0.0, 'content': ""});
+          _notReviewed = myReview.score == 0.0 && myReview.content == "";
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +75,10 @@ class _BookFinishModalState extends State<BookFinishModal> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text("동화가 끝났어요!", style: CustomFontStyle.getTextStyle(context, CustomFontStyle.unSelectedLarge),),
+                    Text(
+                      "동화가 끝났어요!",
+                      style: CustomFontStyle.getTextStyle(context, CustomFontStyle.unSelectedLarge),
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -51,6 +90,9 @@ class _BookFinishModalState extends State<BookFinishModal> {
                         GreenButton("홈으로 돌아가기", onPressed: () {
                           Navigator.of(context).pop();
                           globalRouter.pushReplacement(RoutePath.main0);
+                          if(_notRead && _notReviewed) {
+                            DialogUtils.showCustomDialog(context, contentWidget: const NewReviewModal());
+                          }
                         }),
                       ],
                     )

@@ -67,7 +67,8 @@ class _OpenedBookState extends State<OpenedBook> {
             isRead
                 ? Positioned(
                     bottom: 0,
-                    right: MediaQuery.of(context).size.width * 0.02,
+                    right: 0,
+                    //right: MediaQuery.of(context).size.width * 0.02,
                     child: SizedBox(
                         width: MediaQuery.of(context).size.width * 0.05,
                         child: Image.asset("assets/images/donggle_quiz.png")))
