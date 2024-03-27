@@ -162,10 +162,14 @@ class BookModel extends ChangeNotifier {
 
   ///유저가 그린 그림(그림, 행동, 표정) 저장
   Future<String> saveEducationImage(String accessToken, int educationId, File actionImage) async {
-    // print(bookId.toString());
     var url = Uri.https("j10c101.p.ssafy.io", "api/users/educations/$educationId");
-    final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
-    var response = await http.post(url, headers: headers);
+
+    var request = http.MultipartRequest('POST', url)
+      ..headers['Authorization'] = "Bearer $accessToken"
+      ..files.add(await http.MultipartFile.fromPath('userActionImage', actionImage.path));
+
+    var streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
 
     print(utf8.decode(response.bodyBytes));
 

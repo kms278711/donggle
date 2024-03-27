@@ -55,6 +55,7 @@ Future<void> main() async {
 
   await player.setAudioSource(audioSource);
   await player.setLoopMode(LoopMode.one);
+  await player.setVolume(0.5);
 
   HttpOverrides.global = MyHttpOverrides();
   runApp(MultiProvider(

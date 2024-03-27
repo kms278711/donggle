@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/add_post_position_text.dart';
+import 'package:frontend/core/utils/component/effect_sound.dart';
 import 'package:frontend/core/utils/component/icons/close_circle.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
@@ -27,6 +28,8 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
   @override
   void initState() {
     super.initState();
+
+    effectPlaySound("assets/music/question_start.mp3", 1);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       bookModel = Provider.of<BookModel>(context, listen: false);
