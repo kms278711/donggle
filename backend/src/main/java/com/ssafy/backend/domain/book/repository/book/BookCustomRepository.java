@@ -7,5 +7,4 @@ import java.util.Optional;
 public interface BookCustomRepository {
     Optional<BookDto> purchasedBookInfo(Long bookId, Long loginUSerId);
 
-    //Optional<Book> searchBookInfo(Long bookId);
 }

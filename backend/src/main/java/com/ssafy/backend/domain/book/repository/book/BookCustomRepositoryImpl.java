@@ -46,7 +46,4 @@ public class BookCustomRepositoryImpl implements BookCustomRepository{
                 .where(qBook.bookId.eq(bookId))
                 .fetchOne());
     }
-
-
-
 }
