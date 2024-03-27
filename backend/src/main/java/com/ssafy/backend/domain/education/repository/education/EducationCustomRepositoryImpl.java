@@ -40,7 +40,8 @@ public class EducationCustomRepositoryImpl implements EducationCustomRepository 
 										JPAExpressions.select(qActionLearning.isNotNull())
 												.from(qActionLearning)
 												.where(qActionLearning.education.educationId.eq(qEducation.educationId)
-														.and(qActionLearning.user.userId.eq(userId))),
+														.and(qActionLearning.user.userId.eq(userId)))
+												.groupBy(qActionLearning.education.educationId, qActionLearning.user.userId),
 										"isEducated")
 						)
 				)
