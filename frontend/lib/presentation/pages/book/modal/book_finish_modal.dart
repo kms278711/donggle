@@ -3,6 +3,7 @@ import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/dialog_utils.dart';
+import 'package:frontend/core/utils/component/effect_sound.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/domain/model/model_review.dart';
 import 'package:frontend/presentation/pages/mypage/Book/new_review_modal.dart';
@@ -31,6 +32,8 @@ class _BookFinishModalState extends State<BookFinishModal> {
   @override
   void initState() {
     super.initState();
+
+    effectPlaySound("assets/music/book_finish.mp3", 0.5);
 
     // Schedule a callback for the end of this frame
     WidgetsBinding.instance.addPostFrameCallback((_) async {

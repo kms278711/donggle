@@ -5,10 +5,12 @@ import 'dart:ui' as ui;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:frontend/core/utils/add_post_position_text.dart';
+import 'package:frontend/core/utils/component/effect_sound.dart';
 import 'package:frontend/core/utils/component/icons/close_circle.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/data/data_source/remote/drawing.api.dart';
 import 'package:frontend/domain/model/model_books.dart';
+import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -33,19 +35,26 @@ class PictureQuiz extends StatefulWidget {
 
 class _PictureQuizState extends State<PictureQuiz> {
   late BookModel bookModel;
+  late UserProvider userProvider;
   final DrawingController _drawingController = DrawingController();
   Education education = Education(educationId: 0, gubun: "", wordName: "", imagePath: "", bookSentenceId: 0);
   String url = "";
+  String accessToken = "";
   String? apiResult;
 
   @override
   void initState() {
     super.initState();
 
+    effectPlaySound("assets/music/question_start.mp3", 1);
+
     bookModel = Provider.of<BookModel>(context, listen: false);
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    accessToken = userProvider.getAccessToken();
     education = bookModel.nowEducation;
     String path = education.traceImagePath ?? "";
     url = Constant.s3BaseUrl + path;
+
   }
 
   @override
@@ -56,6 +65,7 @@ class _PictureQuizState extends State<PictureQuiz> {
 
   @override
   Widget build(BuildContext context) {
+
     Widget resultWidget;
     if (apiResult == "true") {
       resultWidget = Image.asset("assets/images/correct.png");
@@ -127,7 +137,7 @@ class _PictureQuizState extends State<PictureQuiz> {
       return newData;
     }
 
-    Future<File> getImageData() async {
+    Future<File> getWhiteImageData() async {
       final Uint8List? data = (await _drawingController.getImageData())?.buffer.asUint8List();
       if (data == null) {
         debugPrint('Failed to get image data');
@@ -143,6 +153,25 @@ class _PictureQuizState extends State<PictureQuiz> {
       // Write the image data to a file
       final File file = File(filePath);
       await file.writeAsBytes(newData);
+
+      return file;
+    }
+
+    Future<File> getImageData() async {
+      final Uint8List? data = (await _drawingController.getImageData())?.buffer.asUint8List();
+      if (data == null) {
+        debugPrint('Failed to get image data');
+        throw Exception('Failed to get image data'); // Throw an exception or handle the error as needed
+      }
+
+
+      // Get a temporary directory (you can choose a different directory if you like)
+      final Directory tempDir = await getTemporaryDirectory();
+      final String filePath = '${tempDir.path}/image_${DateTime.now().millisecondsSinceEpoch}.png';
+
+      // Write the image data to a file
+      final File file = File(filePath);
+      await file.writeAsBytes(data);
 
       return file;
     }
@@ -257,7 +286,7 @@ class _PictureQuizState extends State<PictureQuiz> {
                     "완료",
                     onPressed: () async {
                       String fileName = extractFileNameWithoutExtension(education.imagePath);
-                      DrawingApi drawingApi = DrawingApi(file: await getImageData(), filename: fileName);
+                      DrawingApi drawingApi = DrawingApi(file: await getWhiteImageData(), filename: fileName);
 
                       String result = await drawingApi.drawingAI();
 
@@ -269,6 +298,13 @@ class _PictureQuizState extends State<PictureQuiz> {
 
                       if (result != "true" && result != "false") {
                         showToast(result, backgroundColor: AppColors.error);
+                      }
+
+                      if(result == "true"){
+                        effectPlaySound("assets/music/answer.mp3", 1);
+                        await bookModel.saveEducationImage(accessToken, education.educationId, await getImageData());
+                      }else{
+                        effectPlaySound("assets/music/wrong.mp3", 1);
                       }
 
                       Timer(const Duration(milliseconds: 1000), () {
