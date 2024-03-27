@@ -5,13 +5,14 @@ from pydantic import BaseModel
 from keras.models import load_model
 from fastapi.responses import JSONResponse
 import requests
-import io
+from io import BytesIO
 from PIL import Image
 import base64
 import numpy as np 
 from typing import Optional
 from app.classes.doodle import ref as doodle_ref
 import cv2
+import boto3
 
 app = FastAPI()
 
@@ -64,6 +65,11 @@ except Exception as e:
     print("!!!!!!!!!!!!!!!!!!!!!!!Error loading model:", str(e))
 
 ####################################################################
+    
+s3 = boto3.client(
+    "s3", aws_access_key_id="AKIARI2J3RH4QEK7CPSB", aws_secret_access_key="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"
+)
+
 @app.get("/")
 async def root():
     return {"message": "Hello World th949"}
@@ -78,7 +84,10 @@ async def analyze_object(file: UploadFile = File(...), filename: Optional[str] =
         # 파일을 내 로컬에 다운로드
         with open(f"./{filename}.png", "wb") as f:
             f.write(contents)
-
+        
+        # S3에 업로드
+        s3.upload_fileobj(BytesIO(contents), "donggle", f"{filename}.png")
+        
         # 클래스 이름을 읽음
         with open("./app/class_names.txt", "r") as ins:
             class_names = [line.rstrip('\n') for line in ins]
