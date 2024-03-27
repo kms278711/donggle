@@ -24,7 +24,7 @@ public interface UserService {
 
 	void changeNickname(Long userId, String nickname);
 
-	void saveEducationImage(Long userId, Long educationId, MultipartFile userActionImage, boolean isSkipped);
+	void saveEducationImage(Long userId, Long educationId, MultipartFile userActionImage);
 
 	List<UserEducationDto> getEducationsByUser(Long userId);
 }

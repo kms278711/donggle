@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional
-	public void saveEducationImage(Long userId, Long educationId, MultipartFile userActionImage, boolean isSkipped) {
+	public void saveEducationImage(Long userId, Long educationId, MultipartFile userActionImage) {
 		String folderName = "word/" + educationId + "/" + userId;
 		User user = getUserById(userId);
 		Education education = educationRepository.findById(educationId).orElseThrow(() -> new UserException(INVALID_USER));
