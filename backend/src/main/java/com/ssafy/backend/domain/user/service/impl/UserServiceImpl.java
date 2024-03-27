@@ -69,7 +69,6 @@ public class UserServiceImpl implements UserService {
 				.education(education)
 				.user(user)
 				.userPath(imagePath)
-				.isSkipped(isSkipped)
 				.build());
 	}
 

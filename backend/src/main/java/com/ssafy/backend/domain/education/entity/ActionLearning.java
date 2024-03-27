@@ -26,13 +26,10 @@ public class ActionLearning {
 
 	private String userPath;
 
-	private boolean isSkipped;
-
 	@Builder
-	public ActionLearning(User user, Education education, String userPath, boolean isSkipped) {
+	public ActionLearning(User user, Education education, String userPath) {
 		this.user = user;
 		this.education = education;
 		this.userPath = userPath;
-		this.isSkipped = isSkipped;
 	}
 }
