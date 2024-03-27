@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/add_post_position_text.dart';

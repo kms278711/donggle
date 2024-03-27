@@ -20,13 +20,26 @@ class _OpenedBookState extends State<OpenedBook> {
   late BookModel bookModel;
   late UserProvider userProvider;
   String accessToken = "";
+  bool isRead = false;
 
   @override
   void initState() {
     super.initState();
-    bookModel = Provider.of<BookModel>(context, listen: false);
-    userProvider = Provider.of<UserProvider>(context, listen: false);
-    accessToken = userProvider.getAccessToken();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      bookModel = Provider.of<BookModel>(context, listen: false);
+      userProvider = Provider.of<UserProvider>(context, listen: false);
+      accessToken = userProvider.getAccessToken();
+
+      if (mounted) {
+        setState(() {
+          //isRead = bookModel.BookDetail['isRead'] ?? false;
+          isRead = bookModel.books[widget.bookId - 1]["isRead"];
+          print(isRead);
+        });
+
+      }
+    });
   }
 
   @override
@@ -35,25 +48,31 @@ class _OpenedBookState extends State<OpenedBook> {
       color: Colors.transparent,
       child: InkWell(
         onTap: () async {
-          // String result = await DialogUtils.showCustomDialog(context,
-          //     bookId: widget.bookId);
-          // if (!context.mounted) return;
-          // if (result == "refresh") {
-          //   context.go(RoutePath.main3);
-          // }
           bookModel.getBookDetail(accessToken, widget.bookId);
           DialogUtils.showCustomDialog(context, contentWidget: BookDetail(widget.bookId));
         },
-        child: Center(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: CachedNetworkImage(
-              imageUrl: widget.url,
-              fit: BoxFit.cover,
-              placeholder: (context, url) => const CircularProgressIndicator(),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
+        child: Stack(
+          children: [
+            Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: CachedNetworkImage(
+                  imageUrl: widget.url,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => const CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                ),
+              ),
             ),
-          ),
+            isRead
+                ? Positioned(
+                    bottom: 0,
+                    right: MediaQuery.of(context).size.width * 0.02,
+                    child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.05,
+                        child: Image.asset("assets/images/donggle_quiz.png")))
+                : Container(),
+          ],
         ),
       ),
     );

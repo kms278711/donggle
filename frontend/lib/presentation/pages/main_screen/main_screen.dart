@@ -19,7 +19,6 @@ import 'package:frontend/presentation/pages/modal/stop_quiz_modal.dart';
 import 'package:frontend/presentation/pages/quiz/book_quiz_page.dart';
 import 'package:frontend/presentation/pages/quiz/quiz_page.dart';
 import 'package:frontend/presentation/provider/quiz_provider.dart';
-import 'package:go_router/go_router.dart';
 import 'package:indexed/indexed.dart';
 import 'package:provider/provider.dart';
 
@@ -46,6 +45,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+
     player.play();
     _updateSelectedIndex();
     quizProvider = Provider.of<QuizProvider>(context, listen: false);
@@ -152,13 +152,11 @@ class _MainScreenState extends State<MainScreen> {
                               : _selectedIndex == 2
                                   ? () {
                                       _onButtonPressed(0);
-                                      quizProvider
-                                          .clearAnswers(quizModel.quizzes);
+                                      quizProvider.clearAnswers(quizModel.quizzes);
                                     }()
                                   : () {
                                       _onButtonPressed(0);
-                                      quizProvider
-                                          .clearAnswers(quizModel.bookQuizzes);
+                                      quizProvider.clearAnswers(quizModel.bookQuizzes);
                                     }();
                       // _selectedIndex == 0
                       //     ? _onButtonPressed(1)
@@ -212,8 +210,7 @@ class _MainScreenState extends State<MainScreen> {
                                   title: "퀴즈",
                                   onConfirm: () {
                                     _onButtonPressed(1);
-                                    quizProvider
-                                        .clearAnswers(quizModel.quizzes);
+                                    quizProvider.clearAnswers(quizModel.quizzes);
                                     showToast('종료되었습니다.');
                                   },
                                 );
@@ -244,8 +241,7 @@ class _MainScreenState extends State<MainScreen> {
                                   title: "퀴즈",
                                   onConfirm: () {
                                     _onButtonPressed(0);
-                                    quizProvider
-                                        .clearAnswers(quizModel.quizzes);
+                                    quizProvider.clearAnswers(quizModel.quizzes);
                                     showToast('종료되었습니다.');
                                   },
                                 );
@@ -258,7 +254,7 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 )
               : Container(),
-          Indexed(
+          const Indexed(
             index: 1005,
             child: BackgroundUpper(),
           ),
@@ -268,10 +264,10 @@ class _MainScreenState extends State<MainScreen> {
               bottom: MediaQuery.of(context).size.height * 0.1,
               right: 0,
               child: _selectedIndex == 0
-                  ? donggleTalk(situation: "BOOKLIST")
+                  ? const donggleTalk(situation: "BOOKLIST")
                   : _selectedIndex == 1
-                      ? donggleTalk(situation: "WORDLIST")
-                      : donggleTalk(situation: "QUIZ"),
+                      ? const donggleTalk(situation: "WORDLIST")
+                      : const donggleTalk(situation: "QUIZ"),
             ),
           ),
         ],

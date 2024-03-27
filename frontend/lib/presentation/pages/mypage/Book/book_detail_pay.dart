@@ -408,6 +408,9 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
       payload: payload,
       showCloseButton: false,
       closeButton: const Icon(Icons.close, size: 35.0, color: Colors.black54),
+      onIssued: (String data){
+        print("------------onIssued: $data");
+      },
       onError: (String data) {
         showToast(data, backgroundColor: AppColors.error);
       },
@@ -415,6 +418,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
         return true;
       },
       onDone: (String data) async {
+        print("-------onDone: $data");
         result = await approvalsModel.setApprovals(accessToken, bookId, price);
 
         if (result == "Success") {

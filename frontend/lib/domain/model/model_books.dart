@@ -179,6 +179,26 @@ class BookModel extends ChangeNotifier {
       return msg;
     }
   }
+
+  ///isRead 여부 저장
+  Future<String> setIsRead(String accessToken, int bookId) async {
+    // print(bookId.toString());
+    var url = Uri.https("j10c101.p.ssafy.io", "api/books/$bookId/is-read");
+    final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
+    var response = await http.post(url, headers: headers);
+
+    print(utf8.decode(response.bodyBytes));
+
+    if (response.statusCode == 200) {
+      return "Success";
+    } else if (response.statusCode == 401) {
+      userProvider.refreshToken();
+      return setIsRead(userProvider.getAccessToken(), bookId);
+    } else {
+      String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']['result_message'];
+      return msg;
+    }
+  }
 }
 
 class Book {
@@ -190,6 +210,7 @@ class Book {
   final int? page;
   final int? totalPage;
   final bool? isPay;
+  final bool? isRead;
   final double? averageScore;
   final List<dynamic>? reviews;
   final Map<String, dynamic>? myReview;
@@ -202,6 +223,7 @@ class Book {
     required this.price,
     this.page,
     this.totalPage,
+    this.isRead,
     required this.isPay,
     this.averageScore,
     this.reviews,
@@ -218,6 +240,7 @@ class Book {
       totalPage: json['totalPage'],
       price: json['price'],
       isPay: json['isPay'],
+      isRead: json['isRead'],
       averageScore: json['averageScore'],
       myReview: json['myBookReview'],
       reviews: json["bookReviews"],

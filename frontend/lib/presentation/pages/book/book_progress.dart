@@ -54,11 +54,15 @@ class _BookProgressState extends State<BookProgress> {
   );
   String url = "";
 
-  void finishSentence() {
+  Future<void> finishSentence() async {
     // if(_isLastSentence && _isLastPage){
     //   globalRouter.pushReplacement(RoutePath.main0);
     // }
     if (_isLastSentence && _isLastPage) {
+      bool isRead = bookModel.books[bookId - 1]["isRead"] ?? false;
+      if(!isRead){
+        await bookModel.setIsRead(accessToken, bookId);
+      }
       DialogUtils.showCustomDialog(context,
           contentWidget: BookFinishModal(bookId, onModalClose: () {
             setState(() {});

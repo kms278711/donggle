@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
-import 'package:frontend/core/utils/component/donggle_talk.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/presentation/pages/home/component/book/locked_book.dart';
 import 'package:frontend/presentation/pages/home/component/book/opened_book.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
-import 'package:indexed/indexed.dart';
 import 'package:provider/provider.dart';
 
 import 'component/title/main_title.dart';
