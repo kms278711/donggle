@@ -255,8 +255,11 @@ class _donggleTalkState extends State<donggleTalk>
           ),
         ),
         Positioned(
-          bottom: widget.situation == 'QUIZRESULT' ? MediaQuery.of(context).size.height * -0.1 : 0,
-          right: widget.situation == 'QUIZRESULT' ? MediaQuery.of(context).size.width * -0.001 : 0,
+          bottom: widget.situation == 'QUIZRESULT' ? MediaQuery.of(context).size.height * -0.055 : 0,
+          // bottom: 0,
+          right: widget.situation == 'QUIZRESULT'
+              ? MediaQuery.of(context).size.width * -0.001
+              : 0,
           child: IgnorePointer(
             ignoring: false, // 이 Container만 터치 가능하도록 설정
             child: GestureDetector(
@@ -270,13 +273,19 @@ class _donggleTalkState extends State<donggleTalk>
                 setTouchedDonggle(true);
               },
               child: widget.situation == 'QUIZRESULT'
-                  ? Image.asset(
-                      AppIcons.donggle_quiz,
-                      width: MediaQuery.of(context).size.width * 0.25,
+                  ? Container(
+                      // color: Colors.green,
+                      child: Image.asset(
+                        AppIcons.donggle_quiz,
+                        width: MediaQuery.of(context).size.width * 0.22,
+                      ),
                     )
-                  : Image.asset(
-                      AppIcons.donggle,
-                      width: MediaQuery.of(context).size.width * 0.22,
+                  : Container(
+                      color: Colors.transparent,
+                      child: Image.asset(
+                        AppIcons.donggle,
+                        width: MediaQuery.of(context).size.width * 0.22,
+                      ),
                     ),
             ),
           ),

@@ -96,47 +96,17 @@ class _FinishQuizPageState extends State<FinishQuizPage> {
                 },
               ),
             ),
-            // GridView.builder(
-            //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //     crossAxisCount: 3,
-            //     mainAxisSpacing: MediaQuery.of(context).size.height * 0.5,
-            //   ),
-            //   scrollDirection: Axis.vertical,
-            //   physics: ScrollPhysics(),
-            //   itemCount: widget.selectedAnswer.length,
-            //   itemBuilder: (context, index) {
-            //     bool check = widget.selectedAnswer[index]["answer"];
-            //     String url = widget.selectedAnswer[index]["choiceImagePath"];
-            //     String name = widget.selectedAnswer[index]["choice"];
-            //     return Container(
-            //       color: Colors.red,
-            //       child: Stack(
-            //         children: [
-            //           ClipRRect(
-            //             borderRadius: BorderRadius.circular(20),
-            //             child: CachedNetworkImage(
-            //               imageUrl: Constant.s3BaseUrl + url,
-            //               fit: BoxFit.cover,
-            //               placeholder: (context, url) =>
-            //                   const CircularProgressIndicator(),
-            //               errorWidget: (context, url, error) =>
-            //                   const Icon(Icons.error),
-            //             ),
-            //           ),
-            //           Text('$name'),
-            //         ],
-            //       ),
-            //     );
-            //   },
-            // ),
             Positioned(
               right: MediaQuery.of(context).size.width * 0.36,
               bottom: MediaQuery.of(context).size.width * 0.03,
-              child: GreenButton(
-                '참 잘했어요~!',
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+              child: Container(
+                color: Colors.transparent,
+                child: GreenButton(
+                  '참 잘했어요~!',
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
               ),
             ),
             Positioned(
