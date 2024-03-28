@@ -10,6 +10,7 @@ import com.ssafy.backend.global.jwt.dto.TokenDto;
 import com.ssafy.backend.global.jwt.dto.UserInfoDto;
 import com.ssafy.backend.global.jwt.repository.TokenRepository;
 import com.ssafy.backend.global.jwt.service.JwtService;
+import com.ssafy.backend.global.util.EmailValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,10 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	@Transactional
 	public void signUp(SignupRequestDto signupRequestDto) {
+		if(isValidateEmail(signupRequestDto)) {
+			throw new UserException(INVALID_EMAIL);
+		}
+
 		if (isUserExist(signupRequestDto.email())) {
 			userRepository.findByEmail(signupRequestDto.email()).ifPresent(user -> {
 				if (isWithdrawal(user)) {
@@ -47,6 +52,10 @@ public class AuthServiceImpl implements AuthService {
 		passwordEncoding(user);
 		InitialSetting(user);
 		userRepository.save(user);
+	}
+
+	private static boolean isValidateEmail(SignupRequestDto signupRequestDto) {
+		return !EmailValidator.isValidEmail(signupRequestDto.email());
 	}
 
 	@Override

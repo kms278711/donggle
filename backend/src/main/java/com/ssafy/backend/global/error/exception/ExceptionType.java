@@ -29,6 +29,7 @@ public enum ExceptionType {
 
 	INVALID_FILE(HttpStatus.BAD_REQUEST, "존재하지 않는 파일입니다."),
 	DUPLICATED_FILE(HttpStatus.BAD_REQUEST, "이미 존재하는 파일입니다."),
+	NOT_IMAGE_FILE(HttpStatus.BAD_REQUEST, "저장할 수 없는 유형의 파일입니다."),
 	FAIL_CREATE_FILE(HttpStatus.BAD_REQUEST, "파일 생성을 실패하였습니다."),
 	FAIL_WRITE_FILE(HttpStatus.BAD_REQUEST, "파일 작성을 실패하였습니다."),
 	FAIL_RESPONSE(HttpStatus.BAD_REQUEST, "RESPONSE가 없습니다."),
