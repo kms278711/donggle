@@ -32,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    Provider.of<RegisterFieldModel>(context, listen: false).resetFields();
+    // Provider.of<RegisterFieldModel>(context, listen: false).resetFields();
     player.stop();
   }
 
@@ -99,6 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                     onTap: () {
                       Provider.of<RegisterFieldModel>(context, listen: false)
                           .resetFields();
+                      message.setMessage2('');
                       signUpToggle();
                     },
                     child: DefaultTextStyle(
@@ -118,6 +119,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   GestureDetector(
                     onTap: () {
+                      Provider.of<RegisterFieldModel>(context, listen: false)
+                          .resetFields();
+                      message.setMessage1('');
                       signUpToggle();
                     },
                     child: DefaultTextStyle(
@@ -322,16 +326,29 @@ class LoginButton extends StatelessWidget {
     final auth = Provider.of<AuthModel>(context, listen: false);
     return GestureDetector(
       onTap: () async {
+        print(registerField.email);
         AuthStatus loginStatus =
             await auth.login(registerField.email, registerField.password);
 
-        if (loginStatus == AuthStatus.loginSuccess) {
+        if (registerField.email.isEmpty) {
+          showToast('이메일을 입력해주세요.', backgroundColor: AppColors.error);
+        } else if (registerField.password.isEmpty) {
+          showToast('비밀번호를 입력해주세요.', backgroundColor: AppColors.error);
+        } else if (loginStatus == AuthStatus.loginSuccess) {
           showToast('로그인에 성공하였습니다!');
           context.go(RoutePath.main0);
         } else {
           showToast("로그인에 실패했습니다.", backgroundColor: AppColors.error);
           registerField.resetPassword();
         }
+
+        // if (loginStatus == AuthStatus.loginSuccess) {
+        //   showToast('로그인에 성공하였습니다!');
+        //   context.go(RoutePath.main0);
+        // } else {
+        //   showToast("로그인에 실패했습니다.", backgroundColor: AppColors.error);
+        //   registerField.resetPassword();
+        // }
       },
       child: DefaultTextStyle(
         style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textLarge),
@@ -352,16 +369,31 @@ class SignupButton extends StatelessWidget {
     final auth = Provider.of<AuthModel>(context, listen: false);
     return GestureDetector(
       onTap: () async {
-        if (registerField.isValid && registerField.isSame) {
+        if (registerField.isValid && (registerField.password == registerField.passwordConfirm)) {
           AuthStatus registerStatus =
               await auth.signUp(registerField.email, registerField.password);
-          if (registerStatus == AuthStatus.registerSuccess) {
+
+          if (registerField.email.isEmpty) {
+            showToast('이메일을 입력해주세요.', backgroundColor: AppColors.error);
+          } else if (registerField.password.isEmpty) {
+            showToast('비밀번호를 입력해주세요.', backgroundColor: AppColors.error);
+          } else if (registerField.passwordConfirm.isEmpty) {
+            showToast('비밀번호를 입력해주세요.', backgroundColor: AppColors.error);
+          } else if (registerStatus == AuthStatus.registerSuccess) {
             await auth.login(registerField.email, registerField.password);
             showToast('회원가입에 성공하였습니다!');
             context.go(RoutePath.main0);
           } else {
             registerField.resetFields();
           }
+
+          // if (registerStatus == AuthStatus.registerSuccess) {
+          //   await auth.login(registerField.email, registerField.password);
+          //   showToast('회원가입에 성공하였습니다!');
+          //   context.go(RoutePath.main0);
+          // } else {
+          //   registerField.resetFields();
+          // }
         }
       },
       child: DefaultTextStyle(

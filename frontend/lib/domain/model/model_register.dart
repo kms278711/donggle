@@ -11,7 +11,7 @@ class RegisterFieldModel extends ChangeNotifier {
   String passwordConfirm = "";
   String serverMessage = "";
   String loginMessage = "";
-  bool isSame = true;
+  // bool isSame = true;
   bool isValid = true;
 
   final TextEditingController emailController = TextEditingController();
@@ -21,38 +21,48 @@ class RegisterFieldModel extends ChangeNotifier {
 
   void setEmail(String email) {
     this.email = email;
+    print(email);
     notifyListeners();
   }
 
   void setPassword(String password) {
     this.password = password;
-    if (password.length < 8 || password.length > 16) {
+    print(password);
+    if ((password.isNotEmpty && password.length < 8) || password.length > 16) {
       isValid = false;
       messageProvider.setMessage2("비밀번호는 8자 이상, 16자 이하로 설정해주세요.");
     } else {
       isValid = true;
-      if (isSame || passwordConfirm.isEmpty) {
-        messageProvider.setMessage2("");
-      } else {
+      if (this.password != passwordConfirm) {
         messageProvider.setMessage2("비밀번호가 일치하지 않습니다.");
       }
+      // if (isSame || passwordConfirm.isEmpty) {
+      //   messageProvider.setMessage2("");
+      // } else {
+      //   messageProvider.setMessage2("비밀번호가 일치하지 않습니다.");
+      // }
     }
     notifyListeners();
   }
 
   void setPasswordConfirm(String passwordConfirm) {
     this.passwordConfirm = passwordConfirm;
-    isSame = password == this.passwordConfirm;
+    print(passwordConfirm);
+    // isSame = password == this.passwordConfirm;
     if(passwordConfirm.isEmpty){
       messageProvider.setMessage2("");
-    }
-    else if (!isSame) {
+    } else if (passwordConfirm != password) {
       messageProvider.setMessage2("비밀번호가 일치하지 않습니다.");
     } else if (isValid) {
       messageProvider.setMessage2("");
-    } else {
-      messageProvider.setMessage2("비밀번호는 8자 이상, 16자 이하로 설정해주세요.");
     }
+    // else if (!isSame) {
+    //   messageProvider.setMessage2("비밀번호가 일치하지 않습니다.");
+    // } else if (isValid) {
+    //   messageProvider.setMessage2("");
+    // } else {
+    //   messageProvider.setMessage2("비밀번호는 8자 이상, 16자 이하로 설정해주세요.");
+    // }
     notifyListeners();
   }
 
@@ -60,12 +70,17 @@ class RegisterFieldModel extends ChangeNotifier {
     emailController.clear();
     passwordController.clear();
     passwordConfirmController.clear();
-    isSame = true;
+    setEmail('');
+    setPassword('');
+    setPasswordConfirm('');
+    // isSame = true;
     isValid = true;
+    // notifyListeners();
   }
 
   void resetPassword() {
     passwordController.clear();
+    notifyListeners();
   }
 
   @override
