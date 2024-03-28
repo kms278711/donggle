@@ -75,7 +75,21 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
           color: const Color.fromRGBO(217, 217, 217, 0.9),
         ),
         child: _isLoading
-            ? Container()
+            ? Stack(
+                children: [
+                  Positioned(
+                    top: MediaQuery.of(context).size.height * 0.01,
+                    right: MediaQuery.of(context).size.width * 0.01,
+                    child: IconButton(
+                      icon: const CloseCircle(),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        widget.onModalClose?.call();
+                      },
+                    ),
+                  ),
+                ],
+              )
             : Stack(
                 children: [
                   Positioned(
@@ -86,7 +100,8 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
                     child: CachedNetworkImage(
                       imageUrl: url,
                       fit: BoxFit.contain,
-                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                     ),
                   ),
                   Positioned(
@@ -113,8 +128,10 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
                                 child: FittedBox(
                                   fit: BoxFit.cover,
                                   child: SizedBox(
-                                    width: cameraController.value.previewSize!.width,
-                                    height: cameraController.value.previewSize!.height,
+                                    width: cameraController
+                                        .value.previewSize!.width,
+                                    height: cameraController
+                                        .value.previewSize!.height,
                                     child: CameraPreview(cameraController),
                                   ),
                                 ),
@@ -128,10 +145,13 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
                   Positioned(
                       right: MediaQuery.of(context).size.width * 0.05,
                       bottom: MediaQuery.of(context).size.height * 0.03,
-                      child: GreenButton("확인", onPressed: () async{
-                        final image = await cameraController.takePicture();
-                        CameraImageProcessing.saveImageData(image);
-                      },)),
+                      child: GreenButton(
+                        "확인",
+                        onPressed: () async {
+                          final image = await cameraController.takePicture();
+                          CameraImageProcessing.saveImageData(image);
+                        },
+                      )),
                   Positioned(
                     top: MediaQuery.of(context).size.height * 0.01,
                     right: MediaQuery.of(context).size.width * 0.01,

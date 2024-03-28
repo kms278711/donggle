@@ -193,7 +193,7 @@ class EmailInput extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TextField(
+          TextFormField(
             controller: registerField.emailController,
             onChanged: (email) {
               registerField.setEmail(email);
@@ -326,7 +326,7 @@ class LoginButton extends StatelessWidget {
     final auth = Provider.of<AuthModel>(context, listen: false);
     return GestureDetector(
       onTap: () async {
-        print(registerField.email);
+        // print(registerField.email);
         AuthStatus loginStatus =
             await auth.login(registerField.email, registerField.password);
 
@@ -369,7 +369,8 @@ class SignupButton extends StatelessWidget {
     final auth = Provider.of<AuthModel>(context, listen: false);
     return GestureDetector(
       onTap: () async {
-        if (registerField.isValid && (registerField.password == registerField.passwordConfirm)) {
+        if (registerField.isValid &&
+            (registerField.password == registerField.passwordConfirm)) {
           AuthStatus registerStatus =
               await auth.signUp(registerField.email, registerField.password);
 
