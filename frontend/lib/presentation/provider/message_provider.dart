@@ -17,6 +17,7 @@ class MessageProvider with ChangeNotifier {
 
   void setMessage2(message2){
     this.message2 = message2;
+    print(message2);
     notifyListeners();
   }
 
