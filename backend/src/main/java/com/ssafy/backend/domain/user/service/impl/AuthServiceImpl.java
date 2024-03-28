@@ -15,8 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
-
 import static com.ssafy.backend.global.error.exception.ExceptionType.*;
 
 @Service
@@ -53,14 +51,14 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	@Transactional
-	public UserInfoDto SNSLogin(String publisher, Map<String, Object> userinfo) {
+	public UserInfoDto SNSLogin(String publisher, String SnsEmail) {
 		String email = "";
 		if(publisher.equals("NAVER")) {
-			email += userinfo.get("id") + "_";
+			email += "NAVER_";
 		} else if(publisher.equals("GOOGLE")) {
-			email += userinfo.get("azp") + "_";
+			email += "GOOGLE_";
 		}
-		email += userinfo.get("email");
+		email += SnsEmail;
 		if (isUserExist(email)) {
 			userRepository.findByEmail(email).ifPresent(user -> {
 				if (isWithdrawal(user)) {
