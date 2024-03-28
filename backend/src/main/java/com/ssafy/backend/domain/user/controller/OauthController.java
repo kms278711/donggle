@@ -21,14 +21,20 @@ public class OauthController {
 
 	private final AuthService authService;
 	private final JwtService jwtService;
-	private OauthInterface oauthInterface;
+	private final OauthInterface oauthInterface;
 
-	@RequestMapping(value = "/callback", method = {RequestMethod.GET,
+	@RequestMapping(value = "/sns-login", method = {RequestMethod.GET,
 			RequestMethod.POST}, produces = "application/json")
-	public ResponseEntity<TokenDto> naverLogin(@RequestParam String publisher,
-											   @RequestParam String token) {
-		Map<String, Object> userinfo = oauthInterface.getUserInfo(publisher, token);
-		UserInfoDto userInfoDto = authService.SNSLogin(publisher, userinfo);
+	public ResponseEntity<TokenDto> oauthLogin(@RequestParam String publisher,
+											   @RequestParam(required = false) String token,
+											   @RequestParam(required = false) String email) {
+		UserInfoDto userInfoDto = null;
+		if(publisher.equals("NAVER")) {
+			userInfoDto = authService.SNSLogin(publisher, email);
+		} else {
+			Map<String, Object> userinfo  = oauthInterface.getUserInfo(publisher, token);
+			userInfoDto = authService.SNSLogin(publisher, (String) userinfo.get("email"));
+		}
 		TokenDto tokenDto = jwtService.issueToken(userInfoDto);
 		return ResponseEntity.ok(tokenDto);
 	}
