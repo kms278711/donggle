@@ -8,19 +8,21 @@ import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/icons/close_circle.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:tflite_v2/tflite_v2.dart';
+import 'package:tflite_flutter/tflite_flutter.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
-class TeachableMachineTest extends StatefulWidget {
+
+class TeachableMachineTest2 extends StatefulWidget {
   final CameraDescription camera;
 
-  const TeachableMachineTest(this.camera, {super.key});
+  const TeachableMachineTest2(this.camera, {super.key});
 
   @override
-  State<TeachableMachineTest> createState() => _TeachableMachineTestState();
+  State<TeachableMachineTest2> createState() => _TeachableMachineTest2State();
 }
 
-class _TeachableMachineTestState extends State<TeachableMachineTest> {
-  // late Interpreter interpreter;
+class _TeachableMachineTest2State extends State<TeachableMachineTest2> {
+  late Interpreter interpreter;
   late List<String> labels;
   String predOne = '';
   double confidence = 0;
@@ -58,6 +60,39 @@ class _TeachableMachineTestState extends State<TeachableMachineTest> {
     }
   }
 
+  CameraImage preprocessImage(CameraImage image) {
+    ///TODO
+    return image;
+  }
+
+  List processOutput(List<dynamic> output) {
+    //TODO
+    return output;
+  }
+
+  Future<Object> runInference(CameraImage image) async {
+    if (interpreter == null || !isDetecting) return "";
+
+    isDetecting = true;
+
+    // Convert CameraImage to input format for the model
+    // This often involves converting YUV to RGB, resizing, and normalizing
+
+    // Example pseudo-code for inference
+    var input = preprocessImage(image); // Implement this based on your model needs
+    // Assuming your model outputs a 1D tensor with 3 elements for the batch size of 1
+    var output = List.filled(3, 0).reshape([1, 3]); // Adjusted for 3 output values
+
+    interpreter.run(input, output);
+
+    // Process the model output
+    final recognitionResults = processOutput(output); // Implement based on your model
+
+    isDetecting = false;
+
+    return recognitionResults;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -78,52 +113,39 @@ class _TeachableMachineTestState extends State<TeachableMachineTest> {
 
       cameraController.startImageStream((image) async {
         if (!isDetecting) {
-          isDetecting = true;
-
-          Tflite.runModelOnFrame(
-            bytesList: image.planes.map((plane) {
-              return plane.bytes;
-            }).toList(),
-            imageHeight: image.height,
-            imageWidth: image.width,
-            numResults: 1,
-            rotation: 0,
-          ).then((value) async {
-            if (value!.isNotEmpty) {
-              setRecognitions(value);
-              // final image = await cameraController.takePicture();
-              // saveImageData(image);
-              isDetecting = false;
-            }
-          });
+          final value = await runInference(image);
+          setRecognitions(value);
         }
       });
     });
   }
 
   loadTfliteModel() async {
-    // interpreter = await Interpreter.fromAsset("assets/tflite/model_unquant.tflite");
-    String? res;
-    res = await Tflite.loadModel(model: "assets/tflite/model_unquant.tflite", labels: "assets/tflite/labels.txt");
-    // print("Model loaded successfully");
+    interpreter = await Interpreter.fromAsset('assets/tflite/model_unquant.tflite');
+    String data = await rootBundle.loadString('assets/tflite/labels.txt');
+    labels = data.split('\n');
+    print("----------------------- Model loaded successfully");
   }
 
+
   setRecognitions(outputs) {
-    print("[*] $outputs");
+    if (outputs != "") {
+      print("[*] $outputs");
 
-    if (outputs[0]['index'] == 0) {
-      index = 0;
-    } else if (outputs[0]['index'] == 1) {
-      index = 1;
-    } else {
-      index = 2;
+      if (outputs[0]['index'] == 0) {
+        index = 0;
+      } else if (outputs[0]['index'] == 1) {
+        index = 1;
+      } else {
+        index = 2;
+      }
+
+      confidence = outputs[0]['confidence'];
+
+      setState(() {
+        predOne = outputs[0]['label'];
+      });
     }
-
-    confidence = outputs[0]['confidence'];
-
-    setState(() {
-      predOne = outputs[0]['label'];
-    });
   }
 
   @override

@@ -10,7 +10,9 @@ import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/effect_sound.dart';
 import 'package:frontend/core/utils/component/icons/close_circle.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
+import 'package:frontend/data/data_source/remote/emotion.api.dart';
 import 'package:frontend/domain/model/model_books.dart';
+import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class ExpressionQuiz extends StatefulWidget {
@@ -24,12 +26,15 @@ class ExpressionQuiz extends StatefulWidget {
 
 class _ExpressionQuizState extends State<ExpressionQuiz> {
   late BookModel bookModel;
+  late UserProvider userProvider;
   late CameraController cameraController;
+  Education education = Education(educationId: 0, gubun: "", wordName: "", imagePath: "", bookSentenceId: 0);
   late CameraDescription camera;
 
   bool _isLoading = true;
   String url = "";
   String educationWord = "";
+  String accessToken = "";
 
   @override
   void initState() {
@@ -39,13 +44,16 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       bookModel = Provider.of<BookModel>(context, listen: false);
+      userProvider = Provider.of<UserProvider>(context, listen: false);
       camera = Provider.of<CameraDescription>(context, listen: false);
       cameraController = CameraController(camera, ResolutionPreset.medium);
+
 
       await cameraController.initialize();
 
       if (mounted) {
         setState(() {
+          education = bookModel.nowEducation;
           String path = bookModel.nowEducation.imagePath;
           url = Constant.s3BaseUrl + path;
           educationWord = bookModel.nowEducation.wordName;
@@ -60,6 +68,16 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
   void dispose() {
     cameraController.dispose();
     super.dispose();
+  }
+
+  String extractFileNameWithoutExtension(String url) {
+    // Split the URL by '/'
+    List<String> parts = url.split('/');
+    // Take the last part, which should be 'axe.png' in your example
+    String fileNameWithExtension = parts.last;
+    // Split by '.' and take the first part to remove the extension
+    String fileName = fileNameWithExtension.split('.').first;
+    return fileName;
   }
 
   @override
@@ -130,7 +148,11 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
                       bottom: MediaQuery.of(context).size.height * 0.03,
                       child: GreenButton("확인", onPressed: () async{
                         final image = await cameraController.takePicture();
-                        CameraImageProcessing.saveImageData(image);
+                        String fileName = extractFileNameWithoutExtension(education.imagePath);
+                        // CameraImageProcessing.saveImageData(image);
+                        EmotionApi emotionApi = EmotionApi(file: await CameraImageProcessing.getImageData(image), filename: fileName);
+
+                        String result = await emotionApi.emotionAI();
                       },)),
                   Positioned(
                     top: MediaQuery.of(context).size.height * 0.01,

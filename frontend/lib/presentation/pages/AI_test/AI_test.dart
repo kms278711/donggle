@@ -7,6 +7,7 @@ import 'package:frontend/core/utils/component/icons/my_icon.dart';
 import 'package:frontend/core/utils/component/icons/sound_icon.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/presentation/pages/AI_test/teachable_machine_test.dart';
+import 'package:frontend/presentation/pages/AI_test/teachable_machine_test_2.dart';
 import 'package:frontend/presentation/pages/home/component/background/back_ground_below.dart';
 import 'package:frontend/presentation/pages/home/component/background/background_upper.dart';
 import 'package:frontend/presentation/pages/AI_test/test_component.dart';
@@ -59,9 +60,9 @@ class AITest extends StatelessWidget {
                   SizedBox(
                     height: MediaQuery.of(context).size.height* 0.05,
                   ),
-                  GreenButton("Teachable Machine Test", onPressed: () {
+                  GreenButton("Teachable Machine Test2", onPressed: () {
                     DialogUtils.showCustomDialog(context,
-                        contentWidget: TeachableMachineTest(camera));
+                        contentWidget: TeachableMachineTest2(camera));
                   })
                 ],
               )),
