@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 @EnableAutoConfiguration(exclude = RedisAutoConfiguration.class)
 public class TokenRepository {
 
-	private final RedisTemplate<String, String> redisTemplate;
+	private final RedisTemplate<String, Object> redisTemplate;
 
 	public void save(String key, String value, long expiresMin) {
 		if (expiresMin > 0) {
@@ -25,7 +25,7 @@ public class TokenRepository {
 	}
 
 	public Optional<String> find(String key) {
-		String value = redisTemplate.opsForValue().get(key);
+		String value = (String) redisTemplate.opsForValue().get(key);
 		return Optional.ofNullable(value);
 	}
 
