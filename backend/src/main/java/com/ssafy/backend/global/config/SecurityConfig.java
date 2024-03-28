@@ -37,7 +37,8 @@ public class SecurityConfig {
 				.requestMatchers("/api/verify/**")
 				.requestMatchers("/api/donggle/**")
 				.requestMatchers("/ai/**")
-				.requestMatchers("/api/oauth/**");
+				.requestMatchers("/api/oauth/**")
+			.requestMatchers("/api/approvals/bootpay");
 	}
 
 	@Bean
@@ -54,6 +55,7 @@ public class SecurityConfig {
 								.requestMatchers("/api/donggle/**").permitAll()
 								.requestMatchers("/ai/**").permitAll()
 								.requestMatchers("/api/oauth/**").permitAll()
+								.requestMatchers("/api/approvals/bootpay").permitAll()
 								.anyRequest().authenticated());
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
