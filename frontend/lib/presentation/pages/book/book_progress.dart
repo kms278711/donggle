@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
+import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/dialog_utils.dart';
 import 'package:frontend/core/utils/component/icons/back_icon.dart';
 import 'package:frontend/core/utils/component/icons/end_icon.dart';
@@ -37,6 +40,7 @@ class _BookProgressState extends State<BookProgress> {
   bool _isLastPage = false;
   bool _isLastSentence = false;
   bool _isUnexsist = false;
+  bool _isStarted = false;
 
   late BookModel bookModel;
   late UserProvider userProvider;
@@ -52,7 +56,13 @@ class _BookProgressState extends State<BookProgress> {
     bookImagePath: "",
     page: 0,
     content: "",
-    bookPageSentences: [BookPageSentences(bookPageSentenceId: 0, sequence: 0, sentence: "", sentenceSoundPath: "")],
+    bookPageSentences: [
+      BookPageSentences(
+          bookPageSentenceId: 0,
+          sequence: 0,
+          sentence: "",
+          sentenceSoundPath: "")
+    ],
   );
   String url = "";
 
@@ -62,7 +72,7 @@ class _BookProgressState extends State<BookProgress> {
     // }
     if (_isLastSentence && _isLastPage) {
       bool isRead = bookModel.books[bookId - 1]["isRead"] ?? false;
-      if(!isRead){
+      if (!isRead) {
         await bookModel.setIsRead(accessToken, bookId);
       }
       DialogUtils.showCustomDialog(context,
@@ -77,12 +87,15 @@ class _BookProgressState extends State<BookProgress> {
         if (sentenceId == nowPage.bookPageSentences.length - 1) {
           _isLastSentence = true;
         }
+        backgroundLinePlay(Constant.s3BaseUrl +
+            nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
       });
     }
   }
 
   void goNext() {
-    if (educationId == nowPage.bookPageSentences[sentenceId].bookPageSentenceId) {
+    if (educationId ==
+        nowPage.bookPageSentences[sentenceId].bookPageSentenceId) {
       if (nowPage.education?.gubun == "NOWORD") {
         /// OX문제
         print("------------ noword");
@@ -98,12 +111,11 @@ class _BookProgressState extends State<BookProgress> {
       } else if (nowPage.education?.category == "EXPRESSION") {
         /// 표정문제
         // print("------------ expression");
-        DialogUtils.showCustomDialog(context,
-            contentWidget: ExpressionQuiz(
-              onModalClose: () {
-                finishSentence();
-              },
-            ));
+        DialogUtils.showCustomDialog(context, contentWidget: ExpressionQuiz(
+          onModalClose: () {
+            finishSentence();
+          },
+        ));
       } else if (nowPage.education?.category == "ACTION") {
         /// 동작문제
         print("------------ action");
@@ -111,7 +123,15 @@ class _BookProgressState extends State<BookProgress> {
       }
     } else {
       finishSentence();
+      // backgroundLinePlay(Constant.s3BaseUrl +
+      //     nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
     }
+
+    // backgroundLine.playerStateStream.listen((state) {
+    //   if (state.processingState == ProcessingState.completed) {
+    //     finishSentence();
+    //   }
+    // });
   }
 
   void goPrevious() {
@@ -129,10 +149,26 @@ class _BookProgressState extends State<BookProgress> {
 
   AudioPlayer backgroundLine = AudioPlayer();
 
+  StreamSubscription? _audioPlayerSubscription;
   Future<void> backgroundLinePlay(String path) async {
     try {
       await backgroundLine.setUrl(path); // 오디오 파일의 URL을 설정
       await backgroundLine.play(); // 오디오 재생 시작
+
+      await _audioPlayerSubscription?.cancel();
+
+      _audioPlayerSubscription = backgroundLine.playerStateStream.listen((state) {
+        if (state.processingState == ProcessingState.completed) {
+          goNext();
+          // if (educationId ==
+          //         nowPage
+          //             .bookPageSentences[sentenceId + 1].bookPageSentenceId &&
+          //     nowPage.education?.category == "PICTURE") {
+          // } else {
+          //   goNext();
+          // }
+        }
+      });
     } catch (e) {
       print("오류 발생: $e");
     }
@@ -164,7 +200,6 @@ class _BookProgressState extends State<BookProgress> {
           _isUnexsist = true;
           finishSentence();
         });
-
       }
 
       nowPage = bookModel.nowPage;
@@ -181,6 +216,8 @@ class _BookProgressState extends State<BookProgress> {
             _isLastSentence = true;
           }
           _isLoading = false; // Update loading state when done
+          backgroundLinePlay(Constant.s3BaseUrl +
+              nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
         });
       }
     });
@@ -192,77 +229,92 @@ class _BookProgressState extends State<BookProgress> {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    return _isUnexsist ? Container() : Scaffold(
-      body: Stack(
-        children: [
-          CachedNetworkImage(
-            imageUrl: url,
-            fit: BoxFit.cover,
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            errorWidget: (context, url, error) => const Icon(Icons.error),
-          ),
-          Positioned(
-              bottom: MediaQuery.of(context).size.height * 0.02,
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                        constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width * 0.95, // Set your desired max width here
-                        ),
-                        padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.02),
-                        decoration: BoxDecoration(
-                          color: const Color.fromRGBO(217, 217, 217, 0.85),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Text(
-                          nowPage.bookPageSentences[sentenceId].sentence,
-                          textAlign: TextAlign.center,
-                          style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMediumLarge2),
-                        )),
-                  ],
-                ),
-              )),
-          Positioned(
-            top: MediaQuery.of(context).size.height * 0.02,
-            right: MediaQuery.of(context).size.width * 0.01,
-            child: Row(
+    return _isUnexsist
+        ? Container()
+        : Scaffold(
+            body: Stack(
               children: [
-                BackIcon(
-                  onTap: goPrevious,
+                CachedNetworkImage(
+                  imageUrl: url,
+                  fit: BoxFit.cover,
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.01,
+                Positioned(
+                    bottom: MediaQuery.of(context).size.height * 0.02,
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                              constraints: BoxConstraints(
+                                maxWidth: MediaQuery.of(context).size.width *
+                                    0.95, // Set your desired max width here
+                              ),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      MediaQuery.of(context).size.width * 0.02),
+                              decoration: BoxDecoration(
+                                color:
+                                    const Color.fromRGBO(217, 217, 217, 0.85),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Text(
+                                nowPage.bookPageSentences[sentenceId].sentence,
+                                textAlign: TextAlign.center,
+                                style: CustomFontStyle.getTextStyle(
+                                    context, CustomFontStyle.textMediumLarge2),
+                              ))
+                          // : GreenButton('시작하기', onPressed: () {
+                          //     backgroundLinePlay(Constant.s3BaseUrl +
+                          //         nowPage.bookPageSentences[sentenceId]
+                          //             .sentenceSoundPath);
+                          //     setState(() {
+                          //       _isStarted = !_isStarted;
+                          //     });
+                          //   }),
+                        ],
+                      ),
+                    )),
+                Positioned(
+                  top: MediaQuery.of(context).size.height * 0.02,
+                  right: MediaQuery.of(context).size.width * 0.01,
+                  child: Row(
+                    children: [
+                      BackIcon(
+                        onTap: goPrevious,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.01,
+                      ),
+                      SkipIcon(
+                        // onTap: finishSentence
+                        onTap: goNext,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.01,
+                      ),
+                      EndIcon(onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext dialogContext) {
+                            return stopQuiz(
+                              title: "동화",
+                              onConfirm: () {
+                                showToast('종료되었습니다.');
+                                context.go(RoutePath.main0);
+                              },
+                            );
+                          },
+                        );
+                      }),
+                    ],
+                  ),
                 ),
-                SkipIcon(
-                  // onTap: finishSentence
-                  onTap: goNext,
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.01,
-                ),
-                EndIcon(onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext dialogContext) {
-                      return stopQuiz(
-                        title: "동화",
-                        onConfirm: () {
-                          showToast('종료되었습니다.');
-                          context.go(RoutePath.main0);
-                        },
-                      );
-                    },
-                  );
-                }),
               ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 }

@@ -26,15 +26,12 @@ class ExpressionQuiz extends StatefulWidget {
 
 class _ExpressionQuizState extends State<ExpressionQuiz> {
   late BookModel bookModel;
-  late UserProvider userProvider;
   late CameraController cameraController;
-  Education education = Education(educationId: 0, gubun: "", wordName: "", imagePath: "", bookSentenceId: 0);
   late CameraDescription camera;
 
   bool _isLoading = true;
   String url = "";
   String educationWord = "";
-  String accessToken = "";
 
   @override
   void initState() {
@@ -44,16 +41,13 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       bookModel = Provider.of<BookModel>(context, listen: false);
-      userProvider = Provider.of<UserProvider>(context, listen: false);
       camera = Provider.of<CameraDescription>(context, listen: false);
       cameraController = CameraController(camera, ResolutionPreset.medium);
-
 
       await cameraController.initialize();
 
       if (mounted) {
         setState(() {
-          education = bookModel.nowEducation;
           String path = bookModel.nowEducation.imagePath;
           url = Constant.s3BaseUrl + path;
           educationWord = bookModel.nowEducation.wordName;
@@ -93,7 +87,21 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
           color: const Color.fromRGBO(217, 217, 217, 0.9),
         ),
         child: _isLoading
-            ? Container()
+            ? Stack(
+                children: [
+                  Positioned(
+                    top: MediaQuery.of(context).size.height * 0.01,
+                    right: MediaQuery.of(context).size.width * 0.01,
+                    child: IconButton(
+                      icon: const CloseCircle(),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        widget.onModalClose?.call();
+                      },
+                    ),
+                  ),
+                ],
+              )
             : Stack(
                 children: [
                   Positioned(
@@ -104,7 +112,8 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
                     child: CachedNetworkImage(
                       imageUrl: url,
                       fit: BoxFit.contain,
-                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                     ),
                   ),
                   Positioned(
