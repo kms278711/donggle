@@ -35,7 +35,7 @@ public class ApprovalController {
     public ResponseEntity<String> bootpay(@RequestBody BootpayRequestDto bootpayRequestDto) {
         approvalService.bootpay(bootpayRequestDto);
 
-        return ResponseEntity.ok("결제 내역이 저장되었습니다.");
+        return ResponseEntity.ok("");
     }
 
 

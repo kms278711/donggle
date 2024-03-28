@@ -69,8 +69,8 @@ public class ApprovalServiceImpl implements ApprovalService {
         if (bootpayRequestDto.status() == 1 && value != null) {
             approvalRepository.bootpayDelete(key);
 
-            Long userId = value.getLast();
-            Long bookId = value.getFirst();
+            Long userId = value.get(1);
+            Long bookId = value.get(0);
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new UserException(INVALID_USER));
             Book purchasedBookId = bookRepository.findById(bookId)
