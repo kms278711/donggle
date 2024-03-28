@@ -38,9 +38,10 @@ class BookProgress extends StatefulWidget {
 class _BookProgressState extends State<BookProgress> {
   bool _isLoading = true;
   bool _isLastPage = false;
-  bool _isLastSentence = false;
+  bool _isLastSentence = false; // 마지막 문장인지 판별, 전 페이지로 넘어가기 위해
+  bool _isFirstSentence = false; // 첫 문장인지 판별, 전 페이지로 넘어가기 위해
   bool _isUnexsist = false;
-  bool _isStarted = false;
+  bool _isSkiped = false;
 
   late BookModel bookModel;
   late UserProvider userProvider;
@@ -96,6 +97,7 @@ class _BookProgressState extends State<BookProgress> {
   void goNext() {
     if (educationId ==
         nowPage.bookPageSentences[sentenceId].bookPageSentenceId) {
+      backgroundLine.stop();
       if (nowPage.education?.gubun == "NOWORD") {
         /// OX문제
         print("------------ noword");
@@ -123,18 +125,20 @@ class _BookProgressState extends State<BookProgress> {
       }
     } else {
       finishSentence();
-      // backgroundLinePlay(Constant.s3BaseUrl +
-      //     nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
     }
-
-    // backgroundLine.playerStateStream.listen((state) {
-    //   if (state.processingState == ProcessingState.completed) {
-    //     finishSentence();
-    //   }
-    // });
   }
 
   void goPrevious() {
+    // if (sentenceId == 0 && nowPage.bookPageId == 1) {
+    //   showToast("첫 페이지 입니다.", backgroundColor: AppColors.error);
+    // } else if (sentenceId == 0) {
+    //   globalRouter.pushReplacement('/bookProgress/$bookId/${pageId - 1}/1');
+    // } else {
+    //   setState(() {
+    //     finishSentencePrevious();
+    //     if (_isLastSentence) _isLastSentence = false;
+    //   });
+    // }
     if (sentenceId == 0 && nowPage.bookPageId == 1) {
       showToast("첫 페이지 입니다.", backgroundColor: AppColors.error);
     } else if (sentenceId == 0) {
@@ -142,6 +146,11 @@ class _BookProgressState extends State<BookProgress> {
     } else {
       setState(() {
         sentenceId--;
+        if (sentenceId == 0) {
+          _isFirstSentence = true;
+        }
+        backgroundLinePlay(Constant.s3BaseUrl +
+            nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
         if (_isLastSentence) _isLastSentence = false;
       });
     }
@@ -150,6 +159,7 @@ class _BookProgressState extends State<BookProgress> {
   AudioPlayer backgroundLine = AudioPlayer();
 
   StreamSubscription? _audioPlayerSubscription;
+
   Future<void> backgroundLinePlay(String path) async {
     try {
       await backgroundLine.setUrl(path); // 오디오 파일의 URL을 설정
@@ -157,18 +167,16 @@ class _BookProgressState extends State<BookProgress> {
 
       await _audioPlayerSubscription?.cancel();
 
-      _audioPlayerSubscription = backgroundLine.playerStateStream.listen((state) {
-        if (state.processingState == ProcessingState.completed) {
-          goNext();
-          // if (educationId ==
-          //         nowPage
-          //             .bookPageSentences[sentenceId + 1].bookPageSentenceId &&
-          //     nowPage.education?.category == "PICTURE") {
-          // } else {
-          //   goNext();
-          // }
-        }
-      });
+      _audioPlayerSubscription =
+          backgroundLine.playerStateStream.listen((state) {
+            if (state.processingState == ProcessingState.completed) {
+              if (_isSkiped == false) {
+                goNext();
+              } else {
+                _isSkiped = false;
+              }
+            }
+          });
     } catch (e) {
       print("오류 발생: $e");
     }
@@ -196,6 +204,7 @@ class _BookProgressState extends State<BookProgress> {
         showToast(result, backgroundColor: AppColors.error);
         setState(() {
           _isLastSentence = true;
+          _isFirstSentence = true;
           _isLastPage = true;
           _isUnexsist = true;
           finishSentence();
@@ -224,6 +233,12 @@ class _BookProgressState extends State<BookProgress> {
   }
 
   @override
+  void dispose() {
+    backgroundLine.stop();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (_isLoading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
@@ -232,89 +247,92 @@ class _BookProgressState extends State<BookProgress> {
     return _isUnexsist
         ? Container()
         : Scaffold(
-            body: Stack(
+      body: Stack(
+        children: [
+          CachedNetworkImage(
+            imageUrl: url,
+            fit: BoxFit.cover,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+          ),
+          Positioned(
+              bottom: MediaQuery.of(context).size.height * 0.02,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width *
+                              0.95, // Set your desired max width here
+                        ),
+                        padding: EdgeInsets.symmetric(
+                            horizontal:
+                            MediaQuery.of(context).size.width * 0.02),
+                        decoration: BoxDecoration(
+                          color:
+                          const Color.fromRGBO(217, 217, 217, 0.85),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Text(
+                          nowPage.bookPageSentences[sentenceId].sentence,
+                          textAlign: TextAlign.center,
+                          style: CustomFontStyle.getTextStyle(
+                              context, CustomFontStyle.textMediumLarge2),
+                        ))
+                    // : GreenButton('시작하기', onPressed: () {
+                    //     backgroundLinePlay(Constant.s3BaseUrl +
+                    //         nowPage.bookPageSentences[sentenceId]
+                    //             .sentenceSoundPath);
+                    //     setState(() {
+                    //       _isStarted = !_isStarted;
+                    //     });
+                    //   }),
+                  ],
+                ),
+              )),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.02,
+            right: MediaQuery.of(context).size.width * 0.01,
+            child: Row(
               children: [
-                CachedNetworkImage(
-                  imageUrl: url,
-                  fit: BoxFit.cover,
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                BackIcon(
+                  onTap: goPrevious,
                 ),
-                Positioned(
-                    bottom: MediaQuery.of(context).size.height * 0.02,
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                              constraints: BoxConstraints(
-                                maxWidth: MediaQuery.of(context).size.width *
-                                    0.95, // Set your desired max width here
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                      MediaQuery.of(context).size.width * 0.02),
-                              decoration: BoxDecoration(
-                                color:
-                                    const Color.fromRGBO(217, 217, 217, 0.85),
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Text(
-                                nowPage.bookPageSentences[sentenceId].sentence,
-                                textAlign: TextAlign.center,
-                                style: CustomFontStyle.getTextStyle(
-                                    context, CustomFontStyle.textMediumLarge2),
-                              ))
-                          // : GreenButton('시작하기', onPressed: () {
-                          //     backgroundLinePlay(Constant.s3BaseUrl +
-                          //         nowPage.bookPageSentences[sentenceId]
-                          //             .sentenceSoundPath);
-                          //     setState(() {
-                          //       _isStarted = !_isStarted;
-                          //     });
-                          //   }),
-                        ],
-                      ),
-                    )),
-                Positioned(
-                  top: MediaQuery.of(context).size.height * 0.02,
-                  right: MediaQuery.of(context).size.width * 0.01,
-                  child: Row(
-                    children: [
-                      BackIcon(
-                        onTap: goPrevious,
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.01,
-                      ),
-                      SkipIcon(
-                        // onTap: finishSentence
-                        onTap: goNext,
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.01,
-                      ),
-                      EndIcon(onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext dialogContext) {
-                            return stopQuiz(
-                              title: "동화",
-                              onConfirm: () {
-                                showToast('종료되었습니다.');
-                                context.go(RoutePath.main0);
-                              },
-                            );
-                          },
-                        );
-                      }),
-                    ],
-                  ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.01,
                 ),
+                SkipIcon(
+                  // onTap: finishSentence
+                  onTap: () {
+                    _isSkiped = true;
+                    goNext();
+                  },
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.01,
+                ),
+                EndIcon(onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext dialogContext) {
+                      return stopQuiz(
+                        title: "동화",
+                        onConfirm: () {
+                          showToast('종료되었습니다.');
+                          context.go(RoutePath.main0);
+                        },
+                      );
+                    },
+                  );
+                }),
               ],
             ),
-          );
+          ),
+        ],
+      ),
+    );
   }
 }

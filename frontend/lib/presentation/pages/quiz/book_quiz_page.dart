@@ -13,6 +13,7 @@ import 'package:frontend/core/utils/component/donggle_talk.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_quiz.dart';
 import 'package:frontend/presentation/pages/home/component/title/main_title.dart';
+import 'package:frontend/presentation/pages/modal/finish_quiz_modal.dart';
 import 'package:frontend/presentation/pages/quiz/finish_quiz_page.dart';
 import 'package:frontend/presentation/provider/quiz_provider.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
@@ -66,10 +67,20 @@ class _BookQuizPageState extends State<BookQuizPage> {
                   showToast('풀지않은 문제가 있습니다.', backgroundColor: AppColors.error);
                   print(quizProvider.selectedAnswers);
                 } else {
-                  DialogUtils.showCustomDialog(context,
-                      contentWidget:
-                          FinishQuizPage(quizProvider.selectedAnswers!));
-                  context.pushReplacement('/main/0/0');
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext dialogContext) {
+                      return finishQuiz(
+                        title: "퀴즈",
+                        onConfirm: () {
+                          DialogUtils.showCustomDialog(context,
+                              contentWidget:
+                              FinishQuizPage(quizProvider.selectedAnswers!));
+                          context.pushReplacement('/main/0/0');
+                        },
+                      );
+                    },
+                  );
                 }
               },
             ),
@@ -171,8 +182,8 @@ class _QuizCarouselState extends State<QuizCarousel> {
             return Container(
               width: MediaQuery.of(context).size.width * 0.75,
               decoration: const BoxDecoration(
-                  // color: Colors.white,
-                  ),
+                // color: Colors.white,
+              ),
               child: Column(
                 children: [
                   Container(
@@ -189,8 +200,8 @@ class _QuizCarouselState extends State<QuizCarousel> {
                   quiz['content'].toString().length >= 27
                       ? SizedBox()
                       : SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.07,
-                        ),
+                    height: MediaQuery.of(context).size.height * 0.07,
+                  ),
                   Container(
                     // color: Colors.red,
                     padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
@@ -222,31 +233,31 @@ class _QuizCarouselState extends State<QuizCarousel> {
                                         choice['choiceImagePath'],
                                     fit: BoxFit.cover,
                                     placeholder: (context, url) =>
-                                        const CircularProgressIndicator(),
+                                    const CircularProgressIndicator(),
                                     errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
+                                    const Icon(Icons.error),
                                   ),
                                 ),
                                 isSelected
                                     ? Positioned(
-                                        bottom:
-                                            MediaQuery.of(context).size.height *
-                                                0.11,
-                                        right:
-                                            MediaQuery.of(context).size.width *
-                                                0.01,
-                                        child: Image.asset(
-                                          AppIcons.check_mark,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.17,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              0.2,
-                                        ),
-                                      )
+                                  bottom:
+                                  MediaQuery.of(context).size.height *
+                                      0.11,
+                                  right:
+                                  MediaQuery.of(context).size.width *
+                                      0.01,
+                                  child: Image.asset(
+                                    AppIcons.check_mark,
+                                    width: MediaQuery.of(context)
+                                        .size
+                                        .width *
+                                        0.17,
+                                    height: MediaQuery.of(context)
+                                        .size
+                                        .height *
+                                        0.2,
+                                  ),
+                                )
                                     : Container(),
                                 Positioned(
                                   bottom: MediaQuery.of(context).size.height * 0.04,
