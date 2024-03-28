@@ -29,6 +29,7 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
   late CameraController cameraController;
   late CameraDescription camera;
 
+  Education education = Education(educationId: 0, gubun: "", wordName: "", imagePath: "", bookSentenceId: 0);
   bool _isLoading = true;
   String url = "";
   String educationWord = "";
@@ -43,6 +44,7 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
       bookModel = Provider.of<BookModel>(context, listen: false);
       camera = Provider.of<CameraDescription>(context, listen: false);
       cameraController = CameraController(camera, ResolutionPreset.medium);
+      education = bookModel.nowEducation;
 
       await cameraController.initialize();
 
@@ -112,8 +114,7 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
                     child: CachedNetworkImage(
                       imageUrl: url,
                       fit: BoxFit.contain,
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
                     ),
                   ),
                   Positioned(
@@ -155,14 +156,18 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
                   Positioned(
                       right: MediaQuery.of(context).size.width * 0.05,
                       bottom: MediaQuery.of(context).size.height * 0.03,
-                      child: GreenButton("확인", onPressed: () async{
-                        final image = await cameraController.takePicture();
-                        String fileName = extractFileNameWithoutExtension(education.imagePath);
-                        // CameraImageProcessing.saveImageData(image);
-                        EmotionApi emotionApi = EmotionApi(file: await CameraImageProcessing.getImageData(image), filename: fileName);
+                      child: GreenButton(
+                        "확인",
+                        onPressed: () async {
+                          final image = await cameraController.takePicture();
+                          String fileName = extractFileNameWithoutExtension(education.imagePath);
+                          // CameraImageProcessing.saveImageData(image);
+                          EmotionApi emotionApi =
+                              EmotionApi(file: await CameraImageProcessing.getImageData(image), filename: fileName);
 
-                        String result = await emotionApi.emotionAI();
-                      },)),
+                          String result = await emotionApi.emotionAI();
+                        },
+                      )),
                   Positioned(
                     top: MediaQuery.of(context).size.height * 0.01,
                     right: MediaQuery.of(context).size.width * 0.01,
