@@ -1,12 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/add_post_position_text.dart';
+import 'package:frontend/core/utils/camera_image_processing.dart';
+import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/effect_sound.dart';
 import 'package:frontend/core/utils/component/icons/close_circle.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
-import 'package:frontend/presentation/pages/book/modal/expression_camera.dart';
 import 'package:provider/provider.dart';
 
 class ExpressionQuiz extends StatefulWidget {
@@ -20,6 +24,8 @@ class ExpressionQuiz extends StatefulWidget {
 
 class _ExpressionQuizState extends State<ExpressionQuiz> {
   late BookModel bookModel;
+  late CameraController cameraController;
+  late CameraDescription camera;
 
   bool _isLoading = true;
   String url = "";
@@ -33,6 +39,10 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       bookModel = Provider.of<BookModel>(context, listen: false);
+      camera = Provider.of<CameraDescription>(context, listen: false);
+      cameraController = CameraController(camera, ResolutionPreset.medium);
+
+      await cameraController.initialize();
 
       if (mounted) {
         setState(() {
@@ -44,6 +54,12 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
         });
       }
     });
+  }
+
+  @override
+  void dispose() {
+    cameraController.dispose();
+    super.dispose();
   }
 
   @override
@@ -94,9 +110,13 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
                               height: MediaQuery.of(context).size.width * 0.4,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(40),
-                                child: const FittedBox(
+                                child: FittedBox(
                                   fit: BoxFit.cover,
-                                  child: ExpressionCamera(),
+                                  child: SizedBox(
+                                    width: cameraController.value.previewSize!.width,
+                                    height: cameraController.value.previewSize!.height,
+                                    child: CameraPreview(cameraController),
+                                  ),
                                 ),
                               ),
                             ),
@@ -105,6 +125,13 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
                       ),
                     ],
                   ),
+                  Positioned(
+                      right: MediaQuery.of(context).size.width * 0.05,
+                      bottom: MediaQuery.of(context).size.height * 0.03,
+                      child: GreenButton("확인", onPressed: () async{
+                        final image = await cameraController.takePicture();
+                        CameraImageProcessing.saveImageData(image);
+                      },)),
                   Positioned(
                     top: MediaQuery.of(context).size.height * 0.01,
                     right: MediaQuery.of(context).size.width * 0.01,
@@ -115,7 +142,7 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
                         widget.onModalClose?.call();
                       },
                     ),
-                  )
+                  ),
                 ],
               ),
       ),

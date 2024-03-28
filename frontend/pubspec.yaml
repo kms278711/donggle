@@ -37,6 +37,7 @@ dependencies:
   just_audio: ^0.9.36
   just_audio_background: ^0.0.1-beta.11
   audioplayers: ^6.0.0
+  widgets_to_image: ^0.0.2
 
 dev_dependencies:
   flutter_test:

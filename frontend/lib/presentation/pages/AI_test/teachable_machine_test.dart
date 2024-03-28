@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
@@ -39,8 +37,7 @@ class _TeachableMachineTestState extends State<TeachableMachineTest> {
   loadTfliteModel() async {
     // interpreter = await Interpreter.fromAsset("assets/tflite/model_unquant.tflite");
     String? res;
-    res = await Tflite.loadModel(model: "assets/tflite/model_unquant_new.tflite", labels: "assets/tflite/labels_new.txt");
-    print(res);
+    res = await Tflite.loadModel(model: "assets/tflite/model_unquant.tflite", labels: "assets/tflite/labels.txt");
     // print("Model loaded successfully");
   }
 
@@ -76,22 +73,22 @@ class _TeachableMachineTestState extends State<TeachableMachineTest> {
         ),
         child: Stack(
           children: [
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.1,
-              left: MediaQuery.of(context).size.width * 0.05,
-              width: MediaQuery.of(context).size.width * 0.3,
-              height: MediaQuery.of(context).size.width * 0.3,
-              child: Image.asset("assets/images/test_img.png"),
-            ),
-            Positioned(
-                top: MediaQuery.of(context).size.height * 0.65,
-                left: MediaQuery.of(context).size.width * 0.05,
-                width: MediaQuery.of(context).size.width * 0.3,
-                height: MediaQuery.of(context).size.width * 0.3,
-                child: const Text(
-                  "이 도끼가 당신의 도끼인가요?",
-                  textAlign: TextAlign.center,
-                )),
+            // Positioned(
+            //   top: MediaQuery.of(context).size.height * 0.1,
+            //   left: MediaQuery.of(context).size.width * 0.05,
+            //   width: MediaQuery.of(context).size.width * 0.3,
+            //   height: MediaQuery.of(context).size.width * 0.3,
+            //   child: Image.asset("assets/images/test_img.png"),
+            // ),
+            // Positioned(
+            //     top: MediaQuery.of(context).size.height * 0.65,
+            //     left: MediaQuery.of(context).size.width * 0.05,
+            //     width: MediaQuery.of(context).size.width * 0.3,
+            //     height: MediaQuery.of(context).size.width * 0.3,
+            //     child: const Text(
+            //       "이 도끼가 당신의 도끼인가요?",
+            //       textAlign: TextAlign.center,
+            //     )),
             modelLoaded
                 ? Stack(
                     children: [

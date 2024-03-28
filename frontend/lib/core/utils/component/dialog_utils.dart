@@ -12,7 +12,7 @@ class DialogUtils {
     BuildContext context, {
     required Widget contentWidget,
   }) async {
-    player.pause();
+    // player.pause();
     final result = await showGeneralDialog(
         context: context,
         barrierDismissible: true,

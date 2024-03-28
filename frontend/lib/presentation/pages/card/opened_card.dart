@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/dialog_utils.dart';
 import 'package:frontend/domain/model/model_cards.dart' as domain;
-import 'package:frontend/presentation/pages/card/card_deatil.dart';
+import 'package:frontend/presentation/pages/card/card_detail.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 

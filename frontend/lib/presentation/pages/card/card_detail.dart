@@ -1,9 +1,11 @@
+import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
@@ -12,19 +14,28 @@ import 'package:frontend/core/utils/component/icons/circle_back_icon.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_cards.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/domain/model/model_cards.dart' as domain;
+import 'package:widgets_to_image/widgets_to_image.dart';
+import 'package:image/image.dart' as img;
 
 class CardDetail extends StatefulWidget {
-  int educationId;
+  final int educationId;
 
-  CardDetail(this.educationId, {super.key});
+  const CardDetail(this.educationId, {super.key});
 
   @override
   State<CardDetail> createState() => _CardDetailState();
 }
 
 class _CardDetailState extends State<CardDetail> {
+  // WidgetsToImageController to access widget
+
+// to save image bytes of widget
+  Uint8List? bytes;
+
   late CardModel cardModel;
   String wordName = "";
   String imagePath = "";
@@ -58,6 +69,36 @@ class _CardDetailState extends State<CardDetail> {
     });
   }
 
+  Future<bool> saveImageToDevice() async {
+    try {
+      // Using image_gallery_saver
+      String dir = (await getApplicationDocumentsDirectory()).path;
+      File file = File("$dir/${DateTime.now().millisecondsSinceEpoch}.png");
+      await file.writeAsBytes(bytes!);
+      final result = await ImageGallerySaver.saveFile(file.path);
+      return result['isSuccess'];
+    } catch (e) {
+      debugPrint("Error saving image: $e");
+      return false;
+    }
+  }
+
+  Future<void> saveImageData() async {
+    if (bytes == null) {
+      showToast('오류가 났어요:(', backgroundColor: AppColors.error);
+      return;
+    }
+    if (!context.mounted) return;
+    if (mounted) {
+      final result = await saveImageToDevice();
+      if (result) {
+        showToast("그림이 갤러리에 저장되었습니다!");
+      } else {
+        showToast("그림 저장이 실패했어요:(", backgroundColor: AppColors.error);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle(
@@ -82,8 +123,7 @@ class _CardDetailState extends State<CardDetail> {
             child: Container(
               color: Colors.transparent,
               child: Center(
-                child: Image.asset(AppIcons.bottle,
-                    width: MediaQuery.of(context).size.width * 0.35),
+                child: Image.asset(AppIcons.bottle, width: MediaQuery.of(context).size.width * 0.35),
               ),
             ),
           ),
@@ -132,10 +172,8 @@ class _CardDetailState extends State<CardDetail> {
                         imageUrl: url,
                         fit: BoxFit.cover,
                         width: MediaQuery.of(context).size.width * 0.3,
-                        placeholder: (context, url) =>
-                            const CircularProgressIndicator(),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
+                        placeholder: (context, url) => const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
                       ),
                     ),
                     Positioned(
@@ -165,7 +203,7 @@ class _CardDetailState extends State<CardDetail> {
           Positioned(
             top: MediaQuery.of(context).size.height * 0.2,
             right: MediaQuery.of(context).size.width * 0.1,
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.4,
               height: MediaQuery.of(context).size.height * 0.15,
               // color: Colors.white,
@@ -187,7 +225,7 @@ class _CardDetailState extends State<CardDetail> {
           Positioned(
             top: MediaQuery.of(context).size.height * 0.35,
             right: MediaQuery.of(context).size.width * 0.1,
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.4,
               height: MediaQuery.of(context).size.height * 0.15,
               // color: Colors.white,
@@ -214,7 +252,7 @@ class _CardDetailState extends State<CardDetail> {
           Positioned(
             top: MediaQuery.of(context).size.height * 0.5,
             right: MediaQuery.of(context).size.width * 0.1,
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.4,
               height: MediaQuery.of(context).size.height * 0.39,
               // color: Colors.white,
@@ -230,19 +268,10 @@ class _CardDetailState extends State<CardDetail> {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: userImages.map((imagePath) {
-                          return Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                            child: CachedNetworkImage(
-                              imageUrl: Constant.s3BaseUrl + imagePath,
-                              fit: BoxFit.cover,
-                              height: MediaQuery.of(context).size.height * 0.3,
-                              width: MediaQuery.of(context).size.width * 0.14,
-                              placeholder: (context, url) =>
-                                  const CircularProgressIndicator(),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
-                          );
+                          WidgetsToImageController controller = WidgetsToImageController();
+                          return WidgetsToImage(
+                              controller: controller,
+                              child: cardWidget(imagePath, controller));
                         }).toList(),
                       ),
                     ),
@@ -257,6 +286,38 @@ class _CardDetailState extends State<CardDetail> {
             child: donggleTalk(situation: "WORD"),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget cardWidget(String imagePath, WidgetsToImageController controller){
+    return GestureDetector(
+      onTap: () async{
+        final bytes = await controller.capture();
+        setState(() {
+          this.bytes = bytes;
+        });
+        await saveImageData();
+      },
+      child: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/card.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        height: MediaQuery.of(context).size.height * 0.3,
+        width: MediaQuery.of(context).size.width * 0.15,
+        child: Center(
+          child: CachedNetworkImage(
+            imageUrl: Constant.s3BaseUrl + imagePath,
+            fit: BoxFit.contain,
+            height: MediaQuery.of(context).size.height * 0.17,
+            // width: MediaQuery.of(context).size.width * 0.14,
+            placeholder: (context, url) => const CircularProgressIndicator(),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+          ),
+        ),
       ),
     );
   }
