@@ -106,16 +106,16 @@ class _PictureQuizState extends State<PictureQuiz> {
     Future<void> saveImageData() async {
       final Uint8List? data = (await _drawingController.getImageData())?.buffer.asUint8List();
       if (data == null) {
-        debugPrint('Failed to get image data');
+        showToast('오류가 났어요:(', backgroundColor: AppColors.error);
         return;
       }
       if (!context.mounted) return;
       if (mounted) {
         final result = await saveImageToDevice(data);
         if (result) {
-          showToast("Image saved to device!");
+          showToast("그림이 갤러리에 저장되었습니다!");
         } else {
-          showToast("Failed to save image");
+          showToast("그림 저장이 실패했어요:(", backgroundColor: AppColors.error);
         }
       }
     }

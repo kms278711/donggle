@@ -18,6 +18,7 @@ import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:frontend/presentation/routes/route_path.dart';
 import 'package:frontend/presentation/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 
 class BookProgress extends StatefulWidget {
@@ -123,6 +124,17 @@ class _BookProgressState extends State<BookProgress> {
         sentenceId--;
         if (_isLastSentence) _isLastSentence = false;
       });
+    }
+  }
+
+  AudioPlayer backgroundLine = AudioPlayer();
+
+  Future<void> backgroundLinePlay(String path) async {
+    try {
+      await backgroundLine.setUrl(path); // 오디오 파일의 URL을 설정
+      await backgroundLine.play(); // 오디오 재생 시작
+    } catch (e) {
+      print("오류 발생: $e");
     }
   }
 
