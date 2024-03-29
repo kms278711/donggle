@@ -200,7 +200,7 @@ async def analyze_object(file: UploadFile = File(...), filename: Optional[str] =
 
             # 표정에 따른 label 값 저장
             expression_label = expression_labels[expression_index]
-
+            print(expression_label)
             if expression_label == filename:
                 return True
             else:
@@ -238,7 +238,7 @@ async def analyze_object(file: UploadFile = File(...), filename: Optional[str] =
         # 라벨 해석
         labels = ["O", "X", "N/A"]
         predicted_label = labels[predicted_class]
-
+        print(predicted_label)
         if predicted_label == filename:
             return True
         else:
