@@ -274,47 +274,47 @@ class _NowordQuizState extends State<NowordQuiz> {
       if (savingResult.length == 5) {
         // Perform any action with the consistent prediction
 
-        // predOne = savingResult.first;
-        // String trimmedPredOne = predOne.trim();
+        predOne = savingResult.first;
+        String trimmedPredOne = predOne.trim();
 
-        setState(() {
-          predOne = savingResult.first.trim();
-        });
-        //
-        // if (trimmedPredOne.isEmpty || trimmedPredOne == "N/A") {
-        //   //do nothing
-        //   setState(() {
-        //     correct = 3;
-        //   });
-        // } else {
-        //   isDetecting = true;
-        //   if (trimmedPredOne == DBResult) {
-        //     // correct
-        //     effectPlaySound("assets/music/answer.mp3", 1);
-        //     setState(() {
-        //       correct = 1;
-        //     });
-        //   } else {
-        //     // incorrect
-        //     setState(() {
-        //       correct = 0;
-        //     });
-        //     effectPlaySound("assets/music/wrong.mp3", 1);
-        //   }
+        // setState(() {
+        //   predOne = savingResult.first.trim();
+        // });
 
-        //   Timer(const Duration(milliseconds: 1000), () {
-        //     if (!context.mounted) return; // Always check mounted status before calling setState
-        //     setState(() {
-        //       correct = 3;
-        //     });
-        //
-        //     if (correct == 1) {
-        //       Navigator.of(context).pop();
-        //       widget.onModalClose?.call();
-        //     }
-        //   });
-        //
-        // }
+        if (trimmedPredOne.isEmpty || trimmedPredOne == "N/A") {
+          //do nothing
+          setState(() {
+            correct = 3;
+          });
+        } else {
+          isDetecting = true;
+          if (trimmedPredOne == DBResult) {
+            // correct
+            effectPlaySound("assets/music/answer.mp3", 1);
+            setState(() {
+              correct = 1;
+            });
+          } else {
+            // incorrect
+            setState(() {
+              correct = 0;
+            });
+            effectPlaySound("assets/music/wrong.mp3", 1);
+          }
+
+          Timer(const Duration(milliseconds: 1000), () {
+            if (!context.mounted) return; // Always check mounted status before calling setState
+            setState(() {
+              correct = 3;
+            });
+
+            if (correct == 1) {
+              Navigator.of(context).pop();
+              widget.onModalClose?.call();
+            }
+          });
+
+        }
         savingResult.clear(); // Reset for next set of predictions
       }
     }
@@ -400,15 +400,16 @@ class _NowordQuizState extends State<NowordQuiz> {
                 icon: const CloseCircle(),
                 onPressed: () {
                   Navigator.of(context).pop();
+                  widget.onModalClose?.call();
                 },
               ),
             ),
-            // Positioned(
-            //   // Add the result widget to your UI
-            //   child: Center(
-            //     child: SizedBox(height: MediaQuery.of(context).size.height, child: resultWidget()),
-            //   ),
-            // ),
+            Positioned(
+              // Add the result widget to your UI
+              child: Center(
+                child: SizedBox(height: MediaQuery.of(context).size.height, child: resultWidget()),
+              ),
+            ),
           ],
         ),
       ),
