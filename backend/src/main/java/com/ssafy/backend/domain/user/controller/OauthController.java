@@ -29,7 +29,7 @@ public class OauthController {
 											   @RequestParam(required = false) String token,
 											   @RequestParam(required = false) String email) {
 		UserInfoDto userInfoDto = null;
-		if(provider.equals("NAVER")) {
+		if(provider.equals("KAKAO")) {
 			userInfoDto = authService.SNSLogin(provider, email);
 		} else {
 			Map<String, Object> userinfo  = oauthInterface.getUserInfo(provider, token);
