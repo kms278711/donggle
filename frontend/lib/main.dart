@@ -25,6 +25,7 @@ import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:frontend/presentation/routes/routes.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/presentation/provider/main_provider.dart';
 
@@ -35,6 +36,11 @@ Future<void> main() async {
   await dotenv.load(fileName: "assets/config/.env");
   final cameras = await availableCameras();
   final firstCamera = cameras.last;
+  String kakaoNativeAppKey = dotenv.env['KAKAO_NATIVE_APP_KEY']!;
+
+  KakaoSdk.init(
+    nativeAppKey: kakaoNativeAppKey,
+  );
 
   // await JustAudioBackground.init(
   //   androidNotificationChannelId: 'com.example.frontend',
@@ -66,16 +72,33 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (_) => UserProvider()),
       ChangeNotifierProvider(create: (_) => QuizProvider()),
       ChangeNotifierProvider(create: (_) => DonggleTalkModel()),
-      ChangeNotifierProvider(create: (context) => BookModel(Provider.of<UserProvider>(context, listen: false))),
-      ChangeNotifierProvider(create: (context) => ReviewModel(Provider.of<UserProvider>(context, listen: false))),
-      ChangeNotifierProvider(create: (context) => ApprovalsModel(Provider.of<UserProvider>(context, listen: false))),
-      ChangeNotifierProvider(create: (context) => CardModel(Provider.of<UserProvider>(context, listen: false))),
-      ChangeNotifierProvider(create: (context) => QuizModel(Provider.of<UserProvider>(context, listen: false))),
-      ChangeNotifierProvider(create: (context) => NickNameUpdateModel(Provider.of<UserProvider>(context, listen: false))),
-      ChangeNotifierProvider(create: (context) => ProfileUpdateModel(Provider.of<UserProvider>(context, listen: false))),
-      ChangeNotifierProvider(create: (context) => RegisterFieldModel(Provider.of<MessageProvider>(context, listen: false))),
+      ChangeNotifierProvider(
+          create: (context) =>
+              BookModel(Provider.of<UserProvider>(context, listen: false))),
+      ChangeNotifierProvider(
+          create: (context) =>
+              ReviewModel(Provider.of<UserProvider>(context, listen: false))),
+      ChangeNotifierProvider(
+          create: (context) => ApprovalsModel(
+              Provider.of<UserProvider>(context, listen: false))),
+      ChangeNotifierProvider(
+          create: (context) =>
+              CardModel(Provider.of<UserProvider>(context, listen: false))),
+      ChangeNotifierProvider(
+          create: (context) =>
+              QuizModel(Provider.of<UserProvider>(context, listen: false))),
+      ChangeNotifierProvider(
+          create: (context) => NickNameUpdateModel(
+              Provider.of<UserProvider>(context, listen: false))),
+      ChangeNotifierProvider(
+          create: (context) => ProfileUpdateModel(
+              Provider.of<UserProvider>(context, listen: false))),
+      ChangeNotifierProvider(
+          create: (context) => RegisterFieldModel(
+              Provider.of<MessageProvider>(context, listen: false))),
       ProxyProvider2<UserProvider, MessageProvider, AuthModel>(
-        update: (_, userProvider, messageProvider, previousAuthModel) => AuthModel(userProvider, messageProvider),
+        update: (_, userProvider, messageProvider, previousAuthModel) =>
+            AuthModel(userProvider, messageProvider),
       ),
     ],
     child: const MyApp(),
@@ -90,11 +113,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
 
     return StyledToast(
       locale: const Locale('ko', 'KR'),
-      textStyle: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmall),
+      textStyle:
+          CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmall),
       backgroundColor: AppColors.success,
       borderRadius: BorderRadius.circular(20.0),
       textPadding: const EdgeInsets.symmetric(horizontal: 17.0, vertical: 10.0),
@@ -131,7 +156,9 @@ class MyHomePage extends StatelessWidget {
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -139,7 +166,8 @@ class _Handler extends WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      player.play(); // Audio player is a custom class with resume and pause static methods
+      player
+          .play(); // Audio player is a custom class with resume and pause static methods
     } else {
       player.pause();
     }

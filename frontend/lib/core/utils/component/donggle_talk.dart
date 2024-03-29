@@ -71,6 +71,11 @@ class _donggleTalkState extends State<donggleTalk>
       duration: const Duration(milliseconds: 1900),
       vsync: this,
     );
+    
+    // 퀴즈 다풀었을 때 동글이가 바로 말하도록
+    if (widget.situation == 'QUIZRESULT') {
+      _playInitialDonggleTalk(); 
+    }
 
     // 아까 추가한 스프링 커브
     const springCurve = SpringCurve();
@@ -94,6 +99,17 @@ class _donggleTalkState extends State<donggleTalk>
     } catch (e) {
       print("오류 발생: $e");
     }
+  }
+
+  Future<void> _playInitialDonggleTalk() async {
+    setTouchedDonggle(true);
+    // 여기서 widget.situation에 따라 적절한 오디오 파일을 로드하고 재생합니다.
+    // 페이지가 로드될 때마다 실행될 로직
+    await donggleTalkModel.getDonggleTalk(widget.situation);
+    setState(() {
+      donggleTalk = donggleTalkModel.dongglesTalk["content"];
+    });
+    await sayDonggle(Constant.s3BaseUrl + donggleTalkModel.dongglesTalk["dgSoundPath"]);
   }
 
   @override

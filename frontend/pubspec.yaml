@@ -39,6 +39,7 @@ dependencies:
   audioplayers: ^6.0.0
   widgets_to_image: ^0.0.2
   tflite_flutter: ^0.10.4
+  kakao_flutter_sdk_user: ^1.9.1+2
 
 dev_dependencies:
   flutter_test:
