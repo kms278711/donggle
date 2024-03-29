@@ -18,11 +18,11 @@ import java.util.Map;
 @Service
 public class OauthServieImpl implements OauthInterface {
 	@Override
-	public Map<String, Object> getUserInfo(String publisher, String token) {
+	public Map<String, Object> getUserInfo(String provider, String token) {
 		String apiURL = "";
-		if(publisher.equals("NAVER")) {
+		if(provider.equals("NAVER")) {
 			apiURL = "https://openapi.naver.com/v1/nid/me";
-		} else if(publisher.equals("GOOGLE")) {
+		} else if(provider.equals("GOOGLE")) {
 			apiURL = "https://oauth2.googleapis.com/tokeninfo?id_token=" + token;
 		}
 

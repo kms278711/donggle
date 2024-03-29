@@ -7,7 +7,7 @@ import com.ssafy.backend.global.jwt.dto.UserInfoDto;
 public interface AuthService {
 
 	void signUp(SignupRequestDto signupRequestDto);
-	UserInfoDto SNSLogin(String publisher, String email);
+	UserInfoDto SNSLogin(String provider, String email);
 
 	UserInfoDto login(String email, String password);
 

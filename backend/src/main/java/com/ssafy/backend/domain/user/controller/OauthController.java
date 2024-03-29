@@ -25,15 +25,15 @@ public class OauthController {
 
 	@RequestMapping(value = "/sns-login", method = {RequestMethod.GET,
 			RequestMethod.POST}, produces = "application/json")
-	public ResponseEntity<TokenDto> oauthLogin(@RequestParam String publisher,
+	public ResponseEntity<TokenDto> oauthLogin(@RequestParam String provider,
 											   @RequestParam(required = false) String token,
 											   @RequestParam(required = false) String email) {
 		UserInfoDto userInfoDto = null;
-		if(publisher.equals("NAVER")) {
-			userInfoDto = authService.SNSLogin(publisher, email);
+		if(provider.equals("NAVER")) {
+			userInfoDto = authService.SNSLogin(provider, email);
 		} else {
-			Map<String, Object> userinfo  = oauthInterface.getUserInfo(publisher, token);
-			userInfoDto = authService.SNSLogin(publisher, (String) userinfo.get("email"));
+			Map<String, Object> userinfo  = oauthInterface.getUserInfo(provider, token);
+			userInfoDto = authService.SNSLogin(provider, (String) userinfo.get("email"));
 		}
 		TokenDto tokenDto = jwtService.issueToken(userInfoDto);
 		return ResponseEntity.ok(tokenDto);

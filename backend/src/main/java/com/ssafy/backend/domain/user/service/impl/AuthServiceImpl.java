@@ -51,11 +51,11 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	@Transactional
-	public UserInfoDto SNSLogin(String publisher, String SnsEmail) {
+	public UserInfoDto SNSLogin(String provider, String SnsEmail) {
 		String email = "";
-		if(publisher.equals("NAVER")) {
+		if(provider.equals("NAVER")) {
 			email += "NAVER_";
-		} else if(publisher.equals("GOOGLE")) {
+		} else if(provider.equals("GOOGLE")) {
 			email += "GOOGLE_";
 		}
 		email += SnsEmail;
@@ -68,7 +68,7 @@ public class AuthServiceImpl implements AuthService {
 		} else {
 			User user = User.builder()
 					.email(email)
-					.provider(User.Provider.valueOf(publisher))
+					.provider(User.Provider.valueOf(provider))
 					.build();
 			InitialSetting(user);
 			userRepository.save(user);
