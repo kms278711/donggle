@@ -65,7 +65,7 @@ class _BookDetailState extends State<BookDetail> {
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle(
-      style: CustomFontStyle.titleSmall,
+      style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleSmall),
       child: Stack(
         children: [
           Column(
@@ -168,7 +168,7 @@ class _BookDetailState extends State<BookDetail> {
                             width: MediaQuery.of(context).size.width * 0.185,
                             child: Text(
                               education["wordName"],
-                              style: CustomFontStyle.textSmall,
+                              style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmall),
                               textAlign: TextAlign.center,
                             ),
                           ),

@@ -35,7 +35,6 @@ class _NowordQuizState extends State<NowordQuiz> {
   double confidence = 0;
   double index = 0;
   bool modelLoaded = false;
-  late CameraDescription camera;
   late CameraController cameraController;
   bool isDetecting = false;
   late BookModel bookModel;
@@ -194,12 +193,14 @@ class _NowordQuizState extends State<NowordQuiz> {
     effectPlaySound("assets/music/question_start.mp3", 1);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      camera = Provider.of<CameraDescription>(context, listen: false);
-      cameraController = CameraController(camera, ResolutionPreset.medium);
-      bookModel = Provider.of<BookModel>(context, listen: false);
-      education = bookModel.nowEducation;
+      final cameras = await availableCameras();
+      final firstCamera = cameras.last;
+      cameraController = CameraController(firstCamera, ResolutionPreset.medium);
+
 
       if(mounted) {
+        bookModel = Provider.of<BookModel>(context, listen: false);
+        education = bookModel.nowEducation;
         loadTfliteModel().then((_) {
           if (mounted) {
             setState(() {
@@ -352,7 +353,7 @@ class _NowordQuizState extends State<NowordQuiz> {
                       Positioned(
                           top: MediaQuery.of(context).size.height * 0.15,
                           left: MediaQuery.of(context).size.width * 0.05,
-                          width: MediaQuery.of(context).size.width * 0.3,
+                          width: MediaQuery.of(context).size.width * 0.35,
                           height: MediaQuery.of(context).size.width * 0.4,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,

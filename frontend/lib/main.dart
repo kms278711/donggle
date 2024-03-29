@@ -34,8 +34,8 @@ late AudioPlayer player;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: "assets/config/.env");
-  final cameras = await availableCameras();
-  final firstCamera = cameras.last;
+  // final cameras = await availableCameras();
+  // final firstCamera = cameras.last;
   String kakaoNativeAppKey = dotenv.env['KAKAO_NATIVE_APP_KEY']!;
 
   KakaoSdk.init(
@@ -66,7 +66,7 @@ Future<void> main() async {
   HttpOverrides.global = MyHttpOverrides();
   runApp(MultiProvider(
     providers: [
-      Provider<CameraDescription>.value(value: firstCamera),
+      // Provider<CameraDescription>.value(value: firstCamera),
       ChangeNotifierProvider(create: (_) => MainProvider()),
       ChangeNotifierProvider(create: (_) => MessageProvider()),
       ChangeNotifierProvider(create: (_) => UserProvider()),
