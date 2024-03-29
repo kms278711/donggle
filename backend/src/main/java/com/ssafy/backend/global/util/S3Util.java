@@ -56,7 +56,7 @@ public class S3Util {
 		} else if (fileName.contains("gif")) {
 			extension = "image/gif";
 		} else {
-			extension = file.getContentType();
+			throw new FileException(ExceptionType.NOT_IMAGE_FILE);
 		}
 		objectMetadata.setContentType(extension);
 		objectMetadata.setContentLength(file.getSize());
