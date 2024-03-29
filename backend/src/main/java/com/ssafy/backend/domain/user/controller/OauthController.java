@@ -8,8 +8,8 @@ import com.ssafy.backend.global.jwt.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
@@ -23,8 +23,8 @@ public class OauthController {
 	private final JwtService jwtService;
 	private final OauthInterface oauthInterface;
 
-	@RequestMapping(value = "/sns-login", method = {RequestMethod.GET,
-			RequestMethod.POST}, produces = "application/json")
+
+	@PostMapping(value = "/sns-login")
 	public ResponseEntity<TokenDto> oauthLogin(@RequestParam String provider,
 											   @RequestParam(required = false) String token,
 											   @RequestParam(required = false) String email) {
@@ -38,5 +38,4 @@ public class OauthController {
 		TokenDto tokenDto = jwtService.issueToken(userInfoDto);
 		return ResponseEntity.ok(tokenDto);
 	}
-
 }
