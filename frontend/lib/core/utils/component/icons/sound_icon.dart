@@ -2,7 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/utils/component/icons/sound_off_icon.dart';
 import 'package:frontend/core/utils/component/icons/sound_on_icon.dart';
+import 'package:frontend/presentation/provider/main_provider.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:provider/provider.dart';
 
 class SoundIcon extends StatefulWidget {
   final AudioPlayer player;
@@ -15,7 +17,7 @@ class SoundIcon extends StatefulWidget {
 
 class _SoundIconState extends State<SoundIcon> {
 
-  bool isSoundOn = true;
+  late MainProvider mainProvider = Provider.of<MainProvider>(context, listen: false);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,8 @@ class _SoundIconState extends State<SoundIcon> {
         widget.player.playing ? widget.player.pause() : widget.player.play();
         setState(() {
           // Toggle the sound state
-          isSoundOn = !widget.player.playing;
+          mainProvider.soundToggle();
+          // isSoundOn = !widget.player.playing;
         });
       },
       child: widget.player.playing ? const SoundOnIcon() : const SoundOffIcon(),

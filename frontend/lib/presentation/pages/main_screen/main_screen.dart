@@ -18,6 +18,7 @@ import 'package:frontend/presentation/pages/home/home_page.dart';
 import 'package:frontend/presentation/pages/modal/stop_quiz_modal.dart';
 import 'package:frontend/presentation/pages/quiz/book_quiz_page.dart';
 import 'package:frontend/presentation/pages/quiz/quiz_page.dart';
+import 'package:frontend/presentation/provider/main_provider.dart';
 import 'package:frontend/presentation/provider/quiz_provider.dart';
 import 'package:indexed/indexed.dart';
 import 'package:provider/provider.dart';
@@ -41,12 +42,16 @@ class _MainScreenState extends State<MainScreen> {
   bool _isLoading = true; // Initial state is loading
   late QuizProvider quizProvider; // 퀴즈 저장했던거 초기화 하기 위해서 부름
   late QuizModel quizModel;
+  late MainProvider mainProvider =
+      Provider.of<MainProvider>(context, listen: false);
 
   @override
   void initState() {
     super.initState();
+    if (mainProvider.isSoundOn == false) {
+      player.play();
+    }
 
-    player.play();
     _updateSelectedIndex();
     quizProvider = Provider.of<QuizProvider>(context, listen: false);
     quizModel = Provider.of<QuizModel>(context, listen: false);
@@ -153,11 +158,13 @@ class _MainScreenState extends State<MainScreen> {
                               : _selectedIndex == 2
                                   ? () {
                                       _onButtonPressed(0);
-                                      quizProvider.clearAnswers(quizModel.quizzes);
+                                      quizProvider
+                                          .clearAnswers(quizModel.quizzes);
                                     }()
                                   : () {
                                       _onButtonPressed(0);
-                                      quizProvider.clearAnswers(quizModel.bookQuizzes);
+                                      quizProvider
+                                          .clearAnswers(quizModel.bookQuizzes);
                                     }();
                       // _selectedIndex == 0
                       //     ? _onButtonPressed(1)
@@ -211,7 +218,8 @@ class _MainScreenState extends State<MainScreen> {
                                   title: "퀴즈",
                                   onConfirm: () {
                                     _onButtonPressed(1);
-                                    quizProvider.clearAnswers(quizModel.quizzes);
+                                    quizProvider
+                                        .clearAnswers(quizModel.quizzes);
                                     showToast('종료되었습니다.');
                                   },
                                 );
@@ -242,7 +250,8 @@ class _MainScreenState extends State<MainScreen> {
                                   title: "퀴즈",
                                   onConfirm: () {
                                     _onButtonPressed(0);
-                                    quizProvider.clearAnswers(quizModel.quizzes);
+                                    quizProvider
+                                        .clearAnswers(quizModel.quizzes);
                                     showToast('종료되었습니다.');
                                   },
                                 );

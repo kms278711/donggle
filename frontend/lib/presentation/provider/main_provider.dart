@@ -4,10 +4,13 @@ class MainProvider with ChangeNotifier {
   late bool _isMyPageUpdateSelected = false;
   late bool _isDetailPageSelected = false;
   late bool _isPurchaseHistorySelected = false;
+  late bool _isSoundOn = false;
+
 
   bool get isMyPageUpdateSelected => _isMyPageUpdateSelected;
   bool get isDetailPageSeleted => _isDetailPageSelected;
   bool get isPurchaseHistorySelected => _isPurchaseHistorySelected;
+  bool get isSoundOn => _isSoundOn;
 
   void myPageUpdateToggle() {
     _isMyPageUpdateSelected = !_isMyPageUpdateSelected; // 값을 반전시킴
@@ -36,6 +39,11 @@ class MainProvider with ChangeNotifier {
 
   void resetPurchaseHistory(){
     _isPurchaseHistorySelected = false;
+    notifyListeners();
+  }
+
+  void soundToggle() {
+    _isSoundOn = !_isSoundOn;
     notifyListeners();
   }
 
