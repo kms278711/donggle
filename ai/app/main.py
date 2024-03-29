@@ -124,7 +124,7 @@ async def analyze_object(file: UploadFile = File(...), filename: Optional[str] =
         contents = await file.read()
 
         # S3에 업로드
-        s3.upload_fileobj(BytesIO(contents), "donggle", f"{filename}.png")
+        # s3.upload_fileobj(BytesIO(contents), "donggle", f"{filename}.png")
 
         # 클래스 이름을 읽음
         with open("./app/class_names.txt", "r") as ins:
