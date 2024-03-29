@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
@@ -7,31 +8,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
+import 'package:frontend/core/utils/component/effect_sound.dart';
 import 'package:frontend/core/utils/component/icons/close_circle.dart';
+import 'package:frontend/domain/model/model_books.dart';
+import 'package:frontend/main.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:image/image.dart' as imglib;
 
-class TeachableMachineTest2 extends StatefulWidget {
-  final CameraDescription camera;
+class NowordQuiz extends StatefulWidget {
+  final VoidCallback? onModalClose;
 
-  const TeachableMachineTest2(this.camera, {super.key});
+  const NowordQuiz({this.onModalClose, super.key});
 
   @override
-  State<TeachableMachineTest2> createState() => _TeachableMachineTest2State();
+  State<NowordQuiz> createState() => _NowordQuizState();
 }
 
-class _TeachableMachineTest2State extends State<TeachableMachineTest2> {
+class _NowordQuizState extends State<NowordQuiz> {
   late Interpreter interpreter;
   late List<String> labels;
   String predOne = '';
   double confidence = 0;
   double index = 0;
   bool modelLoaded = false;
+  late CameraDescription camera;
   late CameraController cameraController;
   bool isDetecting = false;
+  late BookModel bookModel;
+  Education education = Education(educationId: 0, gubun: "", wordName: "", imagePath: "", bookSentenceId: 0);
+  bool _isLoading = true;
+  String DBResult = "";
+  String educationWord = "";
+  int correct = 3;
 
   Future<bool> saveImageToDevice(XFile imageFile) async {
     try {
@@ -151,7 +163,6 @@ class _TeachableMachineTest2State extends State<TeachableMachineTest2> {
     // Resize the cropped image to the desired size
     imglib.Image resizedImage = imglib.copyResize(croppedImage, width: 224, height: 224);
 
-
     List<dynamic> normalizedImage = normalizeImagePixels(resizedImage);
 
     return normalizedImage;
@@ -165,40 +176,66 @@ class _TeachableMachineTest2State extends State<TeachableMachineTest2> {
     return output;
   }
 
+  Widget resultWidget() {
+    if (correct == 3) {
+      return Container();
+    } else if (correct == 1) {
+      return Image.asset("assets/images/correct.png");
+    } else {
+      return Image.asset("assets/images/incorrect.png");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    loadTfliteModel().then((_) {
-      if (mounted) {
-        setState(() {
-          modelLoaded = true;
+    player.pause();
+
+    effectPlaySound("assets/music/question_start.mp3", 1);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      camera = Provider.of<CameraDescription>(context, listen: false);
+      cameraController = CameraController(camera, ResolutionPreset.medium);
+      bookModel = Provider.of<BookModel>(context, listen: false);
+      education = bookModel.nowEducation;
+
+      if(mounted) {
+        loadTfliteModel().then((_) {
+          if (mounted) {
+            setState(() {
+              modelLoaded = true;
+              print("------------- model loaded");
+            });
+          }
+        });
+
+
+        cameraController.initialize().then((value) {
+          setState(() {
+            DBResult = bookModel.nowEducation.imagePath;
+            educationWord = bookModel.nowEducation.wordName;
+
+            _isLoading = false;
+            print("------------- others loaded");
+          });
+
+          int frameCounter = 0;
+          int frameProcessingInterval = 8; // Adjust based on performance
+
+          cameraController.startImageStream((CameraImage image) async {
+            frameCounter++;
+            if (frameCounter % frameProcessingInterval == 0 && !isDetecting) {
+              isDetecting = true;
+              try {
+                final value = await runInference(image);
+                setRecognitions(value);
+              } finally {
+                isDetecting = false;
+              }
+            }
+          });
         });
       }
-    });
-
-    cameraController = CameraController(widget.camera, ResolutionPreset.medium);
-    cameraController.initialize().then((value) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-
-      int frameCounter = 0;
-      int frameProcessingInterval = 5; // Adjust based on performance
-
-      cameraController.startImageStream((CameraImage image) async {
-        frameCounter++;
-        if (frameCounter % frameProcessingInterval == 0 && !isDetecting) {
-          isDetecting = true;
-          try {
-            final value = await runInference(image);
-            setRecognitions(value);
-          } finally {
-            isDetecting = false;
-          }
-        }
-      });
-
     });
   }
 
@@ -236,17 +273,57 @@ class _TeachableMachineTest2State extends State<TeachableMachineTest2> {
       // Act on accumulated results if conditions are met
       if (savingResult.length == 5) {
         // Perform any action with the consistent prediction
-        setState(() {
-          predOne = savingResult.first; // Assuming you want to show the consistently predicted label
-        });
 
+        // predOne = savingResult.first;
+        // String trimmedPredOne = predOne.trim();
+
+        setState(() {
+          predOne = savingResult.first.trim();
+        });
+        //
+        // if (trimmedPredOne.isEmpty || trimmedPredOne == "N/A") {
+        //   //do nothing
+        //   setState(() {
+        //     correct = 3;
+        //   });
+        // } else {
+        //   isDetecting = true;
+        //   if (trimmedPredOne == DBResult) {
+        //     // correct
+        //     effectPlaySound("assets/music/answer.mp3", 1);
+        //     setState(() {
+        //       correct = 1;
+        //     });
+        //   } else {
+        //     // incorrect
+        //     setState(() {
+        //       correct = 0;
+        //     });
+        //     effectPlaySound("assets/music/wrong.mp3", 1);
+        //   }
+
+        //   Timer(const Duration(milliseconds: 1000), () {
+        //     if (!context.mounted) return; // Always check mounted status before calling setState
+        //     setState(() {
+        //       correct = 3;
+        //     });
+        //
+        //     if (correct == 1) {
+        //       Navigator.of(context).pop();
+        //       widget.onModalClose?.call();
+        //     }
+        //   });
+        //
+        // }
         savingResult.clear(); // Reset for next set of predictions
       }
     }
   }
+
   @override
   void dispose() {
     cameraController.dispose();
+
     // interpreter.close();
     super.dispose();
   }
@@ -269,9 +346,20 @@ class _TeachableMachineTest2State extends State<TeachableMachineTest2> {
         ),
         child: Stack(
           children: [
-            modelLoaded
+            modelLoaded && !_isLoading
                 ? Stack(
                     children: [
+                      Positioned(
+                          top: MediaQuery.of(context).size.height * 0.15,
+                          left: MediaQuery.of(context).size.width * 0.05,
+                          width: MediaQuery.of(context).size.width * 0.3,
+                          height: MediaQuery.of(context).size.width * 0.4,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(educationWord),
+                            ],
+                          )),
                       Positioned(
                         top: MediaQuery.of(context).size.height * 0.15,
                         right: MediaQuery.of(context).size.width * 0.05,
@@ -314,7 +402,13 @@ class _TeachableMachineTest2State extends State<TeachableMachineTest2> {
                   Navigator.of(context).pop();
                 },
               ),
-            )
+            ),
+            // Positioned(
+            //   // Add the result widget to your UI
+            //   child: Center(
+            //     child: SizedBox(height: MediaQuery.of(context).size.height, child: resultWidget()),
+            //   ),
+            // ),
           ],
         ),
       ),

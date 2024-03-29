@@ -367,7 +367,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
     payload.iosApplicationId = iosApplicationId; // ios application id
 
     payload.pg = 'kcp';
-    payload.methods = ['card', 'phone', 'vbank', 'bank', 'kakaopay', 'payco', 'naverpay'];
+    payload.methods = ['card', 'phone', 'kakaopay', 'payco', 'naverpay'];
 
     payload.orderId = DateTime.now().millisecondsSinceEpoch.toString(); //주문번호, 개발사에서 고유값으로 지정해야함
 

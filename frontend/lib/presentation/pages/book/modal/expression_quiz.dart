@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_styled_toast/flutter_styled_toast.dart';
-import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/add_post_position_text.dart';
 import 'package:frontend/core/utils/camera_image_processing.dart';
@@ -12,7 +10,7 @@ import 'package:frontend/core/utils/component/icons/close_circle.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/data/data_source/remote/emotion.api.dart';
 import 'package:frontend/domain/model/model_books.dart';
-import 'package:frontend/presentation/provider/user_provider.dart';
+import 'package:frontend/main.dart';
 import 'package:provider/provider.dart';
 
 class ExpressionQuiz extends StatefulWidget {
@@ -37,6 +35,7 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
   @override
   void initState() {
     super.initState();
+    player.pause();
 
     effectPlaySound("assets/music/question_start.mp3", 1);
 
