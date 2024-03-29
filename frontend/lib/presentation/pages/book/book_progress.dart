@@ -91,7 +91,10 @@ class _BookProgressState extends State<BookProgress> {
 
   void goNext() {
     if (educationId == nowPage.bookPageSentences[sentenceId].bookPageSentenceId) {
-      backgroundLine.stop();
+      if (_isSkiped == true) {
+        backgroundLine.stop();
+      }
+
       if (nowPage.education?.gubun == "NOWORD") {
         /// OX문제
         // print("------------ noword");

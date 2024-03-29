@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/add_post_position_text.dart';
 import 'package:frontend/core/utils/camera_image_processing.dart';
@@ -11,6 +15,7 @@ import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/data/data_source/remote/emotion.api.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/main.dart';
+import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class ExpressionQuiz extends StatefulWidget {
@@ -24,13 +29,15 @@ class ExpressionQuiz extends StatefulWidget {
 
 class _ExpressionQuizState extends State<ExpressionQuiz> {
   late BookModel bookModel;
+  late UserProvider userProvider;
   late CameraController cameraController;
-  late CameraDescription camera;
 
   Education education = Education(educationId: 0, gubun: "", wordName: "", imagePath: "", bookSentenceId: 0);
   bool _isLoading = true;
   String url = "";
   String educationWord = "";
+  String apiResult = "";
+  String accessToken = "";
 
   @override
   void initState() {
@@ -40,9 +47,16 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
     effectPlaySound("assets/music/question_start.mp3", 1);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final cameras = await availableCameras();
+      final firstCamera = cameras.last;
+
+      if (!context.mounted) return;
       bookModel = Provider.of<BookModel>(context, listen: false);
-      camera = Provider.of<CameraDescription>(context, listen: false);
-      cameraController = CameraController(camera, ResolutionPreset.medium);
+      userProvider = Provider.of<UserProvider>(context, listen: false);
+      accessToken = userProvider.getAccessToken();
+
+
+      cameraController = CameraController(firstCamera, ResolutionPreset.medium);
       education = bookModel.nowEducation;
 
       await cameraController.initialize();
@@ -78,6 +92,16 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
   @override
   Widget build(BuildContext context) {
     // Build method now only contains UI code
+    Widget resultWidget;
+    if (apiResult == "true") {
+      resultWidget = Image.asset("assets/images/correct.png");
+    } else if (apiResult == "false") {
+      resultWidget = Image.asset("assets/images/incorrect.png");
+    } else {
+      // Placeholder or empty container when there's no result or an error
+      resultWidget = Container();
+    }
+
     return DefaultTextStyle(
       style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleMedium),
       child: Container(
@@ -160,11 +184,41 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
                         onPressed: () async {
                           final image = await cameraController.takePicture();
                           String fileName = extractFileNameWithoutExtension(education.imagePath);
-                          // CameraImageProcessing.saveImageData(image);
+                          var img = await CameraImageProcessing.getImageData(image);
                           EmotionApi emotionApi =
-                              EmotionApi(file: await CameraImageProcessing.getImageData(image), filename: fileName);
+                              EmotionApi(file: img, filename: fileName);
+                          // await CameraImageProcessing.saveImageData(img);
 
                           String result = await emotionApi.emotionAI();
+
+                          if (!context.mounted) return;
+
+                          setState(() {
+                            apiResult = result; // Update state with the API call result
+                          });
+
+                          if (result != "true" && result != "false") {
+                            showToast(result, backgroundColor: AppColors.error);
+                          }
+
+                          if(result == "true"){
+                            effectPlaySound("assets/music/answer.mp3", 1);
+                            await bookModel.saveEducationImage(accessToken, education.educationId, img);
+                          }else{
+                            effectPlaySound("assets/music/wrong.mp3", 1);
+                          }
+
+                          Timer(const Duration(milliseconds: 1000), () {
+                            if (!context.mounted) return; // Always check mounted status before calling setState
+                            setState(() {
+                              apiResult = ""; // Reset apiResult to hide the sign
+                            });
+
+                            if (result == "true") {
+                              Navigator.of(context).pop();
+                              widget.onModalClose?.call();
+                            }
+                          });
                         },
                       )),
                   Positioned(
@@ -176,6 +230,12 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
                         Navigator.of(context).pop();
                         widget.onModalClose?.call();
                       },
+                    ),
+                  ),
+                  Positioned(
+                    // Add the result widget to your UI
+                    child: Center(
+                      child: SizedBox(height: MediaQuery.of(context).size.height, child: resultWidget),
                     ),
                   ),
                 ],
