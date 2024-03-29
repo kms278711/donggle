@@ -17,7 +17,7 @@ COPY ./app /code/app
 
 RUN apt-get update
 RUN apt-get -y install libgl1-mesa-glx
-
+RUN pip install fastapi uvicorn
 # Set the command to run the uvicorn server.
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "3000"]
 
