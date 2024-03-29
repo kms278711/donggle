@@ -59,7 +59,13 @@ class _BookProgressState extends State<BookProgress> {
     bookImagePath: "",
     page: 0,
     content: "",
-    bookPageSentences: [BookPageSentences(bookPageSentenceId: 0, sequence: 0, sentence: "", sentenceSoundPath: "")],
+    bookPageSentences: [
+      BookPageSentences(
+          bookPageSentenceId: 0,
+          sequence: 0,
+          sentence: "",
+          sentenceSoundPath: "")
+    ],
   );
   String url = "";
 
@@ -84,25 +90,24 @@ class _BookProgressState extends State<BookProgress> {
         if (sentenceId == nowPage.bookPageSentences.length - 1) {
           _isLastSentence = true;
         }
-        backgroundLinePlay(Constant.s3BaseUrl + nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
+        backgroundLinePlay(Constant.s3BaseUrl +
+            nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
       });
     }
   }
 
   void goNext() {
-    if (educationId == nowPage.bookPageSentences[sentenceId].bookPageSentenceId) {
+    if (educationId ==
+        nowPage.bookPageSentences[sentenceId].bookPageSentenceId) {
       backgroundLine.stop();
       if (nowPage.education?.gubun == "NOWORD") {
         /// OX문제
         // print("------------ noword");
-        DialogUtils.showCustomDialog(
-          context,
-          contentWidget: NowordQuiz(
-            onModalClose: () {
-              finishSentence();
-            },
-          ),
-        );
+        DialogUtils.showCustomDialog(context, contentWidget: NowordQuiz(
+          onModalClose: () {
+            finishSentence();
+          },
+        ));
       } else if (nowPage.education?.category == "PICTURE") {
         /// 그림문제
         // print("------------ picture");
@@ -150,7 +155,8 @@ class _BookProgressState extends State<BookProgress> {
         if (sentenceId == 0) {
           _isFirstSentence = true;
         }
-        backgroundLinePlay(Constant.s3BaseUrl + nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
+        backgroundLinePlay(Constant.s3BaseUrl +
+            nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
         if (_isLastSentence) _isLastSentence = false;
       });
     }
@@ -167,7 +173,8 @@ class _BookProgressState extends State<BookProgress> {
 
       await _audioPlayerSubscription?.cancel();
 
-      _audioPlayerSubscription = backgroundLine.playerStateStream.listen((state) {
+      _audioPlayerSubscription =
+          backgroundLine.playerStateStream.listen((state) {
         if (state.processingState == ProcessingState.completed) {
           if (_isSkiped == false) {
             goNext();
@@ -224,7 +231,8 @@ class _BookProgressState extends State<BookProgress> {
             _isLastSentence = true;
           }
           _isLoading = false; // Update loading state when done
-          backgroundLinePlay(Constant.s3BaseUrl + nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
+          backgroundLinePlay(Constant.s3BaseUrl +
+              nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
         });
       }
     });
@@ -263,17 +271,22 @@ class _BookProgressState extends State<BookProgress> {
                         children: [
                           Container(
                               constraints: BoxConstraints(
-                                maxWidth: MediaQuery.of(context).size.width * 0.95, // Set your desired max width here
+                                maxWidth: MediaQuery.of(context).size.width *
+                                    0.95, // Set your desired max width here
                               ),
-                              padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.02),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      MediaQuery.of(context).size.width * 0.02),
                               decoration: BoxDecoration(
-                                color: const Color.fromRGBO(217, 217, 217, 0.85),
+                                color:
+                                    const Color.fromRGBO(217, 217, 217, 0.85),
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               child: Text(
                                 nowPage.bookPageSentences[sentenceId].sentence,
                                 textAlign: TextAlign.center,
-                                style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMediumLarge2),
+                                style: CustomFontStyle.getTextStyle(
+                                    context, CustomFontStyle.textMediumLarge2),
                               ))
                           // : GreenButton('시작하기', onPressed: () {
                           //     backgroundLinePlay(Constant.s3BaseUrl +
