@@ -77,6 +77,8 @@ class _BookProgressState extends State<BookProgress> {
             setState(() {});
           }));
     } else if (_isLastSentence) {
+      print('실행!!');
+      cancelAudioPlayerSubscription();
       globalRouter.pushReplacement('/bookProgress/$bookId/${pageId + 1}/0');
     } else {
       setState(() {
@@ -92,6 +94,7 @@ class _BookProgressState extends State<BookProgress> {
   void goNext() {
     if (educationId == nowPage.bookPageSentences[sentenceId].bookPageSentenceId) {
       if (_isSkiped == true) {
+        // print('stop');
         backgroundLine.stop();
       }
 
@@ -128,6 +131,8 @@ class _BookProgressState extends State<BookProgress> {
         finishSentence();
       }
     } else {
+      // print('here!!');
+      // print(nowPage.education?.category);
       finishSentence();
     }
   }
@@ -173,8 +178,10 @@ class _BookProgressState extends State<BookProgress> {
       _audioPlayerSubscription = backgroundLine.playerStateStream.listen((state) {
         if (state.processingState == ProcessingState.completed) {
           if (_isSkiped == false) {
+            // print("_isSkiped false");
             goNext();
           } else {
+            // print("_isSkiped true");
             _isSkiped = false;
           }
         }
@@ -184,8 +191,13 @@ class _BookProgressState extends State<BookProgress> {
     }
   }
 
+  void cancelAudioPlayerSubscription() {
+    _audioPlayerSubscription?.cancel();
+  }
+
   @override
   void initState() {
+    print('initstate');
     super.initState();
     player.pause();
     bookId = int.parse(widget.bookId);
@@ -235,6 +247,7 @@ class _BookProgressState extends State<BookProgress> {
 
   @override
   void dispose() {
+    cancelAudioPlayerSubscription();
     backgroundLine.stop();
     super.dispose();
   }

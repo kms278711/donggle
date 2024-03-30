@@ -82,7 +82,7 @@ class BookModel extends ChangeNotifier {
     final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
     var response = await http.get(url, headers: headers);
 
-    print(json.decode(utf8.decode(response.bodyBytes)));
+    // print(json.decode(utf8.decode(response.bodyBytes)));
 
     if (response.statusCode == 200) {
       nowBook = Book.fromJson(json.decode(utf8.decode(response.bodyBytes)));
@@ -103,7 +103,7 @@ class BookModel extends ChangeNotifier {
     final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
     var response = await http.get(url, headers: headers);
 
-    print(utf8.decode(response.bodyBytes));
+    // print(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
       BookDetail = json.decode(utf8.decode(response.bodyBytes));
@@ -147,7 +147,7 @@ class BookModel extends ChangeNotifier {
     final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
     var response = await http.post(url, headers: headers);
 
-    print(utf8.decode(response.bodyBytes));
+    // print(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
       return "Success";
@@ -171,7 +171,7 @@ class BookModel extends ChangeNotifier {
     var streamedResponse = await request.send();
     var response = await http.Response.fromStream(streamedResponse);
 
-    print(utf8.decode(response.bodyBytes));
+    // print(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
       return "Success";
@@ -191,7 +191,7 @@ class BookModel extends ChangeNotifier {
     final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
     var response = await http.post(url, headers: headers);
 
-    print(utf8.decode(response.bodyBytes));
+    // print(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
       return "Success";
