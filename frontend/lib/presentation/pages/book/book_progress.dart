@@ -77,6 +77,8 @@ class _BookProgressState extends State<BookProgress> {
             setState(() {});
           }));
     } else if (_isLastSentence) {
+      print('실행!!');
+      cancelAudioPlayerSubscription();
       globalRouter.pushReplacement('/bookProgress/$bookId/${pageId + 1}/0');
     } else {
       setState(() {
@@ -91,7 +93,15 @@ class _BookProgressState extends State<BookProgress> {
 
   void goNext() {
     if (educationId == nowPage.bookPageSentences[sentenceId].bookPageSentenceId) {
+<<<<<<< PATCH SET (763017 �fix: 동화책 진행 시 화면 렌더링 두번 되는거 수정 완료)
+      if (_isSkiped == true) {
+        // print('stop');
+        backgroundLine.stop();
+      }
+
+=======
       backgroundLine.stop();
+>>>>>>> BASE      (2b567a ✨feat: #S10P21C101-132 카카오 소셜 로그인 구현중)
       if (nowPage.education?.gubun == "NOWORD") {
         /// OX문제
         // print("------------ noword");
@@ -125,6 +135,8 @@ class _BookProgressState extends State<BookProgress> {
         finishSentence();
       }
     } else {
+      // print('here!!');
+      // print(nowPage.education?.category);
       finishSentence();
     }
   }
@@ -170,8 +182,10 @@ class _BookProgressState extends State<BookProgress> {
       _audioPlayerSubscription = backgroundLine.playerStateStream.listen((state) {
         if (state.processingState == ProcessingState.completed) {
           if (_isSkiped == false) {
+            // print("_isSkiped false");
             goNext();
           } else {
+            // print("_isSkiped true");
             _isSkiped = false;
           }
         }
@@ -181,8 +195,13 @@ class _BookProgressState extends State<BookProgress> {
     }
   }
 
+  void cancelAudioPlayerSubscription() {
+    _audioPlayerSubscription?.cancel();
+  }
+
   @override
   void initState() {
+    print('initstate');
     super.initState();
     player.pause();
     bookId = int.parse(widget.bookId);
@@ -232,6 +251,7 @@ class _BookProgressState extends State<BookProgress> {
 
   @override
   void dispose() {
+    cancelAudioPlayerSubscription();
     backgroundLine.stop();
     super.dispose();
   }
