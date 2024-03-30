@@ -43,6 +43,7 @@ class _NowordQuizState extends State<NowordQuiz> {
   String DBResult = "";
   String educationWord = "";
   int correct = 3;
+  bool _isTimerDone = true;
 
   Future<bool> saveImageToDevice(XFile imageFile) async {
     try {
@@ -121,7 +122,7 @@ class _NowordQuizState extends State<NowordQuiz> {
 
       return image;
     } catch (e) {
-      print(">>>>>>>>>>>> ERROR:" + e.toString());
+      debugPrint(">>>>>>>>>>>> ERROR:$e");
     }
     return null;
   }
@@ -197,19 +198,16 @@ class _NowordQuizState extends State<NowordQuiz> {
       final firstCamera = cameras.last;
       cameraController = CameraController(firstCamera, ResolutionPreset.medium);
 
-
-      if(mounted) {
+      if (mounted) {
         bookModel = Provider.of<BookModel>(context, listen: false);
         education = bookModel.nowEducation;
         loadTfliteModel().then((_) {
           if (mounted) {
             setState(() {
               modelLoaded = true;
-              print("------------- model loaded");
             });
           }
         });
-
 
         cameraController.initialize().then((value) {
           setState(() {
@@ -217,7 +215,6 @@ class _NowordQuizState extends State<NowordQuiz> {
             educationWord = bookModel.nowEducation.wordName;
 
             _isLoading = false;
-            print("------------- others loaded");
           });
 
           int frameCounter = 0;
@@ -225,14 +222,13 @@ class _NowordQuizState extends State<NowordQuiz> {
 
           cameraController.startImageStream((CameraImage image) async {
             frameCounter++;
-            if (frameCounter % frameProcessingInterval == 0 && !isDetecting) {
+            if (frameCounter % frameProcessingInterval == 0 && !isDetecting && _isTimerDone) {
               isDetecting = true;
-              try {
-                final value = await runInference(image);
-                setRecognitions(value);
-              } finally {
-                isDetecting = false;
-              }
+
+              final value = await runInference(image);
+              await setRecognitions(value);
+
+              isDetecting = false;
             }
           });
         });
@@ -249,7 +245,7 @@ class _NowordQuizState extends State<NowordQuiz> {
   // Assuming 'savingResult' is a member variable of your state class to persist across frames
   List<String> savingResult = [];
 
-  void setRecognitions(List<dynamic> outputs) {
+  Future<void> setRecognitions(List<dynamic> outputs) async {
     if (outputs.isNotEmpty) {
       // Assuming outputs[0] is a List<double> of probabilities and that you want the index with the highest probability
       List<double> probabilities = outputs[0].cast<double>();
@@ -272,52 +268,50 @@ class _NowordQuizState extends State<NowordQuiz> {
       }
 
       // Act on accumulated results if conditions are met
-      if (savingResult.length == 5) {
+      if (savingResult.length >= 5) {
         // Perform any action with the consistent prediction
 
-        predOne = savingResult.first;
-        String trimmedPredOne = predOne.trim();
-
-        // setState(() {
-        //   predOne = savingResult.first.trim();
-        // });
-
-        if (trimmedPredOne.isEmpty || trimmedPredOne == "N/A") {
-          //do nothing
-          setState(() {
-            correct = 3;
-          });
-        } else {
-          isDetecting = true;
-          if (trimmedPredOne == DBResult) {
-            // correct
-            effectPlaySound("assets/music/answer.mp3", 1);
-            setState(() {
-              correct = 1;
-            });
-          } else {
-            // incorrect
-            setState(() {
-              correct = 0;
-            });
-            effectPlaySound("assets/music/wrong.mp3", 1);
-          }
-
-          Timer(const Duration(milliseconds: 1000), () {
-            if (!context.mounted) return; // Always check mounted status before calling setState
-            setState(() {
-              correct = 3;
-            });
-
-            if (correct == 1) {
-              Navigator.of(context).pop();
-              widget.onModalClose?.call();
-            }
-          });
-
-        }
+        String consistentPrediction = savingResult.last;
+        await processPrediction(consistentPrediction);
         savingResult.clear(); // Reset for next set of predictions
       }
+    }
+  }
+
+  Future<void> processPrediction(String prediction) async {
+    String trimmedPrediction = prediction.trim();
+
+    if (trimmedPrediction.isNotEmpty && trimmedPrediction != "N/A") {
+      setState(() {
+        predOne = trimmedPrediction;
+        correct = trimmedPrediction == DBResult ? 1 : 0;
+        _isTimerDone = false;
+      });
+
+      // Play sound based on the result
+      String soundPath = correct == 1 ? "assets/music/answer.mp3" : "assets/music/wrong.mp3";
+      effectPlaySound(soundPath, 1);
+
+      // Wait for 1 second before executing the next action
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        if (!mounted) return;
+
+        // Optionally navigate away or call the modal close callback
+        if (correct == 1) {
+          Navigator.of(context).pop();
+          widget.onModalClose?.call();
+        } else {
+          setState(() {
+            correct = 3; // Reset the state to hide the result widget
+            _isTimerDone = true;
+          });
+        }
+      });
+    } else {
+      setState(() {
+        predOne = trimmedPrediction;
+        _isTimerDone = true;
+      });
     }
   }
 

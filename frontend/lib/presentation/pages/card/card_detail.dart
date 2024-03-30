@@ -9,17 +9,20 @@ import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
+import 'package:frontend/core/utils/component/dialog_utils.dart';
 import 'package:frontend/core/utils/component/donggle_talk.dart';
 import 'package:frontend/core/utils/component/icons/circle_back_icon.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
+import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/domain/model/model_cards.dart';
+import 'package:frontend/presentation/pages/book/modal/expression_quiz.dart';
+import 'package:frontend/presentation/pages/book/modal/picture_quiz.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/domain/model/model_cards.dart' as domain;
 import 'package:widgets_to_image/widgets_to_image.dart';
-import 'package:image/image.dart' as img;
 
 class CardDetail extends StatefulWidget {
   final int educationId;
@@ -37,12 +40,16 @@ class _CardDetailState extends State<CardDetail> {
   Uint8List? bytes;
 
   late CardModel cardModel;
+  late BookModel bookModel;
+  late UserProvider userProvider;
   String wordName = "";
   String imagePath = "";
   String bookTitle = "";
   String bookSentence = "";
   List userImages = [];
   String url = "";
+  String category = "";
+  String accessToken = "";
 
   @override
   void initState() {
@@ -53,19 +60,25 @@ class _CardDetailState extends State<CardDetail> {
   }
 
   Future loadDataAsync() async {
-    var cardModel = Provider.of<domain.CardModel>(context, listen: false);
-    var userProvider = Provider.of<UserProvider>(context, listen: false);
-    var accessToken = userProvider.getAccessToken();
+    cardModel = Provider.of<domain.CardModel>(context, listen: false);
+    bookModel = Provider.of<BookModel>(context, listen: false);
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    accessToken = userProvider.getAccessToken();
 
     await cardModel.getSelectedCard(accessToken, widget.educationId);
     // 데이터 로딩 완료 후 상태 업데이트
+
+    int index = bookModel.educations.indexWhere((education) => education.educationId == widget.educationId);
+
     setState(() {
       wordName = cardModel.selectedCard['wordName'];
       imagePath = cardModel.selectedCard['imagePath'];
       bookTitle = cardModel.selectedCard['bookTitle'];
       bookSentence = cardModel.selectedCard['bookSentence'];
       userImages = cardModel.selectedCard['userImages'];
+      category = cardModel.selectedCard['category'];
       url = Constant.s3BaseUrl + imagePath;
+      bookModel.nowEducation = bookModel.educations[index];
     });
   }
 
@@ -102,7 +115,7 @@ class _CardDetailState extends State<CardDetail> {
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle(
-      style: CustomFontStyle.textMediumLarge,
+      style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMediumLarge),
       child: Stack(
         children: [
           Column(
@@ -198,6 +211,25 @@ class _CardDetailState extends State<CardDetail> {
             right: MediaQuery.of(context).size.width * 0.06,
             child: GreenButton("학습하기", onPressed: () {
               // 캔버스 띄우기
+              if (category == "PICTURE") {
+                DialogUtils.showCustomDialog(context, contentWidget: PictureQuiz(
+                  onModalClose: () async {
+                    await cardModel.getSelectedCard(accessToken, widget.educationId);
+                    setState(() {
+                      userImages = cardModel.selectedCard['userImages'];
+                    });
+                  },
+                ));
+              } else if (category == "EXPRESSION") {
+                DialogUtils.showCustomDialog(context, contentWidget: ExpressionQuiz(
+                  onModalClose: () async {
+                    await cardModel.getSelectedCard(accessToken, widget.educationId);
+                    setState(() {
+                      userImages = cardModel.selectedCard['userImages'];
+                    });
+                  },
+                ));
+              }
             }),
           ),
           Positioned(
@@ -269,9 +301,7 @@ class _CardDetailState extends State<CardDetail> {
                       child: Row(
                         children: userImages.map((imagePath) {
                           WidgetsToImageController controller = WidgetsToImageController();
-                          return WidgetsToImage(
-                              controller: controller,
-                              child: cardWidget(imagePath, controller));
+                          return WidgetsToImage(controller: controller, child: cardWidget(imagePath, controller));
                         }).toList(),
                       ),
                     ),
@@ -290,9 +320,9 @@ class _CardDetailState extends State<CardDetail> {
     );
   }
 
-  Widget cardWidget(String imagePath, WidgetsToImageController controller){
+  Widget cardWidget(String imagePath, WidgetsToImageController controller) {
     return GestureDetector(
-      onTap: () async{
+      onTap: () async {
         final bytes = await controller.capture();
         setState(() {
           this.bytes = bytes;
@@ -309,13 +339,19 @@ class _CardDetailState extends State<CardDetail> {
         height: MediaQuery.of(context).size.height * 0.3,
         width: MediaQuery.of(context).size.width * 0.15,
         child: Center(
-          child: CachedNetworkImage(
-            imageUrl: Constant.s3BaseUrl + imagePath,
-            fit: BoxFit.contain,
-            height: MediaQuery.of(context).size.height * 0.17,
-            // width: MediaQuery.of(context).size.width * 0.14,
-            placeholder: (context, url) => const CircularProgressIndicator(),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
+          child: Padding(
+            padding: EdgeInsets.only(
+                right: MediaQuery.of(context).size.width * 0.025, left: MediaQuery.of(context).size.width * 0.018),
+            child: ClipRRect(
+              child: CachedNetworkImage(
+                imageUrl: Constant.s3BaseUrl + imagePath,
+                fit: BoxFit.cover,
+                height: MediaQuery.of(context).size.height * 0.17,
+                // width: MediaQuery.of(context).size.width * 0.14,
+                placeholder: (context, url) => const CircularProgressIndicator(),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
+              ),
+            ),
           ),
         ),
       ),

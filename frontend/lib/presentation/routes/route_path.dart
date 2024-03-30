@@ -15,11 +15,6 @@ class RoutePath {
   ///my_page
   static const String myPage = '/mypage';
 
-  static const String aiTest = '/aitest';
-
   /// book_progress
   static const String bookProgress = '/bookProgress/:id/:pageId/:isForward';
-
-  ///quiz
-  // static const String bookquiz = '/bookquiz/:bookId';
 }

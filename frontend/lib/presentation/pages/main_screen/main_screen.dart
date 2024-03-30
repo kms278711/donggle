@@ -7,7 +7,6 @@ import 'package:frontend/core/utils/component/icons/close_circle.dart';
 import 'package:frontend/core/utils/component/icons/home_icon_main.dart';
 import 'package:frontend/core/utils/component/icons/my_icon.dart';
 import 'package:frontend/core/utils/component/icons/sound_icon.dart';
-import 'package:frontend/core/utils/component/icons/test_icon.dart';
 import 'package:frontend/domain/model/model_quiz.dart';
 import 'package:frontend/main.dart';
 import 'package:frontend/presentation/pages/card/card_page.dart';
@@ -144,10 +143,6 @@ class _MainScreenState extends State<MainScreen> {
               right: MediaQuery.of(context).size.width * 0.01,
               child: Row(
                 children: [
-                  const TestIcon(),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.01,
-                  ),
                   IconButton(
                     icon: _icons[_selectedIndex], // replace with actual icons
                     onPressed: () {

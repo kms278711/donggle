@@ -4,6 +4,7 @@ import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
+import 'package:frontend/presentation/pages/mypage/Book/developing_book.dart';
 import 'package:frontend/presentation/pages/mypage/Book/paid_book.dart';
 import 'package:frontend/presentation/pages/mypage/Book/unpaid_book.dart';
 import 'package:frontend/presentation/provider/main_provider.dart';
@@ -77,6 +78,7 @@ class _PurchaseFairytaleState extends State<PurchaseFairytale> {
                           final book = Book.fromJson(bookModel.books[index]);
                           final url = Constant.s3BaseUrl + book.path;
                           final id = book.bookId;
+                          if(index >= 2) return DevelopingBook(url);
                           return book.isPay ?? false ? PaidBook(url, id) : UnpaidBook(url, id);
                         },
                       ),

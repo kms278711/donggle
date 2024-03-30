@@ -1,10 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:frontend/presentation/pages/AI_test/AI_test.dart';
 import 'package:frontend/presentation/pages/book/book_progress.dart';
 import 'package:frontend/presentation/pages/login/login_page.dart';
 import 'package:frontend/presentation/pages/main_screen/main_screen.dart';
 import 'package:frontend/presentation/pages/mypage/my_page_background.dart';
-import 'package:frontend/presentation/pages/quiz/book_quiz_page.dart';
 import 'package:go_router/go_router.dart';
 
 import '../pages/splash/splash_page.dart';
@@ -35,11 +32,6 @@ final GoRouter globalRouter = GoRouter(
       path: RoutePath.login,
       name: 'login',
       builder: (context, state) => const LoginPage(),
-    ),
-    GoRoute(
-      path: RoutePath.aiTest,
-      name: 'aitest',
-      builder: (context, state) => const AITest(),
     ),
     GoRoute(
       path: RoutePath.bookProgress,

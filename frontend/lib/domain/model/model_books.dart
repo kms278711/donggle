@@ -22,6 +22,7 @@ class BookModel extends ChangeNotifier {
   );
   Map BookDetail = {};
   Education nowEducation = Education(educationId: 0, gubun: "", wordName: "", imagePath: "", bookSentenceId: 0);
+  List<Education> educations = [];
 
   int currentBookId = 1;
 
@@ -313,20 +314,20 @@ class BookPageSentences {
 
 class Education {
   final int educationId;
-  final String gubun;
+  final String? gubun;
   final String? category;
   final String wordName;
   final String imagePath;
-  final int bookSentenceId;
+  final int? bookSentenceId;
   final String? traceImagePath;
 
   Education({
     required this.educationId,
-    required this.gubun,
+    this.gubun,
     this.category,
     required this.wordName,
     required this.imagePath,
-    required this.bookSentenceId,
+    this.bookSentenceId,
     this.traceImagePath,
   });
 

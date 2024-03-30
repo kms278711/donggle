@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
-import 'package:frontend/core/utils/add_post_position_text.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
-import 'package:frontend/core/utils/component/buttons/red_button.dart';
 
 class finishQuiz extends StatelessWidget {
   final String title;

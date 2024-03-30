@@ -129,6 +129,7 @@ class _BookProgressState extends State<BookProgress> {
         print("------------ action");
         finishSentence();
       }
+      bookModel.educations.add(nowPage.education!);
     } else {
       // print('here!!');
       // print(nowPage.education?.category);
