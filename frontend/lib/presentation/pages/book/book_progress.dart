@@ -93,15 +93,10 @@ class _BookProgressState extends State<BookProgress> {
 
   void goNext() {
     if (educationId == nowPage.bookPageSentences[sentenceId].bookPageSentenceId) {
-<<<<<<< PATCH SET (763017 �fix: 동화책 진행 시 화면 렌더링 두번 되는거 수정 완료)
       if (_isSkiped == true) {
         // print('stop');
         backgroundLine.stop();
       }
-
-=======
-      backgroundLine.stop();
->>>>>>> BASE      (2b567a ✨feat: #S10P21C101-132 카카오 소셜 로그인 구현중)
       if (nowPage.education?.gubun == "NOWORD") {
         /// OX문제
         // print("------------ noword");
