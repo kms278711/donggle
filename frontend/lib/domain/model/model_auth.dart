@@ -175,25 +175,59 @@ class AuthModel {
 
   LoginPlatform _loginPlatform = LoginPlatform.none;
 
-  Future<void> signInWithKakao() async {
+  Future<AuthStatus> signInWithKakao() async {
     // try {
       bool isInstalled = await isKakaoTalkInstalled();
+      // var isInstalled = false;
       print(isInstalled);
       OAuthToken token = isInstalled
           ? await UserApi.instance.loginWithKakaoTalk()
           : await UserApi.instance.loginWithKakaoAccount();
+      // isInstalled
+      //     ? await UserApi.instance.loginWithKakaoTalk()
+      //     : await UserApi.instance.loginWithKakaoAccount();
 
-      final url = Uri.https("j10c101.p.ssafy.io", "/api/oauth/sns-login");
+      // print(token.accessToken);
+
+      print(token);
+      final url = Uri.https(
+        "j10c101.p.ssafy.io",
+        "api/oauth/sns-login",
+        {
+          "provider": "KAKAO",
+          "email": '1',
+        },
+      );
       final headers = {
         'Content-Type': 'application/json',
-        "Authorization": "Bearer ${token.accessToken}"
+        // "Authorization": "Bearer ${token.accessToken}"
       };
-      var response = await http.get(url, headers: headers);
+      var response = await http.post(url, headers: headers);
 
       final profileInfo = json.decode(response.body);
       print(profileInfo.toString());
 
       _loginPlatform = LoginPlatform.kakao;
+
+      if (response.statusCode == 200) {
+        String accessToken =
+        json.decode(utf8.decode(response.bodyBytes))['access_token'];
+        String refreshToken =
+        json.decode(utf8.decode(response.bodyBytes))['refresh_token'];
+
+        userProvider.setAccessToken(accessToken);
+        userProvider.setRefreshToken(refreshToken);
+
+        userProvider.getUserInfo();
+
+        return AuthStatus.loginSuccess;
+      } else {
+        String serverMessage =
+        json.decode(utf8.decode(response.bodyBytes))['data_header']
+        ['result_message'];
+        messageProvider.setMessage1(serverMessage);
+        return AuthStatus.loginFail;
+      }
     // } catch (error) {
     //   print('카카오톡으로 로그인 실패 $error');
     // }
