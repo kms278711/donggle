@@ -55,6 +55,7 @@ public class EducationCustomRepositoryImpl implements EducationCustomRepository 
 		return jpaQueryFactory
 				.select(
 						Projections.constructor(EducationResponseDto.class,
+								qEducation.category,
 								qEducation.wordName,
 								qEducation.imagePath,
 								qBook.title,
