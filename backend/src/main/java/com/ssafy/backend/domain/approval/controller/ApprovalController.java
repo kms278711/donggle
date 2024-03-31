@@ -15,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApprovalController {
 
-
     private final ApprovalService approvalService;
 
     // 결제내역 저장
