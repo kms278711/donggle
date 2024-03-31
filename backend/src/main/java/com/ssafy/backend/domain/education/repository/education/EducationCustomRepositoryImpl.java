@@ -59,7 +59,8 @@ public class EducationCustomRepositoryImpl implements EducationCustomRepository 
 								qEducation.wordName,
 								qEducation.imagePath,
 								qBook.title,
-								qBookPageSentence.sentence
+								qBookPageSentence.sentence,
+								qEducation.traceImagePath
 						)
 				)
 				.from(qEducation)

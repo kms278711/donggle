@@ -13,10 +13,11 @@ public record EducationResponseDto(
 		String imagePath,
 		String bookTitle,
 		String bookSentence,
+		String traceImagePath,
 		List<String> userImages
 ) {
-	public EducationResponseDto(Education.Category category, String wordName, String imagePath, String bookTitle, String bookSentence) {
-		this(category, wordName, imagePath, bookTitle, bookSentence, new ArrayList<>());
+	public EducationResponseDto(Education.Category category, String wordName, String imagePath, String bookTitle, String bookSentence, String traceImagePath) {
+		this(category, wordName, imagePath, bookTitle, bookSentence, traceImagePath, new ArrayList<>());
 	}
 
 	public static EducationResponseDto from(EducationResponseDto educationResponseDto, List<String> userImageList) {
@@ -26,6 +27,7 @@ public record EducationResponseDto(
 				.imagePath(educationResponseDto.imagePath())
 				.bookTitle(educationResponseDto.bookTitle())
 				.bookSentence(educationResponseDto.bookSentence())
+				.traceImagePath(educationResponseDto.traceImagePath())
 				.userImages(userImageList)
 				.build();
 	}
