@@ -140,31 +140,31 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(
               height: 30,
             ),
-            AnimatedCrossFade(
-                firstChild: Container(
-                  width: 350,
-                ),
-                secondChild: Container(
-                  width: 350,
-                  padding:
-                      EdgeInsets.all(MediaQuery.of(context).size.height * 0.01),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.5),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      KakaotalkIcon(),
-                      NaverIcon(),
-                      GoogleIcon(),
-                    ],
-                  ),
-                ),
-                crossFadeState: isSignup
-                    ? CrossFadeState.showFirst
-                    : CrossFadeState.showSecond,
-                duration: const Duration(milliseconds: 200))
+            // AnimatedCrossFade(
+            //     firstChild: Container(
+            //       width: 350,
+            //     ),
+            //     secondChild: Container(
+            //       width: 350,
+            //       padding:
+            //           EdgeInsets.all(MediaQuery.of(context).size.height * 0.01),
+            //       decoration: BoxDecoration(
+            //         color: Colors.white.withOpacity(0.5),
+            //         borderRadius: BorderRadius.circular(15),
+            //       ),
+            //       child: const Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [
+            //           KakaotalkIcon(),
+            //           NaverIcon(),
+            //           GoogleIcon(),
+            //         ],
+            //       ),
+            //     ),
+            //     crossFadeState: isSignup
+            //         ? CrossFadeState.showFirst
+            //         : CrossFadeState.showSecond,
+            //     duration: const Duration(milliseconds: 200))
           ],
         ),
       ),
