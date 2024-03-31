@@ -28,6 +28,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 // import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/presentation/provider/main_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 late AudioPlayer player;
 
@@ -102,11 +103,19 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late final _Handler handler;
 
+  Future<void> requestPermissions() async {
+    await [
+      Permission.camera,
+      Permission.microphone,
+    ].request();
+  }
+
   @override
   void initState() {
     super.initState();
     handler = _Handler(getIsSoundOn: () => Provider.of<MainProvider>(context, listen: false).isSoundOn);
     WidgetsBinding.instance.addObserver(handler);
+    requestPermissions();
   }
 
   @override
