@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ApprovalRepository extends JpaRepository<Approval, Long>, ApprovalCustomRepository {
+public interface ApprovalRepository extends JpaRepository<Approval, Long>{
     List<Approval> findByUser_userId(Long userId);
     Optional<Approval> findByUser_userIdAndBook_bookId(Long userId, Long bookId);
 }
