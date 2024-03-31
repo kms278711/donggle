@@ -297,14 +297,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
-  dio:
-    dependency: transitive
-    description:
-      name: dio
-      sha256: "0978e9a3e45305a80a7210dbeaf79d6ee8bee33f70c8e542dc654c952070217f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.4.2+1"
   encrypt:
     dependency: transitive
     description:
@@ -501,14 +493,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.7"
-  json_annotation:
-    dependency: transitive
-    description:
-      name: json_annotation
-      sha256: b10a7b2ff83d83c777edba3c6a0f97045ddadd56c944e1a23a3fdf43a1bf4467
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.8.1"
   just_audio:
     dependency: "direct main"
     description:
@@ -541,30 +525,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.9"
-  kakao_flutter_sdk_auth:
-    dependency: transitive
-    description:
-      name: kakao_flutter_sdk_auth
-      sha256: "785f45258190517eadf847d2854f557d1e7df8fa6da803526a0345366bba4864"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.9.1+2"
-  kakao_flutter_sdk_common:
-    dependency: transitive
-    description:
-      name: kakao_flutter_sdk_common
-      sha256: "25beeab751e164ee6c743774f170dc51c4ef2cb64e8a9b67f977a31788b809a3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.9.1+2"
-  kakao_flutter_sdk_user:
-    dependency: "direct main"
-    description:
-      name: kakao_flutter_sdk_user
-      sha256: "60411792a3a019f5de82e176ddcad41a3ee58e3a4c9eeb089fe0193ad8df4516"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.9.1+2"
   leak_tracker:
     dependency: transitive
     description:
@@ -970,14 +930,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.10.4"
-  tflite_v2:
-    dependency: "direct main"
-    description:
-      name: tflite_v2
-      sha256: cedfa87aea6d0feb009a3d6f56ef7f2076617a916d3b002ff867c00aa3c69125
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   transparent_image:
     dependency: "direct main"
     description:

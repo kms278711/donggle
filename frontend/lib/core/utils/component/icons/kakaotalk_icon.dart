@@ -10,7 +10,9 @@ class KakaotalkIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthModel>(context, listen: false);
     return InkWell(
-      onTap: () {auth.signInWithKakao();},
+      onTap: () {
+        // auth.signInWithKakao();
+        },
       child: Image.asset(AppIcons.kakaotalk_icon,
           width: MediaQuery.of(context).size.width * 0.05),
     );

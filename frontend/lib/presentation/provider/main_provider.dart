@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 
 class MainProvider with ChangeNotifier {
+  MainProvider();
+
   late bool _isMyPageUpdateSelected = false;
   late bool _isDetailPageSelected = false;
   late bool _isPurchaseHistorySelected = false;
-  late bool _isSoundOn = false;
+  late bool isSoundOn = false;
 
 
   bool get isMyPageUpdateSelected => _isMyPageUpdateSelected;
   bool get isDetailPageSeleted => _isDetailPageSelected;
   bool get isPurchaseHistorySelected => _isPurchaseHistorySelected;
-  bool get isSoundOn => _isSoundOn;
 
   void myPageUpdateToggle() {
     _isMyPageUpdateSelected = !_isMyPageUpdateSelected; // 값을 반전시킴
@@ -43,7 +44,7 @@ class MainProvider with ChangeNotifier {
   }
 
   void soundToggle() {
-    _isSoundOn = !_isSoundOn;
+    isSoundOn = !isSoundOn;
     notifyListeners();
   }
 

@@ -24,7 +24,8 @@ import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:frontend/presentation/routes/routes.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+
+// import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/presentation/provider/main_provider.dart';
 
@@ -35,11 +36,11 @@ Future<void> main() async {
   await dotenv.load(fileName: "assets/config/.env");
   // final cameras = await availableCameras();
   // final firstCamera = cameras.last;
-  String kakaoNativeAppKey = dotenv.env['KAKAO_NATIVE_APP_KEY']!;
+  // String kakaoNativeAppKey = dotenv.env['KAKAO_NATIVE_APP_KEY']!;
 
-  KakaoSdk.init(
-    nativeAppKey: kakaoNativeAppKey,
-  );
+  // KakaoSdk.init(
+  //   nativeAppKey: kakaoNativeAppKey,
+  // );
 
   // await JustAudioBackground.init(
   //   androidNotificationChannelId: 'com.example.frontend',
@@ -89,12 +90,30 @@ Future<void> main() async {
     ],
     child: const MyApp(),
   ));
-
-  WidgetsBinding.instance.addObserver(_Handler());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late final _Handler handler;
+
+  @override
+  void initState() {
+    super.initState();
+    handler = _Handler(getIsSoundOn: () => Provider.of<MainProvider>(context, listen: false).isSoundOn);
+    WidgetsBinding.instance.addObserver(handler);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(handler);
+    super.dispose();
+  }
 
   // This widget is the root of your application.
   @override
@@ -146,9 +165,14 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 class _Handler extends WidgetsBindingObserver {
+  final bool Function() getIsSoundOn;
+
+  _Handler({required this.getIsSoundOn});
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
+    final isSoundOn = getIsSoundOn();
+    if (state == AppLifecycleState.resumed && isSoundOn) {
       player.play();
     } else {
       player.pause();
