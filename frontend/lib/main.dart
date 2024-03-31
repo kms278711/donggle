@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -72,33 +71,20 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (_) => UserProvider()),
       ChangeNotifierProvider(create: (_) => QuizProvider()),
       ChangeNotifierProvider(create: (_) => DonggleTalkModel()),
+      ChangeNotifierProvider(create: (context) => BookModel(Provider.of<UserProvider>(context, listen: false))),
+      ChangeNotifierProvider(create: (context) => ReviewModel(Provider.of<UserProvider>(context, listen: false))),
       ChangeNotifierProvider(
-          create: (context) =>
-              BookModel(Provider.of<UserProvider>(context, listen: false))),
+          create: (context) => ApprovalsModel(Provider.of<UserProvider>(context, listen: false))),
+      ChangeNotifierProvider(create: (context) => CardModel(Provider.of<UserProvider>(context, listen: false))),
+      ChangeNotifierProvider(create: (context) => QuizModel(Provider.of<UserProvider>(context, listen: false))),
       ChangeNotifierProvider(
-          create: (context) =>
-              ReviewModel(Provider.of<UserProvider>(context, listen: false))),
+          create: (context) => NickNameUpdateModel(Provider.of<UserProvider>(context, listen: false))),
       ChangeNotifierProvider(
-          create: (context) => ApprovalsModel(
-              Provider.of<UserProvider>(context, listen: false))),
+          create: (context) => ProfileUpdateModel(Provider.of<UserProvider>(context, listen: false))),
       ChangeNotifierProvider(
-          create: (context) =>
-              CardModel(Provider.of<UserProvider>(context, listen: false))),
-      ChangeNotifierProvider(
-          create: (context) =>
-              QuizModel(Provider.of<UserProvider>(context, listen: false))),
-      ChangeNotifierProvider(
-          create: (context) => NickNameUpdateModel(
-              Provider.of<UserProvider>(context, listen: false))),
-      ChangeNotifierProvider(
-          create: (context) => ProfileUpdateModel(
-              Provider.of<UserProvider>(context, listen: false))),
-      ChangeNotifierProvider(
-          create: (context) => RegisterFieldModel(
-              Provider.of<MessageProvider>(context, listen: false))),
+          create: (context) => RegisterFieldModel(Provider.of<MessageProvider>(context, listen: false))),
       ProxyProvider2<UserProvider, MessageProvider, AuthModel>(
-        update: (_, userProvider, messageProvider, previousAuthModel) =>
-            AuthModel(userProvider, messageProvider),
+        update: (_, userProvider, messageProvider, previousAuthModel) => AuthModel(userProvider, messageProvider),
       ),
     ],
     child: const MyApp(),
@@ -113,13 +99,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
 
     return StyledToast(
       locale: const Locale('ko', 'KR'),
-      textStyle:
-          CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmall),
+      textStyle: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmall),
       backgroundColor: AppColors.success,
       borderRadius: BorderRadius.circular(20.0),
       textPadding: const EdgeInsets.symmetric(horizontal: 17.0, vertical: 10.0),
@@ -157,8 +141,7 @@ class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -166,8 +149,7 @@ class _Handler extends WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      player
-          .play(); // Audio player is a custom class with resume and pause static methods
+      player.play();
     } else {
       player.pause();
     }

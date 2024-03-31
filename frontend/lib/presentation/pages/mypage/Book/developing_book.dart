@@ -39,7 +39,7 @@ class DevelopingBook extends StatelessWidget {
                     color: const Color.fromRGBO(255, 100, 100, 0.9),
                     borderRadius: BorderRadius.circular(20)
                 ),
-                child: const Text(" 준비 중 ", style: CustomFontStyle.bodyMedium,),
+                child: Text(" 준비 중 ", style: CustomFontStyle.getTextStyle(context, CustomFontStyle.bodyMedium),),
               ),
             ),
           ],

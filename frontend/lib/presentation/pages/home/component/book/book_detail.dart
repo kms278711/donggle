@@ -69,7 +69,7 @@ class _BookDetailState extends State<BookDetail> {
       child: Stack(
         children: [
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.06,
@@ -86,8 +86,7 @@ class _BookDetailState extends State<BookDetail> {
             child: Container(
               color: Colors.transparent,
               child: Center(
-                child: Image.asset(AppIcons.bottle,
-                    width: MediaQuery.of(context).size.width * 0.35),
+                child: Image.asset(AppIcons.bottle, width: MediaQuery.of(context).size.width * 0.35),
               ),
             ),
           ),
@@ -99,7 +98,7 @@ class _BookDetailState extends State<BookDetail> {
               width: MediaQuery.of(context).size.width * 0.25,
               color: Colors.transparent,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(
                     bookTitle,
@@ -139,46 +138,48 @@ class _BookDetailState extends State<BookDetail> {
             top: MediaQuery.of(context).size.height * 0.18,
             right: MediaQuery.of(context).size.width * 0.1,
             child: Container(
-              width: MediaQuery.of(context).size.width * 0.4,
-              height: MediaQuery.of(context).size.height * 0.7,
-              padding: EdgeInsets.zero,
-              child: GridView.count(
-                crossAxisCount: 2, // 한 줄에 2개의 항목을 표시
-                crossAxisSpacing: MediaQuery.of(context).size.width * 0.01, // 가로 간격
-                mainAxisSpacing: MediaQuery.of(context).size.height * 0.01, // 세로 간격
-                physics: const NeverScrollableScrollPhysics(),
-                children: List.generate(educations.length, (index) {
-                  var education = educations[index];
-                  return Transform.rotate(
-                    angle: index % 2 == 0 ? 350 * pi / 180 : 10 * pi / 180,
-                    child: Stack(
-                      children: [
-                        Center(
-                          child: CachedNetworkImage(
-                            imageUrl: Constant.s3BaseUrl + education["imagePath"],
-                            fit: BoxFit.cover,
-                            height: MediaQuery.of(context).size.height * 0.3,
-                            errorWidget: (context, url, error) => const Icon(Icons.error),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: MediaQuery.of(context).size.height * 0.055,
-                          left: 0,
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.185,
-                            child: Text(
-                              education["wordName"],
-                              style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmall),
-                              textAlign: TextAlign.center,
+                width: MediaQuery.of(context).size.width * 0.4,
+                height: MediaQuery.of(context).size.height * 0.7,
+                padding: EdgeInsets.zero,
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  // 한 줄에 2개의 항목을 표시
+                  crossAxisSpacing: MediaQuery.of(context).size.width * 0.01,
+                  // 가로 간격
+                  mainAxisSpacing: MediaQuery.of(context).size.height * 0.01,
+                  // 세로 간격
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: List.generate(educations.length, (index) {
+                    var education = educations[index];
+                    return Transform.rotate(
+                      angle: index % 2 == 0 ? 350 * pi / 180 : 10 * pi / 180,
+                      child: Stack(
+                        children: [
+                          Center(
+                            child: CachedNetworkImage(
+                              imageUrl: Constant.s3BaseUrl + education["imagePath"],
+                              fit: BoxFit.cover,
+                              height: MediaQuery.of(context).size.height * 0.3,
+                              errorWidget: (context, url, error) => const Icon(Icons.error),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
-              )
-            ),
+                          Positioned(
+                            bottom: MediaQuery.of(context).size.height * 0.055,
+                            left: 0,
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.185,
+                              child: Text(
+                                education["wordName"],
+                                style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmall),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                )),
           ),
           Positioned(
             top: MediaQuery.of(context).size.height * 0.75,
@@ -186,25 +187,17 @@ class _BookDetailState extends State<BookDetail> {
             child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.27,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   GreenButton("처음부터", onPressed: () {
                     Navigator.of(context).pop();
                     globalRouter.pushReplacement('/bookProgress/${widget.bookId}/1/0');
                   }),
-                  bookPage == 0 ? Container():
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.04,
-                      ),
-                      GreenButton("이어하기", onPressed: () {
-                        Navigator.of(context).pop();
-                        globalRouter.pushReplacement('/bookProgress/${widget.bookId}/$bookPage/0');
-                      }),
-                    ],
-                  ),
-
+                  if (bookPage != 0)
+                    GreenButton("이어하기", onPressed: () {
+                      Navigator.of(context).pop();
+                      globalRouter.pushReplacement('/bookProgress/${widget.bookId}/$bookPage/0');
+                    }),
                 ],
               ),
             ),

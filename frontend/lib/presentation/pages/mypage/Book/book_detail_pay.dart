@@ -236,6 +236,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                                                           allowHalfRating: true,
                                                           ignoreGestures: true,
                                                           itemCount: 5,
+                                                          itemSize: MediaQuery.of(context).size.width * 0.02,
                                                           itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
                                                           itemBuilder: (context, _) => const Icon(
                                                             Icons.star,
@@ -296,6 +297,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                                     allowHalfRating: true,
                                     ignoreGestures: true,
                                     itemCount: 5,
+                                    itemSize: MediaQuery.of(context).size.width * 0.02,
                                     itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
                                     itemBuilder: (context, _) => const Icon(
                                       Icons.star,
@@ -323,6 +325,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                                           allowHalfRating: true,
                                           ignoreGestures: true,
                                           itemCount: 5,
+                                          itemSize: MediaQuery.of(context).size.width * 0.02,
                                           itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
                                           itemBuilder: (context, _) => const Icon(
                                             Icons.star,
@@ -407,9 +410,8 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
       context: context,
       payload: payload,
       showCloseButton: false,
-      closeButton: const Icon(Icons.close, size: 35.0, color: Colors.black54),
       onIssued: (String data){
-        print("------------onIssued: $data");
+        // print("------------onIssued: $data");
       },
       onError: (String data) {
         showToast(data, backgroundColor: AppColors.error);
@@ -418,7 +420,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
         return true;
       },
       onDone: (String data) async {
-        print("-------onDone: $data");
+        // print("-------onDone: $data");
         result = await approvalsModel.setApprovals(accessToken, bookId, price);
 
         if (result == "Success") {

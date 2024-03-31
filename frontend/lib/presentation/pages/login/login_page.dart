@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
               height: MediaQuery.of(context).size.height * 0.07,
               child: Text(
                 isSignup ? message.message2 : message.message1,
-                style: CustomFontStyle.errorMedium,
+                style: CustomFontStyle.getTextStyle(context, CustomFontStyle.errorMedium),
               ),
             ),
             SizedBox(
@@ -330,16 +330,18 @@ class LoginButton extends StatelessWidget {
         AuthStatus loginStatus =
             await auth.login(registerField.email, registerField.password);
 
-        if (registerField.email.isEmpty) {
-          showToast('이메일을 입력해주세요.', backgroundColor: AppColors.error);
-        } else if (registerField.password.isEmpty) {
-          showToast('비밀번호를 입력해주세요.', backgroundColor: AppColors.error);
-        } else if (loginStatus == AuthStatus.loginSuccess) {
-          showToast('로그인에 성공하였습니다!');
-          context.go(RoutePath.main0);
-        } else {
-          showToast("로그인에 실패했습니다.", backgroundColor: AppColors.error);
-          registerField.resetPassword();
+        if(context.mounted) {
+          if (registerField.email.isEmpty) {
+            showToast('이메일을 입력해주세요.', backgroundColor: AppColors.error);
+          } else if (registerField.password.isEmpty) {
+            showToast('비밀번호를 입력해주세요.', backgroundColor: AppColors.error);
+          } else if (loginStatus == AuthStatus.loginSuccess) {
+            showToast('로그인에 성공하였습니다!');
+            context.go(RoutePath.main0);
+          } else {
+            showToast("로그인에 실패했습니다.", backgroundColor: AppColors.error);
+            registerField.resetPassword();
+          }
         }
 
         // if (loginStatus == AuthStatus.loginSuccess) {
@@ -383,6 +385,7 @@ class SignupButton extends StatelessWidget {
           } else if (registerStatus == AuthStatus.registerSuccess) {
             await auth.login(registerField.email, registerField.password);
             showToast('회원가입에 성공하였습니다!');
+            if (!context.mounted) return;
             context.go(RoutePath.main0);
           } else {
             registerField.resetFields();

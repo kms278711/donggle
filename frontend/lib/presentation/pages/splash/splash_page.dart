@@ -65,7 +65,7 @@ class _SplashPageState extends State<SplashPage> {
       body: Center(
         child: Image.asset(
           AppIcons.donggle,
-          height: 270,
+          height: MediaQuery.of(context).size.height * 0.25,
         ),
       ),
       backgroundColor: AppColors.primary,

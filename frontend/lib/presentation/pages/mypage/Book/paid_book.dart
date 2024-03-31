@@ -42,7 +42,7 @@ class PaidBook extends StatelessWidget {
                   color: const Color.fromRGBO(217, 217, 217, 0.9),
                   borderRadius: BorderRadius.circular(20)
                 ),
-                child: const Text(" 구매완료 ", style: CustomFontStyle.bodyMedium,),
+                child: Text(" 구매완료 ", style: CustomFontStyle.getTextStyle(context, CustomFontStyle.bodyMedium),),
               ),
             ),
           ],

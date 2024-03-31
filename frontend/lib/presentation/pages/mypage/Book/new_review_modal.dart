@@ -97,6 +97,7 @@ class _NewReviewModalState extends State<NewReviewModal> {
                       direction: Axis.horizontal,
                       allowHalfRating: true,
                       itemCount: 5,
+                      itemSize: MediaQuery.of(context).size.width * 0.02,
                       itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
                       itemBuilder: (context, _) => const Icon(
                         Icons.star,

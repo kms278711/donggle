@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
@@ -83,7 +84,7 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
           body: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.01),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -109,13 +110,13 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0),
+                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.03),
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     // Removed height to allow for flexible container height
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(50),
+                      borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height * 0.05),
                     ),
                     child: Stack(
                       children: [
@@ -123,15 +124,15 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
                             context,
                             0,
                             "진행 중인 동화",
-                            const BorderRadius.only(
-                                topLeft: Radius.circular(50))),
+                            BorderRadius.only(
+                                topLeft: Radius.circular(MediaQuery.of(context).size.height * 0.05))),
                         buildTab(context, 1, "동화 구매", null),
                         buildTab(
                             context,
                             2,
                             "회원 정보",
-                            const BorderRadius.only(
-                                topRight: Radius.circular(50))),
+                            BorderRadius.only(
+                                topRight: Radius.circular(MediaQuery.of(context).size.height * 0.05))),
                         //Content based on selectedTab can be placed here
                         Positioned(
                           top: MediaQuery.of(context).size.height * 0.12,
@@ -167,7 +168,7 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
   Widget buildTab(BuildContext context, int index, String text,
       BorderRadius? borderRadius) {
     double width = MediaQuery.of(context).size.width * 0.3;
-    double height = MediaQuery.of(context).size.height * 0.12;
+    double height = MediaQuery.of(context).size.height * 0.127;
     bool isSelected = selectedTab == index;
 
     return Positioned(
@@ -185,16 +186,19 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
               bottom: BorderSide(color: AppColors.primaryContainer, width: 2),
             ),
           ),
-          child: Center(
-            child: Text(
-              text,
-              textAlign: TextAlign.center,
-              style: CustomFontStyle.getTextStyle(
-                  context,
-                  isSelected
-                      ? CustomFontStyle.selectedLarge
-                      : CustomFontStyle.unSelectedLarge),
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                text,
+                textAlign: TextAlign.center,
+                style: CustomFontStyle.getTextStyle(
+                    context,
+                    isSelected
+                        ? CustomFontStyle.selectedLarge
+                        : CustomFontStyle.unSelectedLarge),
+              ),
+            ],
           ),
         ),
       ),

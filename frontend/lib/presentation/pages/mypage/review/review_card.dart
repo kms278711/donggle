@@ -93,6 +93,7 @@ class _ReviewCardState extends State<ReviewCard> {
                         allowHalfRating: true,
                         ignoreGestures: true,
                         itemCount: 5,
+                        itemSize: MediaQuery.of(context).size.width * 0.02,
                         itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
                         itemBuilder: (context, _) => const Icon(
                           Icons.star,
@@ -104,7 +105,8 @@ class _ReviewCardState extends State<ReviewCard> {
                         height: MediaQuery.of(context).size.height * 0.01,
                       ),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.3,
+                        width: MediaQuery.of(context).size.width * 0.25,
+                        height: MediaQuery.of(context).size.height * 0.15,
                         child: SingleChildScrollView(
                           scrollDirection: Axis.vertical,
                           child: Text(

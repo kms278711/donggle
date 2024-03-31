@@ -50,25 +50,25 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
       final cameras = await availableCameras();
       final firstCamera = cameras.last;
 
-      if (!context.mounted) return;
-      bookModel = Provider.of<BookModel>(context, listen: false);
-      userProvider = Provider.of<UserProvider>(context, listen: false);
-      accessToken = userProvider.getAccessToken();
-
-
-      cameraController = CameraController(firstCamera, ResolutionPreset.medium);
-      education = bookModel.nowEducation;
-
-      await cameraController.initialize();
-
       if (mounted) {
-        setState(() {
-          String path = bookModel.nowEducation.imagePath;
-          url = Constant.s3BaseUrl + path;
-          educationWord = bookModel.nowEducation.wordName;
+        bookModel = Provider.of<BookModel>(context, listen: false);
+        userProvider = Provider.of<UserProvider>(context, listen: false);
+        accessToken = userProvider.getAccessToken();
 
-          _isLoading = false;
-        });
+        cameraController = CameraController(firstCamera, ResolutionPreset.medium);
+        education = bookModel.nowEducation;
+
+        await cameraController.initialize();
+
+        if (mounted) {
+          setState(() {
+            String path = bookModel.nowEducation.imagePath;
+            url = Constant.s3BaseUrl + path;
+            educationWord = bookModel.nowEducation.wordName;
+
+            _isLoading = false;
+          });
+        }
       }
     });
   }

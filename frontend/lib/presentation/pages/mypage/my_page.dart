@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
@@ -43,19 +42,18 @@ class _MyPageState extends State<MyPage> {
     userId = userProvider.getUserId();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.9,
       height: MediaQuery.of(context).size.height * 0.748 - 20,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Padding(
             padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ClipOval(
                   child: CachedNetworkImage(
@@ -67,40 +65,34 @@ class _MyPageState extends State<MyPage> {
                     errorWidget: (context, url, error) => const Icon(Icons.error),
                   ),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                ),
-                RichText(
-                  text: TextSpan(
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: '닉네임: ',
-                        style: CustomFontStyle.getTextStyle(
-                            context, CustomFontStyle.textSmall),
+                Column(
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: '닉네임: ',
+                            style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmall),
+                          ),
+                          TextSpan(
+                              text: nickName,
+                              style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmall)),
+                        ],
                       ),
-                      TextSpan(
-                          text: nickName,
-                          style: CustomFontStyle.getTextStyle(
-                              context, CustomFontStyle.textSmall)),
-                    ],
-                  ),
-                ),
-                RichText(
-                  text: TextSpan(
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: '이메일: ',
-                          style: CustomFontStyle.getTextStyle(
-                              context, CustomFontStyle.textSmall)),
-                      TextSpan(
-                          text: email,
-                          style: CustomFontStyle.getTextStyle(
-                              context, CustomFontStyle.textSmallEng)),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.width * 0.05,
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: '이메일: ',
+                              style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmall)),
+                          TextSpan(
+                              text: email,
+                              style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmallEng)),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
                 Row(
                   children: [
@@ -113,15 +105,16 @@ class _MyPageState extends State<MyPage> {
                     SizedBox(width: MediaQuery.of(context).size.width * 0.02),
                     GreenButton(
                       "로그아웃",
-                      onPressed: () async{
+                      onPressed: () async {
                         AuthStatus logoutStatus = await auth.logOut(accessToken);
-                        if(logoutStatus == AuthStatus.logoutSuccess){
+                        if (logoutStatus == AuthStatus.logoutSuccess) {
                           showToast('로그아웃에 성공하였습니다!');
-                          context.go(RoutePath.login);
-                        }else{
+                          if (context.mounted) {
+                            context.go(RoutePath.login);
+                          }
+                        } else {
                           showToast('로그아웃에 실패하였습니다.');
                         }
-
                       },
                     )
                   ],
@@ -134,14 +127,14 @@ class _MyPageState extends State<MyPage> {
             decoration: BoxDecoration(
               border: Border.all(
                 color: AppColors.primaryContainer, // Border color
-                width: 10.0, // Border width
+                width: MediaQuery.of(context).size.width * 0.008, // Border width
               ),
-              borderRadius: const BorderRadius.all(Radius.circular(30)),
+              borderRadius: BorderRadius.all(Radius.circular(MediaQuery.of(context).size.height * 0.03)),
             ),
             child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.5,
+              width: MediaQuery.of(context).size.width * 0.44,
               height: MediaQuery.of(context).size.height,
-              child: MyReview(),
+              child: const MyReview(),
             ),
           ),
         ],

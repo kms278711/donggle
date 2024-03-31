@@ -1,12 +1,10 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
-import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/dialog_utils.dart';
 import 'package:frontend/core/utils/component/icons/back_icon.dart';
 import 'package:frontend/core/utils/component/icons/end_icon.dart';
@@ -41,7 +39,6 @@ class _BookProgressState extends State<BookProgress> {
   bool _isLoading = true;
   bool _isLastPage = false;
   bool _isLastSentence = false; // 마지막 문장인지 판별, 전 페이지로 넘어가기 위해
-  bool _isFirstSentence = false; // 첫 문장인지 판별, 전 페이지로 넘어가기 위해
   bool _isUnexsist = false;
   bool _isSkiped = false;
 
@@ -72,12 +69,14 @@ class _BookProgressState extends State<BookProgress> {
       if (!isRead) {
         await bookModel.setIsRead(accessToken, bookId);
       }
-      DialogUtils.showCustomDialog(context,
-          contentWidget: BookFinishModal(bookId, onModalClose: () {
-            setState(() {});
-          }));
+      if (mounted) {
+        DialogUtils.showCustomDialog(context,
+            contentWidget: BookFinishModal(bookId, onModalClose: () {
+              setState(() {});
+            }));
+      }
     } else if (_isLastSentence) {
-      print('실행!!');
+      // print('실행!!');
       cancelAudioPlayerSubscription();
       globalRouter.pushReplacement('/bookProgress/$bookId/${pageId + 1}/0');
     } else {
@@ -126,7 +125,7 @@ class _BookProgressState extends State<BookProgress> {
         ));
       } else if (nowPage.education?.category == "ACTION") {
         /// 동작문제
-        print("------------ action");
+        // print("------------ action");
         finishSentence();
       }
       bookModel.educations.add(nowPage.education!);
@@ -155,9 +154,6 @@ class _BookProgressState extends State<BookProgress> {
     } else {
       setState(() {
         sentenceId--;
-        if (sentenceId == 0) {
-          _isFirstSentence = true;
-        }
         backgroundLinePlay(Constant.s3BaseUrl + nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
         if (_isLastSentence) _isLastSentence = false;
       });
@@ -187,7 +183,7 @@ class _BookProgressState extends State<BookProgress> {
         }
       });
     } catch (e) {
-      print("오류 발생: $e");
+      debugPrint("오류 발생: $e");
     }
   }
 
@@ -197,7 +193,7 @@ class _BookProgressState extends State<BookProgress> {
 
   @override
   void initState() {
-    print('initstate');
+    // print('initstate');
     super.initState();
     player.pause();
     bookId = int.parse(widget.bookId);
@@ -218,7 +214,6 @@ class _BookProgressState extends State<BookProgress> {
         showToast(result, backgroundColor: AppColors.error);
         setState(() {
           _isLastSentence = true;
-          _isFirstSentence = true;
           _isLastPage = true;
           _isUnexsist = true;
           finishSentence();
