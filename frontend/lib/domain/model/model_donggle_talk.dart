@@ -19,7 +19,7 @@ class DonggleTalkModel extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       dongglesTalk = json.decode(utf8.decode(response.bodyBytes));
-      print(dongglesTalk);
+      print('model ---- $dongglesTalk');
       notifyListeners();
       return "Success";
     }  else {

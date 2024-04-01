@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
@@ -31,6 +33,7 @@ class _BookDetailState extends State<BookDetail> {
   int bookTotalPage = 0;
   List educations = [];
   String url = "";
+  bool isRead = false;
 
   @override
   void initState() {
@@ -60,6 +63,9 @@ class _BookDetailState extends State<BookDetail> {
       educations = bookModel.BookDetail['educationList'];
       url = Constant.s3BaseUrl + bookCover;
     });
+
+    isRead = bookModel.books[bookId - 1]["isRead"];
+    // print(isRead);
   }
 
   @override
@@ -86,7 +92,8 @@ class _BookDetailState extends State<BookDetail> {
             child: Container(
               color: Colors.transparent,
               child: Center(
-                child: Image.asset(AppIcons.bottle, width: MediaQuery.of(context).size.width * 0.35),
+                child: Image.asset(AppIcons.bottle,
+                    width: MediaQuery.of(context).size.width * 0.35),
               ),
             ),
           ),
@@ -129,7 +136,8 @@ class _BookDetailState extends State<BookDetail> {
                 imageUrl: url,
                 fit: BoxFit.cover,
                 width: MediaQuery.of(context).size.width * 0.25,
-                placeholder: (context, url) => const CircularProgressIndicator(),
+                placeholder: (context, url) =>
+                    const CircularProgressIndicator(),
                 errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             ),
@@ -157,10 +165,12 @@ class _BookDetailState extends State<BookDetail> {
                         children: [
                           Center(
                             child: CachedNetworkImage(
-                              imageUrl: Constant.s3BaseUrl + education["imagePath"],
+                              imageUrl:
+                                  Constant.s3BaseUrl + education["imagePath"],
                               fit: BoxFit.cover,
                               height: MediaQuery.of(context).size.height * 0.3,
-                              errorWidget: (context, url, error) => const Icon(Icons.error),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
                             ),
                           ),
                           Positioned(
@@ -170,7 +180,8 @@ class _BookDetailState extends State<BookDetail> {
                               width: MediaQuery.of(context).size.width * 0.185,
                               child: Text(
                                 education["wordName"],
-                                style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmall),
+                                style: CustomFontStyle.getTextStyle(
+                                    context, CustomFontStyle.textSmall),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -191,12 +202,14 @@ class _BookDetailState extends State<BookDetail> {
                 children: [
                   GreenButton("처음부터", onPressed: () {
                     Navigator.of(context).pop();
-                    globalRouter.pushReplacement('/bookProgress/${widget.bookId}/1/0');
+                    globalRouter
+                        .pushReplacement('/bookProgress/${widget.bookId}/1/0');
                   }),
                   if (bookPage != 0)
                     GreenButton("이어하기", onPressed: () {
                       Navigator.of(context).pop();
-                      globalRouter.pushReplacement('/bookProgress/${widget.bookId}/$bookPage/0');
+                      globalRouter.pushReplacement(
+                          '/bookProgress/${widget.bookId}/$bookPage/0');
                     }),
                 ],
               ),
@@ -208,8 +221,12 @@ class _BookDetailState extends State<BookDetail> {
             child: GreenButton("문제풀기", onPressed: () {
               // Navigator.of(context).pop("refresh");
               // context.go(RoutePath.main3);
-              Navigator.of(context).pop();
-              globalRouter.pushReplacement('/main/3/${widget.bookId}');
+              if (isRead) {
+                Navigator.of(context).pop();
+                globalRouter.pushReplacement('/main/3/${widget.bookId}');
+              } else {
+                showToast('동화책을 읽고 진행해주세요', backgroundColor: AppColors.error);
+              }
               // globalRouter.pushReplacement(RoutePath.main3.replaceAll(":bookId", widget.bookId.toString()));
               // Navigator.of(context).pop();
               // context.pushReplacement(RoutePath.main3);

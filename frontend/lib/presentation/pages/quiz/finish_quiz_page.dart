@@ -22,6 +22,16 @@ class FinishQuizPage extends StatefulWidget {
 }
 
 class _FinishQuizPageState extends State<FinishQuizPage> {
+  bool _isAnyAnswerWrong = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _isAnyAnswerWrong =
+        widget.selectedAnswer.any((answer) => answer["answer"] == false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle(
@@ -44,6 +54,7 @@ class _FinishQuizPageState extends State<FinishQuizPage> {
                 itemCount: widget.selectedAnswer.length,
                 itemBuilder: (context, index) {
                   bool check = widget.selectedAnswer[index]["answer"];
+                  // print("check -- $check");
                   String url = widget.selectedAnswer[index]["choiceImagePath"];
                   String name = widget.selectedAnswer[index]["choice"];
                   return Container(
@@ -109,10 +120,16 @@ class _FinishQuizPageState extends State<FinishQuizPage> {
                 ),
               ),
             ),
+            _isAnyAnswerWrong ?
             Positioned(
               bottom: MediaQuery.of(context).size.height * 0.1,
               right: 0,
-              child: const donggleTalk(situation: "QUIZRESULT"),
+              child: const donggleTalk(situation: "QUIZRESULT_WRONG"),
+            ) :
+            Positioned(
+              bottom: MediaQuery.of(context).size.height * 0.1,
+              right: 0,
+              child: const donggleTalk(situation: "QUIZRESULT_CORRECT"),
             ),
           ],
         ),

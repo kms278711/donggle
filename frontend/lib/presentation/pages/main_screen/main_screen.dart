@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/donggle_talk.dart';
 import 'package:frontend/core/utils/component/icons/cards_icon_main.dart';
@@ -19,6 +20,7 @@ import 'package:frontend/presentation/pages/quiz/book_quiz_page.dart';
 import 'package:frontend/presentation/pages/quiz/quiz_page.dart';
 import 'package:frontend/presentation/provider/main_provider.dart';
 import 'package:frontend/presentation/provider/quiz_provider.dart';
+import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:indexed/indexed.dart';
 import 'package:provider/provider.dart';
 
@@ -44,6 +46,9 @@ class _MainScreenState extends State<MainScreen> {
   late MainProvider mainProvider =
       Provider.of<MainProvider>(context, listen: false);
 
+  late UserProvider userProvider;
+  String accessToken = "";
+
   @override
   void initState() {
     super.initState();
@@ -54,6 +59,9 @@ class _MainScreenState extends State<MainScreen> {
     _updateSelectedIndex();
     quizProvider = Provider.of<QuizProvider>(context, listen: false);
     quizModel = Provider.of<QuizModel>(context, listen: false);
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    accessToken = userProvider.getAccessToken();
+    quizModel.getWordQuizzes(accessToken);
   }
 
   @override
@@ -185,13 +193,21 @@ class _MainScreenState extends State<MainScreen> {
                   child: Positioned(
                     top: MediaQuery.of(context).size.height * 0.12,
                     right: MediaQuery.of(context).size.width * 0.1,
-                    child: GreenButton(
-                      "문제 풀기",
-                      onPressed: () {
-                        _onButtonPressed(2);
-                        // context.pushReplacement('/main/2');
-                      },
-                    ),
+                    child: quizModel.quizzes.length == 0
+                        ? GreenButton(
+                            "문제 풀기",
+                            onPressed: () {
+                              showToast('단어카드를 획득 후 진행해주세요',
+                                  backgroundColor: AppColors.error);
+                            },
+                          )
+                        : GreenButton(
+                            "문제 풀기",
+                            onPressed: () {
+                              _onButtonPressed(2);
+                              // context.pushReplacement('/main/2');
+                            },
+                          ),
                   ),
                 )
               : Container(),
