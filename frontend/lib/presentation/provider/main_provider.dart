@@ -6,7 +6,7 @@ class MainProvider with ChangeNotifier {
   late bool _isMyPageUpdateSelected = false;
   late bool _isDetailPageSelected = false;
   late bool _isPurchaseHistorySelected = false;
-  late bool isSoundOn = false;
+  late bool isSoundOn = true;
 
 
   bool get isMyPageUpdateSelected => _isMyPageUpdateSelected;

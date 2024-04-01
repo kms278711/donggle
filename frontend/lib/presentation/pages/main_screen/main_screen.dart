@@ -52,7 +52,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    if (mainProvider.isSoundOn == false) {
+    if (mainProvider.isSoundOn == true) {
       player.play();
     }
 
