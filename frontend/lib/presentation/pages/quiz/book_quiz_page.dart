@@ -211,7 +211,7 @@ class _QuizCarouselState extends State<QuizCarousel> {
                         child: Text(
                           quiz['content'],
                           textAlign: TextAlign.start,
-                          style: CustomFontStyle.textMediumLarge,
+                          style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textLarge)
                         ),
                       ),
                       quiz['content'].toString().length >= 27
@@ -234,20 +234,7 @@ class _QuizCarouselState extends State<QuizCarousel> {
                             return GestureDetector(
                               onTap: () {
                                 if (quizIndex == widget.bookQuizzes.length - 1) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext dialogContext) {
-                                      return finishQuiz(
-                                        title: "퀴즈",
-                                        onConfirm: () {
-                                          DialogUtils.showCustomDialog(context,
-                                              contentWidget: FinishQuizPage(
-                                                  quizProvider.selectedAnswers!));
-                                          context.pushReplacement('/main/1/0');
-                                        },
-                                      );
-                                    },
-                                  );
+                                  showToast('좌측 상단 다 풀었어요 버튼을 눌러주세요');
                                 } else {
                                   buttonCarouselController.nextPage(
                                       duration: Duration(milliseconds: 800),
@@ -305,7 +292,7 @@ class _QuizCarouselState extends State<QuizCarousel> {
                                         child: Text(
                                           choice["choice"],
                                           textAlign: TextAlign.center,
-                                          style: CustomFontStyle.textMedium,
+                                          style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMedium),
                                         ),
                                       ),
                                     ),
@@ -362,7 +349,7 @@ class _QuizCarouselState extends State<QuizCarousel> {
           child: Text(
             '${_currentPageIndex + 1} / ${widget.bookQuizzes.length}',
             textAlign: TextAlign.center,
-            style: CustomFontStyle.textMedium,
+            style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMedium)
           ),
         ),
       ],

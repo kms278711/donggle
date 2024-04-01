@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
@@ -83,19 +84,26 @@ class _NickNameInputState extends State<NickNameInput> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TextField(
-            controller: nickName.nickNameController,
-            onChanged: (nickname) {
-              nickName.setNickName(nickname);
-            },
-            style: CustomFontStyle.getTextStyle(
-                context, CustomFontStyle.textSmall),
-            decoration: InputDecoration(
-              hintText: nickNameHint,
-              contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-              filled: true,
-              fillColor: Colors.transparent,
-              border: InputBorder.none,
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.1,
+            child: TextField(
+              textAlignVertical: const TextAlignVertical(y: -1.0),
+              controller: nickName.nickNameController,
+              onChanged: (nickname) {
+                nickName.setNickName(nickname);
+              },
+              maxLength: 10,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              style: CustomFontStyle.getTextStyle(
+                  context, CustomFontStyle.textSmall),
+              decoration: InputDecoration(
+                hintText: nickNameHint,
+                contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                filled: true,
+                fillColor: Colors.transparent,
+                border: InputBorder.none,
+              ),
             ),
           ),
         ],

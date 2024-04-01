@@ -143,6 +143,7 @@ class _BookProgressState extends State<BookProgress> {
     } else {
       // print('here!!');
       // print(nowPage.education?.category);
+      backgroundLine.stop();
       finishSentence();
     }
   }
