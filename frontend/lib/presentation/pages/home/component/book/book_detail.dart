@@ -155,6 +155,7 @@ class _BookDetailState extends State<BookDetail> {
                     child: CachedNetworkImage(
                       imageUrl: url,
                       fit: BoxFit.cover,
+                      memCacheWidth: 500,
                       width: MediaQuery.of(context).size.width * 0.25,
                       placeholder: (context, url) => const CircularProgressIndicator(),
                       errorWidget: (context, url, error) => const Icon(Icons.error),
@@ -186,6 +187,7 @@ class _BookDetailState extends State<BookDetail> {
                                   child: CachedNetworkImage(
                                     imageUrl: Constant.s3BaseUrl + education["imagePath"],
                                     fit: BoxFit.cover,
+                                    memCacheWidth: 200,
                                     height: MediaQuery.of(context).size.height * 0.3,
                                     errorWidget: (context, url, error) => const Icon(Icons.error),
                                   ),

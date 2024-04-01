@@ -59,6 +59,7 @@ class _OpenedBookState extends State<OpenedBook> {
                 child: CachedNetworkImage(
                   imageUrl: widget.url,
                   fit: BoxFit.cover,
+                  memCacheWidth: 500,
                   placeholder: (context, url) => const CircularProgressIndicator(),
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),

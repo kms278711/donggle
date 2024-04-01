@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class LockedBook extends StatelessWidget {
   final String url;
@@ -19,7 +18,7 @@ class LockedBook extends StatelessWidget {
         onTap: () {
           showToast(
             "마이페이지에서 동화책을 구매해주세요.",
-            duration: Duration(seconds: 3),
+            duration: const Duration(seconds: 3),
             context: context,
             backgroundColor: AppColors.error,
           );
@@ -32,6 +31,7 @@ class LockedBook extends StatelessWidget {
                 child: CachedNetworkImage(
                   imageUrl: url,
                   fit: BoxFit.cover,
+                  memCacheWidth: 450,
                   placeholder: (context, url) => const CircularProgressIndicator(),
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
@@ -41,7 +41,7 @@ class LockedBook extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: Color.fromRGBO(0, 0, 0, 0.7),
+                  color: const Color.fromRGBO(0, 0, 0, 0.7),
                 ),
                 width: MediaQuery.of(context).size.width * 0.165,
               ),

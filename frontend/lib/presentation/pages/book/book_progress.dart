@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
@@ -81,7 +79,6 @@ class _BookProgressState extends State<BookProgress> {
       int index = bookModel.progresses
           .indexWhere((progress) => progress.bookId == bookId);
       bookModel.progresses[index].isDone = true;
-      print("----------- isDone: ${bookModel.progresses[index].isDone}");
       if (mounted) {
         DialogUtils.showCustomDialog(context,
             contentWidget: BookFinishModal(bookId, onModalClose: () {
@@ -143,7 +140,6 @@ class _BookProgressState extends State<BookProgress> {
         // print("------------ action");
         finishSentence();
       }
-      bookModel.educations.add(nowPage.education!);
     } else {
       // print('here!!');
       // print(nowPage.education?.category);
@@ -162,7 +158,7 @@ class _BookProgressState extends State<BookProgress> {
     //     if (_isLastSentence) _isLastSentence = false;
     //   });
     // }
-    if (sentenceId == 0 && nowPage.bookPageId == 1) {
+    if (sentenceId == 0 && nowPage.page == 1) {
       showToast("첫 페이지 입니다.", backgroundColor: AppColors.error);
     } else if (sentenceId == 0) {
       globalRouter.pushReplacement('/bookProgress/$bookId/${pageId - 1}/1');
@@ -279,6 +275,7 @@ class _BookProgressState extends State<BookProgress> {
                 CachedNetworkImage(
                   imageUrl: url,
                   fit: BoxFit.cover,
+                  memCacheWidth: 800,
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
                   errorWidget: (context, url, error) => const Icon(Icons.error),
