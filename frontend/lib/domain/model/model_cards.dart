@@ -10,7 +10,7 @@ class CardModel extends ChangeNotifier {
   CardModel(this.userProvider);
 
   List<dynamic> cards = [];
-  late Map selectedCard = {};
+  late Map<String, dynamic> selectedCard = {};
 
   Future<String> getAllCards(String accessToken) async {
     var url = Uri.https("j10c101.p.ssafy.io", "api/users/educations");

@@ -57,14 +57,41 @@ class _BookProgressState extends State<BookProgress> {
     page: 0,
     content: "",
     bookPageSentences: [
-      BookPageSentences(
-          bookPageSentenceId: 0,
-          sequence: 0,
-          sentence: "",
-          sentenceSoundPath: "")
+      BookPageSentences(bookPageSentenceId: 0, sequence: 0, sentence: "", sentenceSoundPath: "")
     ],
   );
   String url = "";
+
+  AudioPlayer backgroundLine = AudioPlayer();
+
+  StreamSubscription? _audioPlayerSubscription;
+
+  Future<void> backgroundLinePlay(String path) async {
+    try {
+      await backgroundLine.setUrl(path); // 오디오 파일의 URL을 설정
+      await backgroundLine.play(); // 오디오 재생 시작
+
+      await _audioPlayerSubscription?.cancel();
+
+      _audioPlayerSubscription = backgroundLine.playerStateStream.listen((state) {
+        if (state.processingState == ProcessingState.completed) {
+          if (_isSkiped == false) {
+            // print("_isSkiped false");
+            goNext();
+          } else {
+            // print("_isSkiped true");
+            _isSkiped = false;
+          }
+        }
+      });
+    } catch (e) {
+      debugPrint("오류 발생: $e");
+    }
+  }
+
+  void cancelAudioPlayerSubscription() {
+    _audioPlayerSubscription?.cancel();
+  }
 
   Future<void> finishSentence() async {
     // if(_isLastSentence && _isLastPage){
@@ -76,8 +103,7 @@ class _BookProgressState extends State<BookProgress> {
       if (!isRead) {
         await bookModel.setIsRead(accessToken, bookId);
       }
-      int index = bookModel.progresses
-          .indexWhere((progress) => progress.bookId == bookId);
+      int index = bookModel.progresses.indexWhere((progress) => progress.bookId == bookId);
       bookModel.progresses[index].isDone = true;
       if (mounted) {
         DialogUtils.showCustomDialog(context,
@@ -95,15 +121,13 @@ class _BookProgressState extends State<BookProgress> {
         if (sentenceId == nowPage.bookPageSentences.length - 1) {
           _isLastSentence = true;
         }
-        backgroundLinePlay(Constant.s3BaseUrl +
-            nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
+        backgroundLinePlay(Constant.s3BaseUrl + nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
       });
     }
   }
 
   void goNext() {
-    if (educationId ==
-        nowPage.bookPageSentences[sentenceId].bookPageSentenceId) {
+    if (educationId == nowPage.bookPageSentences[sentenceId].bookPageSentenceId) {
       if (_isSkiped == true) {
         // print('stop');
         backgroundLine.stop();
@@ -139,12 +163,12 @@ class _BookProgressState extends State<BookProgress> {
         /// 동작문제
         // print("------------ action");
         finishSentence();
+      } else {
+        // print('here!!');
+        // print(nowPage.education?.category);
+        backgroundLine.stop();
+        finishSentence();
       }
-    } else {
-      // print('here!!');
-      // print(nowPage.education?.category);
-      backgroundLine.stop();
-      finishSentence();
     }
   }
 
@@ -166,43 +190,10 @@ class _BookProgressState extends State<BookProgress> {
     } else {
       setState(() {
         sentenceId--;
-        backgroundLinePlay(Constant.s3BaseUrl +
-            nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
+        backgroundLinePlay(Constant.s3BaseUrl + nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
         if (_isLastSentence) _isLastSentence = false;
       });
     }
-  }
-
-  AudioPlayer backgroundLine = AudioPlayer();
-
-  StreamSubscription? _audioPlayerSubscription;
-
-  Future<void> backgroundLinePlay(String path) async {
-    try {
-      await backgroundLine.setUrl(path); // 오디오 파일의 URL을 설정
-      await backgroundLine.play(); // 오디오 재생 시작
-
-      await _audioPlayerSubscription?.cancel();
-
-      _audioPlayerSubscription =
-          backgroundLine.playerStateStream.listen((state) {
-        if (state.processingState == ProcessingState.completed) {
-          if (_isSkiped == false) {
-            // print("_isSkiped false");
-            goNext();
-          } else {
-            // print("_isSkiped true");
-            _isSkiped = false;
-          }
-        }
-      });
-    } catch (e) {
-      debugPrint("오류 발생: $e");
-    }
-  }
-
-  void cancelAudioPlayerSubscription() {
-    _audioPlayerSubscription?.cancel();
   }
 
   @override
@@ -248,8 +239,7 @@ class _BookProgressState extends State<BookProgress> {
             _isLastSentence = true;
           }
           _isLoading = false; // Update loading state when done
-          backgroundLinePlay(Constant.s3BaseUrl +
-              nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
+          backgroundLinePlay(Constant.s3BaseUrl + nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
         });
       }
     });
@@ -290,22 +280,18 @@ class _BookProgressState extends State<BookProgress> {
                         children: [
                           Container(
                               constraints: BoxConstraints(
-                                maxWidth: MediaQuery.of(context).size.width *
-                                    0.95, // Set your desired max width here
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.95, // Set your desired max width here
                               ),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                      MediaQuery.of(context).size.width * 0.02),
+                              padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.02),
                               decoration: BoxDecoration(
-                                color:
-                                    const Color.fromRGBO(217, 217, 217, 0.85),
+                                color: const Color.fromRGBO(217, 217, 217, 0.85),
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               child: Text(
                                 nowPage.bookPageSentences[sentenceId].sentence,
                                 textAlign: TextAlign.center,
-                                style: CustomFontStyle.getTextStyle(
-                                    context, CustomFontStyle.textMediumLarge2),
+                                style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMediumLarge2),
                               ))
                           // : GreenButton('시작하기', onPressed: () {
                           //     backgroundLinePlay(Constant.s3BaseUrl +

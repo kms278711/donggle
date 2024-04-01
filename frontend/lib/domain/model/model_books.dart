@@ -323,7 +323,7 @@ class Education {
   final String wordName;
   final String imagePath;
   final int? bookSentenceId;
-  final String? traceImagePath;
+  String? traceImagePath;
 
   Education({
     required this.educationId,

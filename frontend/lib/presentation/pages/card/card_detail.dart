@@ -50,6 +50,7 @@ class _CardDetailState extends State<CardDetail> {
   String url = "";
   String category = "";
   String accessToken = "";
+  String traceImagePath = "";
 
   @override
   void initState() {
@@ -68,8 +69,6 @@ class _CardDetailState extends State<CardDetail> {
     await cardModel.getSelectedCard(accessToken, widget.educationId);
     // 데이터 로딩 완료 후 상태 업데이트
 
-    int index = bookModel.educations.indexWhere((education) => education.educationId == widget.educationId);
-
     setState(() {
       wordName = cardModel.selectedCard['wordName'];
       imagePath = cardModel.selectedCard['imagePath'];
@@ -78,7 +77,10 @@ class _CardDetailState extends State<CardDetail> {
       userImages = cardModel.selectedCard['userImages'];
       category = cardModel.selectedCard['category'];
       url = Constant.s3BaseUrl + imagePath;
-      bookModel.nowEducation = bookModel.educations[index];
+      bookModel.nowEducation = Education(educationId: widget.educationId, wordName: wordName, imagePath: imagePath, category: category);
+      if(category == "PICTURE"){
+        bookModel.nowEducation.traceImagePath = cardModel.selectedCard['traceImagePath'];
+      }
     });
   }
 

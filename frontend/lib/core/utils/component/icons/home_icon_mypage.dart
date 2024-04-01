@@ -16,7 +16,7 @@ class _HomeIconMypageState extends State<HomeIconMypage> {
   // 이동하고, 정보 수정 값 false로 초기화 해서 정보수정 페이지로 안가게
   void pushAndChange() {
     context.read<MainProvider>().resetMyPageUpdate();
-    context.push(RoutePath.main0);
+    context.pushReplacement(RoutePath.main0);
   }
 
   @override

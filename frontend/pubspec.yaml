@@ -32,7 +32,7 @@ dependencies:
   carousel_slider: ^4.2.1
   camera: ^0.10.5+9
   flutter_dotenv: ^5.1.0
-  bootpay: ^4.9.0
+  bootpay: ^4.9.2-beta.1
   just_audio: ^0.9.36
   just_audio_background: ^0.0.1-beta.11
   audioplayers: ^6.0.0

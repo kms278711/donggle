@@ -248,10 +248,10 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                                                           width: MediaQuery.of(context).size.width * 0.01,
                                                         ),
                                                         SizedBox(
-                                                          width: MediaQuery.of(context).size.width * 0.31,
+                                                          width: MediaQuery.of(context).size.width * 0.33,
                                                           height: MediaQuery.of(context).size.height * 0.05,
                                                           child: SingleChildScrollView(
-                                                            scrollDirection: Axis.horizontal,
+                                                            scrollDirection: Axis.vertical,
                                                             child: Text(
                                                               myReview.content,
                                                               style: CustomFontStyle.getTextStyle(
@@ -411,7 +411,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
       payload: payload,
       showCloseButton: false,
       onIssued: (String data){
-        // print("------------onIssued: $data");
+        debugPrint("------------onIssued: $data");
       },
       onError: (String data) {
         showToast(data, backgroundColor: AppColors.error);
@@ -420,7 +420,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
         return true;
       },
       onDone: (String data) async {
-        // print("-------onDone: $data");
+        debugPrint("-------onDone: $data");
         result = await approvalsModel.setApprovals(accessToken, bookId, price);
 
         if (result == "Success") {
@@ -436,6 +436,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
       },
       onClose: () {
         if (mounted) {
+          Bootpay().removePaymentWindow();
           Navigator.of(context).pop();
         }
       },

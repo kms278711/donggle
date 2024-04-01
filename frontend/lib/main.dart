@@ -124,6 +124,46 @@ class _MyAppState extends State<MyApp> {
     super.dispose();
   }
 
+  // void _showBackDialog() {
+  //   showDialog<void>(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: const Text('정말 뒤로 가시겠습니까?'),
+  //         content: const Text(
+  //           '현재 페이지를 나가시겠습니까?',
+  //         ),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             style: TextButton.styleFrom(
+  //               textStyle: Theme.of(context).textTheme.labelLarge,
+  //             ),
+  //             child: const Text('아니오'),
+  //             onPressed: () {
+  //               Navigator.pop(context);
+  //             },
+  //           ),
+  //           TextButton(
+  //             style: TextButton.styleFrom(
+  //               textStyle: Theme.of(context).textTheme.labelLarge,
+  //             ),
+  //             child: const Text('네'),
+  //             onPressed: () {
+  //               Navigator.pop(context);
+  //             },
+  //           ),
+  //           TextButton(
+  //             onPressed: () {
+  //               Navigator.pop(context);
+  //             },
+  //             child: const Text("Scope를 감싸지않은 버튼"),
+  //           )
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -146,9 +186,7 @@ class _MyAppState extends State<MyApp> {
       fullWidth: false,
       isHideKeyboard: true,
       isIgnoring: true,
-      child: const MaterialApp(
-        home: MyHomePage(),
-      ),
+      child: const MaterialApp(home: MyHomePage()),
     );
   }
 }
