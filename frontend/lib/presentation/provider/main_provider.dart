@@ -45,6 +45,7 @@ class MainProvider with ChangeNotifier {
 
   void soundToggle() {
     isSoundOn = !isSoundOn;
+    print("SOUND == $isSoundOn");
     notifyListeners();
   }
 

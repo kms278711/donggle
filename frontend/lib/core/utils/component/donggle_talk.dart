@@ -72,7 +72,8 @@ class _donggleTalkState extends State<donggleTalk> with SingleTickerProviderStat
     );
 
     // 퀴즈 다풀었을 때 동글이가 바로 말하도록
-    if (widget.situation == 'QUIZRESULT') {
+    if (widget.situation == 'QUIZRESULT_CORRECT' ||
+        widget.situation == 'QUIZRESULT_WRONG') {
       _playInitialDonggleTalk();
     }
 
@@ -107,8 +108,10 @@ class _donggleTalkState extends State<donggleTalk> with SingleTickerProviderStat
     await donggleTalkModel.getDonggleTalk(widget.situation);
     setState(() {
       donggleTalk = donggleTalkModel.dongglesTalk["content"];
+      print("talk ---- $donggleTalk");
     });
-    await sayDonggle(Constant.s3BaseUrl + donggleTalkModel.dongglesTalk["dgSoundPath"]);
+    await sayDonggle(
+        Constant.s3BaseUrl + donggleTalkModel.dongglesTalk["dgSoundPath"]);
   }
 
   @override
@@ -159,10 +162,25 @@ class _donggleTalkState extends State<donggleTalk> with SingleTickerProviderStat
                                                 : widget.situation == 'WORD'
                                                     ? MediaQuery.of(context).size.height * 0.27
                                                     : widget.situation == 'QUIZ'
-                                                        ? MediaQuery.of(context).size.height * 0.27
-                                                        : widget.situation == 'QUIZRESULT'
-                                                            ? MediaQuery.of(context).size.height * 0.27
-                                                            : 10,
+                                                        ? MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.27
+                                                        : widget.situation ==
+                                                                'QUIZRESULT_CORRECT'
+                                                            ? MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .height *
+                                                                0.27
+                                                            : widget.situation ==
+                                                                    'QUIZRESULT_WRONG'
+                                                                ? MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .height *
+                                                                    0.24
+                                                                : 10,
                                     right: widget.situation == 'BOOKLIST'
                                         ? MediaQuery.of(context).size.width * 0.054
                                         : widget.situation == 'BOOK'
@@ -172,10 +190,25 @@ class _donggleTalkState extends State<donggleTalk> with SingleTickerProviderStat
                                                 : widget.situation == 'WORD'
                                                     ? MediaQuery.of(context).size.width * 0.035
                                                     : widget.situation == 'QUIZ'
-                                                        ? MediaQuery.of(context).size.width * 0.024
-                                                        : widget.situation == 'QUIZRESULT'
-                                                            ? MediaQuery.of(context).size.width * 0.065
-                                                            : 10,
+                                                        ? MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.024
+                                                        : widget.situation ==
+                                                                'QUIZRESULT_CORRECT'
+                                                            ? MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                0.065
+                                                            : widget.situation ==
+                                                                    'QUIZRESULT_WRONG'
+                                                                ? MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    0.02
+                                                                : 10,
                                     child: Container(
                                       width: widget.situation == 'BOOKLIST'
                                           ? MediaQuery.of(context).size.width * 0.13
@@ -184,12 +217,32 @@ class _donggleTalkState extends State<donggleTalk> with SingleTickerProviderStat
                                               : widget.situation == 'WORDLIST'
                                                   ? MediaQuery.of(context).size.width * 0.16
                                                   : widget.situation == 'WORD'
-                                                      ? MediaQuery.of(context).size.width * 0.17
-                                                      : widget.situation == 'QUIZ'
-                                                          ? MediaQuery.of(context).size.width * 0.19
-                                                          : widget.situation == 'QUIZRESULT'
-                                                              ? MediaQuery.of(context).size.width * 0.11
-                                                              : 10,
+                                                      ? MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.17
+                                                      : widget.situation ==
+                                                              'QUIZ'
+                                                          ? MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.2
+                                                          : widget.situation ==
+                                                                  'QUIZRESULT_CORRECT'
+                                                              ? MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.11
+                                                              : widget.situation ==
+                                                                      'QUIZRESULT_WRONG'
+                                                                  ? MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width *
+                                                                      0.2
+                                                                  : 10,
                                       color: Colors.transparent,
                                       child: Padding(
                                         padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
@@ -212,9 +265,13 @@ class _donggleTalkState extends State<donggleTalk> with SingleTickerProviderStat
           ),
         ),
         Positioned(
-          bottom: widget.situation == 'QUIZRESULT' ? MediaQuery.of(context).size.height * -0.055 : 0,
+          bottom: widget.situation == 'QUIZRESULT_CORRECT' || widget.situation == 'QUIZRESULT_WRONG'
+              ? MediaQuery.of(context).size.height * -0.055
+              : 0,
           // bottom: 0,
-          right: widget.situation == 'QUIZRESULT' ? MediaQuery.of(context).size.width * -0.001 : 0,
+          right: widget.situation == 'QUIZRESULT_CORRECT' || widget.situation == 'QUIZRESULT_WRONG'
+              ? MediaQuery.of(context).size.width * -0.001
+              : 0,
           child: IgnorePointer(
             ignoring: false, // 이 Container만 터치 가능하도록 설정
             child: GestureDetector(
@@ -226,7 +283,7 @@ class _donggleTalkState extends State<donggleTalk> with SingleTickerProviderStat
                 });
                 setTouchedDonggle(true);
               },
-              child: widget.situation == 'QUIZRESULT'
+              child: widget.situation == 'QUIZRESULT_CORRECT' || widget.situation == 'QUIZRESULT_WRONG'
                   ? Container(
                       // color: Colors.green,
                       child: Image.asset(

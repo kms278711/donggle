@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/domain/model/model_approvals.dart';
 import 'package:frontend/presentation/pages/mypage/approval/approval_card.dart';
@@ -38,38 +39,49 @@ class _PurchaseHistoryState extends State<PurchaseHistory> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.725,
-          child: Column(
+    return approvals.length == 0
+        ? Center(
+          child: Text(
+              "구매내역이 없습니다.",
+              // Use the data from the snapshot
+              textAlign: TextAlign.center,
+              style: CustomFontStyle.getTextStyle(
+                  context, CustomFontStyle.unSelectedLarge),
+            ),
+        )
+        : Stack(
             children: [
-              Flexible(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(50),
-                  child: ListView.builder(
-                    itemCount: approvals.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      Approval approval = Approval.fromJson(approvals[index]);
-                      return ApprovalCard(approval);
-                    },
-                    shrinkWrap: true,
-                  ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.725,
+                child: Column(
+                  children: [
+                    Flexible(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: ListView.builder(
+                          itemCount: approvals.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            Approval approval =
+                                Approval.fromJson(approvals[index]);
+                            return ApprovalCard(approval);
+                          },
+                          shrinkWrap: true,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-              )
+              ),
+              Positioned(
+                  bottom: MediaQuery.of(context).size.height * 0.03,
+                  right: MediaQuery.of(context).size.width * 0.015,
+                  child: GreenButton(
+                    "돌아가기",
+                    onPressed: () {
+                      context.read<MainProvider>().resetPurchaseHistory();
+                    },
+                  ))
             ],
-          ),
-        ),
-        Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.03,
-            right: MediaQuery.of(context).size.width * 0.015,
-            child: GreenButton(
-              "돌아가기",
-              onPressed: () {
-                context.read<MainProvider>().resetPurchaseHistory();
-              },
-            ))
-      ],
-    );
+          );
   }
 }

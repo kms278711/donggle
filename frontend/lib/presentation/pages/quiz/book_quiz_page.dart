@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +12,7 @@ import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/dialog_utils.dart';
 import 'package:frontend/core/utils/component/donggle_talk.dart';
+import 'package:frontend/core/utils/component/icons/circle_back_icon.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_quiz.dart';
 import 'package:frontend/presentation/pages/home/component/title/main_title.dart';
@@ -158,132 +161,211 @@ class _QuizCarouselState extends State<QuizCarousel> {
   //   selectAnswer = List<dynamic>.filled(widget.quizzes.length, null);
   // }
 
+  CarouselController buttonCarouselController = CarouselController();
+
+  int _currentPageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    return CarouselSlider(
-      options: CarouselOptions(
-        enableInfiniteScroll: false,
-        // 마지막에서 처음으로 안 가도록
-        autoPlay: false,
-        // 자동 재생 여부
-        viewportFraction: 1,
-        // 뷰포트 대비 항목 크기 비율
-        aspectRatio: 16 / 9,
-        // 항목의 종횡비
-        initialPage: 0, // 초기 페이지 인덱스
-      ),
-      items: widget.bookQuizzes.asMap().entries.map((entry) {
-        int quizIndex = entry.key; // 현재 퀴즈 인덱스
-        var quiz = entry.value; // 핸재 퀴즈 객체
+    return Stack(
+      children: [
+        CarouselSlider(
+          carouselController: buttonCarouselController,
+          options: CarouselOptions(
+            enableInfiniteScroll: false,
+            // 마지막에서 처음으로 안 가도록
+            autoPlay: false,
+            // 자동 재생 여부
+            viewportFraction: 1,
+            // 뷰포트 대비 항목 크기 비율
+            aspectRatio: 16 / 8.5,
+            // 항목의 종횡비
+            initialPage: 0,
+            // 초기 페이지 인덱스
+            onPageChanged: (index, reason) {
+              // 페이지가 변경될 때마다 현재 페이지 인덱스를 업데이트합니다.
+              setState(() {
+                _currentPageIndex = index;
+              });
+            },
+          ),
+          items: widget.bookQuizzes.asMap().entries.map((entry) {
+            int quizIndex = entry.key; // 현재 퀴즈 인덱스
+            var quiz = entry.value; // 핸재 퀴즈 객체
 
-        // 퀴즈 목록을 캐러셀 항목으로 변환
-        return Builder(
-          builder: (BuildContext context) {
-            return Container(
-              width: MediaQuery.of(context).size.width * 0.75,
-              decoration: const BoxDecoration(
-                // color: Colors.white,
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    // color: Colors.blue,
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                    // decoration: BoxDecoration(color: Colors.red),
-                    child: Text(
-                      quiz['content'],
-                      textAlign: TextAlign.start,
-                      style: CustomFontStyle.textMediumLarge,
-                    ),
+            // 퀴즈 목록을 캐러셀 항목으로 변환
+            return Builder(
+              builder: (BuildContext context) {
+                return Container(
+                  width: MediaQuery.of(context).size.width * 0.75,
+                  decoration: const BoxDecoration(
+                    // color: Colors.white,
                   ),
-                  quiz['content'].toString().length >= 27
-                      ? SizedBox()
-                      : SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.07,
-                  ),
-                  Container(
-                    // color: Colors.red,
-                    padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
-                    // width: MediaQuery.of(context).size.width * 0.7,
-                    height: MediaQuery.of(context).size.height * 0.37,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal, // 리스트 가로로
-                      itemCount: quiz['choices'].length, // 선택지의 수 만큼 아이템 생성
-                      itemBuilder: (context, index) {
-                        var choice = quiz['choices'][index]; // 현재 인덱스에 해당하는 선택지
-                        bool isSelected =
-                            quizProvider.selectedAnswers![quizIndex] == choice;
-                        return GestureDetector(
-                          onTap: () {
-                            widget.onAnswerSelected(quizIndex, choice);
-                            setState(() {
-                              quizProvider.selectedAnswers![quizIndex] = choice;
-                            });
-                          },
-                          child: Container(
-                            // margin: const EdgeInsets.symmetric(horizontal: 1),
-                            // 가로 여백 설정
-                            child: Stack(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: CachedNetworkImage(
-                                    imageUrl: Constant.s3BaseUrl +
-                                        choice['choiceImagePath'],
-                                    fit: BoxFit.cover,
-                                    placeholder: (context, url) =>
-                                    const CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) =>
-                                    const Icon(Icons.error),
-                                  ),
-                                ),
-                                isSelected
-                                    ? Positioned(
-                                  bottom:
-                                  MediaQuery.of(context).size.height *
-                                      0.11,
-                                  right:
-                                  MediaQuery.of(context).size.width *
-                                      0.01,
-                                  child: Image.asset(
-                                    AppIcons.check_mark,
-                                    width: MediaQuery.of(context)
-                                        .size
-                                        .width *
-                                        0.17,
-                                    height: MediaQuery.of(context)
-                                        .size
-                                        .height *
-                                        0.2,
-                                  ),
-                                )
-                                    : Container(),
-                                Positioned(
-                                  bottom: MediaQuery.of(context).size.height * 0.04,
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width * 0.166,
-                                    color: Colors.transparent,
-                                    child: Text(
-                                      choice["choice"],
-                                      textAlign: TextAlign.center,
-                                      style: CustomFontStyle.textMedium,
+                  child: Column(
+                    children: [
+                      Container(
+                        // color: Colors.blue,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                        // decoration: BoxDecoration(color: Colors.red),
+                        child: Text(
+                          quiz['content'],
+                          textAlign: TextAlign.start,
+                          style: CustomFontStyle.textMediumLarge,
+                        ),
+                      ),
+                      quiz['content'].toString().length >= 27
+                          ? SizedBox()
+                          : SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.07,
+                      ),
+                      Container(
+                        // color: Colors.red,
+                        padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
+                        // width: MediaQuery.of(context).size.width * 0.7,
+                        height: MediaQuery.of(context).size.height * 0.37,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal, // 리스트 가로로
+                          itemCount: quiz['choices'].length, // 선택지의 수 만큼 아이템 생성
+                          itemBuilder: (context, index) {
+                            var choice = quiz['choices'][index]; // 현재 인덱스에 해당하는 선택지
+                            bool isSelected =
+                                quizProvider.selectedAnswers![quizIndex] == choice;
+                            return GestureDetector(
+                              onTap: () {
+                                if (quizIndex == widget.bookQuizzes.length - 1) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext dialogContext) {
+                                      return finishQuiz(
+                                        title: "퀴즈",
+                                        onConfirm: () {
+                                          DialogUtils.showCustomDialog(context,
+                                              contentWidget: FinishQuizPage(
+                                                  quizProvider.selectedAnswers!));
+                                          context.pushReplacement('/main/1/0');
+                                        },
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  buttonCarouselController.nextPage(
+                                      duration: Duration(milliseconds: 800),
+                                      curve: Curves.linear);
+                                }
+                                widget.onAnswerSelected(quizIndex, choice);
+                                setState(() {
+                                  quizProvider.selectedAnswers![quizIndex] =
+                                      choice;
+                                });
+                              },
+                              child: Container(
+                                // margin: const EdgeInsets.symmetric(horizontal: 1),
+                                // 가로 여백 설정
+                                child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: CachedNetworkImage(
+                                        imageUrl: Constant.s3BaseUrl +
+                                            choice['choiceImagePath'],
+                                        fit: BoxFit.cover,
+                                        placeholder: (context, url) =>
+                                        const CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
+                                      ),
                                     ),
-                                  ),
+                                    isSelected
+                                        ? Positioned(
+                                      bottom:
+                                      MediaQuery.of(context).size.height *
+                                          0.11,
+                                      right:
+                                      MediaQuery.of(context).size.width *
+                                          0.01,
+                                      child: Image.asset(
+                                        AppIcons.check_mark,
+                                        width: MediaQuery.of(context)
+                                            .size
+                                            .width *
+                                            0.17,
+                                        height: MediaQuery.of(context)
+                                            .size
+                                            .height *
+                                            0.2,
+                                      ),
+                                    )
+                                        : Container(),
+                                    Positioned(
+                                      bottom: MediaQuery.of(context).size.height * 0.04,
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width * 0.166,
+                                        color: Colors.transparent,
+                                        child: Text(
+                                          choice["choice"],
+                                          textAlign: TextAlign.center,
+                                          style: CustomFontStyle.textMedium,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             );
-          },
-        );
-      }).toList(),
+          }).toList(),
+        ),
+        _currentPageIndex == 0
+            ? Container()
+            : Positioned(
+          left: MediaQuery.of(context).size.height * 0,
+          bottom: MediaQuery.of(context).size.height * 0.32,
+          child: GestureDetector(
+            onTap: () {
+              buttonCarouselController.previousPage(
+                  duration: Duration(milliseconds: 800),
+                  curve: Curves.linear);
+            },
+            child: CircleBackIcon(
+                size: MediaQuery.of(context).size.width * 0.03),
+          ),
+        ),
+        _currentPageIndex == widget.bookQuizzes.length - 1
+            ? Container()
+            : Positioned(
+          right: MediaQuery.of(context).size.height * -0.05,
+          bottom: MediaQuery.of(context).size.height * 0.32,
+          child: Transform(
+            transform: Matrix4.rotationY(pi),
+            child: GestureDetector(
+              onTap: () {
+                buttonCarouselController.nextPage(
+                    duration: Duration(milliseconds: 800),
+                    curve: Curves.linear);
+              },
+              child: CircleBackIcon(
+                  size: MediaQuery.of(context).size.width * 0.03),
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: MediaQuery.of(context).size.height * 0.02,
+          left: MediaQuery.of(context).size.width * 0.36,
+          child: Text(
+            '${_currentPageIndex + 1} / ${widget.bookQuizzes.length}',
+            textAlign: TextAlign.center,
+            style: CustomFontStyle.textMedium,
+          ),
+        ),
+      ],
     );
   }
 }
