@@ -5,11 +5,13 @@ import com.ssafy.backend.domain.approval.repository.ApprovalRepository;
 import com.ssafy.backend.domain.book.dto.BookDto;
 import com.ssafy.backend.domain.book.dto.BookPageSentenceDto;
 import com.ssafy.backend.domain.book.dto.UserBookProcessDto;
+import com.ssafy.backend.domain.book.dto.response.BookCoverResponseDto;
 import com.ssafy.backend.domain.book.dto.response.BookInfoResponseDto;
 import com.ssafy.backend.domain.book.dto.response.BookPageResponseDto;
 import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;
 import com.ssafy.backend.domain.book.entity.*;
 import com.ssafy.backend.domain.book.mapper.BookMapper;
+import com.ssafy.backend.domain.book.mapper.CoverPathMapping;
 import com.ssafy.backend.domain.book.repository.book.BookRepository;
 import com.ssafy.backend.domain.book.repository.bookpage.BookPageRepository;
 import com.ssafy.backend.domain.book.repository.bookprocess.UserBookProcessRespository;
@@ -107,7 +109,6 @@ public class BookServiceImpl implements BookService {
                 .bookPageImagePath(bookPageImagePath)
                 .educationList(educationList)
                 .build();
-
     }
 
     // 진행중인 페이지 정보 가져오기
@@ -227,5 +228,13 @@ public class BookServiceImpl implements BookService {
                 .build();
 
         userBookProcessRespository.save(bookProcess);
+    }
+
+    // 앱 실행시 동화책 표지 이미지 불러오기
+    @Override
+    public List<CoverPathMapping> getCoverPath() {
+        List<CoverPathMapping> books = bookRepository.findAllBy();
+
+        return books;
     }
 }

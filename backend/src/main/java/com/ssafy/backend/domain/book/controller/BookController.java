@@ -2,9 +2,11 @@ package com.ssafy.backend.domain.book.controller;
 
 import com.ssafy.backend.domain.book.dto.BookDto;
 import com.ssafy.backend.domain.book.dto.UserBookProcessDto;
+import com.ssafy.backend.domain.book.dto.response.BookCoverResponseDto;
 import com.ssafy.backend.domain.book.dto.response.BookInfoResponseDto;
 import com.ssafy.backend.domain.book.dto.response.BookPageResponseDto;
 import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;
+import com.ssafy.backend.domain.book.mapper.CoverPathMapping;
 import com.ssafy.backend.domain.book.service.BookService;
 import com.ssafy.backend.global.util.AuthenticationUtil;
 import lombok.RequiredArgsConstructor;
@@ -104,5 +106,13 @@ public class BookController {
         bookService.saveIsRead(loginUserId, bookId);
 
         return ResponseEntity.ok("isRead가 저장되었습니다.");
+    }
+
+    // 앱 실행시 동화책 표지 이미지 불러오기
+    @GetMapping("/cover-images")
+    public ResponseEntity<List<CoverPathMapping>> getCoverPath() {
+        List<CoverPathMapping> bookCovers = bookService.getCoverPath();
+
+        return ResponseEntity.ok(bookCovers);
     }
 }

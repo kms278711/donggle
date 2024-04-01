@@ -2,9 +2,11 @@ package com.ssafy.backend.domain.book.service;
 
 import com.ssafy.backend.domain.book.dto.BookDto;
 import com.ssafy.backend.domain.book.dto.UserBookProcessDto;
+import com.ssafy.backend.domain.book.dto.response.BookCoverResponseDto;
 import com.ssafy.backend.domain.book.dto.response.BookInfoResponseDto;
 import com.ssafy.backend.domain.book.dto.response.BookPageResponseDto;
 import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;
+import com.ssafy.backend.domain.book.mapper.CoverPathMapping;
 
 import java.util.List;
 
@@ -28,4 +30,5 @@ public interface BookService {
     void savePurchasedBook(Long loginUserId, Long bookId);
     // isRead 여부 저장
     void saveIsRead(Long loginUserId, Long bookId);
+    List<CoverPathMapping> getCoverPath();
 }

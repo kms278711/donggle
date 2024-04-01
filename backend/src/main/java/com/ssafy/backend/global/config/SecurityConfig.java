@@ -38,7 +38,8 @@ public class SecurityConfig {
 				.requestMatchers("/api/donggle/**")
 				.requestMatchers("/ai/**")
 				.requestMatchers("/api/oauth/**")
-				.requestMatchers("/api/approvals/bootpay");
+				.requestMatchers("/api/approvals/bootpay")
+				.requestMatchers("/api/books/cover-images");
 	}
 
 	@Bean
@@ -55,6 +56,7 @@ public class SecurityConfig {
 								.requestMatchers("/api/donggle/**").permitAll()
 								.requestMatchers("/ai/**").permitAll()
 								.requestMatchers("/api/oauth/**").permitAll()
+								.requestMatchers("/api/books/cover-images").permitAll()
 								.anyRequest().authenticated());
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
