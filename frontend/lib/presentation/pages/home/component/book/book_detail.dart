@@ -60,13 +60,13 @@ class _BookDetailState extends State<BookDetail> {
     await bookModel.getBookDetail(accessToken, widget.bookId);
 
     if (mounted) {
-      bookPageImagePath = bookModel.BookDetail['bookPageImagePath'];
-      for (String imagePath in bookPageImagePath) {
-        await precacheImage(
-          NetworkImage(Constant.s3BaseUrl + imagePath),
-          context,
-        );
-      }
+      // bookPageImagePath = bookModel.BookDetail['bookPageImagePath'];
+      // for (String imagePath in bookPageImagePath) {
+      //   await precacheImage(
+      //     NetworkImage(Constant.s3BaseUrl + imagePath),
+      //     context,
+      //   );
+      //}
       if (mounted) {
         // 데이터 로딩 완료 후 상태 업데이트
         setState(() {
@@ -79,6 +79,7 @@ class _BookDetailState extends State<BookDetail> {
           url = Constant.s3BaseUrl + bookCover;
           index = bookModel.progresses.indexWhere((progress) => progress.bookId == widget.bookId);
           isDone = bookModel.progresses[index].isDone;
+          isRead = bookModel.books[bookId]["isRead"];
 
           isLoading = false;
         });
