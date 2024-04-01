@@ -2,7 +2,6 @@ package com.ssafy.backend.domain.book.controller;
 
 import com.ssafy.backend.domain.book.dto.BookDto;
 import com.ssafy.backend.domain.book.dto.UserBookProcessDto;
-import com.ssafy.backend.domain.book.dto.response.BookCoverResponseDto;
 import com.ssafy.backend.domain.book.dto.response.BookInfoResponseDto;
 import com.ssafy.backend.domain.book.dto.response.BookPageResponseDto;
 import com.ssafy.backend.domain.book.dto.response.BookPurchasedResponseDto;

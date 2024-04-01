@@ -2,8 +2,6 @@ package com.ssafy.backend.domain.book.mapper;
 
 import com.ssafy.backend.domain.book.dto.BookPageSentenceDto;
 import com.ssafy.backend.domain.book.dto.UserBookProcessDto;
-import com.ssafy.backend.domain.book.dto.response.BookCoverResponseDto;
-import com.ssafy.backend.domain.book.entity.Book;
 import com.ssafy.backend.domain.book.entity.BookPageSentence;
 import com.ssafy.backend.domain.book.entity.UserBookProcess;
 import org.mapstruct.Mapper;
