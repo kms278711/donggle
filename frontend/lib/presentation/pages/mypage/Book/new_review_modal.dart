@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -123,21 +124,24 @@ class _NewReviewModalState extends State<NewReviewModal> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            TextField(
-                              textAlignVertical: const TextAlignVertical(y: -1.0),
-                              controller: _editTextController,
-                              onChanged: (String value) {
-                                content = value;
-                              },
-                              maxLength: 85,
-                              keyboardType: TextInputType.multiline,
-                              maxLines: null,
-                              style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMoreSmall),
-                              decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                filled: true,
-                                fillColor: Colors.transparent,
-                                border: InputBorder.none,
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.19,
+                              child: TextField(
+                                textAlignVertical: const TextAlignVertical(y: -1.0),
+                                controller: _editTextController,
+                                onChanged: (String value) {
+                                  content = value;
+                                },
+                                maxLength: 85,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                                style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMoreSmall),
+                                decoration: const InputDecoration(
+                                  contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                  filled: true,
+                                  fillColor: Colors.transparent,
+                                  border: InputBorder.none,
+                                ),
                               ),
                             ),
                           ],

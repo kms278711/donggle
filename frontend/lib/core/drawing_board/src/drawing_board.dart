@@ -236,8 +236,8 @@ class _DrawingBoardState extends State<DrawingBoard> {
         child: Row(
           children: <Widget>[
             SizedBox(
-              height: 24,
-              width: 160,
+              height: MediaQuery.of(context).size.height * 0.05,
+              width: MediaQuery.of(context).size.width * 0.1,
               child: ExValueBuilder<DrawConfig>(
                 valueListenable: _controller.drawConfig,
                 shouldRebuild: (DrawConfig p, DrawConfig n) =>
@@ -245,8 +245,8 @@ class _DrawingBoardState extends State<DrawingBoard> {
                 builder: (_, DrawConfig dc, ___) {
                   return Slider(
                     value: dc.strokeWidth,
-                    max: 50,
-                    min: 22,
+                    max: 60,
+                    min: 33,
                     onChanged: (double v) =>
                         _controller.setStyle(strokeWidth: v),
                   );
