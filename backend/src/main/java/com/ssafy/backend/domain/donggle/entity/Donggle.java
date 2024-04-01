@@ -24,7 +24,8 @@ public class Donggle {
 		BOOKLIST,
 		BOOK,
 		QUIZ,
-		QUIZRESULT,
+		QUIZRESULT_WRONG,
+		QUIZRESULT_CORRECT,
 		WORDLIST,
 		WORD
 	}
