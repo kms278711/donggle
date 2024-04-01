@@ -65,6 +65,7 @@ class _BookProgressState extends State<BookProgress> {
     //   globalRouter.pushReplacement(RoutePath.main0);
     // }
     if (_isLastSentence && _isLastPage) {
+      cancelAudioPlayerSubscription();
       bool isRead = bookModel.books[bookId - 1]["isRead"] ?? false;
       if (!isRead) {
         await bookModel.setIsRead(accessToken, bookId);
