@@ -23,6 +23,7 @@ class BookModel extends ChangeNotifier {
   Map BookDetail = {};
   Education nowEducation = Education(educationId: 0, gubun: "", wordName: "", imagePath: "", bookSentenceId: 0);
   List<Education> educations = [];
+  List<Progress> progresses = [Progress(bookId: 1, isDone: false)];
 
   int currentBookId = 1;
 
@@ -45,6 +46,8 @@ class BookModel extends ChangeNotifier {
     var url = Uri.https("j10c101.p.ssafy.io", "api/books");
     final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
     var response = await http.get(url, headers: headers);
+
+    // print((utf8.decode(response.bodyBytes)));
 
     if (response.statusCode == 200) {
       books = json.decode(utf8.decode(response.bodyBytes));
@@ -87,6 +90,7 @@ class BookModel extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       nowBook = Book.fromJson(json.decode(utf8.decode(response.bodyBytes)));
+      progresses.add(Progress(bookId: bookId, isDone: false));
       return "Success";
     } else if (response.statusCode == 401) {
       userProvider.refreshToken();
@@ -104,7 +108,7 @@ class BookModel extends ChangeNotifier {
     final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
     var response = await http.get(url, headers: headers);
 
-    // print(utf8.decode(response.bodyBytes));
+    print(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
       BookDetail = json.decode(utf8.decode(response.bodyBytes));
@@ -342,4 +346,14 @@ class Education {
       traceImagePath: json['traceImagePath'],
     );
   }
+}
+
+class Progress {
+  final int bookId;
+  bool isDone;
+
+  Progress({
+    required this.bookId,
+    required this.isDone,
+  });
 }

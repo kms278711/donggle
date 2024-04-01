@@ -70,6 +70,9 @@ class _BookProgressState extends State<BookProgress> {
       if (!isRead) {
         await bookModel.setIsRead(accessToken, bookId);
       }
+      int index = bookModel.progresses.indexWhere((progress) => progress.bookId == bookId);
+      bookModel.progresses[index].isDone = true;
+      print("----------- isDone: ${bookModel.progresses[index].isDone}");
       if (mounted) {
         DialogUtils.showCustomDialog(context,
             contentWidget: BookFinishModal(bookId, onModalClose: () {

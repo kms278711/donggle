@@ -31,7 +31,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
@@ -76,7 +75,12 @@ class _HomePageState extends State<HomePage> {
                                   Book.fromJson(bookModel.books[index]);
                               final url = Constant.s3BaseUrl + book.path;
                               final id = book.bookId;
-                              return book.isPay ?? false
+                              final isPay = book.isPay ?? false;
+                              int idx = bookModel.progresses.indexWhere((progress) => progress.bookId == id);
+                              if(idx == -1 && isPay){
+                                bookModel.progresses.add(Progress(bookId: id, isDone: false));
+                              }
+                              return isPay ?? false
                                   ? OpenedBook(url, id)
                                   : LockedBook(url, id);
                             },

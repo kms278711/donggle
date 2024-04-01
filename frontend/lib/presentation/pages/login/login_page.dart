@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
-import 'package:frontend/core/utils/component/icons/kakaotalk_icon.dart';
-import 'package:frontend/core/utils/component/icons/naver_icon.dart';
-import 'package:frontend/core/utils/component/icons/google_icon.dart';
 import 'package:frontend/domain/model/model_auth.dart';
 import 'package:frontend/domain/model/model_register.dart';
 import 'package:frontend/main.dart';
@@ -32,7 +29,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    // Provider.of<RegisterFieldModel>(context, listen: false).resetFields();
     player.stop();
   }
 

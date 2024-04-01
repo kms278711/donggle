@@ -3,7 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
+import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_auth.dart';
+import 'package:frontend/domain/model/model_books.dart';
+import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:frontend/presentation/routes/route_path.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +20,9 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  late BookModel bookModel;
+
+
   Future<bool> checkLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     if (!context.mounted) return false;
