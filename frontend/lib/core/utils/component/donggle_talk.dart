@@ -37,8 +37,7 @@ class donggleTalk extends StatefulWidget {
   State<donggleTalk> createState() => _donggleTalkState();
 }
 
-class _donggleTalkState extends State<donggleTalk>
-    with SingleTickerProviderStateMixin {
+class _donggleTalkState extends State<donggleTalk> with SingleTickerProviderStateMixin {
   late DonggleTalkModel donggleTalkModel;
   String donggleTalk = "";
   bool touched_donggle = false;
@@ -71,10 +70,10 @@ class _donggleTalkState extends State<donggleTalk>
       duration: const Duration(milliseconds: 1900),
       vsync: this,
     );
-    
+
     // 퀴즈 다풀었을 때 동글이가 바로 말하도록
     if (widget.situation == 'QUIZRESULT') {
-      _playInitialDonggleTalk(); 
+      _playInitialDonggleTalk();
     }
 
     // 아까 추가한 스프링 커브
@@ -147,111 +146,53 @@ class _donggleTalkState extends State<donggleTalk>
                                     color: Colors.transparent,
                                     child: Image.asset(
                                       AppIcons.donggle_talk_balloon,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.3,
+                                      width: MediaQuery.of(context).size.width * 0.3,
                                     ),
                                   ),
                                   Positioned(
                                     top: widget.situation == 'BOOKLIST'
-                                        ? MediaQuery.of(context).size.height *
-                                            0.22
+                                        ? MediaQuery.of(context).size.height * 0.22
                                         : widget.situation == 'BOOK'
-                                            ? MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.24
+                                            ? MediaQuery.of(context).size.height * 0.24
                                             : widget.situation == 'WORDLIST'
-                                                ? MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.22
+                                                ? MediaQuery.of(context).size.height * 0.22
                                                 : widget.situation == 'WORD'
-                                                    ? MediaQuery.of(context)
-                                                            .size
-                                                            .height *
-                                                        0.27
+                                                    ? MediaQuery.of(context).size.height * 0.27
                                                     : widget.situation == 'QUIZ'
-                                                        ? MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.27
-                                                        : widget.situation ==
-                                                                'QUIZRESULT'
-                                                            ? MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .height *
-                                                                0.27
+                                                        ? MediaQuery.of(context).size.height * 0.27
+                                                        : widget.situation == 'QUIZRESULT'
+                                                            ? MediaQuery.of(context).size.height * 0.27
                                                             : 10,
                                     right: widget.situation == 'BOOKLIST'
-                                        ? MediaQuery.of(context).size.width *
-                                            0.054
+                                        ? MediaQuery.of(context).size.width * 0.054
                                         : widget.situation == 'BOOK'
-                                            ? MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.038
+                                            ? MediaQuery.of(context).size.width * 0.038
                                             : widget.situation == 'WORDLIST'
-                                                ? MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.034
+                                                ? MediaQuery.of(context).size.width * 0.034
                                                 : widget.situation == 'WORD'
-                                                    ? MediaQuery.of(context)
-                                                            .size
-                                                            .width *
-                                                        0.035
+                                                    ? MediaQuery.of(context).size.width * 0.035
                                                     : widget.situation == 'QUIZ'
-                                                        ? MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.024
-                                                        : widget.situation ==
-                                                                'QUIZRESULT'
-                                                            ? MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width *
-                                                                0.065
+                                                        ? MediaQuery.of(context).size.width * 0.024
+                                                        : widget.situation == 'QUIZRESULT'
+                                                            ? MediaQuery.of(context).size.width * 0.065
                                                             : 10,
                                     child: Container(
                                       width: widget.situation == 'BOOKLIST'
-                                          ? MediaQuery.of(context).size.width *
-                                              0.13
+                                          ? MediaQuery.of(context).size.width * 0.13
                                           : widget.situation == 'BOOK'
-                                              ? MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.16
+                                              ? MediaQuery.of(context).size.width * 0.16
                                               : widget.situation == 'WORDLIST'
-                                                  ? MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.16
+                                                  ? MediaQuery.of(context).size.width * 0.16
                                                   : widget.situation == 'WORD'
-                                                      ? MediaQuery.of(context)
-                                                              .size
-                                                              .width *
-                                                          0.17
-                                                      : widget.situation ==
-                                                              'QUIZ'
-                                                          ? MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.19
-                                                          : widget.situation ==
-                                                                  'QUIZRESULT'
-                                                              ? MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.11
+                                                      ? MediaQuery.of(context).size.width * 0.17
+                                                      : widget.situation == 'QUIZ'
+                                                          ? MediaQuery.of(context).size.width * 0.19
+                                                          : widget.situation == 'QUIZRESULT'
+                                                              ? MediaQuery.of(context).size.width * 0.11
                                                               : 10,
                                       color: Colors.transparent,
                                       child: Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
                                         child: Text(
                                           donggleTalk,
                                           style: CustomFontStyle.textMedium,
@@ -273,9 +214,7 @@ class _donggleTalkState extends State<donggleTalk>
         Positioned(
           bottom: widget.situation == 'QUIZRESULT' ? MediaQuery.of(context).size.height * -0.055 : 0,
           // bottom: 0,
-          right: widget.situation == 'QUIZRESULT'
-              ? MediaQuery.of(context).size.width * -0.001
-              : 0,
+          right: widget.situation == 'QUIZRESULT' ? MediaQuery.of(context).size.width * -0.001 : 0,
           child: IgnorePointer(
             ignoring: false, // 이 Container만 터치 가능하도록 설정
             child: GestureDetector(
@@ -283,8 +222,7 @@ class _donggleTalkState extends State<donggleTalk>
                 await donggleTalkModel.getDonggleTalk(widget.situation);
                 setState(() {
                   donggleTalk = donggleTalkModel.dongglesTalk["content"];
-                  sayDonggle(Constant.s3BaseUrl +
-                      donggleTalkModel.dongglesTalk["dgSoundPath"]);
+                  sayDonggle(Constant.s3BaseUrl + donggleTalkModel.dongglesTalk["dgSoundPath"]);
                 });
                 setTouchedDonggle(true);
               },
@@ -300,7 +238,7 @@ class _donggleTalkState extends State<donggleTalk>
                       color: Colors.transparent,
                       child: Image.asset(
                         AppIcons.donggle,
-                        width: MediaQuery.of(context).size.width * 0.22,
+                        width: MediaQuery.of(context).size.width * 0.2,
                       ),
                     ),
             ),
