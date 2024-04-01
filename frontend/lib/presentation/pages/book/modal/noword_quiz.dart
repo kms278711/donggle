@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -10,6 +11,7 @@ import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/effect_sound.dart';
 import 'package:frontend/core/utils/component/icons/close_circle.dart';
+import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/main.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
@@ -44,6 +46,7 @@ class _NowordQuizState extends State<NowordQuiz> {
   String educationWord = "";
   int correct = 3;
   bool _isTimerDone = true;
+  String url = "";
 
   Future<bool> saveImageToDevice(XFile imageFile) async {
     try {
@@ -213,24 +216,31 @@ class _NowordQuizState extends State<NowordQuiz> {
           setState(() {
             DBResult = bookModel.nowEducation.imagePath;
             educationWord = bookModel.nowEducation.wordName;
+            String path = bookModel.nowEducation.traceImagePath ?? "";
+            url = Constant.s3BaseUrl + path;
 
             _isLoading = false;
           });
 
-          int frameCounter = 0;
-          int frameProcessingInterval = 8; // Adjust based on performance
+          Timer(const Duration(seconds: 3), (){
+            int frameCounter = 0;
+            int frameProcessingInterval = 8; // Adjust based on performance
 
-          cameraController.startImageStream((CameraImage image) async {
-            frameCounter++;
-            if (frameCounter % frameProcessingInterval == 0 && !isDetecting && _isTimerDone) {
-              isDetecting = true;
+            cameraController.startImageStream((CameraImage image) async {
+              frameCounter++;
+              if (frameCounter % frameProcessingInterval == 0 && !isDetecting && _isTimerDone) {
+                isDetecting = true;
 
-              final value = await runInference(image);
-              await setRecognitions(value);
+                final value = await runInference(image);
+                await setRecognitions(value);
 
-              isDetecting = false;
-            }
+                isDetecting = false;
+              }
+            });
+
           });
+
+
         });
       }
     });
@@ -345,15 +355,24 @@ class _NowordQuizState extends State<NowordQuiz> {
                 ? Stack(
                     children: [
                       Positioned(
-                          top: MediaQuery.of(context).size.height * 0.15,
+                        top: MediaQuery.of(context).size.height * 0.1,
+                        left: MediaQuery.of(context).size.width * 0.05,
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        height: MediaQuery.of(context).size.width * 0.3,
+                        child: CachedNetworkImage(
+                          imageUrl: url,
+                          fit: BoxFit.contain,
+                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                        ),
+                      ),
+                      Positioned(
+                          top: MediaQuery.of(context).size.height * 0.65,
                           left: MediaQuery.of(context).size.width * 0.05,
                           width: MediaQuery.of(context).size.width * 0.35,
-                          height: MediaQuery.of(context).size.width * 0.4,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(educationWord),
-                            ],
+                          height: MediaQuery.of(context).size.width * 0.3,
+                          child: Text(
+                            educationWord,
+                            textAlign: TextAlign.center,
                           )),
                       Positioned(
                         top: MediaQuery.of(context).size.height * 0.15,
@@ -378,10 +397,10 @@ class _NowordQuizState extends State<NowordQuiz> {
                             SizedBox(
                               height: MediaQuery.of(context).size.height * 0.02,
                             ),
-                            Text(
-                              "Prediction: $predOne",
-                              style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmallEng),
-                            ),
+                            // Text(
+                            //   "Prediction: $predOne",
+                            //   style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textSmallEng),
+                            // ),
                           ],
                         ),
                       ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/main.dart';
 
 class DialogUtils {
   static final DialogUtils _instance = DialogUtils.internal();
@@ -12,7 +11,6 @@ class DialogUtils {
     BuildContext context, {
     required Widget contentWidget,
   }) async {
-    // player.pause();
     final result = await showGeneralDialog(
         context: context,
         barrierDismissible: true,
