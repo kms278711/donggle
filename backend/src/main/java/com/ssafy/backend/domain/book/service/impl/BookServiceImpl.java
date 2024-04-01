@@ -85,7 +85,9 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new UserException(NOT_FOUND_BOOK));
 
         List<Long> ids = new ArrayList<>();
+        List<String> bookPageImagePath = new ArrayList<>();
         for (BookPage bookPage : bookPurchasedLearning.getBook().getBookPageList()) {
+            bookPageImagePath.add(bookPage.getBookImagePath());
             for (BookPageSentence bookPageSentence : bookPage.getBookPageSentenceList()) {
                 ids.add(bookPageSentence.getBookPageSentenceId());
             }
@@ -102,6 +104,7 @@ public class BookServiceImpl implements BookService {
                 .coverImagePath(bookPurchasedLearning.getBook().getCoverPath())
                 .totalPage(totalPage)
                 .processPage(bookProcessPage)
+                .bookPageImagePath(bookPageImagePath)
                 .educationList(educationList)
                 .build();
 
