@@ -56,9 +56,7 @@ class _BookProgressState extends State<BookProgress> {
     bookImagePath: "",
     page: 0,
     content: "",
-    bookPageSentences: [
-      BookPageSentences(bookPageSentenceId: 0, sequence: 0, sentence: "", sentenceSoundPath: "")
-    ],
+    bookPageSentences: [BookPageSentences(bookPageSentenceId: 0, sequence: 0, sentence: "", sentenceSoundPath: "")],
   );
   String url = "";
 
@@ -163,12 +161,12 @@ class _BookProgressState extends State<BookProgress> {
         /// 동작문제
         // print("------------ action");
         finishSentence();
-      } else {
-        // print('here!!');
-        // print(nowPage.education?.category);
-        backgroundLine.stop();
-        finishSentence();
       }
+    } else {
+      // print('here!!');
+      // print(nowPage.education?.category);
+      backgroundLine.stop();
+      finishSentence();
     }
   }
 
@@ -280,8 +278,7 @@ class _BookProgressState extends State<BookProgress> {
                         children: [
                           Container(
                               constraints: BoxConstraints(
-                                maxWidth:
-                                    MediaQuery.of(context).size.width * 0.95, // Set your desired max width here
+                                maxWidth: MediaQuery.of(context).size.width * 0.95, // Set your desired max width here
                               ),
                               padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.02),
                               decoration: BoxDecoration(
@@ -319,7 +316,7 @@ class _BookProgressState extends State<BookProgress> {
                         // onTap: finishSentence
                         onTap: () {
                           _isSkiped = true;
-                          goNext();
+                          finishSentence();
                         },
                       ),
                       SizedBox(
