@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
+import 'package:frontend/core/utils/component/loading_screen.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/presentation/pages/home/component/book/locked_book.dart';
@@ -76,9 +77,11 @@ class _HomePageState extends State<HomePage> {
                               final path = book.path;
                               final id = book.bookId;
                               final isPay = book.isPay ?? false;
-                              int idx = bookModel.progresses.indexWhere((progress) => progress.bookId == id);
-                              if(idx == -1 && isPay){
-                                bookModel.progresses.add(Progress(bookId: id, isDone: false));
+                              int idx = bookModel.progresses.indexWhere(
+                                  (progress) => progress.bookId == id);
+                              if (idx == -1 && isPay) {
+                                bookModel.progresses
+                                    .add(Progress(bookId: id, isDone: false));
                               }
                               return isPay ?? false
                                   ? OpenedBook(path, id)
