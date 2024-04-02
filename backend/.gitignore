@@ -41,7 +41,7 @@ out/
 ###**/application.properties
 
 ### 전역에서 일치하는 파일 안잡히게 하는거 ###
-#application*.yml
+application*.yml
 .env
 .DS_Store
 
