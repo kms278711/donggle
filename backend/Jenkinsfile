@@ -42,7 +42,7 @@ pipeline {
             steps {
                 dir("${env.WORKSPACE}/backend") {
                     withCredentials([file(credentialsId: 'application', variable: 'application')]) {
-                       sh "cp ${application}  backend/src/main/resources/application.yml"
+                       sh "cp ${application}  /src/main/resources/application.yml"
                     }
                 }
             }
