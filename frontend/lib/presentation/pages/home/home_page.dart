@@ -5,6 +5,7 @@ import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/presentation/pages/home/component/book/locked_book.dart';
 import 'package:frontend/presentation/pages/home/component/book/opened_book.dart';
+import 'package:frontend/presentation/pages/splash/splash_page.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -109,6 +110,20 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
+          // TextButton(
+          //     onPressed: () {
+          //       Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //           builder: (context) => SplashPage(),
+          //         ),
+          //       );
+          //     },
+          //     child: Text(
+          //       'splahs',
+          //       style: CustomFontStyle.textLarge,
+          //     ),
+          // )
         ],
       ),
     );
