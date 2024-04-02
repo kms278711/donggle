@@ -63,8 +63,8 @@ class _LoadingScreenState extends State<LoadingScreen>
       final screenWidth = MediaQuery.of(context).size.width;
       final screenHeight = MediaQuery.of(context).size.height;
       _transAnimation_L = Tween<Offset>(
-              begin: Offset(screenWidth * 0.32, screenHeight * 0.65),
-              end: Offset(screenWidth * 0.32, screenHeight * 0.55))
+              begin: Offset(screenWidth * 0.33, screenHeight * 0.65),
+              end: Offset(screenWidth * 0.33, screenHeight * 0.55))
           .animate(_animationController_L!);
     });
 

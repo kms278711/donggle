@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
+import 'package:frontend/core/utils/component/icons/sound_icon.dart';
 import 'package:frontend/domain/model/model_auth.dart';
 import 'package:frontend/domain/model/model_register.dart';
 import 'package:frontend/main.dart';
@@ -29,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    player.stop();
+    // player.stop();
   }
 
   @override
@@ -38,129 +40,116 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       body: SingleChildScrollView(
-        child: Column(
+        child: Stack(
           children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
-            ),
-            DefaultTextStyle(
-              style: CustomFontStyle.getTextStyle(
-                  context, CustomFontStyle.titleLarge),
-              child: const Text('동  글  이'),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.07,
-              child: Text(
-                isSignup ? message.message2 : message.message1,
-                style: CustomFontStyle.getTextStyle(context, CustomFontStyle.errorMedium),
-              ),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
-            const EmailInput(),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
-            const PasswordInput(),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.02,
-            ),
-            AnimatedCrossFade(
-              firstChild: const Column(
-                children: [
-                  PasswordConfirmInput(),
-                ],
-              ),
-              secondChild: Container(
-                width: MediaQuery.of(context).size.width * 0.47,
-              ),
-              crossFadeState: isSignup
-                  ? CrossFadeState.showFirst
-                  : CrossFadeState.showSecond,
-              duration: const Duration(milliseconds: 200),
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.035,
-            ),
-            AnimatedCrossFade(
-              firstChild: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SignupButton(),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.1,
+            Column(
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.05,
+                ),
+                DefaultTextStyle(
+                  style: CustomFontStyle.getTextStyle(
+                      context, CustomFontStyle.titleLarge),
+                  child: const Text('동  글  이'),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.07,
+                  child: Text(
+                    isSignup ? message.message2 : message.message1,
+                    style: CustomFontStyle.getTextStyle(
+                        context, CustomFontStyle.errorMedium),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Provider.of<RegisterFieldModel>(context, listen: false)
-                          .resetFields();
-                      message.setMessage2('');
-                      signUpToggle();
-                    },
-                    child: DefaultTextStyle(
-                      style: CustomFontStyle.getTextStyle(
-                          context, CustomFontStyle.textLarge),
-                      child: const Text('취소'),
-                    ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+                const EmailInput(),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+                const PasswordInput(),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+                AnimatedCrossFade(
+                  firstChild: const Column(
+                    children: [
+                      PasswordConfirmInput(),
+                    ],
                   ),
-                ],
-              ),
-              secondChild: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const LoginButton(),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.1,
+                  secondChild: Container(
+                    width: MediaQuery.of(context).size.width * 0.47,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Provider.of<RegisterFieldModel>(context, listen: false)
-                          .resetFields();
-                      message.setMessage1('');
-                      signUpToggle();
-                    },
-                    child: DefaultTextStyle(
-                      style: CustomFontStyle.getTextStyle(
-                          context, CustomFontStyle.textLarge),
-                      child: const Text('회원가입'),
-                    ),
+                  crossFadeState: isSignup
+                      ? CrossFadeState.showFirst
+                      : CrossFadeState.showSecond,
+                  duration: const Duration(milliseconds: 200),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.035,
+                ),
+                AnimatedCrossFade(
+                  firstChild: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SignupButton(),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.1,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Provider.of<RegisterFieldModel>(context,
+                                  listen: false)
+                              .resetFields();
+                          message.setMessage2('');
+                          signUpToggle();
+                        },
+                        child: DefaultTextStyle(
+                          style: CustomFontStyle.getTextStyle(
+                              context, CustomFontStyle.textLarge),
+                          child: const Text('취소'),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              crossFadeState: isSignup
-                  ? CrossFadeState.showFirst
-                  : CrossFadeState.showSecond,
-              duration: const Duration(milliseconds: 200),
+                  secondChild: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const LoginButton(),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.1,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Provider.of<RegisterFieldModel>(context,
+                                  listen: false)
+                              .resetFields();
+                          message.setMessage1('');
+                          signUpToggle();
+                        },
+                        child: DefaultTextStyle(
+                          style: CustomFontStyle.getTextStyle(
+                              context, CustomFontStyle.textLarge),
+                          child: const Text('회원가입'),
+                        ),
+                      ),
+                    ],
+                  ),
+                  crossFadeState: isSignup
+                      ? CrossFadeState.showFirst
+                      : CrossFadeState.showSecond,
+                  duration: const Duration(milliseconds: 200),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 30,
-            ),
-            // AnimatedCrossFade(
-            //     firstChild: Container(
-            //       width: 350,
-            //     ),
-            //     secondChild: Container(
-            //       width: 350,
-            //       padding:
-            //           EdgeInsets.all(MediaQuery.of(context).size.height * 0.01),
-            //       decoration: BoxDecoration(
-            //         color: Colors.white.withOpacity(0.5),
-            //         borderRadius: BorderRadius.circular(15),
-            //       ),
-            //       child: const Row(
-            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //         children: [
-            //           KakaotalkIcon(),
-            //           NaverIcon(),
-            //           GoogleIcon(),
-            //         ],
-            //       ),
-            //     ),
-            //     crossFadeState: isSignup
-            //         ? CrossFadeState.showFirst
-            //         : CrossFadeState.showSecond,
-            //     duration: const Duration(milliseconds: 200))
+            Positioned(
+              top: MediaQuery.of(context).size.height * 0.04,
+              right: MediaQuery.of(context).size.width * 0.01,
+              child: SoundIcon(player),
+            )
           ],
         ),
       ),
@@ -326,7 +315,7 @@ class LoginButton extends StatelessWidget {
         AuthStatus loginStatus =
             await auth.login(registerField.email, registerField.password);
 
-        if(context.mounted) {
+        if (context.mounted) {
           if (registerField.email.isEmpty) {
             showToast('이메일을 입력해주세요.', backgroundColor: AppColors.error);
           } else if (registerField.password.isEmpty) {

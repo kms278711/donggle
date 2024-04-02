@@ -82,7 +82,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    player.stop();
+    // player.stop();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       List bookCovers = await Provider.of<BookModel>(context, listen: false).getBookCovers();
