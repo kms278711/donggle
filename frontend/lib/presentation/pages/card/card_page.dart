@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/donggle_talk.dart';
-import 'package:frontend/core/utils/component/loading_screen.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_cards.dart' as domain;
 import 'package:frontend/presentation/pages/card/locked_card.dart';
@@ -48,10 +47,15 @@ class _CardPageState extends State<CardPage> {
   @override
   void initState() {
     super.initState();
-    cardModel = Provider.of<domain.CardModel>(context, listen: false);
-    userProvider = Provider.of<UserProvider>(context, listen: false);
-    accessToken = userProvider.getAccessToken();
+    setState(() {
+      _isLoading = true;
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      cardModel = Provider.of<domain.CardModel>(context, listen: false);
+      userProvider = Provider.of<UserProvider>(context, listen: false);
+      accessToken = userProvider.getAccessToken();
+      await cardModel.getAllCards(accessToken);
       documentDirectory = await getApplicationDocumentsDirectory();
 
       for (Map card in cardModel.cards) {

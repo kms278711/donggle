@@ -21,7 +21,7 @@ class CardModel extends ChangeNotifier {
     var response = await http.get(url, headers: headers);
     if (response.statusCode == 200) {
       cards = json.decode(utf8.decode(response.bodyBytes));
-      print(cards);
+      // print(cards);
       return "Success";
     } else if (response.statusCode == 401) {
       userProvider.refreshToken();
@@ -41,11 +41,11 @@ class CardModel extends ChangeNotifier {
     };
     var response = await http.get(url, headers: headers);
 
-    print(response.statusCode);
-    print(utf8.decode(response.bodyBytes));
+    // print(response.statusCode);
+    // debugPrint(utf8.decode(response.bodyBytes));
     if (response.statusCode == 200) {
       selectedCard = json.decode(utf8.decode(response.bodyBytes));
-      print(selectedCard);
+      // print(selectedCard);
       return "Success";
     } else if (response.statusCode == 401) {
       userProvider.refreshToken();

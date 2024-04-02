@@ -7,7 +7,6 @@ import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_auth.dart';
 import 'package:frontend/domain/model/model_books.dart';
-import 'package:frontend/main.dart';
 import 'package:frontend/presentation/routes/route_path.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
@@ -24,10 +23,12 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   late BookModel bookModel;
+  late Directory documentDirectory;
   bool isSaved = false;
 
   Future<bool> checkLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
     if (!context.mounted) return false;
     final authProvider = Provider.of<AuthModel>(context, listen: false);
     bool isLogin = prefs.getBool('isLogin') ?? false;
@@ -58,9 +59,6 @@ class _SplashPageState extends State<SplashPage> {
     String url = Constant.s3BaseUrl + path;
     final response = await http.get(Uri.parse(url));
 
-    // 임시 디렉토리를 가져옵니다.
-    final documentDirectory = await getApplicationDocumentsDirectory();
-
     // 파일을 생성합니다.
     final file = File('${documentDirectory.path}/$path');
 
@@ -86,14 +84,16 @@ class _SplashPageState extends State<SplashPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       List bookCovers = await Provider.of<BookModel>(context, listen: false).getBookCovers();
+      documentDirectory = await getApplicationDocumentsDirectory();
+
       for(Map coverMap in bookCovers){
         String path = coverMap['coverPath'];
-        final documentDirectory = await getApplicationDocumentsDirectory();
         final file = File('${documentDirectory.path}/$path');
         final fileExists = file.existsSync();
 
-        if (fileExists) break;
-        await _downloadImage(path);
+        if (!fileExists) {
+          await _downloadImage(path);
+        }
       }
 
       moveScreen();
