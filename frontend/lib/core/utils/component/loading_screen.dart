@@ -304,7 +304,7 @@ class _LoadingScreenState extends State<LoadingScreen>
           },
           child: DefaultTextStyle(
             style: CustomFontStyle.getTextStyle(
-                context, CustomFontStyle.unSelectedLarge),
+                context, CustomFontStyle.textLargeEng),
             child: const Text(
               "L",
               style: TextStyle(color: Colors.white),
@@ -329,7 +329,7 @@ class _LoadingScreenState extends State<LoadingScreen>
           },
           child: DefaultTextStyle(
             style: CustomFontStyle.getTextStyle(
-                context, CustomFontStyle.unSelectedLarge),
+                context, CustomFontStyle.textLargeEng),
             child: const Text(
               "o",
               style: TextStyle(color: Colors.white),
@@ -354,7 +354,7 @@ class _LoadingScreenState extends State<LoadingScreen>
           },
           child: DefaultTextStyle(
             style: CustomFontStyle.getTextStyle(
-                context, CustomFontStyle.unSelectedLarge),
+                context, CustomFontStyle.textLargeEng),
             child: const Text(
               "a",
               style: TextStyle(color: Colors.white),
@@ -379,7 +379,7 @@ class _LoadingScreenState extends State<LoadingScreen>
           },
           child: DefaultTextStyle(
             style: CustomFontStyle.getTextStyle(
-                context, CustomFontStyle.unSelectedLarge),
+                context, CustomFontStyle.textLargeEng),
             child: const Text(
               "d",
               style: TextStyle(color: Colors.white),
@@ -404,7 +404,7 @@ class _LoadingScreenState extends State<LoadingScreen>
           },
           child: DefaultTextStyle(
             style: CustomFontStyle.getTextStyle(
-                context, CustomFontStyle.unSelectedLarge),
+                context, CustomFontStyle.textLargeEng),
             child: const Text(
               "i",
               style: TextStyle(color: Colors.white),
@@ -429,7 +429,7 @@ class _LoadingScreenState extends State<LoadingScreen>
           },
           child: DefaultTextStyle(
             style: CustomFontStyle.getTextStyle(
-                context, CustomFontStyle.unSelectedLarge),
+                context, CustomFontStyle.textLargeEng),
             child: const Text(
               "n",
               style: TextStyle(color: Colors.white),
@@ -454,7 +454,7 @@ class _LoadingScreenState extends State<LoadingScreen>
           },
           child: DefaultTextStyle(
             style: CustomFontStyle.getTextStyle(
-                context, CustomFontStyle.unSelectedLarge),
+                context, CustomFontStyle.textLargeEng),
             child: const Text(
               "g",
               style: TextStyle(color: Colors.white),
@@ -479,7 +479,7 @@ class _LoadingScreenState extends State<LoadingScreen>
           },
           child: DefaultTextStyle(
             style: CustomFontStyle.getTextStyle(
-                context, CustomFontStyle.unSelectedLarge),
+                context, CustomFontStyle.textLargeEng),
             child: const Text(
               ".",
               style: TextStyle(color: Colors.white),
@@ -504,7 +504,7 @@ class _LoadingScreenState extends State<LoadingScreen>
           },
           child: DefaultTextStyle(
             style: CustomFontStyle.getTextStyle(
-                context, CustomFontStyle.unSelectedLarge),
+                context, CustomFontStyle.textLargeEng),
             child: const Text(
               ".",
               style: TextStyle(color: Colors.white),
@@ -529,7 +529,7 @@ class _LoadingScreenState extends State<LoadingScreen>
           },
           child: DefaultTextStyle(
             style: CustomFontStyle.getTextStyle(
-                context, CustomFontStyle.unSelectedLarge),
+                context, CustomFontStyle.textLargeEng),
             child: const Text(
               ".",
               style: TextStyle(color: Colors.white),
@@ -554,7 +554,7 @@ class _LoadingScreenState extends State<LoadingScreen>
           },
           child: DefaultTextStyle(
             style: CustomFontStyle.getTextStyle(
-                context, CustomFontStyle.unSelectedLarge),
+                context, CustomFontStyle.textLargeEng),
             child: const Text(
               ".",
               style: TextStyle(color: Colors.white),
