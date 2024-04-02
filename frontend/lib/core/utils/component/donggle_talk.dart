@@ -248,7 +248,7 @@ class _donggleTalkState extends State<donggleTalk> with SingleTickerProviderStat
                                         padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
                                         child: Text(
                                           donggleTalk,
-                                          style: CustomFontStyle.textMedium,
+                                          style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMedium),
                                         ),
                                       ),
                                     ),

@@ -73,6 +73,7 @@ class _BookProgressState extends State<BookProgress> {
 
       _audioPlayerSubscription = backgroundLine.playerStateStream.listen((state) {
         if (state.processingState == ProcessingState.completed) {
+          print('here!!');
           if (_isSkiped == false) {
             // print("_isSkiped false");
             goNext();
@@ -114,6 +115,7 @@ class _BookProgressState extends State<BookProgress> {
       cancelAudioPlayerSubscription();
       globalRouter.pushReplacement('/bookProgress/$bookId/${pageId + 1}/0');
     } else {
+      cancelAudioPlayerSubscription();
       setState(() {
         sentenceId++;
         if (sentenceId == nowPage.bookPageSentences.length - 1) {
