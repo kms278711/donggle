@@ -88,10 +88,12 @@ public class BookServiceImpl implements BookService {
 
         List<Long> ids = new ArrayList<>();
         List<String> bookPageImagePath = new ArrayList<>();
+        List<String> bookSoundPath = new ArrayList<>();
         for (BookPage bookPage : bookPurchasedLearning.getBook().getBookPageList()) {
             bookPageImagePath.add(bookPage.getBookImagePath());
             for (BookPageSentence bookPageSentence : bookPage.getBookPageSentenceList()) {
                 ids.add(bookPageSentence.getBookPageSentenceId());
+                bookSoundPath.add(bookPageSentence.getSentenceSoundPath());
             }
         }
 
@@ -106,7 +108,8 @@ public class BookServiceImpl implements BookService {
                 .coverImagePath(bookPurchasedLearning.getBook().getCoverPath())
                 .totalPage(totalPage)
                 .processPage(bookProcessPage)
-                .bookPageImagePath(bookPageImagePath)
+                .bookPageImagePathList(bookPageImagePath)
+                .bookSoundPathList(bookSoundPath)
                 .educationList(educationList)
                 .build();
     }
