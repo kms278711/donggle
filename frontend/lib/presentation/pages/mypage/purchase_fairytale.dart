@@ -65,11 +65,13 @@ class _PurchaseFairytaleState extends State<PurchaseFairytale> {
                       );
                     }
                     return ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
+                      borderRadius:
+                          const BorderRadius.only(bottomLeft: Radius.circular(45), bottomRight: Radius.circular(45)),
                       child: GridView.builder(
+                        padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.width * 0.01),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 5,
-                          mainAxisSpacing: MediaQuery.of(context).size.height * 0.05,
+                          mainAxisSpacing: MediaQuery.of(context).size.height * 0.04,
                         ),
                         scrollDirection: Axis.vertical,
                         physics: const ScrollPhysics(),
@@ -78,7 +80,7 @@ class _PurchaseFairytaleState extends State<PurchaseFairytale> {
                           final book = Book.fromJson(bookModel.books[index]);
                           final url = Constant.s3BaseUrl + book.path;
                           final id = book.bookId;
-                          if(index >= 2) return DevelopingBook(url);
+                          if (index >= 2) return DevelopingBook(url);
                           return book.isPay ?? false ? PaidBook(url, id) : UnpaidBook(url, id);
                         },
                       ),

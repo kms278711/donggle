@@ -253,7 +253,7 @@ class _DrawingBoardState extends State<DrawingBoard> {
                 },
               ),
             ),
-            ColorPicBtn(controller: _controller),
+            // ColorPicBtn(controller: _controller),
             IconButton(
                 icon: const Icon(CupertinoIcons.arrow_turn_up_left),
                 onPressed: () => _controller.undo()),

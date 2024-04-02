@@ -159,6 +159,13 @@ class CustomFontStyle {
     fontWeight: CustomFontWeight.regular,
   );
 
+  static const textSmallSmallEng = TextStyle(
+    fontFamily: "PatrickHand",
+    color: AppColors.black,
+    fontSize: 20,
+    fontWeight: CustomFontWeight.regular,
+  );
+
   static const errorMedium = TextStyle(
     fontFamily: "Nanumson_jangmi",
     color: AppColors.error,

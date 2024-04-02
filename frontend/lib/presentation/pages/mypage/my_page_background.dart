@@ -135,7 +135,7 @@ class _MyPageBackgroundState extends State<MyPageBackground> {
                                 topRight: Radius.circular(MediaQuery.of(context).size.height * 0.05))),
                         //Content based on selectedTab can be placed here
                         Positioned(
-                          top: MediaQuery.of(context).size.height * 0.12,
+                          top: MediaQuery.of(context).size.height * 0.127,
                           bottom: 0,
                           left: 0,
                           right: 0,
