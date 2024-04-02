@@ -42,7 +42,7 @@ pipeline {
             steps {
                 dir('Epimetheus/backend/epimetheus') {
                     withCredentials([file(credentialsId: 'application', variable: 'application.yml')]) {
-                       sh 'cp ${application}  backend/src/main/resources/application.yml'
+                       sh "cp ${application}  backend/src/main/resources/application"
                     }
                 }
             }
