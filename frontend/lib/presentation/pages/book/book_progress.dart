@@ -54,13 +54,20 @@ class _BookProgressState extends State<BookProgress> {
   int sentenceId = 0;
   int educationId = 10000;
   int totalPage = 0;
+
   // String path = "";
   BookPage nowPage = BookPage(
     bookPageId: 0,
     bookImagePath: "",
     page: 0,
     content: "",
-    bookPageSentences: [BookPageSentences(bookPageSentenceId: 0, sequence: 0, sentence: "", sentenceSoundPath: "")],
+    bookPageSentences: [
+      BookPageSentences(
+          bookPageSentenceId: 0,
+          sequence: 0,
+          sentence: "",
+          sentenceSoundPath: "")
+    ],
   );
   String url = "";
 
@@ -75,7 +82,8 @@ class _BookProgressState extends State<BookProgress> {
 
       await _audioPlayerSubscription?.cancel();
 
-      _audioPlayerSubscription = backgroundLine.playerStateStream.listen((state) {
+      _audioPlayerSubscription =
+          backgroundLine.playerStateStream.listen((state) {
         if (state.processingState == ProcessingState.completed) {
           print('here!!');
           if (_isSkiped == false) {
@@ -106,7 +114,8 @@ class _BookProgressState extends State<BookProgress> {
       if (!isRead) {
         await bookModel.setIsRead(accessToken, bookId);
       }
-      int index = bookModel.progresses.indexWhere((progress) => progress.bookId == bookId);
+      int index = bookModel.progresses
+          .indexWhere((progress) => progress.bookId == bookId);
       bookModel.progresses[index].isDone = true;
       if (mounted) {
         DialogUtils.showCustomDialog(context,
@@ -125,13 +134,15 @@ class _BookProgressState extends State<BookProgress> {
         if (sentenceId == nowPage.bookPageSentences.length - 1) {
           _isLastSentence = true;
         }
-        backgroundLinePlay(Constant.s3BaseUrl + nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
+        backgroundLinePlay(Constant.s3BaseUrl +
+            nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
       });
     }
   }
 
   void goNext() {
-    if (educationId == nowPage.bookPageSentences[sentenceId].bookPageSentenceId) {
+    if (educationId ==
+        nowPage.bookPageSentences[sentenceId].bookPageSentenceId) {
       if (_isSkiped == true) {
         // print('stop');
         backgroundLine.stop();
@@ -194,7 +205,8 @@ class _BookProgressState extends State<BookProgress> {
     } else {
       setState(() {
         sentenceId--;
-        backgroundLinePlay(Constant.s3BaseUrl + nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
+        backgroundLinePlay(Constant.s3BaseUrl +
+            nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
         if (_isLastSentence) _isLastSentence = false;
       });
     }
@@ -244,7 +256,8 @@ class _BookProgressState extends State<BookProgress> {
             _isLastSentence = true;
           }
           _isLoading = false; // Update loading state when done
-          backgroundLinePlay(Constant.s3BaseUrl + nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
+          backgroundLinePlay(Constant.s3BaseUrl +
+              nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
         });
       }
     });
@@ -285,17 +298,22 @@ class _BookProgressState extends State<BookProgress> {
                         children: [
                           Container(
                               constraints: BoxConstraints(
-                                maxWidth: MediaQuery.of(context).size.width * 0.95, // Set your desired max width here
+                                maxWidth: MediaQuery.of(context).size.width *
+                                    0.95, // Set your desired max width here
                               ),
-                              padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.02),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal:
+                                      MediaQuery.of(context).size.width * 0.02),
                               decoration: BoxDecoration(
-                                color: const Color.fromRGBO(217, 217, 217, 0.85),
+                                color:
+                                    const Color.fromRGBO(217, 217, 217, 0.85),
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               child: Text(
                                 nowPage.bookPageSentences[sentenceId].sentence,
                                 textAlign: TextAlign.center,
-                                style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMediumLarge2),
+                                style: CustomFontStyle.getTextStyle(
+                                    context, CustomFontStyle.textMediumLarge2),
                               ))
                           // : GreenButton('시작하기', onPressed: () {
                           //     backgroundLinePlay(Constant.s3BaseUrl +
@@ -314,7 +332,10 @@ class _BookProgressState extends State<BookProgress> {
                   child: Row(
                     children: [
                       BackIcon(
-                        onTap: goPrevious,
+                        onTap: () {
+                          _isSkiped = true;
+                          goPrevious();
+                        },
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.01,
@@ -350,7 +371,10 @@ class _BookProgressState extends State<BookProgress> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
-                      onTap: goPrevious,
+                      onTap: () {
+                        _isSkiped = true;
+                        goPrevious();
+                      },
                       child: Container(
                         // height: MediaQuery.of(context).size.height * 0.7,
                         width: MediaQuery.of(context).size.width * 0.3,
