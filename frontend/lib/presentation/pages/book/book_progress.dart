@@ -18,6 +18,7 @@ import 'package:frontend/presentation/pages/book/modal/expression_quiz.dart';
 import 'package:frontend/presentation/pages/book/modal/noword_quiz.dart';
 import 'package:frontend/presentation/pages/book/modal/picture_quiz.dart';
 import 'package:frontend/presentation/pages/modal/stop_quiz_modal.dart';
+import 'package:frontend/presentation/provider/main_provider.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:frontend/presentation/routes/route_path.dart';
 import 'package:frontend/presentation/routes/routes.dart';
@@ -54,7 +55,7 @@ class _BookProgressState extends State<BookProgress> {
   int sentenceId = 0;
   int educationId = 10000;
   int totalPage = 0;
-
+  late MainProvider mainProvider = Provider.of<MainProvider>(context, listen: false);
   // String path = "";
   BookPage nowPage = BookPage(
     bookPageId: 0,
@@ -358,6 +359,7 @@ class _BookProgressState extends State<BookProgress> {
                             return stopQuiz(
                               title: "동화",
                               onConfirm: () {
+                                mainProvider.isSoundOn = true;
                                 showToast('종료되었습니다.');
                                 context.go(RoutePath.main0);
                               },

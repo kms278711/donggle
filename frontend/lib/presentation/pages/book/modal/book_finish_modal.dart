@@ -7,6 +7,7 @@ import 'package:frontend/core/utils/component/effect_sound.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/domain/model/model_review.dart';
 import 'package:frontend/presentation/pages/mypage/Book/new_review_modal.dart';
+import 'package:frontend/presentation/provider/main_provider.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:frontend/presentation/routes/route_path.dart';
 import 'package:frontend/presentation/routes/routes.dart';
@@ -25,6 +26,7 @@ class BookFinishModal extends StatefulWidget {
 class _BookFinishModalState extends State<BookFinishModal> {
   late BookModel bookModel;
   late UserProvider userProvider;
+  late MainProvider mainProvider;
   String accessToken = "";
   bool _notRead = true;
   bool _notReviewed = true;
@@ -41,7 +43,7 @@ class _BookFinishModalState extends State<BookFinishModal> {
       bookModel = Provider.of<BookModel>(context, listen: false);
       userProvider = Provider.of<UserProvider>(context, listen: false);
       accessToken = userProvider.getAccessToken();
-
+      mainProvider = Provider.of<MainProvider>(context, listen: false);
 
       await bookModel.getCurrentBookPurchase(accessToken, widget.bookId);
 
@@ -91,6 +93,7 @@ class _BookFinishModalState extends State<BookFinishModal> {
                           globalRouter.pushReplacement('/bookProgress/${widget.bookId}/1/0');
                         }),
                         GreenButton("홈으로 돌아가기", onPressed: () {
+                          mainProvider.isSoundOn = true;
                           Navigator.of(context).pop();
                           globalRouter.pushReplacement(RoutePath.main0);
                           if(_notRead && _notReviewed) {

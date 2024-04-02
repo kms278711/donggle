@@ -12,6 +12,7 @@ import 'package:frontend/core/utils/component/icons/circle_back_icon.dart';
 import 'package:frontend/core/utils/component/loading_screen.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
+import 'package:frontend/presentation/provider/main_provider.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:frontend/presentation/routes/routes.dart';
 import 'package:path_provider/path_provider.dart';
@@ -42,6 +43,7 @@ class _BookDetailState extends State<BookDetail> {
   bool isLoading = true;
   List<dynamic> bookPageImagePath = [];
   bool isRead = false;
+  late MainProvider mainProvider = Provider.of<MainProvider>(context, listen: false);
 
   Future<void> _downloadImage(String path) async {
     String url = Constant.s3BaseUrl + path;
@@ -256,11 +258,13 @@ class _BookDetailState extends State<BookDetail> {
                       children: [
                         GreenButton("처음부터", onPressed: () {
                           Navigator.of(context).pop();
+                          mainProvider.isSoundOn = false;
                           bookModel.progresses[index].isDone = false;
                           globalRouter.pushReplacement('/bookProgress/${widget.bookId}/1/0');
                         }),
                         if (bookPage != 0 && isDone == false)
                           GreenButton("이어하기", onPressed: () {
+                            mainProvider.isSoundOn = false;
                             Navigator.of(context).pop();
                             // bookModel.progresses[index].isDone = false;
                             // print("----------- isDone: ${bookModel.progresses[index].isDone}");
