@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동글이 초대장</title>
+    <style>
+        @font-face{
+            font-family: "donggle";
+            src: url("Nanumson_jangmi.ttf");
+            font-weight: normal;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            background: url('img.png') no-repeat center center;
+            background-size:contain /* 배경 이미지가 부모 요소를 커버하도록 설정 */
+        }
+        .qr-code {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+        }
+
+        .qr-code {
+            top: 60%; /* QR 코드 위치 조정 */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 15%; /* QR 코드 너비를 퍼센트로 설정하여 반응형으로 만듦 */
+            height: auto; /* 높이는 자동으로 설정하여 비율 유지 */
+        }
+
+        /* 반응형 스타일링 */
+        @media screen and (max-width: 768px) {
+            body, html {
+                background-size: contain; /* 중간 크기의 화면에서 배경 이미지를 확대 */
+            }
+            .qr-code {
+                width: 40%; /* 중간 크기의 화면에서 QR 코드 크기 조정 */
+            }
+        }
+        @media screen and (min-width: 256.01px) and (max-width: 480px) {
+            body, html {
+                background-size: contain; /* 작은 화면에서 배경 이미지를 더 확대 */
+            }
+            .qr-code {
+                top: 55%;
+                width: 25%; /* 작은 화면에서 QR 코드 크기 조정 */
+            }
+        }
+        @media screen and (max-width: 256px ) {
+            body, html {
+                background-size: contain; /* 작은 화면에서 배경 이미지를 더 확대 */
+            }
+            .qr-code {
+                top: 55%;
+                width: 25%; /* 작은 화면에서 QR 코드 크기 조정 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <img src="qr_download.png" alt="QR 코드" class="qr-code">
+</body>
+</html>

@@ -1,4 +1,10 @@
 from fastapi import FastAPI, File, UploadFile, Form
+from fastapi.responses import StreamingResponse
+from fastapi import Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
 import tensorflow as tf
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -113,8 +119,8 @@ s3 = boto3.client(
 )
 
 @app.get("/")
-async def root():
-    return {"message": "Hello World th949"}
+async def home(request: Request):
+    return templates.TemplateResponse("./index/index.html",{"request":request})
 
 
 @app.post("/ai/analyze/drawing")
