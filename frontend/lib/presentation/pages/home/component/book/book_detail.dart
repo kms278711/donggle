@@ -92,8 +92,9 @@ class _BookDetailState extends State<BookDetail> {
         final file = File('${documentDirectory.path}/$soundPath');
         final fileExists = file.existsSync();
 
-        if (fileExists) break;
-        await _downloadImage(soundPath);
+        if (!fileExists) {
+          await _downloadImage(soundPath);
+        }
       }
 
       for (Map word in bookModel.BookDetail['educationList']) {
