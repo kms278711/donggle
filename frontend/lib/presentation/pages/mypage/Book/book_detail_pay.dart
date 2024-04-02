@@ -1,9 +1,10 @@
+import 'dart:io';
+
 import 'package:bootpay/bootpay.dart';
 import 'package:bootpay/model/extra.dart';
 import 'package:bootpay/model/payload.dart';
 import 'package:bootpay/model/user.dart';
 import 'package:bootpay/config/bootpay_config.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -21,6 +22,7 @@ import 'package:frontend/presentation/pages/mypage/Book/new_review_modal.dart';
 import 'package:frontend/presentation/provider/main_provider.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class BooksDetailPay extends StatefulWidget {
@@ -47,7 +49,6 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
   String title = "";
   String summary = "";
   String path = "";
-  String url = "";
   String nickname = "";
   String email = "";
   int price = 0;
@@ -58,6 +59,8 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
   List<dynamic> reviews = [];
   Review myReview = Review(score: 0, content: "");
   var f = NumberFormat('###,###,###,###');
+  late Directory documentDirectory;
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -74,6 +77,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
       bookId = bookModel.currentBookId;
 
       await bookModel.getCurrentBookPurchase(accessToken, bookId);
+      documentDirectory = await getApplicationDocumentsDirectory();
 
       // Check if the widget is still mounted before updating its state
       if (mounted) {
@@ -82,7 +86,6 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
           title = book.title;
           summary = book.summary ?? "";
           path = book.path;
-          url = Constant.s3BaseUrl + path;
           price = book.price ?? 0;
           isPay = book.isPay ?? false;
           averageScore = book.averageScore ?? 0.0;
@@ -97,6 +100,8 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
           email = userProvider.getEmail();
 
           bootpayReqeustDataInit(nickname, email);
+
+          _isLoading = false;
         });
       }
     });
@@ -104,222 +109,197 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      child: Stack(
-        children: [
-          Positioned(
-              top: MediaQuery.of(context).size.height * 0.01,
-              right: MediaQuery.of(context).size.width * 0.01,
-              child: IconButton(
-                icon: CloseCircle(
-                  size: MediaQuery.of(context).size.width * 0.035,
-                ),
-                onPressed: () {
-                  context.read<MainProvider>().resetDetailPageSelection();
-                },
-              )),
-          Padding(
-            padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return _isLoading
+        ? Center(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.1,
+            height: MediaQuery.of(context).size.width * 0.1,
+            child: const CircularProgressIndicator()))
+        : SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Stack(
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.23,
-                      height: MediaQuery.of(context).size.height * 0.5,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: url.isEmpty
-                            ? const Center(child: CircularProgressIndicator()) // Show loader when URL is empty
-                            : CachedNetworkImage(
-                                imageUrl: url,
-                                fit: BoxFit.cover,
-                                width: MediaQuery.of(context).size.width * 0.25,
-                                placeholder: (context, url) => const CircularProgressIndicator(),
-                                errorWidget: (context, url, error) => const Icon(Icons.error),
-                              ),
+                Positioned(
+                    top: MediaQuery.of(context).size.height * 0.01,
+                    right: MediaQuery.of(context).size.width * 0.01,
+                    child: IconButton(
+                      icon: CloseCircle(
+                        size: MediaQuery.of(context).size.width * 0.035,
                       ),
-                    ),
-                    isPay
-                        ? Container()
-                        : Text(
-                            "${f.format(price)}원",
-                            style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleSmall),
-                          ),
-                    isPay
-                        ? GreenButton("구매완료", onPressed: () {
-                            showToast(
-                              "이미 구매한 동화책입니다.",
-                              backgroundColor: AppColors.error,
-                            );
-                          })
-                        : GreenButton("구매하기", onPressed: () {
-                            goBootpayTest(context);
-                          }),
-                  ],
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: Column(
+                      onPressed: () {
+                        context.read<MainProvider>().resetDetailPageSelection();
+                      },
+                    )),
+                Padding(
+                  padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.02),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.22,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.zero,
-                                padding: EdgeInsets.zero,
-                                child: Text("줄거리",
-                                    style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleSmallSmall)),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.23,
+                            height: MediaQuery.of(context).size.height * 0.5,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.file(
+                                File('${documentDirectory.path}/${path}'),
+                                fit: BoxFit.cover,
+                                width: MediaQuery.of(context).size.width * 0.25,
                               ),
-                              Container(
-                                margin: EdgeInsets.zero,
-                                padding: EdgeInsets.zero,
-                                constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.14),
-                                // Set a maxHeight for scrolling
-                                child: SingleChildScrollView(
-                                  child: Text(
-                                    summary,
-                                    style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMoreSmall),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * 0.4,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: AppColors.primaryContainer, // Border color
-                            width: 10.0, // Border width
+                            ),
                           ),
-                          borderRadius: const BorderRadius.all(Radius.circular(50)),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.01),
-                          child: Column(
-                            children: [
-                              isPay
-                                  ? Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: MediaQuery.of(context).size.height * 0.14,
-                                      decoration: const BoxDecoration(
-                                          border: Border(
-                                              bottom: BorderSide(
-                                        width: 3,
-                                        color: AppColors.primaryContainer,
-                                      ))),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text("내 리뷰",
-                                              style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleSmallSmall)),
-                                          Row(
-                                            children: [
-                                              //
-                                              isReviewed
-                                                  ? Row(
-                                                      children: [
-                                                        RatingBar.builder(
-                                                          initialRating: myReview.score,
-                                                          minRating: 1,
-                                                          direction: Axis.horizontal,
-                                                          allowHalfRating: true,
-                                                          ignoreGestures: true,
-                                                          itemCount: 5,
-                                                          itemSize: MediaQuery.of(context).size.width * 0.02,
-                                                          itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
-                                                          itemBuilder: (context, _) => const Icon(
-                                                            Icons.star,
-                                                            color: Colors.amber,
-                                                          ),
-                                                          onRatingUpdate: (double value) {},
-                                                        ),
-                                                        SizedBox(
-                                                          width: MediaQuery.of(context).size.width * 0.01,
-                                                        ),
-                                                        SizedBox(
-                                                          width: MediaQuery.of(context).size.width * 0.33,
-                                                          height: MediaQuery.of(context).size.height * 0.05,
-                                                          child: SingleChildScrollView(
-                                                            scrollDirection: Axis.vertical,
-                                                            child: Text(
-                                                              myReview.content,
-                                                              style: CustomFontStyle.getTextStyle(
-                                                                  context, CustomFontStyle.textMoreSmall),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  : GreenButton(
-                                                      "내 리뷰 등록하기",
-                                                      onPressed: () {
-                                                        DialogUtils.showCustomDialog(context,
-                                                            contentWidget: NewReviewModal(onModalClose: () {
-                                                          setState(() {
-                                                            Book book = bookModel.nowBook;
-                                                            averageScore = book.averageScore ?? 0.0;
-                                                            myReview = Review.fromJson(
-                                                                book.myReview ?? {'score': 0.0, 'content': ""});
-                                                            reviews = book.reviews ?? [];
-                                                            isReviewed = true;
-                                                            isPay = true;
-                                                          });
-                                                        }));
-                                                      },
-                                                      textStyle: CustomFontStyle.getTextStyle(
-                                                          context, CustomFontStyle.textMoreSmall),
-                                                    )
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  : Container(),
-                              Row(
-                                children: [
-                                  Text("평균평점: ",
-                                      style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleSmallSmall)),
-                                  RatingBar.builder(
-                                    initialRating: averageScore,
-                                    minRating: 1,
-                                    direction: Axis.horizontal,
-                                    allowHalfRating: true,
-                                    ignoreGestures: true,
-                                    itemCount: 5,
-                                    itemSize: MediaQuery.of(context).size.width * 0.02,
-                                    itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
-                                    itemBuilder: (context, _) => const Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
+                          isPay
+                              ? Container()
+                              : Text(
+                                  "${f.format(price)}원",
+                                  style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleSmall),
+                                ),
+                          isPay
+                              ? GreenButton("구매완료", onPressed: () {
+                                  showToast(
+                                    "이미 구매한 동화책입니다.",
+                                    backgroundColor: AppColors.error,
+                                  );
+                                })
+                              : GreenButton("구매하기", onPressed: () {
+                                  goBootpayTest(context);
+                                }),
+                        ],
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height * 0.22,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.zero,
+                                      padding: EdgeInsets.zero,
+                                      child: Text("줄거리",
+                                          style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleSmallSmall)),
                                     ),
-                                    onRatingUpdate: (double value) {},
-                                  ),
-                                ],
+                                    Container(
+                                      margin: EdgeInsets.zero,
+                                      padding: EdgeInsets.zero,
+                                      constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.14),
+                                      // Set a maxHeight for scrolling
+                                      child: SingleChildScrollView(
+                                        child: Text(
+                                          summary,
+                                          style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMoreSmall),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height * 0.4,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: AppColors.primaryContainer, // Border color
+                                  width: 10.0, // Border width
+                                ),
+                                borderRadius: const BorderRadius.all(Radius.circular(50)),
                               ),
-                              SizedBox(
-                                height: isPay
-                                    ? MediaQuery.of(context).size.width * 0.10
-                                    : MediaQuery.of(context).size.width * 0.17,
-                                child: ListView.builder(
-                                  padding: const EdgeInsets.all(8),
-                                  itemCount: reviews.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.01),
+                                child: Column(
+                                  children: [
+                                    isPay
+                                        ? Container(
+                                            width: MediaQuery.of(context).size.width,
+                                            height: MediaQuery.of(context).size.height * 0.14,
+                                            decoration: const BoxDecoration(
+                                                border: Border(
+                                                    bottom: BorderSide(
+                                              width: 3,
+                                              color: AppColors.primaryContainer,
+                                            ))),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text("내 리뷰",
+                                                    style: CustomFontStyle.getTextStyle(
+                                                        context, CustomFontStyle.titleSmallSmall)),
+                                                Row(
+                                                  children: [
+                                                    //
+                                                    isReviewed
+                                                        ? Row(
+                                                            children: [
+                                                              RatingBar.builder(
+                                                                initialRating: myReview.score,
+                                                                minRating: 1,
+                                                                direction: Axis.horizontal,
+                                                                allowHalfRating: true,
+                                                                ignoreGestures: true,
+                                                                itemCount: 5,
+                                                                itemSize: MediaQuery.of(context).size.width * 0.02,
+                                                                itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
+                                                                itemBuilder: (context, _) => const Icon(
+                                                                  Icons.star,
+                                                                  color: Colors.amber,
+                                                                ),
+                                                                onRatingUpdate: (double value) {},
+                                                              ),
+                                                              SizedBox(
+                                                                width: MediaQuery.of(context).size.width * 0.01,
+                                                              ),
+                                                              SizedBox(
+                                                                width: MediaQuery.of(context).size.width * 0.33,
+                                                                height: MediaQuery.of(context).size.height * 0.05,
+                                                                child: SingleChildScrollView(
+                                                                  scrollDirection: Axis.vertical,
+                                                                  child: Text(
+                                                                    myReview.content,
+                                                                    style: CustomFontStyle.getTextStyle(
+                                                                        context, CustomFontStyle.textMoreSmall),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          )
+                                                        : GreenButton(
+                                                            "내 리뷰 등록하기",
+                                                            onPressed: () {
+                                                              DialogUtils.showCustomDialog(context,
+                                                                  contentWidget: NewReviewModal(onModalClose: () {
+                                                                setState(() {
+                                                                  Book book = bookModel.nowBook;
+                                                                  averageScore = book.averageScore ?? 0.0;
+                                                                  myReview = Review.fromJson(
+                                                                      book.myReview ?? {'score': 0.0, 'content': ""});
+                                                                  reviews = book.reviews ?? [];
+                                                                  isReviewed = true;
+                                                                  isPay = true;
+                                                                });
+                                                              }));
+                                                            },
+                                                            textStyle: CustomFontStyle.getTextStyle(
+                                                                context, CustomFontStyle.textMoreSmall),
+                                                          )
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : Container(),
+                                    Row(
                                       children: [
+                                        Text("평균평점: ",
+                                            style: CustomFontStyle.getTextStyle(context, CustomFontStyle.titleSmallSmall)),
                                         RatingBar.builder(
-                                          initialRating: reviews[index]['score'],
+                                          initialRating: averageScore,
                                           minRating: 1,
                                           direction: Axis.horizontal,
                                           allowHalfRating: true,
@@ -333,24 +313,56 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                                           ),
                                           onRatingUpdate: (double value) {},
                                         ),
-                                        SizedBox(
-                                          width: MediaQuery.of(context).size.width * 0.02,
-                                        ),
-                                        Flexible(
-                                          child: RichText(
-                                            text: TextSpan(
-                                              text: reviews[index]['content'],
-                                              style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMoreSmall),
-                                            ),
-                                          ),
-                                        ),
                                       ],
-                                    );
-                                  },
+                                    ),
+                                    SizedBox(
+                                      height: isPay
+                                          ? MediaQuery.of(context).size.width * 0.10
+                                          : MediaQuery.of(context).size.width * 0.17,
+                                      child: ListView.builder(
+                                        padding: const EdgeInsets.all(8),
+                                        itemCount: reviews.length,
+                                        itemBuilder: (BuildContext context, int index) {
+                                          return Row(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              RatingBar.builder(
+                                                initialRating: reviews[index]['score'],
+                                                minRating: 1,
+                                                direction: Axis.horizontal,
+                                                allowHalfRating: true,
+                                                ignoreGestures: true,
+                                                itemCount: 5,
+                                                itemSize: MediaQuery.of(context).size.width * 0.02,
+                                                itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
+                                                itemBuilder: (context, _) => const Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                ),
+                                                onRatingUpdate: (double value) {},
+                                              ),
+                                              SizedBox(
+                                                width: MediaQuery.of(context).size.width * 0.02,
+                                              ),
+                                              Flexible(
+                                                child: RichText(
+                                                  text: TextSpan(
+                                                    text: reviews[index]['content'],
+                                                    style:
+                                                        CustomFontStyle.getTextStyle(context, CustomFontStyle.textMoreSmall),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -358,10 +370,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
                 ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 
   bootpayReqeustDataInit(String nickname, String email) {
@@ -410,7 +419,7 @@ class _BooksDetailPayState extends State<BooksDetailPay> {
       context: context,
       payload: payload,
       showCloseButton: false,
-      onIssued: (String data){
+      onIssued: (String data) {
         debugPrint("------------onIssued: $data");
       },
       onError: (String data) {

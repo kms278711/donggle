@@ -77,7 +77,8 @@ class _BookProgressState extends State<BookProgress> {
 
   Future<void> backgroundLinePlay(String path) async {
     try {
-      await backgroundLine.setUrl(path); // 오디오 파일의 URL을 설정
+      String filePath = '${documentDirectory.path}/$path';
+      await backgroundLine.setFilePath(filePath); // 오디오 파일의 URL을 설정
       await backgroundLine.play(); // 오디오 재생 시작
 
       await _audioPlayerSubscription?.cancel();
@@ -134,7 +135,7 @@ class _BookProgressState extends State<BookProgress> {
         if (sentenceId == nowPage.bookPageSentences.length - 1) {
           _isLastSentence = true;
         }
-        backgroundLinePlay(Constant.s3BaseUrl +
+        backgroundLinePlay(
             nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
       });
     }
@@ -205,7 +206,7 @@ class _BookProgressState extends State<BookProgress> {
     } else {
       setState(() {
         sentenceId--;
-        backgroundLinePlay(Constant.s3BaseUrl +
+        backgroundLinePlay(
             nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
         if (_isLastSentence) _isLastSentence = false;
       });
@@ -256,7 +257,7 @@ class _BookProgressState extends State<BookProgress> {
             _isLastSentence = true;
           }
           _isLoading = false; // Update loading state when done
-          backgroundLinePlay(Constant.s3BaseUrl +
+          backgroundLinePlay(
               nowPage.bookPageSentences[sentenceId].sentenceSoundPath);
         });
       }
@@ -316,7 +317,7 @@ class _BookProgressState extends State<BookProgress> {
                                     context, CustomFontStyle.textMediumLarge2),
                               ))
                           // : GreenButton('시작하기', onPressed: () {
-                          //     backgroundLinePlay(Constant.s3BaseUrl +
+                          //     backgroundLinePlay(
                           //         nowPage.bookPageSentences[sentenceId]
                           //             .sentenceSoundPath);
                           //     setState(() {

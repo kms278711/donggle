@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
@@ -43,7 +42,6 @@ class _BookDetailState extends State<BookDetail> {
   bool isLoading = true;
   List<dynamic> bookPageImagePath = [];
   bool isRead = false;
-  bool isSaved = false;
 
   Future<void> _downloadImage(String path) async {
     String url = Constant.s3BaseUrl + path;
@@ -51,15 +49,10 @@ class _BookDetailState extends State<BookDetail> {
 
     // 파일을 생성합니다.
     final file = File('${documentDirectory.path}/$path');
-
-    if (!isSaved) {
-      final directoryPath = file.parent.path;
-      final directory = Directory(directoryPath);
-      if (!directory.existsSync()) {
-        directory.createSync(recursive: true);
-      } else {
-        isSaved = true;
-      }
+    final directoryPath = file.parent.path;
+    final directory = Directory(directoryPath);
+    if (!directory.existsSync()) {
+      directory.createSync(recursive: true);
     }
 
     // 파일에 데이터를 씁니다.
@@ -87,13 +80,29 @@ class _BookDetailState extends State<BookDetail> {
     documentDirectory = await getApplicationDocumentsDirectory();
 
     if (mounted) {
-      bookPageImagePath = bookModel.BookDetail['bookPageImagePath'];
+      bookPageImagePath = bookModel.BookDetail['bookPageImagePathList'];
       for (String imagePath in bookPageImagePath) {
         final file = File('${documentDirectory.path}/$imagePath');
         final fileExists = file.existsSync();
 
         if (fileExists) break;
         await _downloadImage(imagePath);
+      }
+      for (String soundPath in bookModel.BookDetail['bookSoundPathList']) {
+        final file = File('${documentDirectory.path}/$soundPath');
+        final fileExists = file.existsSync();
+
+        if (fileExists) break;
+        await _downloadImage(soundPath);
+      }
+
+      for (Map word in bookModel.BookDetail['educationList']) {
+        final file = File('${documentDirectory.path}/${word['imagePath']}');
+        final fileExists = file.existsSync();
+
+        if (!fileExists) {
+          await _downloadImage(word['imagePath']);
+        }
       }
       if (mounted) {
         // 데이터 로딩 완료 후 상태 업데이트
@@ -103,7 +112,7 @@ class _BookDetailState extends State<BookDetail> {
           bookTotalPage = bookModel.BookDetail['totalPage'];
           bookPage = bookModel.BookDetail['processPage'];
           educations = bookModel.BookDetail['educationList'];
-          bookPageImagePath = bookModel.BookDetail['bookPageImagePath'];
+          bookPageImagePath = bookModel.BookDetail['bookPageImagePathList'];
           url = Constant.s3BaseUrl + bookCover;
           index = bookModel.progresses.indexWhere((progress) => progress.bookId == widget.bookId);
           isDone = bookModel.progresses[index].isDone;
@@ -212,12 +221,10 @@ class _BookDetailState extends State<BookDetail> {
                             child: Stack(
                               children: [
                                 Center(
-                                  child: CachedNetworkImage(
-                                    imageUrl: Constant.s3BaseUrl + education["imagePath"],
+                                  child: Image.file(
+                                    File('${documentDirectory.path}/${education["imagePath"]}'),
                                     fit: BoxFit.cover,
-                                    memCacheWidth: 200,
                                     height: MediaQuery.of(context).size.height * 0.3,
-                                    errorWidget: (context, url, error) => const Icon(Icons.error),
                                   ),
                                 ),
                                 Positioned(

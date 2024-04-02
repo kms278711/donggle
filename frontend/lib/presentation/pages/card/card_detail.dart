@@ -42,15 +42,16 @@ class _CardDetailState extends State<CardDetail> {
   late CardModel cardModel;
   late BookModel bookModel;
   late UserProvider userProvider;
+  late Directory documentDirectory;
   String wordName = "";
   String imagePath = "";
   String bookTitle = "";
   String bookSentence = "";
   List userImages = [];
-  String url = "";
   String category = "";
   String accessToken = "";
   String traceImagePath = "";
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -68,6 +69,7 @@ class _CardDetailState extends State<CardDetail> {
 
     await cardModel.getSelectedCard(accessToken, widget.educationId);
     // 데이터 로딩 완료 후 상태 업데이트
+    documentDirectory = await getApplicationDocumentsDirectory();
 
     setState(() {
       wordName = cardModel.selectedCard['wordName'];
@@ -76,11 +78,12 @@ class _CardDetailState extends State<CardDetail> {
       bookSentence = cardModel.selectedCard['bookSentence'];
       userImages = cardModel.selectedCard['userImages'];
       category = cardModel.selectedCard['category'];
-      url = Constant.s3BaseUrl + imagePath;
-      bookModel.nowEducation = Education(educationId: widget.educationId, wordName: wordName, imagePath: imagePath, category: category);
-      if(category == "PICTURE"){
+      bookModel.nowEducation =
+          Education(educationId: widget.educationId, wordName: wordName, imagePath: imagePath, category: category);
+      if (category == "PICTURE") {
         bookModel.nowEducation.traceImagePath = cardModel.selectedCard['traceImagePath'];
       }
+      _isLoading = false;
     });
   }
 
@@ -183,13 +186,16 @@ class _CardDetailState extends State<CardDetail> {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: CachedNetworkImage(
-                        imageUrl: url,
-                        fit: BoxFit.cover,
-                        width: MediaQuery.of(context).size.width * 0.3,
-                        placeholder: (context, url) => const CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => const Icon(Icons.error),
-                      ),
+                      child: _isLoading
+                          ? SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              height: MediaQuery.of(context).size.height * 0.5,
+                              child: const Center(child: CircularProgressIndicator()))
+                          : Image.file(
+                              File('${documentDirectory.path}/$imagePath'),
+                              fit: BoxFit.cover,
+                              width: MediaQuery.of(context).size.width * 0.3,
+                            ),
                     ),
                     Positioned(
                       bottom: MediaQuery.of(context).size.height * 0.1,

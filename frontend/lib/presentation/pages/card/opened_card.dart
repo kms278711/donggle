@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
@@ -5,14 +7,15 @@ import 'package:frontend/core/utils/component/dialog_utils.dart';
 import 'package:frontend/domain/model/model_cards.dart' as domain;
 import 'package:frontend/presentation/pages/card/card_detail.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class OpenedCard extends StatefulWidget {
-  final String url;
+  final String path;
   final int educationId;
   final String word;
 
-  const OpenedCard(this.url, this.educationId, this.word, {super.key});
+  const OpenedCard(this.path, this.educationId, this.word, {super.key});
 
   @override
   State<OpenedCard> createState() => _OpenedBookState();
@@ -21,7 +24,9 @@ class OpenedCard extends StatefulWidget {
 class _OpenedBookState extends State<OpenedCard> {
   late domain.CardModel cardModel;
   late UserProvider userProvider;
+  late Directory documentDirectory;
   String accessToken = "";
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -29,11 +34,18 @@ class _OpenedBookState extends State<OpenedCard> {
     cardModel = Provider.of<domain.CardModel>(context, listen: false);
     userProvider = Provider.of<UserProvider>(context, listen: false);
     accessToken = userProvider.getAccessToken();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      documentDirectory = await getApplicationDocumentsDirectory();
+      setState(() {
+        _isLoading = false;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return _isLoading ? const CircularProgressIndicator() : Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: () async {
@@ -51,13 +63,9 @@ class _OpenedBookState extends State<OpenedCard> {
             Center(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  child: CachedNetworkImage(
-                    imageUrl: widget.url,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => const CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => const Icon(Icons.error),
-                  ),
+                child: Image.file(
+                  File('${documentDirectory.path}/${widget.path}'),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
