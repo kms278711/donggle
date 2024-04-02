@@ -20,9 +20,9 @@ import io
 
 app = FastAPI()
 # templates 폴더 설정
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory="app/templates")
 # 정적 파일 제공을 위한 경로 설정
-app.mount("/static", StaticFiles(directory="templates"), name="static")  # 추가
+app.mount("/static", StaticFiles(directory="app/templates"), name="static")  # 추가
 
 origins = ["*"]
 app.add_middleware(
@@ -120,7 +120,7 @@ s3 = boto3.client(
 
 @app.get("/")
 async def home(request: Request):
-    return templates.TemplateResponse("./index.html",{"request":request})
+    return templates.TemplateResponse("index.html",{"request":request})
 
 
 @app.post("/ai/analyze/drawing")
