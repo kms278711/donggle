@@ -44,7 +44,9 @@ class _profileImageUpdateModalState extends State<profileImageUpdateModal> {
 
   void _pickFiles() async {
     List<PlatformFile>? uploadedFiles = (await FilePicker.platform.pickFiles(
-      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'jpeg', 'png', 'gif']
+      // allowMultiple: true,
     ))
         ?.files;
     setState(() {

@@ -154,13 +154,13 @@ class _donggleTalkState extends State<donggleTalk> with SingleTickerProviderStat
                                   ),
                                   Positioned(
                                     top: widget.situation == 'BOOKLIST'
-                                        ? MediaQuery.of(context).size.height * 0.22
+                                        ? MediaQuery.of(context).size.height * 0.27
                                         : widget.situation == 'BOOK'
-                                            ? MediaQuery.of(context).size.height * 0.24
+                                            ? MediaQuery.of(context).size.height * 0.3
                                             : widget.situation == 'WORDLIST'
-                                                ? MediaQuery.of(context).size.height * 0.22
+                                                ? MediaQuery.of(context).size.height * 0.27
                                                 : widget.situation == 'WORD'
-                                                    ? MediaQuery.of(context).size.height * 0.27
+                                                    ? MediaQuery.of(context).size.height * 0.3
                                                     : widget.situation == 'QUIZ'
                                                         ? MediaQuery.of(context)
                                                                 .size
@@ -172,14 +172,14 @@ class _donggleTalkState extends State<donggleTalk> with SingleTickerProviderStat
                                                                         context)
                                                                     .size
                                                                     .height *
-                                                                0.27
+                                                                0.32
                                                             : widget.situation ==
                                                                     'QUIZRESULT_WRONG'
                                                                 ? MediaQuery.of(
                                                                             context)
                                                                         .size
                                                                         .height *
-                                                                    0.24
+                                                                    0.3
                                                                 : 10,
                                     right: widget.situation == 'BOOKLIST'
                                         ? MediaQuery.of(context).size.width * 0.054
