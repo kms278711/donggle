@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -14,7 +15,9 @@ import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:frontend/presentation/routes/routes.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class BookDetail extends StatefulWidget {
   final int bookId;
@@ -27,6 +30,7 @@ class BookDetail extends StatefulWidget {
 
 class _BookDetailState extends State<BookDetail> {
   late BookModel bookModel;
+  late Directory documentDirectory;
   int bookId = 0;
   String bookTitle = "";
   String bookCover = "";
@@ -39,6 +43,28 @@ class _BookDetailState extends State<BookDetail> {
   bool isLoading = true;
   List<dynamic> bookPageImagePath = [];
   bool isRead = false;
+  bool isSaved = false;
+
+  Future<void> _downloadImage(String path) async {
+    String url = Constant.s3BaseUrl + path;
+    final response = await http.get(Uri.parse(url));
+
+    // 파일을 생성합니다.
+    final file = File('${documentDirectory.path}/$path');
+
+    if (!isSaved) {
+      final directoryPath = file.parent.path;
+      final directory = Directory(directoryPath);
+      if (!directory.existsSync()) {
+        directory.createSync(recursive: true);
+      } else {
+        isSaved = true;
+      }
+    }
+
+    // 파일에 데이터를 씁니다.
+    file.writeAsBytesSync(response.bodyBytes);
+  }
 
   @override
   void initState() {
@@ -58,15 +84,17 @@ class _BookDetailState extends State<BookDetail> {
     var accessToken = userProvider.getAccessToken();
 
     await bookModel.getBookDetail(accessToken, widget.bookId);
+    documentDirectory = await getApplicationDocumentsDirectory();
 
     if (mounted) {
-      // bookPageImagePath = bookModel.BookDetail['bookPageImagePath'];
-      // for (String imagePath in bookPageImagePath) {
-      //   await precacheImage(
-      //     NetworkImage(Constant.s3BaseUrl + imagePath),
-      //     context,
-      //   );
-      //}
+      bookPageImagePath = bookModel.BookDetail['bookPageImagePath'];
+      for (String imagePath in bookPageImagePath) {
+        final file = File('${documentDirectory.path}/$imagePath');
+        final fileExists = file.existsSync();
+
+        if (fileExists) break;
+        await _downloadImage(imagePath);
+      }
       if (mounted) {
         // 데이터 로딩 완료 후 상태 업데이트
         setState(() {
@@ -152,13 +180,13 @@ class _BookDetailState extends State<BookDetail> {
                   left: MediaQuery.of(context).size.width * 0.13,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: CachedNetworkImage(
-                      imageUrl: url,
+                    child: Image.file(
+                      File('${documentDirectory.path}/$bookCover'),
                       fit: BoxFit.cover,
-                      memCacheWidth: 500,
+                      // memCacheWidth: 500,
                       width: MediaQuery.of(context).size.width * 0.25,
-                      placeholder: (context, url) => const CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                      // placeholder: (context, url) => const CircularProgressIndicator(),
+                      // errorWidget: (context, url, error) => const Icon(Icons.error),
                     ),
                   ),
                 ),

@@ -1,4 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
@@ -7,11 +8,11 @@ import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/component/buttons/green_button.dart';
 import 'package:frontend/core/utils/component/buttons/red_button.dart';
 import 'package:frontend/core/utils/component/dialog_utils.dart';
-import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/domain/model/model_review.dart';
 import 'package:frontend/presentation/pages/mypage/Book/new_review_modal.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class ReviewCard extends StatefulWidget {
@@ -25,16 +26,23 @@ class ReviewCard extends StatefulWidget {
 }
 
 class _ReviewCardState extends State<ReviewCard> {
+  late Directory documentDirectory;
+  bool _isLoading = true;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {});
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      documentDirectory = await getApplicationDocumentsDirectory();
+      setState(() {
+        _isLoading = false;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     String path = widget.review.coverPath ?? "";
-    String url = Constant.s3BaseUrl + path;
     return Container(
       margin: EdgeInsets.only(
         bottom: MediaQuery.of(context).size.width * 0.02,
@@ -68,11 +76,9 @@ class _ReviewCardState extends State<ReviewCard> {
                     width: MediaQuery.of(context).size.width * 0.12,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: CachedNetworkImage(
-                        imageUrl: url,
+                      child: _isLoading ? const CircularProgressIndicator() : Image.file(
+                        File('${documentDirectory.path}/$path'),
                         fit: BoxFit.cover,
-                        placeholder: (context, url) => const CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => const Icon(Icons.error),
                       ),
                     ),
                   ),

@@ -1,17 +1,38 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:frontend/core/theme/constant/app_colors.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
+import 'package:path_provider/path_provider.dart';
 
-class DevelopingBook extends StatelessWidget {
-  final String url;
+class DevelopingBook extends StatefulWidget {
+  final String path;
 
-  const DevelopingBook(this.url, {super.key});
+  const DevelopingBook(this.path, {super.key});
+
+  @override
+  State<DevelopingBook> createState() => _DevelopingBookState();
+}
+
+class _DevelopingBookState extends State<DevelopingBook> {
+  late Directory documentDirectory;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      documentDirectory = await getApplicationDocumentsDirectory();
+      setState(() {
+        _isLoading = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return _isLoading ? const CircularProgressIndicator() : Material(
       // Added Material widget
       color: Colors.transparent, // Avoid any undesired coloring
       child: InkWell(
@@ -23,11 +44,9 @@ class DevelopingBook extends StatelessWidget {
             Center(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child: CachedNetworkImage(
-                  imageUrl: url,
+                child: Image.file(
+                  File('${documentDirectory.path}/${widget.path}'),
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => const CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
             ),

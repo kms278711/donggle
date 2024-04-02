@@ -24,6 +24,7 @@ class BookModel extends ChangeNotifier {
   Education nowEducation = Education(educationId: 0, gubun: "", wordName: "", imagePath: "", bookSentenceId: 0);
   List<Education> educations = [];
   List<Progress> progresses = [Progress(bookId: 1, isDone: false)];
+  List bookCovers = [];
 
   int currentBookId = 1;
 
@@ -206,6 +207,24 @@ class BookModel extends ChangeNotifier {
     } else {
       String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']['result_message'];
       return msg;
+    }
+  }
+
+  /// 앱 실행시 동화책 표지 이미지 불러오기
+  Future<List> getBookCovers() async {
+    // print(bookId.toString());
+    var url = Uri.https("j10c101.p.ssafy.io", "/api/books/cover-images");
+    final headers = {'Content-Type': 'application/json'};
+    var response = await http.get(url, headers: headers);
+
+    // print(utf8.decode(response.bodyBytes));
+
+    if (response.statusCode == 200) {
+      return json.decode(utf8.decode(response.bodyBytes));
+    } else {
+      String msg = json.decode(utf8.decode(response.bodyBytes))['data_header']['result_message'];
+      debugPrint(msg);
+      return [];
     }
   }
 }

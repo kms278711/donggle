@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ import 'package:frontend/presentation/routes/route_path.dart';
 import 'package:frontend/presentation/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class BookProgress extends StatefulWidget {
@@ -44,6 +46,7 @@ class _BookProgressState extends State<BookProgress> {
 
   late BookModel bookModel;
   late UserProvider userProvider;
+  late Directory documentDirectory;
   String accessToken = "";
   int bookId = 0;
   int pageId = 0;
@@ -51,6 +54,7 @@ class _BookProgressState extends State<BookProgress> {
   int sentenceId = 0;
   int educationId = 10000;
   int totalPage = 0;
+  // String path = "";
   BookPage nowPage = BookPage(
     bookPageId: 0,
     bookImagePath: "",
@@ -226,11 +230,12 @@ class _BookProgressState extends State<BookProgress> {
       }
 
       nowPage = bookModel.nowPage;
-      url = Constant.s3BaseUrl + nowPage.bookImagePath;
       if (sentenceId == nowPage.bookPageSentences.length - 1) {
         _isLastSentence = true;
       }
       educationId = nowPage.education?.bookSentenceId ?? 10000;
+
+      documentDirectory = await getApplicationDocumentsDirectory();
 
       if (mounted) {
         setState(() {
@@ -263,13 +268,13 @@ class _BookProgressState extends State<BookProgress> {
         : Scaffold(
             body: Stack(
               children: [
-                CachedNetworkImage(
-                  imageUrl: url,
+                Image.file(
+                  File('${documentDirectory.path}/${nowPage.bookImagePath}'),
                   fit: BoxFit.cover,
-                  memCacheWidth: 800,
+                  // memCacheWidth: 800,
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                  // errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
                 Positioned(
                     bottom: MediaQuery.of(context).size.height * 0.02,

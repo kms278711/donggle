@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                             itemBuilder: (context, index) {
                               final book =
                                   Book.fromJson(bookModel.books[index]);
-                              final url = Constant.s3BaseUrl + book.path;
+                              final path = book.path;
                               final id = book.bookId;
                               final isPay = book.isPay ?? false;
                               int idx = bookModel.progresses.indexWhere((progress) => progress.bookId == id);
@@ -81,8 +81,8 @@ class _HomePageState extends State<HomePage> {
                                 bookModel.progresses.add(Progress(bookId: id, isDone: false));
                               }
                               return isPay ?? false
-                                  ? OpenedBook(url, id)
-                                  : LockedBook(url, id);
+                                  ? OpenedBook(path, id)
+                                  : LockedBook(path, id);
                             },
                           );
                         } else {

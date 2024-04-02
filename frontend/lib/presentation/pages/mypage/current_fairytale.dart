@@ -1,11 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
-import 'package:frontend/core/utils/component/buttons/red_button.dart';
-import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_books.dart';
 import 'package:frontend/presentation/pages/home/component/book/opened_book.dart';
-import 'package:frontend/presentation/pages/modal/signout_modal.dart';
 import 'package:frontend/presentation/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -77,9 +73,9 @@ class _CurrentFairytaleState extends State<CurrentFairytale> {
                       itemBuilder: (context, index) {
                         final book = Book.fromJson(
                             bookModel.currentBooks[index]);
-                        final url = Constant.s3BaseUrl + book.path;
+                        final path = book.path;
                         final id = book.bookId;
-                        return OpenedBook(url, id);
+                        return OpenedBook(path, id);
                       },
                     );
                   } else {

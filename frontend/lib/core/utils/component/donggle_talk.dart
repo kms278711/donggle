@@ -1,13 +1,10 @@
 import 'dart:math' as math;
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:frontend/core/theme/constant/app_icons.dart';
 import 'package:frontend/core/theme/custom/custom_font_style.dart';
 import 'package:frontend/core/utils/constant/constant.dart';
 import 'package:frontend/domain/model/model_donggle_talk.dart';
-import 'package:indexed/indexed.dart';
 import 'package:provider/provider.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -50,7 +47,7 @@ class _donggleTalkState extends State<donggleTalk> with SingleTickerProviderStat
       // 애니메이션 시작
       controller.forward(from: 0.0);
       // 3초 후에 touched_donggle를 false로 설정하여 이미지를 숨깁니다.
-      Future.delayed(Duration(milliseconds: 2400), () {
+      Future.delayed(const Duration(milliseconds: 2400), () {
         setState(() {
           touched_donggle = false;
         });
@@ -72,8 +69,7 @@ class _donggleTalkState extends State<donggleTalk> with SingleTickerProviderStat
     );
 
     // 퀴즈 다풀었을 때 동글이가 바로 말하도록
-    if (widget.situation == 'QUIZRESULT_CORRECT' ||
-        widget.situation == 'QUIZRESULT_WRONG') {
+    if (widget.situation == 'QUIZRESULT_CORRECT' || widget.situation == 'QUIZRESULT_WRONG') {
       _playInitialDonggleTalk();
     }
 
@@ -97,7 +93,7 @@ class _donggleTalkState extends State<donggleTalk> with SingleTickerProviderStat
       await donggleSay.setUrl(path); // 오디오 파일의 URL을 설정
       await donggleSay.play(); // 오디오 재생 시작
     } catch (e) {
-      print("오류 발생: $e");
+      debugPrint("오류 발생: $e");
     }
   }
 
@@ -108,10 +104,9 @@ class _donggleTalkState extends State<donggleTalk> with SingleTickerProviderStat
     await donggleTalkModel.getDonggleTalk(widget.situation);
     setState(() {
       donggleTalk = donggleTalkModel.dongglesTalk["content"];
-      print("talk ---- $donggleTalk");
+      debugPrint("talk ---- $donggleTalk");
     });
-    await sayDonggle(
-        Constant.s3BaseUrl + donggleTalkModel.dongglesTalk["dgSoundPath"]);
+    await sayDonggle(Constant.s3BaseUrl + donggleTalkModel.dongglesTalk["dgSoundPath"]);
   }
 
   @override
@@ -154,60 +149,34 @@ class _donggleTalkState extends State<donggleTalk> with SingleTickerProviderStat
                                   ),
                                   Positioned(
                                     top: widget.situation == 'BOOKLIST'
-                                        ? MediaQuery.of(context).size.height * 0.27
+                                        ? MediaQuery.of(context).size.height * 0.23
                                         : widget.situation == 'BOOK'
-                                            ? MediaQuery.of(context).size.height * 0.3
+                                            ? MediaQuery.of(context).size.height * 0.25
                                             : widget.situation == 'WORDLIST'
-                                                ? MediaQuery.of(context).size.height * 0.27
+                                                ? MediaQuery.of(context).size.height * 0.24
                                                 : widget.situation == 'WORD'
-                                                    ? MediaQuery.of(context).size.height * 0.3
+                                                    ? MediaQuery.of(context).size.height * 0.27
                                                     : widget.situation == 'QUIZ'
-                                                        ? MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.27
-                                                        : widget.situation ==
-                                                                'QUIZRESULT_CORRECT'
-                                                            ? MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .height *
-                                                                0.32
-                                                            : widget.situation ==
-                                                                    'QUIZRESULT_WRONG'
-                                                                ? MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .height *
-                                                                    0.3
+                                                        ? MediaQuery.of(context).size.height * 0.27
+                                                        : widget.situation == 'QUIZRESULT_CORRECT'
+                                                            ? MediaQuery.of(context).size.height * 0.275
+                                                            : widget.situation == 'QUIZRESULT_WRONG'
+                                                                ? MediaQuery.of(context).size.height * 0.25
                                                                 : 10,
                                     right: widget.situation == 'BOOKLIST'
-                                        ? MediaQuery.of(context).size.width * 0.054
+                                        ? MediaQuery.of(context).size.width * 0.05
                                         : widget.situation == 'BOOK'
-                                            ? MediaQuery.of(context).size.width * 0.038
+                                            ? MediaQuery.of(context).size.width * 0.03
                                             : widget.situation == 'WORDLIST'
-                                                ? MediaQuery.of(context).size.width * 0.034
+                                                ? MediaQuery.of(context).size.width * 0.04
                                                 : widget.situation == 'WORD'
                                                     ? MediaQuery.of(context).size.width * 0.035
                                                     : widget.situation == 'QUIZ'
-                                                        ? MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.024
-                                                        : widget.situation ==
-                                                                'QUIZRESULT_CORRECT'
-                                                            ? MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width *
-                                                                0.065
-                                                            : widget.situation ==
-                                                                    'QUIZRESULT_WRONG'
-                                                                ? MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .width *
-                                                                    0.02
+                                                        ? MediaQuery.of(context).size.width * 0.024
+                                                        : widget.situation == 'QUIZRESULT_CORRECT'
+                                                            ? MediaQuery.of(context).size.width * 0.065
+                                                            : widget.situation == 'QUIZRESULT_WRONG'
+                                                                ? MediaQuery.of(context).size.width * 0.02
                                                                 : 10,
                                     child: Container(
                                       width: widget.situation == 'BOOKLIST'
@@ -215,37 +184,19 @@ class _donggleTalkState extends State<donggleTalk> with SingleTickerProviderStat
                                           : widget.situation == 'BOOK'
                                               ? MediaQuery.of(context).size.width * 0.16
                                               : widget.situation == 'WORDLIST'
-                                                  ? MediaQuery.of(context).size.width * 0.16
+                                                  ? MediaQuery.of(context).size.width * 0.14
                                                   : widget.situation == 'WORD'
-                                                      ? MediaQuery.of(context)
-                                                              .size
-                                                              .width *
-                                                          0.17
-                                                      : widget.situation ==
-                                                              'QUIZ'
-                                                          ? MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.2
-                                                          : widget.situation ==
-                                                                  'QUIZRESULT_CORRECT'
-                                                              ? MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.11
-                                                              : widget.situation ==
-                                                                      'QUIZRESULT_WRONG'
-                                                                  ? MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width *
-                                                                      0.2
+                                                      ? MediaQuery.of(context).size.width * 0.17
+                                                      : widget.situation == 'QUIZ'
+                                                          ? MediaQuery.of(context).size.width * 0.2
+                                                          : widget.situation == 'QUIZRESULT_CORRECT'
+                                                              ? MediaQuery.of(context).size.width * 0.11
+                                                              : widget.situation == 'QUIZRESULT_WRONG'
+                                                                  ? MediaQuery.of(context).size.width * 0.2
                                                                   : 10,
                                       color: Colors.transparent,
                                       child: Padding(
-                                        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                                        padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                                         child: Text(
                                           donggleTalk,
                                           style: CustomFontStyle.getTextStyle(context, CustomFontStyle.textMedium),
