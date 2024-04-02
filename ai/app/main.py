@@ -1,19 +1,15 @@
 from fastapi import FastAPI, File, UploadFile, Form
-from fastapi.responses import StreamingResponse
 from fastapi import Request
-from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import tensorflow as tf
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-#from keras.models import load_model
+from fastapi.staticfiles import StaticFiles  # StaticFiles 임포트 추가
 from fastapi.responses import JSONResponse
 import requests
 from io import BytesIO
 from PIL import Image
-import base64
 import numpy as np 
 from typing import Optional
 from app.classes.doodle import ref as doodle_ref
@@ -23,6 +19,10 @@ import dlib
 import io
 
 app = FastAPI()
+# templates 폴더 설정
+templates = Jinja2Templates(directory="templates")
+# 정적 파일 제공을 위한 경로 설정
+app.mount("/static", StaticFiles(directory="templates"), name="static")  # 추가
 
 origins = ["*"]
 app.add_middleware(
@@ -120,7 +120,7 @@ s3 = boto3.client(
 
 @app.get("/")
 async def home(request: Request):
-    return templates.TemplateResponse("./index/index.html",{"request":request})
+    return templates.TemplateResponse("./index.html",{"request":request})
 
 
 @app.post("/ai/analyze/drawing")
