@@ -11,6 +11,13 @@ class CustomFontStyle {
   }
 
   /// Typography
+  static const huge = TextStyle(
+    fontFamily: "Itim",
+    color: AppColors.white,
+    fontSize: 400,
+    fontWeight: CustomFontWeight.semiBold,
+  );
+
   static const titleMain = TextStyle(
     fontFamily: "Nanumson_jangmi",
     color: AppColors.black,

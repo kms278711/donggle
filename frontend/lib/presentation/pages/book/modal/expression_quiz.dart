@@ -38,6 +38,7 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
   String educationWord = "";
   String apiResult = "";
   String accessToken = "";
+  String number = "";
 
   @override
   void initState() {
@@ -177,53 +178,87 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
                     ],
                   ),
                   Positioned(
-                      right: MediaQuery.of(context).size.width * 0.05,
-                      bottom: MediaQuery.of(context).size.height * 0.03,
-                      child: GreenButton(
-                        "확인",
-                        onPressed: () async {
-                          final image = await cameraController.takePicture();
-                          String fileName = extractFileNameWithoutExtension(education.imagePath);
-                          var img = await CameraImageProcessing.getImageData(image);
-                          EmotionApi emotionApi =
-                              EmotionApi(file: img, filename: fileName);
-                          // await CameraImageProcessing.saveImageData(img);
-
-                          String result = await emotionApi.emotionAI();
-
-                          if (!context.mounted) return;
-
+                    right: MediaQuery.of(context).size.width * 0.05,
+                    bottom: MediaQuery.of(context).size.height * 0.03,
+                    child: GreenButton(
+                      "확인",
+                      onPressed: () async {
+                        effectPlaySound("assets/music/photo_ready.mp3", 1);
+                        setState(() {
+                          number = "3";
+                        });
+                        Timer(const Duration(seconds: 1), () {
+                          effectPlaySound("assets/music/photo_ready.mp3", 1);
                           setState(() {
-                            apiResult = result; // Update state with the API call result
+                            number = "2";
                           });
-
-                          if (result != "true" && result != "false") {
-                            showToast(result, backgroundColor: AppColors.error);
-                          }
-
-                          if(result == "true"){
-                            effectPlaySound("assets/music/answer.mp3", 1);
-                            await bookModel.saveEducationImage(accessToken, education.educationId, img);
-                          }else{
-                            effectPlaySound("assets/music/wrong.mp3", 1);
-                          }
-
-                          Timer(const Duration(milliseconds: 1000), () {
-                            if (!context.mounted) return; // Always check mounted status before calling setState
+                          Timer(const Duration(seconds: 1), () {
+                            effectPlaySound("assets/music/photo_ready.mp3", 1);
                             setState(() {
-                              apiResult = ""; // Reset apiResult to hide the sign
+                              number = "1";
                             });
+                            Timer(const Duration(seconds: 1), () async{
+                              effectPlaySound("assets/music/take_photo.mp3", 1);
+                              setState(() {
+                                number = "";
+                              });
+                              final image = await cameraController.takePicture();
+                              String fileName = extractFileNameWithoutExtension(education.imagePath);
+                              var img = await CameraImageProcessing.getImageData(image);
+                              EmotionApi emotionApi = EmotionApi(file: img, filename: fileName);
+                              // await CameraImageProcessing.saveImageData(img);
 
-                            if (result == "true") {
-                              Navigator.of(context).pop();
-                              widget.onModalClose?.call();
-                            }
+                              String result = await emotionApi.emotionAI();
+
+                              if (!context.mounted) return;
+
+                              setState(() {
+                                apiResult = result; // Update state with the API call result
+                              });
+
+                              if (result != "true" && result != "false") {
+                                showToast(result, backgroundColor: AppColors.error);
+                              }
+
+                              if (result == "true") {
+                                effectPlaySound("assets/music/answer.mp3", 1);
+                                await bookModel.saveEducationImage(accessToken, education.educationId, img);
+                              } else {
+                                effectPlaySound("assets/music/wrong.mp3", 1);
+                              }
+
+                              Timer(const Duration(milliseconds: 1000), () {
+                                if (!context.mounted) return; // Always check mounted status before calling setState
+                                setState(() {
+                                  apiResult = ""; // Reset apiResult to hide the sign
+                                });
+
+                                if (result == "true") {
+                                  Navigator.of(context).pop();
+                                  widget.onModalClose?.call();
+                                }
+                              });
+                            });
                           });
-                        },
-                      )),
+                        });
+
+
+
+
+                      },
+                    ),
+                  ),
+                  Positioned(
+                    right: MediaQuery.of(context).size.width * 0.16,
+                    top: MediaQuery.of(context).size.height * 0.21,
+                    child: Text(
+                      number,
+                      style: CustomFontStyle.getTextStyle(context, CustomFontStyle.huge),
+                    ),
+                  ),
                   Positioned(
                     top: MediaQuery.of(context).size.height * 0.01,
-                    right: MediaQuery.of(context).size.width * 0.01,
+                    right: MediaQuery.of(context).size.width * 0.015,
                     child: IconButton(
                       icon: const CloseCircle(),
                       onPressed: () {
