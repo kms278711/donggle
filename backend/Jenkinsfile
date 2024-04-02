@@ -40,7 +40,7 @@ pipeline {
         }
         stage('Add Env') {
             steps {
-                dir('Epimetheus/backend/epimetheus') {
+                dir("${env.WORKSPACE}/backend") {
                     withCredentials([file(credentialsId: 'application', variable: 'application')]) {
                        sh "cp ${application}  backend/src/main/resources/application.yml"
                     }
