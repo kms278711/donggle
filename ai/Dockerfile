@@ -13,7 +13,7 @@ RUN pip install --no-cache-dir boto3
 
 # Copy the ./app directory inside the /code directory.
 COPY ./app /code/app
-COPY ./app /code/templates
+COPY ./templates /code/templates
 # COPY ./class_names.txt /code/class_names.txt
 
 RUN apt-get update
