@@ -90,6 +90,7 @@ class _BookProgressState extends State<BookProgress> {
           if (_isSkiped == false) {
             goNext();
           } else {
+            goNext();
             _isSkiped = false;
           }
         }
