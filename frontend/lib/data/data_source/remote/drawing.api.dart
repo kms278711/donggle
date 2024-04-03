@@ -24,9 +24,6 @@ class DrawingApi {
     var streamedResponse = await request.send();
     var response = await http.Response.fromStream(streamedResponse);
 
-    print("[*] ${response.statusCode}");
-    print(response.body);
-
     if (response.statusCode == 200) {
       return response.body;
     } else {

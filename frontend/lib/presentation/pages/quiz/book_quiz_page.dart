@@ -68,7 +68,6 @@ class _BookQuizPageState extends State<BookQuizPage> {
               onPressed: () {
                 if (quizProvider.selectedAnswers!.contains(null)) {
                   showToast('풀지않은 문제가 있습니다.', backgroundColor: AppColors.error);
-                  print(quizProvider.selectedAnswers);
                 } else {
                   showDialog(
                     context: context,

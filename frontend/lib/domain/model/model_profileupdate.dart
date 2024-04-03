@@ -43,7 +43,6 @@ class ProfileUpdateModel extends ChangeNotifier {
       return "Success";
     } else {
       var response = await http.Response.fromStream(streamedResponse);
-      print(utf8.decode(response.bodyBytes));
       return utf8.decode(response.bodyBytes);
     }
   }

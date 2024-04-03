@@ -54,7 +54,6 @@ class _FinishQuizPageState extends State<FinishQuizPage> {
                 itemCount: widget.selectedAnswer.length,
                 itemBuilder: (context, index) {
                   bool check = widget.selectedAnswer[index]["answer"];
-                  // print("check -- $check");
                   String url = widget.selectedAnswer[index]["choiceImagePath"];
                   String name = widget.selectedAnswer[index]["choice"];
                   return Container(

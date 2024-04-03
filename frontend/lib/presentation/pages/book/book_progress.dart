@@ -87,12 +87,9 @@ class _BookProgressState extends State<BookProgress> {
       _audioPlayerSubscription =
           backgroundLine.playerStateStream.listen((state) {
         if (state.processingState == ProcessingState.completed) {
-          print('here!!');
           if (_isSkiped == false) {
-            // print("_isSkiped false");
             goNext();
           } else {
-            // print("_isSkiped true");
             _isSkiped = false;
           }
         }
@@ -126,7 +123,6 @@ class _BookProgressState extends State<BookProgress> {
             }));
       }
     } else if (_isLastSentence) {
-      // print('실행!!');
       cancelAudioPlayerSubscription();
       globalRouter.pushReplacement('/bookProgress/$bookId/${pageId + 1}/0');
     } else {
@@ -146,12 +142,10 @@ class _BookProgressState extends State<BookProgress> {
     if (educationId ==
         nowPage.bookPageSentences[sentenceId].bookPageSentenceId) {
       if (_isSkiped == true) {
-        // print('stop');
         backgroundLine.stop();
       }
       if (nowPage.education?.gubun == "NOWORD") {
         /// OX문제
-        // print("------------ noword");
         DialogUtils.showCustomDialog(
           context,
           contentWidget: NowordQuiz(
@@ -162,7 +156,6 @@ class _BookProgressState extends State<BookProgress> {
         );
       } else if (nowPage.education?.category == "PICTURE") {
         /// 그림문제
-        // print("------------ picture");
         DialogUtils.showCustomDialog(context, contentWidget: PictureQuiz(
           onModalClose: () {
             finishSentence();
@@ -170,7 +163,6 @@ class _BookProgressState extends State<BookProgress> {
         ));
       } else if (nowPage.education?.category == "EXPRESSION") {
         /// 표정문제
-        // print("------------ expression");
         DialogUtils.showCustomDialog(context, contentWidget: ExpressionQuiz(
           onModalClose: () {
             finishSentence();
@@ -178,12 +170,9 @@ class _BookProgressState extends State<BookProgress> {
         ));
       } else if (nowPage.education?.category == "ACTION") {
         /// 동작문제
-        // print("------------ action");
         finishSentence();
       }
     } else {
-      // print('here!!');
-      // print(nowPage.education?.category);
       backgroundLine.stop();
       finishSentence();
     }
@@ -216,7 +205,6 @@ class _BookProgressState extends State<BookProgress> {
 
   @override
   void initState() {
-    // print('initstate');
     super.initState();
     player.pause();
     bookId = int.parse(widget.bookId);

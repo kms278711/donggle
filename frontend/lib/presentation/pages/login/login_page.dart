@@ -311,7 +311,6 @@ class LoginButton extends StatelessWidget {
     final auth = Provider.of<AuthModel>(context, listen: false);
     return GestureDetector(
       onTap: () async {
-        // print(registerField.email);
         AuthStatus loginStatus =
             await auth.login(registerField.email, registerField.password);
 

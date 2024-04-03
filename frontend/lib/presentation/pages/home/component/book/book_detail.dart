@@ -268,7 +268,6 @@ class _BookDetailState extends State<BookDetail> {
                             mainProvider.isSoundOn = false;
                             Navigator.of(context).pop();
                             // bookModel.progresses[index].isDone = false;
-                            // print("----------- isDone: ${bookModel.progresses[index].isDone}");
                             globalRouter.pushReplacement('/bookProgress/${widget.bookId}/$bookPage/0');
                           }),
                       ],

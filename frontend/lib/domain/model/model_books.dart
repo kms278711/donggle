@@ -48,8 +48,6 @@ class BookModel extends ChangeNotifier {
     final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
     var response = await http.get(url, headers: headers);
 
-    debugPrint((utf8.decode(response.bodyBytes)));
-
     if (response.statusCode == 200) {
       books = json.decode(utf8.decode(response.bodyBytes));
       notifyListeners();
@@ -87,8 +85,6 @@ class BookModel extends ChangeNotifier {
     final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
     var response = await http.get(url, headers: headers);
 
-    // print(json.decode(utf8.decode(response.bodyBytes)));
-
     if (response.statusCode == 200) {
       nowBook = Book.fromJson(json.decode(utf8.decode(response.bodyBytes)));
       progresses.add(Progress(bookId: bookId, isDone: false));
@@ -104,12 +100,9 @@ class BookModel extends ChangeNotifier {
 
   /// 동화책 단일 조회 (메인 페이지 동화책 클릭)
   Future<String> getBookDetail(String accessToken, int bookId) async {
-    // print(bookId.toString());
     var url = Uri.https("j10c101.p.ssafy.io", "api/books/$bookId");
     final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
     var response = await http.get(url, headers: headers);
-
-    debugPrint(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
       BookDetail = json.decode(utf8.decode(response.bodyBytes));
@@ -125,12 +118,9 @@ class BookModel extends ChangeNotifier {
 
   ///동화책 페이지 조회
   Future<String> getBookPage(String accessToken, int bookId, int pageId) async {
-    // print(bookId.toString());
     var url = Uri.https("j10c101.p.ssafy.io", "api/books/$bookId/pages/$pageId");
     final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
     var response = await http.get(url, headers: headers);
-
-    debugPrint(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
       nowPage = BookPage.fromJson(json.decode(utf8.decode(response.bodyBytes)));
@@ -148,12 +138,9 @@ class BookModel extends ChangeNotifier {
 
   ///진행중인 책 페이지 저장
   Future<String> setBookPage(String accessToken, int bookId, int pageId) async {
-    // print(bookId.toString());
     var url = Uri.https("j10c101.p.ssafy.io", "api/books/$bookId/pages/$pageId");
     final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
     var response = await http.post(url, headers: headers);
-
-    // print(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
       return "Success";
@@ -177,8 +164,6 @@ class BookModel extends ChangeNotifier {
     var streamedResponse = await request.send();
     var response = await http.Response.fromStream(streamedResponse);
 
-    // print(utf8.decode(response.bodyBytes));
-
     if (response.statusCode == 200) {
       return "Success";
     } else if (response.statusCode == 401) {
@@ -192,12 +177,9 @@ class BookModel extends ChangeNotifier {
 
   ///isRead 여부 저장
   Future<String> setIsRead(String accessToken, int bookId) async {
-    // print(bookId.toString());
     var url = Uri.https("j10c101.p.ssafy.io", "api/books/$bookId/is-read");
     final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
     var response = await http.post(url, headers: headers);
-
-    // print(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
       return "Success";
@@ -212,12 +194,9 @@ class BookModel extends ChangeNotifier {
 
   /// 앱 실행시 동화책 표지 이미지 불러오기
   Future<List> getBookCovers() async {
-    // print(bookId.toString());
     var url = Uri.https("j10c101.p.ssafy.io", "/api/books/cover-images");
     final headers = {'Content-Type': 'application/json'};
     var response = await http.get(url, headers: headers);
-
-    // print(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
       return json.decode(utf8.decode(response.bodyBytes));

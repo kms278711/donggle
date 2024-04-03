@@ -43,7 +43,6 @@ class _OpenedBookState extends State<OpenedBook> {
           //isRead = bookModel.BookDetail['isRead'] ?? false;
           isRead = bookModel.books[widget.bookId - 1]["isRead"];
           _isLoading = false;
-          // print(isRead);
         });
 
       }

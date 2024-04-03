@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
 AudioPlayer effectPlayer = AudioPlayer();
@@ -8,6 +9,6 @@ Future<void> effectPlaySound(String path, double volume) async {
     await effectPlayer.setVolume(volume);
     await effectPlayer.play(); // 오디오 재생 시작
   } catch (e) {
-    print("오류 발생: $e");
+    debugPrint("오류 발생: $e");
   }
 }

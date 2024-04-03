@@ -43,9 +43,6 @@ class ReviewModel extends ChangeNotifier {
 
     var response = await http.get(url, headers: headers);
 
-    // print("[*] ${response.statusCode}");
-    // print(utf8.decode(response.bodyBytes));
-
     if (response.statusCode == 200) {
       myReviews = json.decode(utf8.decode(response.bodyBytes));
       return "Success";
@@ -71,9 +68,6 @@ class ReviewModel extends ChangeNotifier {
 
     var response = await http.put(url, headers: headers, body: body);
 
-    // print("[*] ${response.statusCode}");
-    // print(utf8.decode(response.bodyBytes));
-
     if (response.statusCode == 200) {
       return "Success";
     } else if (response.statusCode == 401) {
@@ -92,9 +86,6 @@ class ReviewModel extends ChangeNotifier {
     final headers = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
 
     var response = await http.delete(url, headers: headers);
-
-    // print("[*] ${response.statusCode}");
-    // print(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
       return "Success";

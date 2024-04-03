@@ -46,7 +46,6 @@ class NickNameUpdateModel extends ChangeNotifier {
 
       return "Success";
     } else {
-      print(utf8.decode(response.bodyBytes));
       return utf8.decode(response.bodyBytes);
     }
   }

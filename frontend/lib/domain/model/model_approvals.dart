@@ -19,9 +19,6 @@ class ApprovalsModel extends ChangeNotifier {
 
     var response = await http.get(url, headers: headers);
 
-    // print("[*] ${response.statusCode}");
-    // print(utf8.decode(response.bodyBytes));
-
     if (response.statusCode == 200) {
       myApprovals = json.decode(utf8.decode(response.bodyBytes));
       return "Success";
@@ -42,16 +39,10 @@ class ApprovalsModel extends ChangeNotifier {
 
     var response = await http.post(url, headers: headers);
 
-    print("[*] ${response.statusCode}");
-    print(utf8.decode(response.bodyBytes));
-
     if (response.statusCode == 200) {
       var url2 = Uri.https("j10c101.p.ssafy.io", "api/books/$bookId/approval");
       final headers2 = {'Content-Type': 'application/json', "Authorization": "Bearer $accessToken"};
       var response2 = await http.post(url2, headers: headers2);
-
-      print("[*] ${response2.statusCode}");
-      print(utf8.decode(response2.bodyBytes));
 
       if(response2.statusCode == 200){
         return "Success";

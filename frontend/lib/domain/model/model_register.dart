@@ -34,13 +34,11 @@ class RegisterFieldModel extends ChangeNotifier {
       this.email = email;
       messageProvider.setMessage2("이메일 형식이 올바르지 않습니다.");
     }
-    // print(email);
     notifyListeners();
   }
 
   void setPassword(String password) {
     this.password = password;
-    // print(password);
     if ((password.isNotEmpty && password.length < 8) || password.length > 16) {
       isValid = false;
       messageProvider.setMessage2("비밀번호는 8자 이상, 16자 이하로 설정해주세요.");
@@ -60,7 +58,6 @@ class RegisterFieldModel extends ChangeNotifier {
 
   void setPasswordConfirm(String passwordConfirm) {
     this.passwordConfirm = passwordConfirm;
-    // print(passwordConfirm);
     // isSame = password == this.passwordConfirm;
     if(passwordConfirm.isEmpty){
       messageProvider.setMessage2("");

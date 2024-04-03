@@ -24,7 +24,6 @@ class QuizModel extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       quizzes = json.decode(utf8.decode(response.bodyBytes));
-      // print(quizzes);
       return "Success";
     } else if (response.statusCode == 401) {
       userProvider.refreshToken();
@@ -52,7 +51,6 @@ class QuizModel extends ChangeNotifier {
 
     if (response.statusCode == 200) {
       bookQuizzes = json.decode(utf8.decode(response.bodyBytes));
-      print(bookQuizzes);
       return "Success";
     } else if (response.statusCode == 401) {
       userProvider.refreshToken();
