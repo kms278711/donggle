@@ -90,7 +90,6 @@ class _BookProgressState extends State<BookProgress> {
           if (_isSkiped == false) {
             goNext();
           } else {
-            goNext();
             _isSkiped = false;
           }
         }
@@ -328,7 +327,6 @@ class _BookProgressState extends State<BookProgress> {
                     children: [
                       BackIcon(
                         onTap: () {
-                          _isSkiped = true;
                           goPrevious();
                         },
                       ),
@@ -368,7 +366,6 @@ class _BookProgressState extends State<BookProgress> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        _isSkiped = true;
                         goPrevious();
                       },
                       child: Container(
