@@ -181,7 +181,7 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
                     right: MediaQuery.of(context).size.width * 0.05,
                     bottom: MediaQuery.of(context).size.height * 0.03,
                     child: GreenButton(
-                      "확인",
+                      "촬영하기",
                       onPressed: () async {
                         effectPlaySound("assets/music/photo_ready.mp3", 1);
                         setState(() {
