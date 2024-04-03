@@ -217,7 +217,7 @@ class _ExpressionQuizState extends State<ExpressionQuiz> {
                               });
 
                               if (result != "true" && result != "false") {
-                                showToast(result, backgroundColor: AppColors.error);
+                                showToast("다시 시도해주세요.", backgroundColor: AppColors.error);
                               }
 
                               if (result == "true") {
