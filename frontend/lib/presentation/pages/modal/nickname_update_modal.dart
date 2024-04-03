@@ -94,7 +94,7 @@ class _NickNameInputState extends State<NickNameInput> {
               },
               maxLength: 10,
               keyboardType: TextInputType.multiline,
-              maxLines: null,
+              maxLines: 1,
               style: CustomFontStyle.getTextStyle(
                   context, CustomFontStyle.textSmall),
               decoration: InputDecoration(
