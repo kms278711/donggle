@@ -191,10 +191,14 @@ class _BookProgressState extends State<BookProgress> {
     //   });
     // }
     if (sentenceId == 0 && nowPage.page == 1) {
+      cancelAudioPlayerSubscription();
       showToast("첫 페이지 입니다.", backgroundColor: AppColors.error);
     } else if (sentenceId == 0) {
+      cancelAudioPlayerSubscription();
+
       globalRouter.pushReplacement('/bookProgress/$bookId/${pageId - 1}/1');
     } else {
+      cancelAudioPlayerSubscription();
       setState(() {
         sentenceId--;
         backgroundLinePlay(

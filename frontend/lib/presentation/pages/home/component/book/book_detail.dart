@@ -120,7 +120,8 @@ class _BookDetailState extends State<BookDetail> {
           url = Constant.s3BaseUrl + bookCover;
           index = bookModel.progresses.indexWhere((progress) => progress.bookId == widget.bookId);
           isDone = bookModel.progresses[index].isDone;
-          isRead = bookModel.books[bookId]["isRead"];
+          int idx = bookModel.books.indexWhere((book) => book['bookId'] == widget.bookId);
+          isRead = bookModel.books[idx]["isRead"];
 
           isLoading = false;
         });
