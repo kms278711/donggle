@@ -30,6 +30,7 @@ class _BookFinishModalState extends State<BookFinishModal> {
   String accessToken = "";
   bool _notRead = true;
   bool _notReviewed = true;
+  int index = 0;
 
   @override
   void initState() {
@@ -53,6 +54,7 @@ class _BookFinishModalState extends State<BookFinishModal> {
           Book book = bookModel.nowBook;
           Review myReview = Review.fromJson(book.myReview ?? {'score': 0.0, 'content': ""});
           _notReviewed = myReview.score == 0.0 && myReview.content == "";
+          index = bookModel.progresses.indexWhere((progress) => progress.bookId == widget.bookId);
         });
       }
     });
@@ -91,6 +93,7 @@ class _BookFinishModalState extends State<BookFinishModal> {
                         GreenButton("처음부터 다시보기", onPressed: () {
                           Navigator.of(context).pop();
                           globalRouter.pushReplacement('/bookProgress/${widget.bookId}/1/0');
+                          bookModel.progresses[index].isDone = false;
                         }),
                         GreenButton("홈으로 돌아가기", onPressed: () {
                           mainProvider.isSoundOn = true;
