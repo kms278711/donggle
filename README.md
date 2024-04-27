@@ -91,49 +91,49 @@ AI 기술을 활용한 참여형 전자 동화책
 
 ## 서비스 화면
 ### 메인 페이지
-![main screen](images/main_screen.gif){ width = 500 }
+![main screen](images/main_screen.gif)
 
 ### 동화책
 #### 동화책 선택 시 화면
-![book detail](images/book_detail.jpg){ width = 500 }
+![book detail](images/book_detail.jpg)
 #### 동화책 다운 시 로딩 화면
-![loading](images/loading.gif){ width = 500 }
+![loading](images/loading.gif)
 #### 동화책 진행 시 화면
-![book progress](images/book_progress.jpg){ width = 500 }
+![book progress](images/book_progress.jpg)
 #### 첫 완독 시 리뷰 모달
-![review modal](images/review.jpg){ width = 500 }
+![review modal](images/review.jpg)
 
 ### 동화책 진행 시 퀴즈
 #### 그림 퀴즈
-![drawing quiz](images/drawing_quiz.gif){ width = 500 }
+![drawing quiz](images/drawing_quiz.gif)
 #### OX 퀴즈
-![OX quiz](images/ox_quiz.gif){ width = 500 }
+![OX quiz](images/ox_quiz.gif)
 #### 표정 퀴즈
-![expression quiz](images/expression_quiz.gif){ width = 500 }
+![expression quiz](images/expression_quiz.gif)
 
 ### 동화책 퀴즈 / 단어 퀴즈
-![book quiz](images/book_quiz.gif){ width = 500 }
+![book quiz](images/book_quiz.gif)
 
 ### 단어장
 #### 잠긴 단어장
-![locked notes](images/locked_notes.jpg){ width = 500 }
+![locked notes](images/locked_notes.jpg)
 #### 단어 획득 후 단어장
-![opened notes](images/opened_notes.jpg){ width = 500 }
+![opened notes](images/opened_notes.jpg)
 #### 단어 카드 상세 화면
-![axe detail](images/axe_detail.jpg){ width = 500 }
-![laugh detail](images/laugh_detail.jpg){ width = 500 }
+![axe detail](images/axe_detail.jpg)
+![laugh detail](images/laugh_detail.jpg)
 
 ### 마이페이지
 #### 내 리뷰 확인하기
-![my review](images/my_review.jpg){ width = 500 }
+![my review](images/my_review.jpg)
 #### 동화 구매 전
-![before purchase](images/before_purchase.jpg){ width = 500 }
+![before purchase](images/before_purchase.jpg)
 #### 동화 구매 후
-![after purchase](images/after_purchase.jpg){ width = 500 }
+![after purchase](images/after_purchase.jpg)
 #### 동화 구매 페이지
-![purchased fairytale](images/purchased_fairytale.jpg){ width = 500 }
+![purchased fairytale](images/purchased_fairytale.jpg)
 #### 내 리뷰 수정 / 삭제 및 정보 수정 페이지
-![update review](images/update_review.jpg){ width = 500 }
+![update review](images/update_review.jpg)
 
 
 
