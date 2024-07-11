@@ -15,7 +15,7 @@
 | :black_square_button: iOS App        | :black_square_button: AR/VR/Metaverse | :white_check_mark: ​Python        | :black_square_button: Flask/Django   |
 | :black_square_button: Desktop App    | :black_square_button: Game            | :white_check_mark: Java          | :white_check_mark: Spring/Springboot |
 |                                      |                                       | :black_square_button: Kotlin     | :white_check_mark: Flutter           |
-|                                      |                                       | :white_check_mark: Dart          | :white_check_mark: PastApi           |
+|                                      |                                       | :white_check_mark: Dart          | :white_check_mark: FastApi           |
 
 <!-- 필수 항목 -->
 
